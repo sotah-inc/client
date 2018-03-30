@@ -4,10 +4,13 @@
   "private": true,
   "dependencies": {
     "@blueprintjs/core": "^2.0.1",
+    "@types/react-redux": "^5.0.15",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
+    "react-redux": "^5.0.7",
     "react-scripts-ts": "2.14.0",
-    "react-transition-group": "^2.3.0"
+    "react-transition-group": "^2.3.0",
+    "redux": "^3.7.2"
   },
   "scripts": {
     "start": "react-scripts-ts start",
