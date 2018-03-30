@@ -1,15 +1,18 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { createStore } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
+import thunk from 'redux-thunk';
 
-import { App } from './components/App';
+import App from './containers/App';
 import { sotah } from './reducers';
 import { StoreState } from './types';
 import registerServiceWorker from './registerServiceWorker';
 
-const preloadedState: StoreState = {};
-const store = createStore<StoreState>(sotah, preloadedState);
+const preloadedState: StoreState = {
+  regions: []
+};
+const store = createStore<StoreState>(sotah, preloadedState, applyMiddleware(thunk));
 
 ReactDOM.render(
   <Provider store={store}>

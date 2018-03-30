@@ -1,10 +1,12 @@
 import { StoreState } from '../types';
 import { SotahClientAction } from '../actions';
-import { GET_REGIONS } from '../constants';
+import { REQUEST_REGIONS } from '../constants';
 
-export const sotah = (state: StoreState, action: SotahClientAction): StoreState => {
+type State = Readonly<StoreState>;
+
+export const sotah = (state: State, action: SotahClientAction): State => {
   switch (action.type) {
-    case GET_REGIONS:
+    case REQUEST_REGIONS:
       return state;
     default:
       return state;

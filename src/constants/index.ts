@@ -1,2 +1,5 @@
-export const GET_REGIONS = 'GET_REGIONS';
-export type GET_REGIONS = typeof GET_REGIONS;
+export const REQUEST_REGIONS = 'REQUEST_REGIONS';
+export type REQUEST_REGIONS = typeof REQUEST_REGIONS;
+
+export const RECEIVE_REGIONS = 'RECEIVE_REGIONS';
+export type RECEIVE_REGIONS = typeof RECEIVE_REGIONS;
