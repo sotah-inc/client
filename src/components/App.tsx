@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Navbar, NavbarGroup, NavbarHeading } from '@blueprintjs/core';
 
 import { AppLevel, Region } from '../types';
 import { Regions } from '../components/Regions';
@@ -37,19 +38,12 @@ export class App extends React.Component<Props> {
   renderConnected() {
     return (
       <>
-        <nav className="pt-navbar">
-          <div className="pt-navbar-group pt-align-left">
-            <div className="pt-navbar-heading">Sotah Client</div>
-          </div>
-        </nav>
-        <div className="pure-g">
-          <div className="pure-u-1-5">
-            <Regions regions={this.props.regions} />
-          </div>
-          <div className="pure-u-1-5">
-            <p>Hello, world!</p>
-          </div>
-        </div>
+        <Navbar>
+          <NavbarGroup>
+            <NavbarHeading>Sotah Client</NavbarHeading>
+          </NavbarGroup>
+        </Navbar>
+        <Regions regions={this.props.regions} />
       </>
     );
   }
