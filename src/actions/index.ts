@@ -12,8 +12,10 @@ import { getRegions, getPing } from '../api';
 export type RequestRegionsAction = { type: REQUEST_REGIONS };
 export const RequestRegions = (): RequestRegionsAction => { return { type: REQUEST_REGIONS }; };
 
-export type ReceiveRegionsAction = { type: RECEIVE_REGIONS, data: Region[] };
-export const ReceiveRegions = (data: Region[]): ReceiveRegionsAction => { return { type: RECEIVE_REGIONS, data }; };
+export type ReceiveRegionsAction = { type: RECEIVE_REGIONS, data: Region[] | null };
+export const ReceiveRegions = (data: Region[] | null): ReceiveRegionsAction => {
+  return { type: RECEIVE_REGIONS, data };
+};
 
 export type FetchRegionsAction = RequestRegionsAction | ReceiveRegionsAction;
 export const FetchRegions = () => {

@@ -1,14 +1,14 @@
 import * as React from 'react';
 import { Navbar, NavbarGroup, NavbarHeading } from '@blueprintjs/core';
 
-import { AppLevel, Region } from '../types';
-import { Regions } from '../components/Regions';
+import { AppLevel, Regions } from '../types';
+import { RegionList } from '../components/Regions';
 
 import './App.scss';
 
 export type StateProps = {
   appLevel: AppLevel
-  regions: Region[]
+  regions: Regions
 };
 
 export type DispatchProps = {
@@ -26,24 +26,25 @@ export class App extends React.Component<Props> {
   }
 
   componentDidUpdate(prevProps: Props) {
-    const finishedLoading = prevProps.appLevel === AppLevel.connecting
-      && this.props.appLevel === AppLevel.connectSuccess;
-    if (!finishedLoading) {
-      return;
-    }
+    switch (this.props.appLevel) {
+      case AppLevel.connectSuccess:
+        this.props.refreshRegions();
 
-    this.props.refreshRegions();
+        return;
+      default:
+        return;
+    }
   }
 
   renderConnected() {
     return (
       <>
-        <Navbar>
+        <Navbar className="pt-dark">
           <NavbarGroup>
             <NavbarHeading>Sotah Client</NavbarHeading>
           </NavbarGroup>
         </Navbar>
-        <Regions regions={this.props.regions} />
+        <RegionList regions={this.props.regions} />
       </>
     );
   }
@@ -57,7 +58,11 @@ export class App extends React.Component<Props> {
         return <>Connecting...</>;
       case AppLevel.connectFailure:
         return <>Could not connect!</>;
-      case AppLevel.connectSuccess:
+      case AppLevel.fetchingRegions:
+        return <>Fetching regions...</>;
+      case AppLevel.fetchRegionFailure:
+        return <>Could not fetch regions!</>;
+      case AppLevel.fetchRegionSuccess:
         return this.renderConnected();
       default:
         return <>Invalid app level!</>;

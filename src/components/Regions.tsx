@@ -1,9 +1,9 @@
 import * as React from 'react';
 
-import { Region } from '../types';
+import { Region, Regions } from '../types';
 
 type Props = {
-  regions: Region[]
+  regions: Regions
 };
 
 const renderRegion = (region: Region, index: number) => {
@@ -15,8 +15,9 @@ const renderRegion = (region: Region, index: number) => {
   );
 };
 
-export const Regions: React.SFC<Props> = (props: Props) => {
-  if (props.regions.length === 0) {
+export const RegionList: React.SFC<Props> = (props: Props) => {
+  const { regions } = props;
+  if (Object.keys(props.regions).length === 0) {
     return <>No regions!</>;
   }
 
@@ -29,7 +30,7 @@ export const Regions: React.SFC<Props> = (props: Props) => {
         </tr>
       </thead>
       <tbody>
-        {props.regions.map((region, index) => renderRegion(region, index))}
+        {Object.keys(regions).map((regionName, index) => renderRegion(regions[regionName], index))}
       </tbody>
     </table>
   );
