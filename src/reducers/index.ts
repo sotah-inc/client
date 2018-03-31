@@ -7,9 +7,12 @@ type State = Readonly<StoreState>;
 export const sotah = (state: State, action: SotahClientAction): State => {
   switch (action.type) {
     case REQUEST_PING:
-      return {...state, appLevel: AppLevel.connecting};
+      return { ...state, appLevel: AppLevel.connecting };
     case RECEIVE_PING:
-      return {...state, appLevel: AppLevel.connectFailure};
+      if (!action.data) {
+        return { ...state, appLevel: AppLevel.connectFailure };
+      }
+      return { ...state, appLevel: AppLevel.connectSuccess };
     case REQUEST_REGIONS:
       return state;
     default:
