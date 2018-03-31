@@ -40,7 +40,7 @@ export class App extends React.Component<Props> {
       case AppLevel.initial:
         return <>Welcome!</>;
       case AppLevel.connecting:
-        return <>Conneting...</>;
+        return <>Connecting...</>;
       case AppLevel.connectFailure:
         return <>Could not connect!</>;
       case AppLevel.connectSuccess:

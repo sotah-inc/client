@@ -2,15 +2,15 @@ import { connect, Dispatch } from 'react-redux';
 
 import { App, StateProps, DispatchProps, OwnProps } from '../components/App';
 import { StoreState } from '../types';
-import { FetchRegions, FetchRegionsAction } from '../actions';
+import { FetchPing, SotahClientAction } from '../actions';
 
 const mapStateToProps = (state: StoreState): StateProps => {
   return {appLevel: state.appLevel};
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<FetchRegionsAction>): DispatchProps => {
+const mapDispatchToProps = (dispatch: Dispatch<SotahClientAction>): DispatchProps => {
   return {
-      onLoad: () => dispatch(FetchRegions())
+      onLoad: () => dispatch(FetchPing())
   };
 };
 

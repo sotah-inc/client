@@ -1,8 +1,13 @@
 import { Dispatch } from 'redux';
 
-import { REQUEST_REGIONS, RECEIVE_REGIONS } from '../constants';
+import {
+  REQUEST_REGIONS,
+  RECEIVE_REGIONS,
+  REQUEST_PING,
+  RECEIVE_PING
+} from '../constants';
 import { Region } from '../types';
-import { getRegions } from '../api';
+import { getRegions, getPing } from '../api';
 
 export type RequestRegionsAction = { type: REQUEST_REGIONS };
 export const RequestRegions = (): RequestRegionsAction => { return { type: REQUEST_REGIONS }; };
@@ -18,4 +23,19 @@ export const FetchRegions = () => {
   };
 };
 
-export type SotahClientAction = FetchRegionsAction;
+export type RequestPingAction = { type: REQUEST_PING };
+export const RequestPing = (): RequestPingAction => { return { type: REQUEST_PING }; };
+
+export type ReceivePingAction = { type: RECEIVE_PING, data: boolean };
+export const ReceivePing = (data: boolean): ReceivePingAction => { return { type: RECEIVE_PING, data }; };
+
+export type FetchPingAction = RequestPingAction | ReceivePingAction;
+export const FetchPing = () => {
+  return (dispatch: Dispatch<FetchPingAction>) => {
+    dispatch(RequestPing());
+    return getPing().then((res) => dispatch(ReceivePing(res)));
+  };
+};
+
+export type SotahClientAction = FetchRegionsAction
+  | FetchPingAction;

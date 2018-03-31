@@ -3,3 +3,9 @@ export type REQUEST_REGIONS = typeof REQUEST_REGIONS;
 
 export const RECEIVE_REGIONS = 'RECEIVE_REGIONS';
 export type RECEIVE_REGIONS = typeof RECEIVE_REGIONS;
+
+export const REQUEST_PING = 'REQUEST_PING';
+export type REQUEST_PING = typeof REQUEST_PING;
+
+export const RECEIVE_PING = 'RECEIVE_PING';
+export type RECEIVE_PING = typeof RECEIVE_PING;
