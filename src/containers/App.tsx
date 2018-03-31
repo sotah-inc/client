@@ -5,7 +5,7 @@ import { StoreState } from '../types';
 import { FetchRegions, FetchRegionsAction } from '../actions';
 
 const mapStateToProps = (state: StoreState): StateProps => {
-  return {};
+  return {appLevel: state.appLevel};
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<FetchRegionsAction>): DispatchProps => {

@@ -1,8 +1,11 @@
 import * as React from 'react';
 
+import { AppLevel } from '../types';
 import Regions from '../containers/Regions';
 
-export type StateProps = {};
+export type StateProps = {
+  appLevel: AppLevel
+};
 
 export type DispatchProps = {
   onLoad: () => void
@@ -17,7 +20,7 @@ export class App extends React.Component<Props> {
     this.props.onLoad();
   }
 
-  render() {
+  renderConnected() {
     return (
       <>
         <nav className="pt-navbar">
@@ -29,5 +32,21 @@ export class App extends React.Component<Props> {
         <Regions/>
       </>
     );
+  }
+
+  render() {
+    const { appLevel } = this.props;
+    switch (appLevel) {
+      case AppLevel.initial:
+        return <>Welcome!</>;
+      case AppLevel.connecting:
+        return <>Conneting...</>;
+      case AppLevel.connectFailure:
+        return <>Could not connect!</>;
+      case AppLevel.connectSuccess:
+        return this.renderConnected();
+      default:
+        return <>Invalid app level!</>;
+    }
   }
 }

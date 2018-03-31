@@ -6,10 +6,11 @@ import thunk from 'redux-thunk';
 
 import App from './containers/App';
 import { sotah } from './reducers';
-import { StoreState } from './types';
+import { StoreState, AppLevel } from './types';
 import registerServiceWorker from './registerServiceWorker';
 
 const preloadedState: StoreState = {
+  appLevel: AppLevel.initial,
   regions: []
 };
 const store = createStore<StoreState>(sotah, preloadedState, applyMiddleware(thunk));
