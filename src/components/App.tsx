@@ -3,6 +3,8 @@ import * as React from 'react';
 import { AppLevel, Region } from '../types';
 import { Regions } from '../components/Regions';
 
+import './App.scss';
+
 export type StateProps = {
   appLevel: AppLevel
   regions: Region[]
