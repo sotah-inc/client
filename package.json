@@ -4,7 +4,9 @@
   "private": true,
   "dependencies": {
     "@blueprintjs/core": "^2.0.1",
+    "@types/node-sass": "^3.10.32",
     "@types/react-redux": "^5.0.15",
+    "node-sass": "^4.8.3",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-redux": "^5.0.7",
