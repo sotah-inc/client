@@ -1,14 +1,16 @@
 import * as React from 'react';
 
-import { AppLevel } from '../types';
-import Regions from '../containers/Regions';
+import { AppLevel, Region } from '../types';
+import { Regions } from '../components/Regions';
 
 export type StateProps = {
   appLevel: AppLevel
+  regions: Region[]
 };
 
 export type DispatchProps = {
   onLoad: () => void
+  refreshRegions: () => void
 };
 
 export type OwnProps = {};
@@ -20,6 +22,16 @@ export class App extends React.Component<Props> {
     this.props.onLoad();
   }
 
+  componentDidUpdate(prevProps: Props) {
+    const finishedLoading = prevProps.appLevel === AppLevel.connecting
+      && this.props.appLevel === AppLevel.connectSuccess;
+    if (!finishedLoading) {
+      return;
+    }
+
+    this.props.refreshRegions();
+  }
+
   renderConnected() {
     return (
       <>
@@ -29,7 +41,7 @@ export class App extends React.Component<Props> {
           </div>
         </nav>
         <p>Hello, world!</p>
-        <Regions/>
+        <Regions regions={this.props.regions} />
       </>
     );
   }

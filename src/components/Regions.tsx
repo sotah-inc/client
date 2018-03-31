@@ -2,41 +2,35 @@ import * as React from 'react';
 
 import { Region } from '../types';
 
-export type StateProps = {
+type Props = {
   regions: Region[]
 };
 
-export type DispatchProps = {};
-
-export type OwnProps = {};
-
-type Props = Readonly<StateProps & DispatchProps & OwnProps>;
-
-const renderRegion = (region: Region) => {
+const renderRegion = (region: Region, index: number) => {
   return (
-    <tr>
+    <tr key={index}>
       <td>{region.name}</td>
       <td>{region.hostname}</td>
     </tr>
   );
 };
 
-export class Regions extends React.Component<Props> {
-  render() {
-    if (this.props.regions.length === 0) {
-      return <>No regions!</>;
-    }
+export const Regions: React.SFC<Props> = (props: Props) => {
+  if (props.regions.length === 0) {
+    return <>No regions!</>;
+  }
 
-    return (
-      <table className="pt-html-table">
-        <thead>
+  return (
+    <table className="pt-html-table">
+      <thead>
+        <tr>
           <th>Name</th>
           <th>Hostname</th>
-        </thead>
-        <tbody>
-          {this.props.regions.map(renderRegion)}
-        </tbody>
-      </table>
-    );
-  }
-}
+        </tr>
+      </thead>
+      <tbody>
+        {props.regions.map((region, index) => renderRegion(region, index))}
+      </tbody>
+    </table>
+  );
+};
