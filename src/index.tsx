@@ -11,7 +11,8 @@ import registerServiceWorker from './registerServiceWorker';
 
 const preloadedState: StoreState = {
   appLevel: AppLevel.initial,
-  regions: {}
+  regions: {},
+  currentRegionName: null
 };
 const store = createStore<StoreState>(sotah, preloadedState, applyMiddleware(thunk));
 
