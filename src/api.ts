@@ -1,6 +1,6 @@
 import { Region } from './types';
 
-export const apiEndpoint = 'http://localhost:3002/';
+export const apiEndpoint = 'http://localhost:8080';
 
 export const getPing = async (): Promise<boolean> => {
   try {
