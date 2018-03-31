@@ -40,8 +40,14 @@ export class App extends React.Component<Props> {
             <div className="pt-navbar-heading">Sotah Client</div>
           </div>
         </nav>
-        <p>Hello, world!</p>
-        <Regions regions={this.props.regions} />
+        <div className="pure-g">
+          <div className="pure-u-1-5">
+            <Regions regions={this.props.regions} />
+          </div>
+          <div className="pure-u-1-5">
+            <p>Hello, world!</p>
+          </div>
+        </div>
       </>
     );
   }
