@@ -1,4 +1,4 @@
-import { Region } from './types';
+import { Region, Realm } from './types';
 
 export const apiEndpoint = 'http://localhost:8080';
 
@@ -15,6 +15,6 @@ export const getRegions = async (): Promise<Region[]> => {
   return await (await fetch(`${apiEndpoint}/regions`)).json();
 };
 
-export const getStatus = async (regionName: string): Promise<Region[]> => {
+export const getStatus = async (regionName: string): Promise<Realm[]> => {
   return await (await fetch(`${apiEndpoint}/status/${regionName}`)).json();
 };

@@ -3,7 +3,7 @@ import { Navbar, NavbarGroup, NavbarHeading, Alignment, Spinner } from '@bluepri
 
 import { AppLevel, Regions, RegionName } from '../types';
 import { RegionList } from '../components/RegionList';
-import { RegionToggle } from './App/RegionToggle';
+import RegionToggle from '../containers/App/RegionToggle';
 
 import './App.scss';
 
@@ -28,13 +28,21 @@ export class App extends React.Component<Props> {
   }
 
   componentDidUpdate(prevProps: Props) {
-    switch (this.props.appLevel) {
+    const props = this.props;
+
+    if (props.currentRegionName !== null) {
+      if (props.currentRegionName !== prevProps.currentRegionName) {
+        console.log(props.currentRegionName);
+      }
+    }
+
+    switch (props.appLevel) {
       case AppLevel.connectSuccess:
         this.props.refreshRegions();
 
-        return;
+        break;
       default:
-        return;
+        break;
     }
   }
 
@@ -49,7 +57,7 @@ export class App extends React.Component<Props> {
 
     return (
       <NavbarGroup align={Alignment.RIGHT}>
-        <RegionToggle regions={regions} currentRegionName={currentRegionName}/>
+        <RegionToggle/>
       </NavbarGroup>
     );
   }

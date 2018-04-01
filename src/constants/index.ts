@@ -9,3 +9,12 @@ export type REQUEST_PING = typeof REQUEST_PING;
 
 export const RECEIVE_PING = 'RECEIVE_PING';
 export type RECEIVE_PING = typeof RECEIVE_PING;
+
+export const REQUEST_REALMS = 'REQUEST_REALMS';
+export type REQUEST_REALMS = typeof REQUEST_REALMS;
+
+export const RECEIVE_REALMS = 'RECEIVE_REALMS';
+export type RECEIVE_REALMS = typeof RECEIVE_REALMS;
+
+export const REGION_CHANGE = 'REGION_CHANGE';
+export type REGION_CHANGE = typeof REGION_CHANGE;
