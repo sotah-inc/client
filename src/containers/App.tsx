@@ -5,7 +5,8 @@ import { StoreState } from '../types';
 import { SotahClientAction, FetchPing, FetchRegions } from '../actions';
 
 const mapStateToProps = (state: StoreState): StateProps => {
-  return { appLevel: state.appLevel, regions: state.regions };
+  const { appLevel, regions, currentRegionName } = state;
+  return { appLevel, regions, currentRegionName };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<SotahClientAction>): DispatchProps => {

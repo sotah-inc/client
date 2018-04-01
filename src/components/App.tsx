@@ -1,14 +1,15 @@
 import * as React from 'react';
 import { Navbar, NavbarGroup, NavbarHeading } from '@blueprintjs/core';
 
-import { AppLevel, Regions } from '../types';
-import { RegionList } from '../components/Regions';
+import { AppLevel, Regions, RegionName } from '../types';
+import { RegionList } from '../components/RegionList';
 
 import './App.scss';
 
 export type StateProps = {
   appLevel: AppLevel
   regions: Regions
+  currentRegionName: RegionName | null
 };
 
 export type DispatchProps = {
