@@ -1,7 +1,7 @@
 export type StoreState = {
   appLevel: AppLevel
   regions: Regions
-  currentRegionName: RegionName | null
+  currentRegion: Region | null
 };
 
 export enum AppLevel {

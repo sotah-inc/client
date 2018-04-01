@@ -20,15 +20,15 @@ export const sotah = (state: State, action: SotahClientAction): State => {
         return { ...state, appLevel: AppLevel.fetchRegionFailure };
       }
 
-      const currentRegionName = action.data[0].name;
+      const currentRegion = action.data[0];
       const regions: Regions = action.data.reduce(
         (result, region) => { return { ...result, [region.name]: region }; },
         {}
       );
 
-      return { ...state, appLevel: AppLevel.fetchRegionSuccess, regions, currentRegionName };
+      return { ...state, appLevel: AppLevel.fetchRegionSuccess, regions, currentRegion };
     case REGION_CHANGE:
-      return { ...state, currentRegionName: action.regionName };
+      return { ...state, currentRegion: action.region };
     default:
       return state;
   }

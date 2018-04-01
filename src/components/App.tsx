@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Navbar, NavbarGroup, NavbarHeading, Alignment, Spinner } from '@blueprintjs/core';
 
-import { AppLevel, Regions, RegionName } from '../types';
+import { AppLevel, Regions, Region } from '../types';
 import { RegionList } from '../components/RegionList';
 import RegionToggle from '../containers/App/RegionToggle';
 
@@ -10,7 +10,7 @@ import './App.scss';
 export type StateProps = {
   appLevel: AppLevel
   regions: Regions
-  currentRegionName: RegionName | null
+  currentRegion: Region | null
 };
 
 export type DispatchProps = {
@@ -30,9 +30,9 @@ export class App extends React.Component<Props> {
   componentDidUpdate(prevProps: Props) {
     const props = this.props;
 
-    if (props.currentRegionName !== null) {
-      if (props.currentRegionName !== prevProps.currentRegionName) {
-        console.log(props.currentRegionName);
+    if (props.currentRegion !== null) {
+      if (props.currentRegion !== prevProps.currentRegion) {
+        console.log(props.currentRegion);
       }
     }
 
@@ -46,8 +46,8 @@ export class App extends React.Component<Props> {
     }
   }
 
-  renderRegionToggle(regions: Regions, currentRegionName: RegionName | null) {
-    if (currentRegionName === null) {
+  renderRegionToggle(regions: Regions, currentRegion: Region | null) {
+    if (currentRegion === null) {
       return (
         <NavbarGroup align={Alignment.RIGHT}>
           <Spinner className="pt-small"/>
@@ -63,7 +63,7 @@ export class App extends React.Component<Props> {
   }
 
   renderConnected() {
-    const { regions, currentRegionName } = this.props;
+    const { regions, currentRegion } = this.props;
 
     return (
       <>
@@ -71,7 +71,7 @@ export class App extends React.Component<Props> {
           <NavbarGroup align={Alignment.LEFT}>
             <NavbarHeading>Sotah Client</NavbarHeading>
           </NavbarGroup>
-          {this.renderRegionToggle(regions, currentRegionName)}
+          {this.renderRegionToggle(regions, currentRegion)}
         </Navbar>
         <RegionList regions={regions}/>
       </>

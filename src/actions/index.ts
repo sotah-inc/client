@@ -9,7 +9,7 @@ import {
   RECEIVE_REALMS,
   REGION_CHANGE
 } from '../constants';
-import { Region, Realm, RegionName } from '../types';
+import { Region, Realm } from '../types';
 import { getStatus, getRegions, getPing } from '../api';
 
 export type RequestRegionsAction = { type: REQUEST_REGIONS };
@@ -49,16 +49,16 @@ export type ReceiveRealmsAction = { type: RECEIVE_REALMS, data: Realm[] };
 export const ReceiveRealms = (data: Realm[]): ReceiveRealmsAction => { return { type: RECEIVE_REALMS, data }; };
 
 export type FetchRealmsAction = RequestRealmsAction | ReceiveRealmsAction;
-export const FetchRealms = (regionName: RegionName) => {
+export const FetchRealms = (region: Region) => {
   return (dispatch: Dispatch<FetchPingAction>) => {
     dispatch(RequestRealms());
-    return getStatus(regionName).then((res) => dispatch(ReceiveRealms(res)));
+    return getStatus(region.name).then((res) => dispatch(ReceiveRealms(res)));
   };
 };
 
-export type RegionChangeAction = { type: REGION_CHANGE, regionName: RegionName };
-export const RegionChange = (regionName: RegionName) => {
-  return { type: REGION_CHANGE, regionName };
+export type RegionChangeAction = { type: REGION_CHANGE, region: Region };
+export const RegionChange = (region: Region) => {
+  return { type: REGION_CHANGE, region };
 };
 
 export type SotahClientAction = FetchRegionsAction

@@ -1,15 +1,15 @@
 import * as React from 'react';
 import { Button, Popover, Position, Menu, MenuItem } from '@blueprintjs/core';
 
-import { Region, Regions, RegionName } from '../../types';
+import { Region, Regions } from '../../types';
 
 export type StateProps = {
-  currentRegionName: RegionName | null
+  currentRegion: Region | null
   regions: Regions
 };
 
 export type DispatchProps = {
-  onRegionChange: (regionName: RegionName) => void
+  onRegionChange: (region: Region) => void
 };
 
 export type OwnProps = {};
@@ -19,7 +19,7 @@ type Props = Readonly<StateProps & DispatchProps & OwnProps>;
 export class RegionToggle extends React.Component<Props> {
   renderMenuItem(region: Region, index: number) {
     let className = '';
-    if (region.name === this.props.currentRegionName) {
+    if (this.props.currentRegion !== null && region.name === this.props.currentRegion.name) {
       className = 'pt-active';
     }
 
@@ -29,7 +29,7 @@ export class RegionToggle extends React.Component<Props> {
         icon="geosearch"
         className={className}
         text={region.name.toUpperCase()}
-        onClick={() => this.props.onRegionChange(region.name)}
+        onClick={() => this.props.onRegionChange(region)}
       />
     );
   }
