@@ -1,8 +1,9 @@
 import * as React from 'react';
-import { Navbar, NavbarGroup, NavbarHeading } from '@blueprintjs/core';
+import { Navbar, NavbarGroup, NavbarHeading, Alignment, Spinner } from '@blueprintjs/core';
 
 import { AppLevel, Regions, RegionName } from '../types';
 import { RegionList } from '../components/RegionList';
+import { RegionToggle } from './App/RegionToggle';
 
 import './App.scss';
 
@@ -37,15 +38,34 @@ export class App extends React.Component<Props> {
     }
   }
 
+  renderRegionToggle(regions: Regions, currentRegionName: RegionName | null) {
+    if (currentRegionName === null) {
+      return (
+        <NavbarGroup align={Alignment.RIGHT}>
+          <Spinner className="pt-small"/>
+        </NavbarGroup>
+      );
+    }
+
+    return (
+      <NavbarGroup align={Alignment.RIGHT}>
+        <RegionToggle regions={regions} currentRegionName={currentRegionName}/>
+      </NavbarGroup>
+    );
+  }
+
   renderConnected() {
+    const { regions, currentRegionName } = this.props;
+
     return (
       <>
         <Navbar className="pt-dark">
-          <NavbarGroup>
+          <NavbarGroup align={Alignment.LEFT}>
             <NavbarHeading>Sotah Client</NavbarHeading>
           </NavbarGroup>
+          {this.renderRegionToggle(regions, currentRegionName)}
         </Navbar>
-        <RegionList regions={this.props.regions} />
+        <RegionList regions={regions}/>
       </>
     );
   }
