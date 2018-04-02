@@ -16,6 +16,7 @@ export type StateProps = {
 export type DispatchProps = {
   onLoad: () => void
   refreshRegions: () => void
+  refreshRealms: (region: Region) => void
 };
 
 export type OwnProps = {};
@@ -27,16 +28,12 @@ export class App extends React.Component<Props> {
     this.props.onLoad();
   }
 
-  onRegionChange(region: Region) {
-    return;
-  }
-
   componentDidUpdate(prevProps: Props) {
     const props = this.props;
 
     if (props.currentRegion !== null) {
       if (props.currentRegion !== prevProps.currentRegion) {
-        this.onRegionChange(props.currentRegion);
+        this.props.refreshRealms(props.currentRegion);
       }
     }
 

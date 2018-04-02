@@ -1,6 +1,14 @@
-import { StoreState, AppLevel, Regions } from '../types';
+import { StoreState, AppLevel, Regions, Realms } from '../types';
 import { SotahClientAction } from '../actions';
-import { RECEIVE_REGIONS, REQUEST_PING, RECEIVE_PING, REQUEST_REGIONS, REGION_CHANGE } from '../constants';
+import {
+  RECEIVE_REGIONS,
+  REQUEST_PING,
+  RECEIVE_PING,
+  REQUEST_REGIONS,
+  REGION_CHANGE,
+  REQUEST_REALMS,
+  RECEIVE_REALMS
+} from '../constants';
 
 type State = Readonly<StoreState>;
 
@@ -29,6 +37,14 @@ export const sotah = (state: State, action: SotahClientAction): State => {
       return { ...state, appLevel: AppLevel.fetchRegionSuccess, regions, currentRegion };
     case REGION_CHANGE:
       return { ...state, currentRegion: action.region };
+    case REQUEST_REALMS:
+      return { ...state, fetchingRealms: true };
+    case RECEIVE_REALMS:
+      const realms: Realms = action.data.reduce(
+        (result, realm) => { return { ...result, [realm.slug]: realm }; },
+        {}
+      );
+      return { ...state, fetchingRealms: false, realms };
     default:
       return state;
   }

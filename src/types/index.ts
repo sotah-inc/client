@@ -3,6 +3,7 @@ export type StoreState = {
   regions: Regions
   currentRegion: Region | null
   realms: Realms
+  fetchingRealms: boolean
 };
 
 export enum AppLevel {
