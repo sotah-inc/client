@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Navbar, NavbarGroup, NavbarHeading, Alignment, Spinner } from '@blueprintjs/core';
 
 import { AppLevel, Regions, Region } from '../types';
-import { RegionList } from '../components/RegionList';
+import RealmList from '../containers/App/RealmList';
 import RegionToggle from '../containers/App/RegionToggle';
 
 import './App.scss';
@@ -27,12 +27,16 @@ export class App extends React.Component<Props> {
     this.props.onLoad();
   }
 
+  onRegionChange(region: Region) {
+    return;
+  }
+
   componentDidUpdate(prevProps: Props) {
     const props = this.props;
 
     if (props.currentRegion !== null) {
       if (props.currentRegion !== prevProps.currentRegion) {
-        console.log(props.currentRegion);
+        this.onRegionChange(props.currentRegion);
       }
     }
 
@@ -73,7 +77,7 @@ export class App extends React.Component<Props> {
           </NavbarGroup>
           {this.renderRegionToggle(regions, currentRegion)}
         </Navbar>
-        <RegionList regions={regions}/>
+        <RealmList/>
       </>
     );
   }
