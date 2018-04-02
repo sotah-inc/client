@@ -6,15 +6,16 @@ import thunk from 'redux-thunk';
 
 import App from './containers/App';
 import { sotah } from './reducers';
-import { StoreState, AppLevel } from './types';
+import { StoreState, FetchPingLevel, FetchRegionLevel, FetchRealmLevel } from './types';
 import registerServiceWorker from './registerServiceWorker';
 
 const preloadedState: StoreState = {
-  appLevel: AppLevel.initial,
+  fetchPingLevel: FetchPingLevel.initial,
+  fetchRegionLevel: FetchRegionLevel.initial,
   regions: {},
   currentRegion: null,
-  realms: {},
-  fetchingRealms: false
+  fetchRealmLevel: FetchRealmLevel.initial,
+  realms: {}
 };
 const store = createStore<StoreState>(sotah, preloadedState, applyMiddleware(thunk));
 

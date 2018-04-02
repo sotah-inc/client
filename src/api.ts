@@ -1,3 +1,4 @@
+import * as HTTPStatus from 'http-status';
 import { Region, Realm } from './types';
 
 export const apiEndpoint = 'http://localhost:8080';
@@ -15,6 +16,11 @@ export const getRegions = async (): Promise<Region[]> => {
   return await (await fetch(`${apiEndpoint}/regions`)).json();
 };
 
-export const getStatus = async (regionName: string): Promise<Realm[]> => {
-  return await (await fetch(`${apiEndpoint}/status/${regionName}`)).json();
+export const getStatus = async (regionName: string): Promise<Realm[] | null> => {
+  const res = await fetch(`${apiEndpoint}/status/${regionName}`);
+  if (res.status !== HTTPStatus.OK) {
+    return null;
+  }
+
+  return await res.json();
 };

@@ -1,14 +1,16 @@
 import * as React from 'react';
 import { Navbar, NavbarGroup, NavbarHeading, Alignment, Spinner } from '@blueprintjs/core';
 
-import { AppLevel, Regions, Region } from '../types';
+import { FetchPingLevel, FetchRegionLevel, Regions, Region, FetchRealmLevel } from '../types';
 import RealmList from '../containers/App/RealmList';
 import RegionToggle from '../containers/App/RegionToggle';
 
 import './App.scss';
 
 export type StateProps = {
-  appLevel: AppLevel
+  fetchPingLevel: FetchPingLevel
+  fetchRegionLevel: FetchRegionLevel
+  fetchRealmLevel: FetchRealmLevel
   regions: Regions
   currentRegion: Region | null
 };
@@ -29,50 +31,62 @@ export class App extends React.Component<Props> {
   }
 
   componentDidUpdate(prevProps: Props) {
-    const props = this.props;
+    const { fetchPingLevel, fetchRegionLevel, fetchRealmLevel, currentRegion } = this.props;
 
-    if (props.currentRegion !== null) {
-      if (props.currentRegion !== prevProps.currentRegion) {
-        this.props.refreshRealms(props.currentRegion);
-      }
+    if (fetchPingLevel === FetchPingLevel.success && fetchRegionLevel === FetchRegionLevel.initial) {
+      this.props.refreshRegions();
+
+      return;
     }
 
-    switch (props.appLevel) {
-      case AppLevel.connectSuccess:
-        this.props.refreshRegions();
+    const shouldRefreshRealms = fetchRegionLevel === FetchRegionLevel.success
+      && fetchRealmLevel === FetchRealmLevel.initial;
+    if (currentRegion !== null && shouldRefreshRealms) {
+      this.props.refreshRealms(currentRegion);
 
-        break;
-      default:
-        break;
+      return;
     }
   }
 
-  renderRegionToggle(regions: Regions, currentRegion: Region | null) {
-    if (currentRegion === null) {
-      return (
-        <NavbarGroup align={Alignment.RIGHT}>
-          <Spinner className="pt-small"/>
-        </NavbarGroup>
-      );
+  renderRegionToggle() {
+    const { fetchRegionLevel } = this.props;
+    switch (fetchRegionLevel) {
+      case FetchRegionLevel.initial:
+      case FetchRegionLevel.fetching:
+        return (
+          <NavbarGroup align={Alignment.RIGHT}>
+            <Spinner className="pt-small"/>
+          </NavbarGroup>
+        );
+      case FetchRegionLevel.failure:
+        return (
+          <NavbarGroup align={Alignment.RIGHT}>
+            Could not fetch regions!
+          </NavbarGroup>
+        );
+      case FetchRegionLevel.success:
+        return (
+          <NavbarGroup align={Alignment.RIGHT}>
+            <RegionToggle/>
+          </NavbarGroup>
+        );
+      default:
+        return (
+          <NavbarGroup align={Alignment.RIGHT}>
+            You should never see this!
+          </NavbarGroup>
+        );
     }
-
-    return (
-      <NavbarGroup align={Alignment.RIGHT}>
-        <RegionToggle/>
-      </NavbarGroup>
-    );
   }
 
   renderConnected() {
-    const { regions, currentRegion } = this.props;
-
     return (
       <>
         <Navbar className="pt-dark">
           <NavbarGroup align={Alignment.LEFT}>
             <NavbarHeading>Sotah Client</NavbarHeading>
           </NavbarGroup>
-          {this.renderRegionToggle(regions, currentRegion)}
+          {this.renderRegionToggle()}
         </Navbar>
         <RealmList/>
       </>
@@ -80,22 +94,18 @@ export class App extends React.Component<Props> {
   }
 
   render() {
-    const { appLevel } = this.props;
-    switch (appLevel) {
-      case AppLevel.initial:
+    const { fetchPingLevel } = this.props;
+    switch (fetchPingLevel) {
+      case FetchPingLevel.initial:
         return <>Welcome!</>;
-      case AppLevel.connecting:
+      case FetchPingLevel.fetching:
         return <>Connecting...</>;
-      case AppLevel.connectFailure:
+      case FetchPingLevel.failure:
         return <>Could not connect!</>;
-      case AppLevel.fetchingRegions:
-        return <>Fetching regions...</>;
-      case AppLevel.fetchRegionFailure:
-        return <>Could not fetch regions!</>;
-      case AppLevel.fetchRegionSuccess:
+      case FetchPingLevel.success:
         return this.renderConnected();
       default:
-        return <>Invalid app level!</>;
+        return <>You should never see this!</>;
     }
   }
 }

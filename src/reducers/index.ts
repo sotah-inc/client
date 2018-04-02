@@ -1,4 +1,4 @@
-import { StoreState, AppLevel, Regions, Realms } from '../types';
+import { StoreState, FetchPingLevel, FetchRegionLevel, Regions, FetchRealmLevel, Realms } from '../types';
 import { SotahClientAction } from '../actions';
 import {
   RECEIVE_REGIONS,
@@ -15,17 +15,17 @@ type State = Readonly<StoreState>;
 export const sotah = (state: State, action: SotahClientAction): State => {
   switch (action.type) {
     case REQUEST_PING:
-      return { ...state, appLevel: AppLevel.connecting };
+      return { ...state, fetchPingLevel: FetchPingLevel.fetching };
     case RECEIVE_PING:
-      if (!action.data) {
-        return { ...state, appLevel: AppLevel.connectFailure };
+      if (action.data === false) {
+        return { ...state, fetchPingLevel: FetchPingLevel.failure };
       }
-      return { ...state, appLevel: AppLevel.connectSuccess };
+      return { ...state, fetchPingLevel: FetchPingLevel.success };
     case REQUEST_REGIONS:
-      return { ...state, appLevel: AppLevel.fetchingRegions };
+      return { ...state, fetchRegionLevel: FetchRegionLevel.fetching };
     case RECEIVE_REGIONS:
       if (action.data === null) {
-        return { ...state, appLevel: AppLevel.fetchRegionFailure };
+        return { ...state, fetchRegionLevel: FetchRegionLevel.failure };
       }
 
       const currentRegion = action.data[0];
@@ -34,17 +34,21 @@ export const sotah = (state: State, action: SotahClientAction): State => {
         {}
       );
 
-      return { ...state, appLevel: AppLevel.fetchRegionSuccess, regions, currentRegion };
+      return { ...state, fetchRegionLevel: FetchRegionLevel.success, regions, currentRegion };
     case REGION_CHANGE:
       return { ...state, currentRegion: action.region };
     case REQUEST_REALMS:
-      return { ...state, fetchingRealms: true };
+      return { ...state, fetchRealmLevel: FetchRealmLevel.fetching };
     case RECEIVE_REALMS:
+      if (action.data === null) {
+        return { ...state, fetchRealmLevel: FetchRealmLevel.failure };
+      }
+
       const realms: Realms = action.data.reduce(
         (result, realm) => { return { ...result, [realm.slug]: realm }; },
         {}
       );
-      return { ...state, fetchingRealms: false, realms };
+      return { ...state, fetchRealmLevel: FetchRealmLevel.success, realms };
     default:
       return state;
   }

@@ -45,14 +45,20 @@ export const FetchPing = () => {
 export type RequestRealmsAction = { type: REQUEST_REALMS };
 export const RequestRealms = (): RequestRealmsAction => { return { type: REQUEST_REALMS }; };
 
-export type ReceiveRealmsAction = { type: RECEIVE_REALMS, data: Realm[] };
-export const ReceiveRealms = (data: Realm[]): ReceiveRealmsAction => { return { type: RECEIVE_REALMS, data }; };
+export type ReceiveRealmsAction = { type: RECEIVE_REALMS, data: Realm[] | null };
+export const ReceiveRealms = (data: Realm[] | null): ReceiveRealmsAction => { return { type: RECEIVE_REALMS, data }; };
 
 export type FetchRealmsAction = RequestRealmsAction | ReceiveRealmsAction;
 export const FetchRealms = (region: Region) => {
   return (dispatch: Dispatch<FetchPingAction>) => {
     dispatch(RequestRealms());
-    return getStatus(region.name).then((res) => dispatch(ReceiveRealms(res)));
+    try {
+      return getStatus(region.name).then((res) => dispatch(ReceiveRealms(res)));
+    } catch (err) {
+      dispatch(ReceiveRealms(null));
+
+      return;
+    }
   };
 };
 

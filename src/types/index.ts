@@ -1,20 +1,17 @@
 export type StoreState = {
-  appLevel: AppLevel
+  fetchPingLevel: FetchPingLevel
+  fetchRegionLevel: FetchRegionLevel
   regions: Regions
   currentRegion: Region | null
+  fetchRealmLevel: FetchRealmLevel
   realms: Realms
-  fetchingRealms: boolean
 };
 
-export enum AppLevel {
-  initial,
-  connecting,
-  connectSuccess,
-  connectFailure,
-  fetchingRegions,
-  fetchRegionSuccess,
-  fetchRegionFailure
-}
+// ping types
+export enum FetchPingLevel { initial, fetching, success, failure }
+
+// region types
+export enum FetchRegionLevel { initial, fetching, success, failure }
 
 export type RegionName = string;
 
@@ -26,6 +23,9 @@ export type Region = {
 export type Regions = {
   [key: string]: Region;
 };
+
+// realm types
+export enum FetchRealmLevel { initial, fetching, success, failure }
 
 export type RealmSlug = string;
 

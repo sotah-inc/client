@@ -1,9 +1,10 @@
 import * as React from 'react';
 
-import { Realms, Realm } from '../../types';
+import { FetchRealmLevel, Realms, Realm } from '../../types';
 
 export type StateProps = {
   realms: Realms
+  fetchRealmLevel: FetchRealmLevel
 };
 
 export type DispatchProps = {};
@@ -22,11 +23,8 @@ export class RealmList extends React.Component<Props> {
     );
   }
 
-  render() {
+  renderRealms() {
     const { realms } = this.props;
-    if (Object.keys(realms).length === 0) {
-      return <>No realms!</>;
-    }
   
     return (
       <table className="pt-html-table">
@@ -41,5 +39,19 @@ export class RealmList extends React.Component<Props> {
         </tbody>
       </table>
     );
+  }
+
+  render() {
+    switch (this.props.fetchRealmLevel) {
+      case FetchRealmLevel.initial:
+      case FetchRealmLevel.fetching:
+        return <>Loading...</>;
+      case FetchRealmLevel.failure:
+        return <>Could not fetch realms!</>;
+      case FetchRealmLevel.success:
+        return this.renderRealms();
+      default:
+        return <>You should never see this!</>;
+    }
   }
 }
