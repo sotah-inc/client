@@ -39,12 +39,16 @@ export class App extends React.Component<Props> {
       return;
     }
 
-    const shouldRefreshRealms = fetchRegionLevel === FetchRegionLevel.success
-      && fetchRealmLevel === FetchRealmLevel.initial;
-    if (currentRegion !== null && shouldRefreshRealms) {
-      this.props.refreshRealms(currentRegion);
+    if (currentRegion !== null) {
+      const shouldRefreshRealms = fetchRealmLevel === FetchRealmLevel.initial
+        || fetchRealmLevel === FetchRealmLevel.success
+          && prevProps.currentRegion !== null
+          && prevProps.currentRegion.name !== currentRegion.name;
+      if (shouldRefreshRealms) {
+        this.props.refreshRealms(currentRegion);
 
-      return;
+        return;
+      }
     }
   }
 
