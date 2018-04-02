@@ -22,5 +22,5 @@ export const getStatus = async (regionName: string): Promise<Realm[] | null> => 
     return null;
   }
 
-  return await res.json();
+  return (await res.json()).realms;
 };
