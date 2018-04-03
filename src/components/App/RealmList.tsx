@@ -42,8 +42,8 @@ export class RealmList extends React.Component<Props> {
       <table className="pt-html-table">
         <thead>
           <tr>
+            <th>Battlegroup</th>
             <th>Name</th>
-            <th>Hostname</th>
           </tr>
         </thead>
         <tbody>
