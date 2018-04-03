@@ -18,3 +18,6 @@ export type RECEIVE_REALMS = typeof RECEIVE_REALMS;
 
 export const REGION_CHANGE = 'REGION_CHANGE';
 export type REGION_CHANGE = typeof REGION_CHANGE;
+
+export const REALM_CHANGE = 'REALM_CHANGE';
+export type REALM_CHANGE = typeof REALM_CHANGE;

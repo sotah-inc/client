@@ -7,7 +7,8 @@ import {
   RECEIVE_PING,
   REQUEST_REALMS,
   RECEIVE_REALMS,
-  REGION_CHANGE
+  REGION_CHANGE,
+  REALM_CHANGE
 } from '../constants';
 import { Region, Realm } from '../types';
 import { getStatus, getRegions, getPing } from '../api';
@@ -67,7 +68,13 @@ export const RegionChange = (region: Region) => {
   return { type: REGION_CHANGE, region };
 };
 
+export type RealmChangeAction = { type: REALM_CHANGE, realm: Realm };
+export const RealmChange = (realm: Realm) => {
+  return { type: REALM_CHANGE, realm };
+};
+
 export type SotahClientAction = FetchRegionsAction
   | FetchPingAction
   | FetchRealmsAction
-  | RegionChangeAction;
+  | RegionChangeAction
+  | RealmChangeAction;

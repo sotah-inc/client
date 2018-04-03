@@ -10,7 +10,9 @@ export type StateProps = {
   realms: Realms
 };
 
-export type DispatchProps = {};
+export type DispatchProps = {
+  onRealmChange: (realm: Realm) => void;
+};
 
 export type OwnProps = {};
 
@@ -34,7 +36,7 @@ export class RealmToggle extends React.Component<Props> {
   }
 
   render() {
-    const { realms } = this.props;
+    const { realms, onRealmChange } = this.props;
     if (Object.keys(realms).length === 0) {
       return <Spinner className="pt-small"/>;
     }
@@ -45,7 +47,7 @@ export class RealmToggle extends React.Component<Props> {
         items={items}
         itemRenderer={this.itemRenderer}
         noResults={<MenuItem disabled={true} text="No results." />}
-        onItemSelect={(realm: Realm) => console.log(realm)}
+        onItemSelect={(realm: Realm) => onRealmChange(realm)}
       >
         <Button text={items[0].name} rightIcon="double-caret-vertical" />
       </RealmToggleSelect>

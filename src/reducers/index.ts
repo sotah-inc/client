@@ -7,7 +7,8 @@ import {
   REQUEST_REGIONS,
   REGION_CHANGE,
   REQUEST_REALMS,
-  RECEIVE_REALMS
+  RECEIVE_REALMS,
+  REALM_CHANGE
 } from '../constants';
 
 type State = Readonly<StoreState>;
@@ -51,6 +52,8 @@ export const sotah = (state: State, action: SotahClientAction): State => {
       );
 
       return { ...state, fetchRealmLevel: FetchRealmLevel.success, realms, currentRealm };
+    case REALM_CHANGE:
+      return { ...state, currentRealm: action.realm };
     default:
       return state;
   }
