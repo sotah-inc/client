@@ -5,6 +5,7 @@ import { FetchRealmLevel, Realms, Realm } from '../../types';
 export type StateProps = {
   realms: Realms
   fetchRealmLevel: FetchRealmLevel
+  currentRealm: Realm | null
 };
 
 export type DispatchProps = {};
@@ -15,10 +16,21 @@ type Props = Readonly<StateProps & DispatchProps & OwnProps>;
 
 export class RealmList extends React.Component<Props> {
   renderRealm(realm: Realm, index: number) {
-    return (
+    const defaultRow = (
       <tr key={index}>
         <td>{realm.battlegroup}</td>
         <td>{realm.name}</td>
+      </tr>
+    );
+    const { currentRealm } = this.props;
+    if (currentRealm === null || currentRealm.slug !== realm.slug) {
+      return defaultRow;
+    }
+
+    return (
+      <tr key={index}>
+        <th>{realm.battlegroup}</th>
+        <th>{realm.name}</th>
       </tr>
     );
   }

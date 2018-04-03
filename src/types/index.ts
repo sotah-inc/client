@@ -5,6 +5,7 @@ export type StoreState = {
   currentRegion: Region | null
   fetchRealmLevel: FetchRealmLevel
   realms: Realms
+  currentRealm: Realm | null
 };
 
 // ping types

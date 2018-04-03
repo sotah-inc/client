@@ -44,11 +44,13 @@ export const sotah = (state: State, action: SotahClientAction): State => {
         return { ...state, fetchRealmLevel: FetchRealmLevel.failure };
       }
 
+      const currentRealm = action.data[0];
       const realms: Realms = action.data.reduce(
         (result, realm) => { return { ...result, [realm.slug]: realm }; },
         {}
       );
-      return { ...state, fetchRealmLevel: FetchRealmLevel.success, realms };
+
+      return { ...state, fetchRealmLevel: FetchRealmLevel.success, realms, currentRealm };
     default:
       return state;
   }
