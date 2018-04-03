@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Navbar, NavbarGroup, NavbarHeading, Alignment, Spinner } from '@blueprintjs/core';
+import { Navbar, NavbarGroup, NavbarHeading, NavbarDivider, Alignment, Spinner } from '@blueprintjs/core';
 
 import { FetchPingLevel, FetchRegionLevel, Regions, Region, FetchRealmLevel } from '../types';
 import RealmList from '../containers/App/RealmList';
@@ -88,6 +88,7 @@ export class App extends React.Component<Props> {
         return (
           <NavbarGroup align={Alignment.RIGHT}>
             <RealmToggle/>
+            <NavbarDivider/>
             <RegionToggle/>
           </NavbarGroup>
         );
