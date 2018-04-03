@@ -46,7 +46,6 @@ export class RealmToggle extends React.Component<Props> {
         itemRenderer={this.itemRenderer}
         noResults={<MenuItem disabled={true} text="No results." />}
         onItemSelect={(realm: Realm) => console.log(realm)}
-        popoverProps={{minimal: true}}
       >
         <Button text={items[0].name} rightIcon="double-caret-vertical" />
       </RealmToggleSelect>
