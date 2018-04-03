@@ -30,6 +30,22 @@ export class App extends React.Component<Props> {
     this.props.onLoad();
   }
 
+  didRegionChange(prevRegion: Region | null, currentRegion: Region | null): boolean {
+    if (prevRegion === null) {
+      return true;
+    }
+
+    if (currentRegion === null) {
+      return false;
+    }
+
+    if (prevRegion.name === currentRegion.name) {
+      return false;
+    }
+
+    return true;
+  }
+
   componentDidUpdate(prevProps: Props) {
     const { fetchPingLevel, fetchRegionLevel, fetchRealmLevel, currentRegion } = this.props;
 
@@ -42,8 +58,7 @@ export class App extends React.Component<Props> {
     if (currentRegion !== null) {
       const shouldRefreshRealms = fetchRealmLevel === FetchRealmLevel.initial
         || fetchRealmLevel === FetchRealmLevel.success
-          && prevProps.currentRegion !== null
-          && prevProps.currentRegion.name !== currentRegion.name;
+          && this.didRegionChange(prevProps.currentRegion, currentRegion);
       if (shouldRefreshRealms) {
         this.props.refreshRealms(currentRegion);
 
