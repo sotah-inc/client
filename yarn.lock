@@ -16,7 +16,7 @@
     esutils "^2.0.2"
     js-tokens "^3.0.0"
 
-"@blueprintjs/core@^2.0.1":
+"@blueprintjs/core@^2.0.0", "@blueprintjs/core@^2.0.1":
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/@blueprintjs/core/-/core-2.0.1.tgz#0b2cf9b477c8a0d102030a5de0465c1709eb99e7"
   dependencies:
@@ -33,6 +33,14 @@
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/@blueprintjs/icons/-/icons-2.0.0.tgz#d3c149b0c70de20f16bf46eff30caa60b3e74370"
   dependencies:
+    classnames "^2.2"
+    tslib "^1.9.0"
+
+"@blueprintjs/select@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@blueprintjs/select/-/select-2.0.0.tgz#35c1e05e1171774fe4cb6772f5f8f77d5be80c4d"
+  dependencies:
+    "@blueprintjs/core" "^2.0.0"
     classnames "^2.2"
     tslib "^1.9.0"
 

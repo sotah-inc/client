@@ -4,6 +4,7 @@ import { Navbar, NavbarGroup, NavbarHeading, Alignment, Spinner } from '@bluepri
 import { FetchPingLevel, FetchRegionLevel, Regions, Region, FetchRealmLevel } from '../types';
 import RealmList from '../containers/App/RealmList';
 import RegionToggle from '../containers/App/RegionToggle';
+import RealmToggle from '../containers/App/RealmToggle';
 
 import './App.scss';
 
@@ -86,6 +87,7 @@ export class App extends React.Component<Props> {
       case FetchRegionLevel.success:
         return (
           <NavbarGroup align={Alignment.RIGHT}>
+            <RealmToggle/>
             <RegionToggle/>
           </NavbarGroup>
         );
