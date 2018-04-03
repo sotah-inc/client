@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, Popover, Position, Menu, MenuItem } from '@blueprintjs/core';
+import { Spinner, Button, Popover, Position, Menu, MenuItem } from '@blueprintjs/core';
 
 import { Region, Regions } from '../../types';
 
@@ -48,10 +48,15 @@ export class RegionToggle extends React.Component<Props> {
   }
 
   render() {
+    const { currentRegion } = this.props;
+    if (currentRegion === null) {
+      return <Spinner className="pt-small"/>;
+    }
+
     return (
       <Popover
         content={this.renderMenu(this.props.regions)}
-        target={<Button icon="cog" className="pt-minimal" />}
+        target={<Button icon="cog">{currentRegion.name.toUpperCase()}</Button>}
         position={Position.BOTTOM_RIGHT}
       />
     );
