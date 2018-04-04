@@ -5,8 +5,8 @@ import { StoreState, Realm } from '../../types';
 import { SotahClientAction, RealmChange } from '../../actions';
 
 const mapStateToProps = (state: StoreState): StateProps => {
-  const { realms } = state;
-  return { realms };
+  const { realms, currentRealm } = state;
+  return { realms, currentRealm };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<SotahClientAction>): DispatchProps => {

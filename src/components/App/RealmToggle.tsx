@@ -15,6 +15,7 @@ const RealmToggleSelect = Select.ofType<Realm>();
 
 export type StateProps = {
   realms: Realms
+  currentRealm: Realm | null
 };
 
 export type DispatchProps = {
@@ -62,12 +63,17 @@ export class RealmToggle extends React.Component<Props> {
   }
 
   render() {
-    const { realms, onRealmChange } = this.props;
+    const { realms, onRealmChange, currentRealm } = this.props;
     if (Object.keys(realms).length === 0) {
       return <Spinner className="pt-small"/>;
     }
 
     const items = Object.keys(realms).map((realmName) => realms[realmName]);
+    let highlightedRealm = items[0];
+    if (currentRealm !== null) {
+      highlightedRealm = currentRealm;
+    }
+
     return (
       <RealmToggleSelect
         items={items}
@@ -78,7 +84,7 @@ export class RealmToggle extends React.Component<Props> {
         resetOnSelect={true}
         resetOnClose={true}
       >
-        <Button text={items[0].name} rightIcon="double-caret-vertical" />
+        <Button text={highlightedRealm.name} rightIcon="double-caret-vertical" />
       </RealmToggleSelect>
     );
   }
