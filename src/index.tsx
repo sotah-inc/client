@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 import { BrowserRouter as Router } from 'react-router-dom';
 
-import App from './containers/App';
+import App from './route-containers/App';
 import { sotah } from './reducers';
 import { StoreState, FetchPingLevel, FetchRegionLevel, FetchRealmLevel } from './types';
 import registerServiceWorker from './registerServiceWorker';
