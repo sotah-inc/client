@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Navbar, NavbarGroup, NavbarHeading, NavbarDivider, Alignment, Spinner } from '@blueprintjs/core';
-import { Route, match } from 'react-router-dom';
-import { History, Location } from 'history';
+import { Route, RouteComponentProps } from 'react-router-dom';
 
 import { FetchPingLevel, FetchRegionLevel, Regions, Region, FetchRealmLevel } from '../types';
 import RealmList from '../containers/App/RealmList';
@@ -26,11 +25,7 @@ export type DispatchProps = {
   refreshRealms: (region: Region) => void
 };
 
-export type OwnProps = {
-  match: match<{}>
-  location: Location
-  history: History
-};
+export interface OwnProps extends RouteComponentProps<{}> {}
 
 export type Props = Readonly<StateProps & DispatchProps & OwnProps>;
 

@@ -17,7 +17,6 @@
     "file-loader": "0.11.2",
     "fork-ts-checker-webpack-plugin": "^0.2.8",
     "fs-extra": "3.0.1",
-    "history": "^4.7.2",
     "html-webpack-plugin": "2.29.0",
     "http-status": "^1.0.1",
     "jest": "22.1.4",
@@ -57,7 +56,6 @@
     "test": "node scripts/test.js --env=jsdom"
   },
   "devDependencies": {
-    "@types/history": "^4.6.2",
     "@types/http-status": "^0.2.30",
     "@types/jest": "^22.2.2",
     "@types/node": "^9.6.1",
