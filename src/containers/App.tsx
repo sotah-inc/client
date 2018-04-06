@@ -2,14 +2,14 @@ import { connect, Dispatch } from 'react-redux';
 
 import { App, StateProps, DispatchProps, OwnProps } from '../components/App';
 import { StoreState, Region } from '../types';
-import { SotahClientAction, FetchPing, FetchRegions, FetchRealms } from '../actions';
+import { FetchPing, FetchRegions, FetchRealms, Actions } from '../actions';
 
 const mapStateToProps = (state: StoreState): StateProps => {
   const { fetchPingLevel, fetchRegionLevel, regions, currentRegion, fetchRealmLevel } = state;
   return { fetchPingLevel, fetchRegionLevel, regions, currentRegion, fetchRealmLevel };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<SotahClientAction>): DispatchProps => {
+const mapDispatchToProps = (dispatch: Dispatch<Actions>): DispatchProps => {
   return {
     onLoad: () => dispatch(FetchPing()),
     refreshRegions: () => dispatch(FetchRegions()),
