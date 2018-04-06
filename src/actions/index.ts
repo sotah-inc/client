@@ -2,19 +2,7 @@ import { Dispatch } from 'redux';
 
 import { createAction, ActionsUnion } from './helpers';
 import { Region, Realm } from '../types';
-import { getStatus, getRegions, getPing } from '../api';
-
-export const REQUEST_REGIONS = 'REQUEST_REGIONS';
-export const RECEIVE_REGIONS = 'RECEIVE_REGIONS';
-const RequestRegions = () => createAction(REQUEST_REGIONS);
-const ReceiveRegions = (payload: Region[] | null) => createAction(RECEIVE_REGIONS, payload);
-type FetchRegionsType = ReturnType<typeof RequestRegions | typeof ReceiveRegions>;
-export const FetchRegions = () => {
-  return (dispatch: Dispatch<FetchRegionsType>) => {
-    dispatch(RequestRegions());
-    return getRegions().then((res) => dispatch(ReceiveRegions(res)));
-  };
-};
+import { getPing, getStatus, getRegions } from '../api';
 
 export const REQUEST_PING = 'REQUEST_PING';
 export const RECEIVE_PING = 'RECEIVE_PING';
@@ -25,6 +13,18 @@ export const FetchPing = () => {
   return (dispatch: Dispatch<FetchPingType>) => {
     dispatch(RequestPing());
     return getPing().then((res) => dispatch(ReceivePing(res)));
+  };
+};
+
+export const REQUEST_REGIONS = 'REQUEST_REGIONS';
+export const RECEIVE_REGIONS = 'RECEIVE_REGIONS';
+const RequestRegions = () => createAction(REQUEST_REGIONS);
+const ReceiveRegions = (payload: Region[] | null) => createAction(RECEIVE_REGIONS, payload);
+type FetchRegionsType = ReturnType<typeof RequestRegions | typeof ReceiveRegions>;
+export const FetchRegions = () => {
+  return (dispatch: Dispatch<FetchRegionsType>) => {
+    dispatch(RequestRegions());
+    return getRegions().then((res) => dispatch(ReceiveRegions(res)));
   };
 };
 
