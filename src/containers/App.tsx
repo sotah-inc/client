@@ -1,4 +1,5 @@
 import { connect, Dispatch } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 
 import { App, StateProps, DispatchProps, OwnProps } from '../components/App';
 import { StoreState, Region } from '../types';
@@ -17,7 +18,7 @@ const mapDispatchToProps = (dispatch: Dispatch<SotahClientAction>): DispatchProp
   };
 };
 
-export default connect<StateProps, DispatchProps, OwnProps>(
+export default withRouter<OwnProps>(connect<StateProps, DispatchProps, OwnProps>(
   mapStateToProps,
   mapDispatchToProps
-)(App);
+)(App));

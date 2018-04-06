@@ -1,10 +1,14 @@
 import * as React from 'react';
 import { Navbar, NavbarGroup, NavbarHeading, NavbarDivider, Alignment, Spinner } from '@blueprintjs/core';
+import { Route, match } from 'react-router-dom';
+import { History, Location } from 'history';
 
 import { FetchPingLevel, FetchRegionLevel, Regions, Region, FetchRealmLevel } from '../types';
 import RealmList from '../containers/App/RealmList';
 import RegionToggle from '../containers/App/RegionToggle';
 import RealmToggle from '../containers/App/RealmToggle';
+import { NotFound } from './App/NotFound';
+import { HomeButton } from './App/HomeButton';
 
 import './App.scss';
 
@@ -22,9 +26,13 @@ export type DispatchProps = {
   refreshRealms: (region: Region) => void
 };
 
-export type OwnProps = {};
+export type OwnProps = {
+  match: match<{}>
+  location: Location
+  history: History
+};
 
-type Props = Readonly<StateProps & DispatchProps & OwnProps>;
+export type Props = Readonly<StateProps & DispatchProps & OwnProps>;
 
 export class App extends React.Component<Props> {
   componentDidMount() {
@@ -107,10 +115,13 @@ export class App extends React.Component<Props> {
         <Navbar className="pt-dark">
           <NavbarGroup align={Alignment.LEFT}>
             <NavbarHeading>Sotah Client</NavbarHeading>
+            <NavbarDivider/>
+            <HomeButton/>
           </NavbarGroup>
           {this.renderRegionToggle()}
         </Navbar>
-        <RealmList/>
+        <Route exact={true} path="/" component={RealmList}/>
+        <Route component={NotFound}/>
       </>
     );
   }
