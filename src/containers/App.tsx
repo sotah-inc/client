@@ -5,8 +5,8 @@ import { StoreState, Region } from '../types';
 import { FetchPing, FetchRegions, FetchRealms, Actions } from '../actions';
 
 const mapStateToProps = (state: StoreState): StateProps => {
-  const { fetchPingLevel, fetchRegionLevel, regions, currentRegion, fetchRealmLevel } = state;
-  return { fetchPingLevel, fetchRegionLevel, regions, currentRegion, fetchRealmLevel };
+  const { fetchPingLevel, fetchRegionLevel, currentRegion, fetchRealmLevel } = state;
+  return { fetchPingLevel, fetchRegionLevel, currentRegion, fetchRealmLevel };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<Actions>): DispatchProps => {

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Route, RouteComponentProps } from 'react-router-dom';
 
-import { FetchPingLevel, FetchRegionLevel, Regions, Region, FetchRealmLevel } from '../types';
+import { FetchPingLevel, FetchRegionLevel, Region, FetchRealmLevel } from '../types';
 import RealmList from '../containers/App/RealmList';
 import { Topbar } from './App/Topbar';
 import { NotFound } from './App/NotFound';
@@ -12,7 +12,6 @@ export type StateProps = {
   fetchPingLevel: FetchPingLevel
   fetchRegionLevel: FetchRegionLevel
   fetchRealmLevel: FetchRealmLevel
-  regions: Regions
   currentRegion: Region | null
 };
 
