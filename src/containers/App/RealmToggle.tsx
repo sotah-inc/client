@@ -5,8 +5,8 @@ import { StoreState, Realm } from '../../types';
 import { Actions, RealmChange } from '../../actions';
 
 const mapStateToProps = (state: StoreState): StateProps => {
-  const { realms, currentRealm } = state;
-  return { realms, currentRealm };
+  const { realms, currentRealm, fetchRealmLevel } = state;
+  return { realms, currentRealm, fetchRealmLevel };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<Actions>): DispatchProps => {

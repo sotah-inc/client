@@ -9,13 +9,14 @@ import {
   IItemRendererProps
 } from '@blueprintjs/select';
 
-import { Realms, Realm } from '../../types';
+import { Realms, Realm, FetchRealmLevel } from '../../types';
 
 const RealmToggleSelect = Select.ofType<Realm>();
 
 export type StateProps = {
   realms: Realms
   currentRealm: Realm | null
+  fetchRealmLevel: FetchRealmLevel
 };
 
 export type DispatchProps = {
@@ -63,29 +64,31 @@ export class RealmToggle extends React.Component<Props> {
   }
 
   render() {
-    const { realms, onRealmChange, currentRealm } = this.props;
-    if (Object.keys(realms).length === 0) {
-      return <Spinner className="pt-small"/>;
-    }
+    const { realms, onRealmChange, currentRealm, fetchRealmLevel } = this.props;
 
-    const items = Object.keys(realms).map((realmName) => realms[realmName]);
-    let highlightedRealm = items[0];
-    if (currentRealm !== null) {
-      highlightedRealm = currentRealm;
-    }
+    switch (fetchRealmLevel) {
+      case FetchRealmLevel.success:
+        const items = Object.keys(realms).map((realmName) => realms[realmName]);
+        let highlightedRealm = items[0];
+        if (currentRealm !== null) {
+          highlightedRealm = currentRealm;
+        }
 
-    return (
-      <RealmToggleSelect
-        items={items}
-        itemRenderer={this.itemRenderer}
-        itemListRenderer={this.itemListRenderer}
-        itemPredicate={this.itemPredicate}
-        onItemSelect={(realm: Realm) => onRealmChange(realm)}
-        resetOnSelect={true}
-        resetOnClose={true}
-      >
-        <Button text={highlightedRealm.name} rightIcon="double-caret-vertical" />
-      </RealmToggleSelect>
-    );
+        return (
+          <RealmToggleSelect
+            items={items}
+            itemRenderer={this.itemRenderer}
+            itemListRenderer={this.itemListRenderer}
+            itemPredicate={this.itemPredicate}
+            onItemSelect={(realm: Realm) => onRealmChange(realm)}
+            resetOnSelect={true}
+            resetOnClose={true}
+          >
+            <Button text={highlightedRealm.name} rightIcon="double-caret-vertical" />
+          </RealmToggleSelect>
+        );
+      default:
+        return <Spinner className="pt-small"/>;
+    }
   }
 }

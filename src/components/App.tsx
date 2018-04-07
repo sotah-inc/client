@@ -3,7 +3,7 @@ import { Route, RouteComponentProps } from 'react-router-dom';
 
 import { FetchPingLevel, FetchRegionLevel, Regions, Region, FetchRealmLevel } from '../types';
 import RealmList from '../containers/App/RealmList';
-import Topbar from '../containers/App/Topbar';
+import { Topbar } from './App/Topbar';
 import { NotFound } from './App/NotFound';
 
 import './App.scss';

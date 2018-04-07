@@ -5,8 +5,8 @@ import { StoreState, Region } from '../../types';
 import { Actions, RegionChange } from '../../actions';
 
 const mapStateToProps = (state: StoreState): StateProps => {
-  const { regions, currentRegion } = state;
-  return { regions, currentRegion };
+  const { regions, currentRegion, fetchRegionLevel } = state;
+  return { regions, currentRegion, fetchRegionLevel };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<Actions>): DispatchProps => {

@@ -1,11 +1,12 @@
 import * as React from 'react';
 import { Spinner, Button, Popover, Position, Menu, MenuItem } from '@blueprintjs/core';
 
-import { Region, Regions } from '../../types';
+import { Region, Regions, FetchRegionLevel } from '../../types';
 
 export type StateProps = {
   currentRegion: Region | null
   regions: Regions
+  fetchRegionLevel: FetchRegionLevel
 };
 
 export type DispatchProps = {
@@ -40,25 +41,25 @@ export class RegionToggle extends React.Component<Props> {
         <li>
           <h6>Select Region</h6>
         </li>
-        {Object.keys(regions).map(
-          (regionName, index) => this.renderMenuItem(regions[regionName], index)
-        )}
+        {Object.keys(regions).map((regionName, index) => this.renderMenuItem(regions[regionName], index))}
       </Menu>
     );
   }
 
   render() {
-    const { currentRegion } = this.props;
-    if (currentRegion === null) {
-      return <Spinner className="pt-small"/>;
-    }
+    const { currentRegion, fetchRegionLevel } = this.props;
 
-    return (
-      <Popover
-        content={this.renderMenu(this.props.regions)}
-        target={<Button icon="double-caret-vertical">{currentRegion.name.toUpperCase()}</Button>}
-        position={Position.BOTTOM_RIGHT}
-      />
-    );
+    switch (fetchRegionLevel) {
+      case FetchRegionLevel.success:
+        return (
+          <Popover
+            content={this.renderMenu(this.props.regions)}
+            target={<Button icon="double-caret-vertical">{currentRegion!.name.toUpperCase()}</Button>}
+            position={Position.BOTTOM_RIGHT}
+          />
+        );
+      default:
+        return <Spinner className="pt-small"/>;
+    }
   }
 }
