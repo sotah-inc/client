@@ -34,13 +34,9 @@ export class App extends React.Component<Props> {
     this.props.onLoad();
   }
 
-  didRegionChange(prevRegion: Region | null, currentRegion: Region | null): boolean {
+  didRegionChange(prevRegion: Region | null, currentRegion: Region): boolean {
     if (prevRegion === null) {
       return true;
-    }
-
-    if (currentRegion === null) {
-      return false;
     }
 
     if (prevRegion.name === currentRegion.name) {
