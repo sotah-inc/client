@@ -10,9 +10,9 @@ const RequestPing = () => createAction(REQUEST_PING);
 const ReceivePing = (payload: boolean) => createAction(RECEIVE_PING, payload);
 type FetchPingType = ReturnType<typeof RequestPing | typeof ReceivePing>;
 export const FetchPing = () => {
-  return (dispatch: Dispatch<FetchPingType>) => {
+  return async (dispatch: Dispatch<FetchPingType>) => {
     dispatch(RequestPing());
-    return getPing().then((res) => dispatch(ReceivePing(res)));
+    dispatch(ReceivePing(await getPing()));
   };
 };
 
@@ -22,9 +22,9 @@ const RequestRegions = () => createAction(REQUEST_REGIONS);
 const ReceiveRegions = (payload: Region[] | null) => createAction(RECEIVE_REGIONS, payload);
 type FetchRegionsType = ReturnType<typeof RequestRegions | typeof ReceiveRegions>;
 export const FetchRegions = () => {
-  return (dispatch: Dispatch<FetchRegionsType>) => {
+  return async (dispatch: Dispatch<FetchRegionsType>) => {
     dispatch(RequestRegions());
-    return getRegions().then((res) => dispatch(ReceiveRegions(res)));
+    dispatch(ReceiveRegions(await getRegions()));
   };
 };
 
@@ -34,9 +34,9 @@ const RequestRealms = () => createAction(REQUEST_REALMS);
 const ReceiveRealms = (payload: Realm[] | null) => createAction(RECEIVE_REALMS, payload);
 type FetchRealmType = ReturnType<typeof RequestRealms | typeof ReceiveRealms>;
 export const FetchRealms = (region: Region) => {
-  return (dispatch: Dispatch<FetchRealmType>) => {
+  return async (dispatch: Dispatch<FetchRealmType>) => {
     dispatch(RequestRealms());
-    return getStatus(region.name).then((res) => dispatch(ReceiveRealms(res)));
+    dispatch(ReceiveRealms(await getStatus(region.name)));
   };
 };
 
