@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Route, RouteComponentProps } from 'react-router-dom';
+import { Route, RouteComponentProps, Switch } from 'react-router-dom';
 
 import { FetchPingLevel, FetchRegionLevel, Region, FetchRealmLevel } from '../types';
 import RealmList from '../containers/App/RealmList';
@@ -67,8 +67,10 @@ export class App extends React.Component<Props> {
     return (
       <>
         <Topbar/>
-        <Route exact={true} path="/" component={RealmList}/>
-        <Route component={NotFound}/>
+        <Switch>
+          <Route exact={true} path="/" component={RealmList}/>
+          <Route component={NotFound}/>
+        </Switch>
       </>
     );
   }
