@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, Menu, MenuItem, Spinner } from '@blueprintjs/core';
+import { Button, Menu, MenuItem, Spinner, Intent } from '@blueprintjs/core';
 import {
   Select,
   ItemPredicate,
@@ -87,8 +87,13 @@ export class RealmToggle extends React.Component<Props> {
             <Button text={highlightedRealm.name} rightIcon="double-caret-vertical" />
           </RealmToggleSelect>
         );
+      case FetchRealmLevel.failure:
+        return <Spinner className="pt-small" intent={Intent.DANGER} value={1} />;
+      case FetchRealmLevel.initial:
+        return <Spinner className="pt-small" intent={Intent.NONE} value={1} />;
+      case FetchRealmLevel.fetching:
       default:
-        return <Spinner className="pt-small"/>;
+        return <Spinner className="pt-small" intent={Intent.PRIMARY} />;
     }
   }
 }

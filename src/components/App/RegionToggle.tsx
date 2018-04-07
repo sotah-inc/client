@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Spinner, Button, Popover, Position, Menu, MenuItem } from '@blueprintjs/core';
+import { Spinner, Button, Popover, Position, Menu, MenuItem, Intent } from '@blueprintjs/core';
 
 import { Region, Regions, FetchRegionLevel } from '../../types';
 
@@ -58,8 +58,13 @@ export class RegionToggle extends React.Component<Props> {
             position={Position.BOTTOM_RIGHT}
           />
         );
+      case FetchRegionLevel.failure:
+        return <Spinner className="pt-small" intent={Intent.DANGER} value={1} />;
+      case FetchRegionLevel.initial:
+        return <Spinner className="pt-small" intent={Intent.NONE} value={1} />;
+      case FetchRegionLevel.fetching:
       default:
-        return <Spinner className="pt-small"/>;
+        return <Spinner className="pt-small" intent={Intent.PRIMARY} />;
     }
   }
 }
