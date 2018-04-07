@@ -1,13 +1,10 @@
 import * as React from 'react';
-import { Navbar, NavbarGroup, NavbarHeading, NavbarDivider, Alignment, Spinner } from '@blueprintjs/core';
 import { Route, RouteComponentProps } from 'react-router-dom';
 
 import { FetchPingLevel, FetchRegionLevel, Regions, Region, FetchRealmLevel } from '../types';
 import RealmList from '../containers/App/RealmList';
-import RegionToggle from '../containers/App/RegionToggle';
-import RealmToggle from '../containers/App/RealmToggle';
+import Topbar from '../containers/App/Topbar';
 import { NotFound } from './App/NotFound';
-import { HomeButton } from './App/HomeButton';
 
 import './App.scss';
 
@@ -67,50 +64,10 @@ export class App extends React.Component<Props> {
     }
   }
 
-  renderRegionToggle() {
-    const { fetchRegionLevel } = this.props;
-    switch (fetchRegionLevel) {
-      case FetchRegionLevel.initial:
-      case FetchRegionLevel.fetching:
-        return (
-          <NavbarGroup align={Alignment.RIGHT}>
-            <Spinner className="pt-small"/>
-          </NavbarGroup>
-        );
-      case FetchRegionLevel.failure:
-        return (
-          <NavbarGroup align={Alignment.RIGHT}>
-            Could not fetch regions!
-          </NavbarGroup>
-        );
-      case FetchRegionLevel.success:
-        return (
-          <NavbarGroup align={Alignment.RIGHT}>
-            <RealmToggle/>
-            <NavbarDivider/>
-            <RegionToggle/>
-          </NavbarGroup>
-        );
-      default:
-        return (
-          <NavbarGroup align={Alignment.RIGHT}>
-            You should never see this!
-          </NavbarGroup>
-        );
-    }
-  }
-
   renderConnected() {
     return (
       <>
-        <Navbar className="pt-dark">
-          <NavbarGroup align={Alignment.LEFT}>
-            <NavbarHeading>Sotah Client</NavbarHeading>
-            <NavbarDivider/>
-            <HomeButton/>
-          </NavbarGroup>
-          {this.renderRegionToggle()}
-        </Navbar>
+        <Topbar/>
         <Route exact={true} path="/" component={RealmList}/>
         <Route component={NotFound}/>
       </>
