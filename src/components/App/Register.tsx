@@ -1,19 +1,64 @@
 import * as React from 'react';
-import { FormGroup, Card } from '@blueprintjs/core';
+import { Button, Dialog, FormGroup, Intent } from '@blueprintjs/core';
 
-export class Register extends React.Component {
+import { DialogBody } from '../util/DialogBody';
+import { DialogActions } from '../util/DialogActions';
+
+export type StateProps = {};
+
+export type DispatchProps = {};
+
+export type OwnProps = {};
+
+type Props = Readonly<StateProps & DispatchProps & OwnProps>;
+
+type State = Readonly<{
+  isOpen: boolean
+}>;
+
+export class Register extends React.Component<Props, State> {
+  state: State = {
+    isOpen: false
+  };
+
+  renderForm() {
+    return (
+      <>
+        <DialogBody>
+          <FormGroup
+            helperText="Helper text with details..."
+            label="Label A"
+            labelFor="text-input"
+            requiredLabel={true}
+          >
+            <input id="text-input" placeholder="Placeholder text" />
+          </FormGroup>
+        </DialogBody>
+        <DialogActions>
+          <Button text="Reset" intent={Intent.NONE} />
+          <Button text="Register" intent={Intent.PRIMARY} icon="edit" />
+        </DialogActions>
+      </>
+    );
+  }
+
+  toggleDialog() {
+    this.setState({ isOpen: !this.state.isOpen });
+  }
+
   render() {
     return (
-      <Card>
-        <FormGroup
-          helperText="Helper text with details..."
-          label="Label A"
-          labelFor="text-input"
-          requiredLabel={true}
+      <>
+        <Button onClick={() => this.toggleDialog()} text="Register" icon="user" />
+        <Dialog
+          isOpen={this.state.isOpen}
+          onClose={() => this.toggleDialog()}
+          title="Register"
+          icon="manually-entered-data"
         >
-          <input id="text-input" placeholder="Placeholder text" />
-        </FormGroup>
-      </Card>
+          {this.renderForm()}
+        </Dialog>
+      </>
     );
   }
 }
