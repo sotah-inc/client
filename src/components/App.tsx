@@ -64,10 +64,10 @@ export class App extends React.Component<Props> {
 
   renderConnected() {
     return (
-      <>
+      <div id="app">
         <Topbar/>
         <Content/>
-      </>
+      </div>
     );
   }
 
