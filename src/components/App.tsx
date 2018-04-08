@@ -1,10 +1,9 @@
 import * as React from 'react';
-import { Route, RouteComponentProps, Switch } from 'react-router-dom';
+import { RouteComponentProps } from 'react-router-dom';
 
 import { FetchPingLevel, FetchRegionLevel, Region, FetchRealmLevel } from '../types';
-import RealmList from '../containers/App/RealmList';
 import Topbar from '../route-containers/App/Topbar';
-import { NotFound } from './util/NotFound';
+import { Content } from './App/Content';
 
 import './App.scss';
 
@@ -67,10 +66,7 @@ export class App extends React.Component<Props> {
     return (
       <>
         <Topbar/>
-        <Switch>
-          <Route exact={true} path="/" component={RealmList}/>
-          <Route component={NotFound}/>
-        </Switch>
+        <Content/>
       </>
     );
   }
