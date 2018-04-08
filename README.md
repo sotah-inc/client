@@ -8,3 +8,4 @@
 - [x] Use [Blueprint](http://blueprintjs.com/) (components, not design methodolgy)
 - [ ] Use [Polaris](https://polaris.shopify.com/) (design methodology, not components)
 - [ ] Use [Formik](https://github.com/jaredpalmer/formik)
+- [ ] Use [jsx-space-before-trailing-slash rule](https://github.com/palantir/tslint-react/pull/144)
