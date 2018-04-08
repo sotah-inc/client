@@ -1,18 +1,32 @@
 import * as React from 'react';
-import { Navbar, NavbarGroup, NavbarHeading, NavbarDivider, Alignment } from '@blueprintjs/core';
+import { Navbar, NavbarGroup, NavbarHeading, NavbarDivider, Alignment, ButtonGroup } from '@blueprintjs/core';
+import { RouteComponentProps } from 'react-router-dom';
 
 import RegionToggle from '../../containers/App/RegionToggle';
 import RealmToggle from '../../containers/App/RealmToggle';
-import { HomeButton } from './HomeButton';
+import LinkButton from '../../route-containers/util/LinkButton';
 
-export const Topbar: React.SFC = () => {
+export interface Props extends RouteComponentProps<Props> {}
+
+export const Topbar: React.SFC<Props> = (props: Props) => {
   return (
     <>
       <Navbar className="pt-dark">
         <NavbarGroup align={Alignment.LEFT}>
           <NavbarHeading>Sotah Client</NavbarHeading>
           <NavbarDivider />
-          <HomeButton />
+          <ButtonGroup>
+            <LinkButton
+              icon="home"
+              text="Home"
+              destination="/"
+            />
+            <LinkButton
+              icon="list"
+              text="Realms"
+              destination="/realms"
+            />
+          </ButtonGroup>
         </NavbarGroup>
         <NavbarGroup align={Alignment.RIGHT}>
           <RealmToggle />
