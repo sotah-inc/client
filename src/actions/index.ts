@@ -4,6 +4,9 @@ import { createAction, ActionsUnion } from './helpers';
 import { Region, Realm } from '../types';
 import { getPing, getStatus, getRegions } from '../api';
 
+export const sleep = (duration: number): Promise<void> =>
+  new Promise<void>((resolve) => setTimeout(() => resolve(), duration));
+
 export const REQUEST_PING = 'REQUEST_PING';
 export const RECEIVE_PING = 'RECEIVE_PING';
 const RequestPing = () => createAction(REQUEST_PING);
