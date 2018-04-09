@@ -1,9 +1,10 @@
 import * as React from 'react';
-import { Button, Dialog, FormGroup, Intent } from '@blueprintjs/core';
+import { Button, Dialog, Intent } from '@blueprintjs/core';
 import { FormikProps } from 'formik';
 
 import { DialogBody } from '../util/DialogBody';
 import { DialogActions } from '../util/DialogActions';
+import { Generator } from '../util/FormField';
 
 export type StateProps = {};
 
@@ -24,27 +25,47 @@ type State = Readonly<{
 
 export class Register extends React.Component<Props, State> {
   state: State = {
-    isOpen: false
+    isOpen: true
   };
 
   renderForm() {
+    const { values, setFieldValue, isSubmitting, handleReset, handleSubmit, dirty, errors, touched } = this.props;
+    const generator = Generator({ errors, touched, values, setFieldValue });
+
     return (
-      <>
+      <form onSubmit={handleSubmit}>
         <DialogBody>
-          <FormGroup
-            helperText="Helper text with details..."
-            label="Label A"
-            labelFor="text-input"
-            requiredLabel={true}
-          >
-            <input id="text-input" placeholder="Placeholder text" />
-          </FormGroup>
+          {generator({
+            type: 'email',
+            fieldName: 'email',
+            helperText: 'For communication',
+            label: 'Email',
+            placeholder: 'test@example.com'
+          })}
+          {generator({
+            type: 'password',
+            fieldName: 'password',
+            helperText: 'For login',
+            label: 'Password',
+            placeholder: ''
+          })}
         </DialogBody>
         <DialogActions>
-          <Button text="Reset" intent={Intent.NONE} />
-          <Button text="Register" intent={Intent.PRIMARY} icon="edit" />
+          <Button
+            text="Reset"
+            intent={Intent.NONE}
+            onClick={handleReset}
+            disabled={!dirty || isSubmitting}
+          />
+          <Button
+            type="submit"
+            text="Register"
+            intent={Intent.PRIMARY}
+            icon="edit"
+            disabled={isSubmitting}
+          />
         </DialogActions>
-      </>
+      </form>
     );
   }
 
