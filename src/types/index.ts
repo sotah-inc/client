@@ -6,6 +6,12 @@ export type StoreState = {
   fetchRealmLevel: FetchRealmLevel
   realms: Realms
   currentRealm: Realm | null
+  user: User | null
+};
+
+// error types
+export type Errors = {
+  [key: string]: string
 };
 
 // ping types
@@ -22,7 +28,7 @@ export type Region = {
 };
 
 export type Regions = {
-  [key: string]: Region;
+  [key: string]: Region
 };
 
 // realm types
@@ -31,18 +37,24 @@ export enum FetchRealmLevel { initial, fetching, success, failure }
 export type RealmSlug = string;
 
 export type Realm = {
-  type: string;
-  population: string;
-  queue: boolean;
-  status: boolean;
-  name: string;
-  slug: RealmSlug;
-  battlegroup: string;
-  locale: string;
-  timezone: string;
-  connected_realms: RealmSlug[];
+  type: string
+  population: string
+  queue: boolean
+  status: boolean
+  name: string
+  slug: RealmSlug
+  battlegroup: string
+  locale: string
+  timezone: string
+  connected_realms: RealmSlug[]
 };
 
 export type Realms = {
   [key: string]: Realm
+};
+
+// user types
+export type User = {
+  id: number
+  email: string
 };

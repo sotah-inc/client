@@ -29,7 +29,16 @@ export class Register extends React.Component<Props, State> {
   };
 
   renderForm() {
-    const { values, setFieldValue, isSubmitting, handleReset, handleSubmit, dirty, errors, touched } = this.props;
+    const {
+      values,
+      setFieldValue,
+      isSubmitting,
+      handleReset,
+      handleSubmit,
+      dirty,
+      errors,
+      touched
+    } = this.props;
     const createFormField = FormFieldGenerator({ setFieldValue });
 
     return (
