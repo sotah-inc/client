@@ -1,20 +1,21 @@
 import * as React from 'react';
 import { FormGroup, Intent, InputGroup } from '@blueprintjs/core';
-import { FormikErrors, FormikTouched, FormikValues } from 'formik';
+
+const capitalize = (v: string) => `${v.charAt(0).toUpperCase()}${v.slice(1)}`;
 
 type GeneratorOptions = {
-  errors: FormikErrors<{}>
-  touched: FormikTouched<{}>
-  values: FormikValues
-  setFieldValue: (key: string, value: string) => void;
+  setFieldValue: (key: string, value: string) => void
 };
 
 type PropsOptions = {
   fieldName: string
   helperText: string
-  label: string
-  type: string
-  placeholder: string
+  label?: string
+  type?: string
+  placeholder?: string
+  getError: () => string
+  getValue: () => string
+  getTouched: () => boolean
 };
 
 type Props = Readonly<GeneratorOptions & PropsOptions>;
@@ -22,15 +23,15 @@ type Props = Readonly<GeneratorOptions & PropsOptions>;
 type FormFieldType = React.SFC<Props>;
 
 export const FormField: FormFieldType = (props: Props) => {
-  const { fieldName, errors, touched, helperText, label, type, placeholder, values, setFieldValue } = props;
-  const error = errors[fieldName];
-  const isTouched = touched[fieldName];
+  const { setFieldValue, fieldName, helperText, label, type, placeholder, getError, getValue, getTouched } = props;
+  const error = getError();
+  const isTouched = getTouched();
   const intent = error && isTouched ? Intent.DANGER : Intent.NONE;
 
   return (
     <FormGroup
       helperText={error ? error : helperText}
-      label={label}
+      label={label || capitalize(fieldName)}
       labelFor={fieldName}
       requiredLabel={true}
       intent={intent}
@@ -39,7 +40,7 @@ export const FormField: FormFieldType = (props: Props) => {
         intent={intent}
         type={type}
         placeholder={placeholder}
-        value={values[fieldName]}
+        value={getValue()}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFieldValue(fieldName, e.target.value)}
       />
     </FormGroup>
@@ -55,20 +56,20 @@ interface GeneratorFunc {
 }
 
 export const Generator: GeneratorInterface = (opts: GeneratorOptions) => {
-  const { errors, touched, values, setFieldValue } = opts;
+  const { setFieldValue } = opts;
   return (propsOpts: PropsOptions) => {
-    const { fieldName, helperText, label, placeholder, type } = propsOpts;
+    const { fieldName, helperText, label, type, placeholder, getError, getTouched, getValue } = propsOpts;
     return (
       <FormField
-        fieldName={fieldName}
-        errors={errors}
-        touched={touched}
-        values={values}
         setFieldValue={setFieldValue}
+        fieldName={fieldName}
         helperText={helperText}
         label={label}
         type={type}
         placeholder={placeholder}
+        getError={getError}
+        getTouched={getTouched}
+        getValue={getValue}
       />
     );
   };

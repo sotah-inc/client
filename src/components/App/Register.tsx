@@ -4,7 +4,7 @@ import { FormikProps } from 'formik';
 
 import { DialogBody } from '../util/DialogBody';
 import { DialogActions } from '../util/DialogActions';
-import { Generator } from '../util/FormField';
+import { Generator as FormFieldGenerator } from '../util/FormField';
 
 export type StateProps = {};
 
@@ -30,24 +30,27 @@ export class Register extends React.Component<Props, State> {
 
   renderForm() {
     const { values, setFieldValue, isSubmitting, handleReset, handleSubmit, dirty, errors, touched } = this.props;
-    const generator = Generator({ errors, touched, values, setFieldValue });
+    const createFormField = FormFieldGenerator({ setFieldValue });
 
     return (
       <form onSubmit={handleSubmit}>
         <DialogBody>
-          {generator({
-            type: 'email',
+          {createFormField({
             fieldName: 'email',
             helperText: 'For communication',
-            label: 'Email',
-            placeholder: 'test@example.com'
+            type: 'email',
+            placeholder: 'test@example.com',
+            getError: () => errors.email,
+            getTouched: () => !!touched.email,
+            getValue: () => values.email
           })}
-          {generator({
-            type: 'password',
+          {createFormField({
             fieldName: 'password',
             helperText: 'For login',
-            label: 'Password',
-            placeholder: ''
+            type: 'password',
+            getError: () => errors.password,
+            getTouched: () => !!touched.password,
+            getValue: () => values.password
           })}
         </DialogBody>
         <DialogActions>
