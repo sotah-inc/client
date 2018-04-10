@@ -1,8 +1,8 @@
 @import "../vendor/blueprint-variables.scss";
 
-@media (min-width: 1000px) {
+@media (min-width: 1050px) {
     #topbar, #content {
-        width: 800px;
+        width: 1000px;
         margin: 0 auto;
     }
 }
