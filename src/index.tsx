@@ -18,7 +18,8 @@ const preloadedState: StoreState = {
   fetchRealmLevel: FetchRealmLevel.initial,
   realms: {},
   currentRealm: null,
-  user: null
+  user: null,
+  isRegistered: false
 };
 const store = createStore<StoreState>(sotah, preloadedState, applyMiddleware(thunk));
 

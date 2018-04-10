@@ -7,6 +7,7 @@ export type StoreState = {
   realms: Realms
   currentRealm: Realm | null
   user: User | null
+  isRegistered: boolean
 };
 
 // error types

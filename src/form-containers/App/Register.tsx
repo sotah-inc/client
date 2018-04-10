@@ -1,11 +1,14 @@
 import { withFormik, WithFormikConfig } from 'formik';
 import * as Yup from 'yup';
 
-import { FormValues } from '../../components/App/Register';
-import Register from '../../containers/App/Register';
+import { FormValues, Register } from '../../components/App/Register';
 import { registerUser } from '../../api';
+import { User } from '../../types';
 
-interface FormProps {}
+interface FormProps {
+  onUserRegister: (user: User) => void;
+  isRegistered: boolean;
+}
 
 const config: WithFormikConfig<FormProps, FormValues> = {
   mapPropsToValues: (_: FormProps) => {
@@ -18,7 +21,7 @@ const config: WithFormikConfig<FormProps, FormValues> = {
     email: Yup.string().email('Invalid email address').required('Email is required!'),
     password: Yup.string().required('Password is required!')
   }),
-  handleSubmit: async (values, { setSubmitting, setErrors }) => {
+  handleSubmit: async (values, { setSubmitting, setErrors, props }) => {
     const res = await registerUser(values.email, values.password);
     if (res.errors !== null) {
       setErrors(res.errors);
@@ -26,8 +29,8 @@ const config: WithFormikConfig<FormProps, FormValues> = {
       return;
     }
 
-    console.log(res.user);
     setSubmitting(false);
+    props.onUserRegister(res.user!);
   }
 };
 

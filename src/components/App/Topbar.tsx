@@ -4,7 +4,7 @@ import { RouteComponentProps } from 'react-router-dom';
 
 import RegionToggle from '../../containers/App/RegionToggle';
 import RealmToggle from '../../containers/App/RealmToggle';
-import Register from '../../form-containers/App/Register';
+import Register from '../../containers/App/Register';
 import LinkButton from '../../route-containers/util/LinkButton';
 
 export interface Props extends RouteComponentProps<Props> {}
