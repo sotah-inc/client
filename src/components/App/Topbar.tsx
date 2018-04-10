@@ -6,30 +6,44 @@ import RegionToggle from '../../containers/App/RegionToggle';
 import RealmToggle from '../../containers/App/RealmToggle';
 import Register from '../../containers/App/Register';
 import LinkButton from '../../route-containers/util/LinkButton';
+import { User } from '../../types';
 
-export interface Props extends RouteComponentProps<Props> {}
-
-export const Topbar: React.SFC<Props> = (props: Props) => {
-  return (
-    <>
-      <Navbar className="pt-dark">
-        <div id="topbar" >
-          <NavbarGroup align={Alignment.LEFT}>
-            <NavbarHeading>Sotah Client</NavbarHeading>
-            <NavbarDivider/>
-            <ButtonGroup>
-              <LinkButton icon="home" text="Home" destination="/"/>
-              <LinkButton icon="list" text="Realms" destination="/realms"/>
-              <Register/>
-            </ButtonGroup>
-          </NavbarGroup>
-          <NavbarGroup align={Alignment.RIGHT}>
-            <RealmToggle/>
-            <NavbarDivider/>
-            <RegionToggle/>
-          </NavbarGroup>
-        </div>
-      </Navbar>
-    </>
-  );
+export type StateProps = {
+  user: User | null
 };
+
+export type DispatchProps = {};
+
+export interface OwnProps extends RouteComponentProps<Props> { }
+
+export type Props = Readonly<StateProps & DispatchProps & OwnProps>;
+
+export class Topbar extends React.Component<Props> {
+
+  render() {
+    const { user } = this.props;
+
+    return (
+      <>
+        <Navbar className="pt-dark">
+          <div id="topbar" >
+            <NavbarGroup align={Alignment.LEFT}>
+              <NavbarHeading>Sotah Client</NavbarHeading>
+              <NavbarDivider />
+              <ButtonGroup>
+                <LinkButton icon="home" text="Home" destination="/" />
+                <LinkButton icon="list" text="Realms" destination="/realms" />
+                {user === null && <Register />}
+              </ButtonGroup>
+            </NavbarGroup>
+            <NavbarGroup align={Alignment.RIGHT}>
+              <RealmToggle />
+              <NavbarDivider />
+              <RegionToggle />
+            </NavbarGroup>
+          </div>
+        </Navbar>
+      </>
+    );
+  }
+}
