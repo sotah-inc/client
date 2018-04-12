@@ -9,7 +9,7 @@ type GeneratorOptions = {
 
 type PropsOptions = {
   fieldName: string
-  helperText: string
+  helperText?: string
   label?: string
   type?: string
   placeholder?: string

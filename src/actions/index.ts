@@ -52,13 +52,16 @@ export const RealmChange = (payload: Realm) => createAction(REALM_CHANGE, payloa
 export const USER_REGISTER = 'USER_REGISTER';
 export const UserRegister = (payload: Profile) => createAction(USER_REGISTER, payload);
 
+export const USER_LOGIN = 'USER_LOGIN';
+export const UserLogin = (payload: Profile) => createAction(USER_LOGIN, payload);
+
 export const Actions = {
   RequestRegions, ReceiveRegions,
   RequestPing, ReceivePing,
   RequestRealms, ReceiveRealms,
   RegionChange,
   RealmChange,
-  UserRegister
+  UserRegister, UserLogin
 };
 
 export type Actions = ActionsUnion<typeof Actions>;

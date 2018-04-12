@@ -19,7 +19,8 @@ const preloadedState: StoreState = {
   realms: {},
   currentRealm: null,
   profile: null,
-  isRegistered: false
+  isRegistered: false,
+  isLoggedIn: false
 };
 const store = createStore<StoreState>(sotah, preloadedState, applyMiddleware(thunk));
 

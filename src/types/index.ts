@@ -8,6 +8,7 @@ export type StoreState = {
   currentRealm: Realm | null
   profile: Profile | null
   isRegistered: boolean
+  isLoggedIn: boolean
 };
 
 // error types

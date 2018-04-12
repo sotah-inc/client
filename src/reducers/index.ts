@@ -6,7 +6,8 @@ import {
   REGION_CHANGE,
   REQUEST_REALMS, RECEIVE_REALMS,
   REALM_CHANGE,
-  USER_REGISTER
+  USER_REGISTER,
+  USER_LOGIN
 } from '../actions';
 
 type State = Readonly<StoreState>;
@@ -54,6 +55,8 @@ export const sotah = (state: State, action: Actions): State => {
       return { ...state, currentRealm: action.payload };
     case USER_REGISTER:
       return { ...state, profile: action.payload, isRegistered: true };
+    case USER_LOGIN:
+      return { ...state, profile: action.payload, isLoggedIn: true };
     default:
       return state;
   }
