@@ -5,14 +5,14 @@ import { FormikProps } from 'formik';
 import { DialogBody } from '../util/DialogBody';
 import { DialogActions } from '../util/DialogActions';
 import { Generator as FormFieldGenerator } from '../util/FormField';
-import { User } from '../../types';
+import { Profile } from '../../types';
 
 export type StateProps = {
   isRegistered: boolean
 };
 
 export type DispatchProps = {
-  onUserRegister: (user: User) => void
+  onUserRegister: (payload: Profile) => void
 };
 
 export type OwnProps = {};

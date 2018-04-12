@@ -6,7 +6,7 @@ export type StoreState = {
   fetchRealmLevel: FetchRealmLevel
   realms: Realms
   currentRealm: Realm | null
-  user: User | null
+  profile: Profile | null
   isRegistered: boolean
 };
 
@@ -58,4 +58,9 @@ export type Realms = {
 export type User = {
   id: number
   email: string
+};
+
+export type Profile = {
+  user: User,
+  token: string
 };

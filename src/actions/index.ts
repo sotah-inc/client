@@ -1,7 +1,7 @@
 import { Dispatch } from 'redux';
 
 import { createAction, ActionsUnion } from './helpers';
-import { Region, Realm, User } from '../types';
+import { Region, Realm, Profile } from '../types';
 import { getPing, getStatus, getRegions } from '../api';
 
 export const sleep = (duration: number): Promise<void> =>
@@ -50,7 +50,7 @@ export const REALM_CHANGE = 'REALM_CHANGE';
 export const RealmChange = (payload: Realm) => createAction(REALM_CHANGE, payload);
 
 export const USER_REGISTER = 'USER_REGISTER';
-export const UserRegister = (payload: User) => createAction(USER_REGISTER, payload);
+export const UserRegister = (payload: Profile) => createAction(USER_REGISTER, payload);
 
 export const Actions = {
   RequestRegions, ReceiveRegions,

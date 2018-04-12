@@ -5,7 +5,8 @@ import { StoreState } from '../../types';
 import { Actions } from '../../actions';
 
 const mapStateToProps = (state: StoreState): StateProps => {
-  return { user: state.user };
+  const user = state.profile === null ? null : state.profile.user;
+  return { user };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<Actions>): DispatchProps => {

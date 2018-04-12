@@ -53,7 +53,7 @@ export const sotah = (state: State, action: Actions): State => {
     case REALM_CHANGE:
       return { ...state, currentRealm: action.payload };
     case USER_REGISTER:
-      return { ...state, user: action.payload, isRegistered: true };
+      return { ...state, profile: action.payload, isRegistered: true };
     default:
       return state;
   }

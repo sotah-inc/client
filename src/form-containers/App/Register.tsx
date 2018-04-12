@@ -3,10 +3,10 @@ import * as Yup from 'yup';
 
 import { FormValues, Register } from '../../components/App/Register';
 import { registerUser } from '../../api';
-import { User } from '../../types';
+import { Profile } from '../../types';
 
 interface FormProps {
-  onUserRegister: (user: User) => void;
+  onUserRegister: (payload: Profile) => void;
   isRegistered: boolean;
 }
 
@@ -22,15 +22,15 @@ const config: WithFormikConfig<FormProps, FormValues> = {
     password: Yup.string().required('Password is required!')
   }),
   handleSubmit: async (values, { setSubmitting, setErrors, props }) => {
-    const res = await registerUser(values.email, values.password);
-    if (res.errors !== null) {
-      setErrors(res.errors);
+    const { user, token, errors } = await registerUser(values.email, values.password);
+    if (errors !== null) {
+      setErrors(errors);
 
       return;
     }
 
     setSubmitting(false);
-    props.onUserRegister(res.user!);
+    props.onUserRegister({user: user!, token: token!});
   }
 };
 
