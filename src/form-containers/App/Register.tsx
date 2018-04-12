@@ -25,6 +25,7 @@ const config: WithFormikConfig<FormProps, FormValues> = {
     const { profile, errors } = await registerUser(values.email, values.password);
     if (errors !== null) {
       setErrors(errors);
+      setSubmitting(false);
 
       return;
     }
