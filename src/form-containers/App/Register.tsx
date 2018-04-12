@@ -22,7 +22,7 @@ const config: WithFormikConfig<FormProps, FormValues> = {
     password: Yup.string().required('Password is required!')
   }),
   handleSubmit: async (values, { setSubmitting, setErrors, props }) => {
-    const { user, token, errors } = await registerUser(values.email, values.password);
+    const { profile, errors } = await registerUser(values.email, values.password);
     if (errors !== null) {
       setErrors(errors);
 
@@ -30,7 +30,7 @@ const config: WithFormikConfig<FormProps, FormValues> = {
     }
 
     setSubmitting(false);
-    props.onUserRegister({user: user!, token: token!});
+    props.onUserRegister(profile!);
   }
 };
 

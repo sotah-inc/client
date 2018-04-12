@@ -26,8 +26,10 @@ export const getStatus = async (regionName: string): Promise<Realm[] | null> => 
 };
 
 export type RegisterUserResponse = {
-  user: User | null
-  token: string | null
+  profile: {
+    user: User
+    token: string
+  } | null
   errors: Errors | null
 };
 
@@ -39,12 +41,10 @@ export const registerUser = async (email: string, password: string): Promise<Reg
   });
   if (res.status === HTTPStatus.BAD_REQUEST) {
     return {
-      user: null,
-      token: null,
-      errors: await res.json() as Errors
+      profile: null,
+      errors: await res.json()
     };
   }
 
-  const { user, token } = await res.json();
-  return { user, token, errors: null };
+  return { profile: await res.json(), errors: null };
 };
