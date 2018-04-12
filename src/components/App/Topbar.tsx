@@ -5,6 +5,7 @@ import { RouteComponentProps } from 'react-router-dom';
 import RegionToggle from '../../containers/App/RegionToggle';
 import RealmToggle from '../../containers/App/RealmToggle';
 import Register from '../../containers/App/Register';
+import Login from '../../containers/App/Login';
 import LinkButton from '../../route-containers/util/LinkButton';
 import { User } from '../../types';
 
@@ -23,7 +24,10 @@ export class Topbar extends React.Component<Props> {
     const { user } = this.props;
     if (user === null) {
       return (
-        <Register/>
+        <ButtonGroup>
+          <Register/>
+          <Login/>
+        </ButtonGroup>
       );
     }
 
