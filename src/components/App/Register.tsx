@@ -2,8 +2,7 @@ import * as React from 'react';
 import { Button, Dialog, Intent } from '@blueprintjs/core';
 import { FormikProps } from 'formik';
 
-import { DialogBody } from '../util/DialogBody';
-import { DialogActions } from '../util/DialogActions';
+import { DialogBody, DialogActions } from '../util';
 import { Generator as FormFieldGenerator } from '../util/FormField';
 import { Profile } from '../../types';
 
