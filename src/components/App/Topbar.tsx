@@ -19,27 +19,36 @@ export interface OwnProps extends RouteComponentProps<Props> { }
 export type Props = Readonly<StateProps & DispatchProps & OwnProps>;
 
 export class Topbar extends React.Component<Props> {
+  renderUserInfo() {
+    const { user } = this.props;
+    if (user === null) {
+      return (
+        <Register/>
+      );
+    }
+
+    return null;
+  }
 
   render() {
-    const { user } = this.props;
-
     return (
       <>
         <Navbar className="pt-dark">
           <div id="topbar" >
             <NavbarGroup align={Alignment.LEFT}>
               <NavbarHeading>Sotah Client</NavbarHeading>
-              <NavbarDivider />
+              <NavbarDivider/>
               <ButtonGroup>
-                <LinkButton icon="home" text="Home" destination="/" />
-                <LinkButton icon="list" text="Realms" destination="/realms" />
-                {user === null && <Register />}
+                <LinkButton icon="home" text="Home" destination="/"/>
+                <LinkButton icon="list" text="Realms" destination="/realms"/>
               </ButtonGroup>
+              <NavbarDivider/>
+              {this.renderUserInfo()}
             </NavbarGroup>
             <NavbarGroup align={Alignment.RIGHT}>
-              <RealmToggle />
-              <NavbarDivider />
-              <RegionToggle />
+              <RealmToggle/>
+              <NavbarDivider/>
+              <RegionToggle/>
             </NavbarGroup>
           </div>
         </Navbar>
