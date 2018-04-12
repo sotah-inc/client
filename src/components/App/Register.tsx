@@ -32,6 +32,14 @@ export class Register extends React.Component<Props, State> {
     isDialogOpen: false
   };
 
+  componentDidUpdate() {
+    const { isRegistered } = this.props;
+
+    if (isRegistered) {
+      this.setState({ isDialogOpen: false });
+    }
+  }
+
   renderForm() {
     const {
       values,
@@ -85,10 +93,6 @@ export class Register extends React.Component<Props, State> {
     );
   }
 
-  isDialogOpen(): boolean {
-    return this.state.isDialogOpen && !this.props.isRegistered;
-  }
-
   toggleDialog() {
     this.setState({ isDialogOpen: !this.state.isDialogOpen });
   }
@@ -98,7 +102,7 @@ export class Register extends React.Component<Props, State> {
       <>
         <Button onClick={() => this.toggleDialog()} text="Register" icon="user" />
         <Dialog
-          isOpen={this.isDialogOpen()}
+          isOpen={this.state.isDialogOpen}
           onClose={() => this.toggleDialog()}
           title="Register"
           icon="manually-entered-data"
