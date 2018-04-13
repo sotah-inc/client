@@ -4,6 +4,7 @@ import * as Yup from 'yup';
 import { FormValues, Register } from '../../components/App/Register';
 import { registerUser } from '../../api';
 import { Profile } from '../../types';
+import { UserRules } from '../../validator-rules';
 
 interface FormProps {
   onUserRegister: (payload: Profile) => void;
@@ -18,8 +19,8 @@ const config: WithFormikConfig<FormProps, FormValues> = {
     };
   },
   validationSchema: Yup.object().shape({
-    email: Yup.string().email('Invalid email address').required('Email is required!'),
-    password: Yup.string().required('Password is required!')
+    email: UserRules.email,
+    password: UserRules.password
   }),
   handleSubmit: async (values, { setSubmitting, setErrors, props }) => {
     const { profile, errors } = await registerUser(values.email, values.password);
