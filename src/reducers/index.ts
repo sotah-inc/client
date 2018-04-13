@@ -1,4 +1,12 @@
-import { StoreState, FetchPingLevel, FetchRegionLevel, Regions, FetchRealmLevel, Realms } from '../types';
+import {
+  StoreState,
+  FetchPingLevel,
+  FetchRegionLevel,
+  Regions,
+  FetchRealmLevel,
+  Realms,
+  FetchAuctionsLevel
+} from '../types';
 import {
   Actions,
   REQUEST_PING, RECEIVE_PING,
@@ -7,7 +15,8 @@ import {
   REQUEST_REALMS, RECEIVE_REALMS,
   REALM_CHANGE,
   USER_REGISTER,
-  USER_LOGIN
+  USER_LOGIN,
+  REQUEST_AUCTIONS, RECEIVE_AUCTIONS
 } from '../actions';
 
 type State = Readonly<StoreState>;
@@ -51,6 +60,14 @@ export const sotah = (state: State, action: Actions): State => {
       );
 
       return { ...state, fetchRealmLevel: FetchRealmLevel.success, realms, currentRealm };
+    case REQUEST_AUCTIONS:
+      return { ...state, fetchAuctionsLevel: FetchAuctionsLevel.fetching };
+    case RECEIVE_AUCTIONS:
+      if (action.payload === null) {
+        return { ...state, fetchAuctionsLevel: FetchAuctionsLevel.failure };
+      }
+
+      return { ...state, fetchAuctionsLevel: FetchAuctionsLevel.success };
     case REALM_CHANGE:
       return { ...state, currentRealm: action.payload };
     case USER_REGISTER:

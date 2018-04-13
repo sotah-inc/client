@@ -7,7 +7,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 
 import App from './route-containers/App';
 import { sotah } from './reducers';
-import { StoreState, FetchPingLevel, FetchRegionLevel, FetchRealmLevel } from './types';
+import { StoreState, FetchPingLevel, FetchRegionLevel, FetchRealmLevel, FetchAuctionsLevel } from './types';
 import registerServiceWorker from './registerServiceWorker';
 
 const preloadedState: StoreState = {
@@ -20,7 +20,9 @@ const preloadedState: StoreState = {
   currentRealm: null,
   profile: null,
   isRegistered: false,
-  isLoggedIn: false
+  isLoggedIn: false,
+  fetchAuctionsLevel: FetchAuctionsLevel.initial,
+  auctions: []
 };
 const store = createStore<StoreState>(sotah, preloadedState, applyMiddleware(thunk));
 

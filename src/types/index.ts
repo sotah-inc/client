@@ -6,6 +6,8 @@ export type StoreState = {
   fetchRealmLevel: FetchRealmLevel
   realms: Realms
   currentRealm: Realm | null
+  auctions: Auction[]
+  fetchAuctionsLevel: FetchAuctionsLevel
   profile: Profile | null
   isRegistered: boolean
   isLoggedIn: boolean
@@ -64,4 +66,31 @@ export type User = {
 export type Profile = {
   user: User,
   token: string
+};
+
+// auction types
+export enum FetchAuctionsLevel { initial, fetching, success, failure }
+
+export type Auctions = {
+  realms: AuctionRealm[]
+  auctions: Auction[]
+};
+
+export type AuctionRealm = {
+  name: string
+  slug: RealmSlug
+};
+
+export type Auction = {
+  auc: number
+  item: number
+  owner: string
+  ownerRealm: string
+  bid: number
+  buyout: number
+  quantity: number
+  timeLeft: string
+  rand: number
+  seed: number
+  context: number
 };
