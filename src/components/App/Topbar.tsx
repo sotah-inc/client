@@ -1,5 +1,12 @@
 import * as React from 'react';
-import { Navbar, NavbarGroup, NavbarHeading, NavbarDivider, Alignment, ButtonGroup } from '@blueprintjs/core';
+import {
+  Navbar,
+  NavbarGroup,
+  NavbarHeading,
+  NavbarDivider,
+  Alignment,
+  ButtonGroup
+} from '@blueprintjs/core';
 import { RouteComponentProps } from 'react-router-dom';
 
 import RegionToggle from '../../containers/App/RegionToggle';
@@ -25,13 +32,19 @@ export class Topbar extends React.Component<Props> {
     if (user === null) {
       return (
         <ButtonGroup>
-          <Register/>
-          <Login/>
+          <Register />
+          <Login />
         </ButtonGroup>
       );
     }
 
-    return null;
+    return (
+      <LinkButton
+        icon="user"
+        text="Profile"
+        destination="/profile"
+      />
+    );
   }
 
   render() {
@@ -41,18 +54,18 @@ export class Topbar extends React.Component<Props> {
           <div id="topbar" >
             <NavbarGroup align={Alignment.LEFT}>
               <NavbarHeading>Sotah Client</NavbarHeading>
-              <NavbarDivider/>
+              <NavbarDivider />
               <ButtonGroup>
-                <LinkButton icon="home" text="Home" destination="/"/>
-                <LinkButton icon="list" text="Realms" destination="/realms"/>
+                <LinkButton icon="home" text="Home" destination="/" />
+                <LinkButton icon="list" text="Realms" destination="/realms" />
               </ButtonGroup>
-              <NavbarDivider/>
+              <NavbarDivider />
               {this.renderUserInfo()}
             </NavbarGroup>
             <NavbarGroup align={Alignment.RIGHT}>
-              <RealmToggle/>
-              <NavbarDivider/>
-              <RegionToggle/>
+              <RealmToggle />
+              <NavbarDivider />
+              <RegionToggle />
             </NavbarGroup>
           </div>
         </Navbar>
