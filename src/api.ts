@@ -18,7 +18,7 @@ export const getRegions = async (): Promise<Region[]> => {
 };
 
 export const getStatus = async (regionName: string): Promise<Realm[] | null> => {
-  const res = await fetch(`${apiEndpoint}/status/${regionName}`);
+  const res = await fetch(`${apiEndpoint}/region/${regionName}/realms`);
   if (res.status !== HTTPStatus.OK) {
     return null;
   }
