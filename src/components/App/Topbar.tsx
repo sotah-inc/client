@@ -1,12 +1,5 @@
 import * as React from 'react';
-import {
-  Navbar,
-  NavbarGroup,
-  NavbarHeading,
-  NavbarDivider,
-  Alignment,
-  ButtonGroup
-} from '@blueprintjs/core';
+import { Navbar, NavbarGroup, NavbarHeading, NavbarDivider, Alignment, ButtonGroup } from '@blueprintjs/core';
 import { RouteComponentProps } from 'react-router-dom';
 
 import RegionToggle from '../../containers/App/RegionToggle';
