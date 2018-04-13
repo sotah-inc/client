@@ -1,4 +1,5 @@
 import * as HTTPStatus from 'http-status';
+
 import { Region, Realm, User, Errors } from './types';
 
 export const apiEndpoint = 'http://localhost:8080';
