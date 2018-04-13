@@ -2,7 +2,7 @@ import { withFormik, WithFormikConfig } from 'formik';
 import * as Yup from 'yup';
 
 import { FormValues, Register } from '../../components/App/Register';
-import { registerUser } from '../../api';
+import { registerUser } from '../../api/user';
 import { Profile } from '../../types';
 import { UserRules } from '../../validator-rules';
 

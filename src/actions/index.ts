@@ -2,7 +2,7 @@ import { Dispatch } from 'redux';
 
 import { createAction, ActionsUnion } from './helpers';
 import { Region, Realm, Profile } from '../types';
-import { getPing, getStatus, getRegions } from '../api';
+import { getPing, getStatus, getRegions } from '../api/data';
 
 export const sleep = (duration: number): Promise<void> =>
   new Promise<void>((resolve) => setTimeout(() => resolve(), duration));
