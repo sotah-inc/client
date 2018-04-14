@@ -20,6 +20,8 @@ export class AuctionList extends React.Component<Props> {
         <th>{auction.auc}</th>
         <td>{auction.ownerRealm}</td>
         <td>{auction.owner}</td>
+        <td>{auction.item}</td>
+        <td>{auction.quantity}</td>
         <td>{auction.bid}</td>
         <td>{auction.buyout}</td>
       </tr>
@@ -40,6 +42,8 @@ export class AuctionList extends React.Component<Props> {
             <th>Auc</th>
             <th>Realm</th>
             <th>Owner</th>
+            <th>Item</th>
+            <th>Quantity</th>
             <th>Bid</th>
             <th>Buyout</th>
           </tr>
