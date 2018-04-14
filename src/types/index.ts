@@ -71,16 +71,6 @@ export type Profile = {
 // auction types
 export enum FetchAuctionsLevel { initial, fetching, success, failure }
 
-export type Auctions = {
-  realms: AuctionRealm[]
-  auctions: Auction[]
-};
-
-export type AuctionRealm = {
-  name: string
-  slug: RealmSlug
-};
-
 export type Auction = {
   auc: number
   item: number

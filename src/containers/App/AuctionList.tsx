@@ -1,12 +1,12 @@
 import { connect, Dispatch } from 'react-redux';
 
-import { RealmList, StateProps, DispatchProps, OwnProps } from '../../components/App/RealmList';
+import { AuctionList, StateProps, DispatchProps, OwnProps } from '../../components/App/AuctionList';
 import { StoreState } from '../../types';
 import { Actions } from '../../actions';
 
 const mapStateToProps = (state: StoreState): StateProps => {
-  const { fetchRealmLevel, realms, currentRealm } = state;
-  return { fetchRealmLevel, realms, currentRealm };
+  const { fetchAuctionsLevel, auctions } = state;
+  return { fetchAuctionsLevel, auctions };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<Actions>): DispatchProps => {
@@ -16,4 +16,4 @@ const mapDispatchToProps = (dispatch: Dispatch<Actions>): DispatchProps => {
 export default connect<StateProps, DispatchProps, OwnProps>(
   mapStateToProps,
   mapDispatchToProps
-)(RealmList);
+)(AuctionList);

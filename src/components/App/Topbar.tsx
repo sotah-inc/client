@@ -50,7 +50,7 @@ export class Topbar extends React.Component<Props> {
               <NavbarDivider />
               <ButtonGroup>
                 <LinkButton icon="home" text="Home" destination="/" />
-                <LinkButton icon="list" text="Realms" destination="/realms" />
+                <LinkButton icon="list" text="Auctions" destination="/auctions" />
               </ButtonGroup>
               <NavbarDivider />
               {this.renderUserInfo()}
