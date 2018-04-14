@@ -18,10 +18,10 @@ export class AuctionList extends React.Component<Props> {
     return (
       <tr key={index}>
         <th>{auction.auc}</th>
-        <th>{auction.ownerRealm}</th>
-        <th>{auction.owner}</th>
-        <th>{auction.bid}</th>
-        <th>{auction.buyout}</th>
+        <td>{auction.ownerRealm}</td>
+        <td>{auction.owner}</td>
+        <td>{auction.bid}</td>
+        <td>{auction.buyout}</td>
       </tr>
     );
   }
