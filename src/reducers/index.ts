@@ -67,7 +67,7 @@ export const sotah = (state: State, action: Actions): State => {
         return { ...state, fetchAuctionsLevel: FetchAuctionsLevel.failure };
       }
 
-      return { ...state, fetchAuctionsLevel: FetchAuctionsLevel.success };
+      return { ...state, fetchAuctionsLevel: FetchAuctionsLevel.success, auctions: action.payload };
     case REALM_CHANGE:
       return { ...state, currentRealm: action.payload };
     case USER_REGISTER:
