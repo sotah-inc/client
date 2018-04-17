@@ -26,8 +26,8 @@ export const getStatus = async (regionName: string): Promise<Realm[] | null> => 
 };
 
 type AuctionsResponse = {
-  realms: Realm[] | null
   auctions: Auction[] | null
+  total: number
 };
 
 export const getAuctions = async (regionName: string, realmSlug: string): Promise<Auction[] | null> => {
