@@ -72,7 +72,6 @@ export type Profile = {
 export enum FetchAuctionsLevel { initial, fetching, success, failure }
 
 export type Auction = {
-  auc: number
   item: number
   owner: string
   ownerRealm: string
@@ -80,7 +79,5 @@ export type Auction = {
   buyout: number
   quantity: number
   timeLeft: string
-  rand: number
-  seed: number
-  context: number
+  aucList: number[]
 };
