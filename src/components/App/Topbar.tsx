@@ -56,9 +56,10 @@ export class Topbar extends React.Component<Props> {
               {this.renderUserInfo()}
             </NavbarGroup>
             <NavbarGroup align={Alignment.RIGHT}>
-              <RealmToggle />
-              <NavbarDivider />
-              <RegionToggle />
+              <ButtonGroup>
+                <RealmToggle />
+                <RegionToggle />
+              </ButtonGroup>
             </NavbarGroup>
           </div>
         </Navbar>
