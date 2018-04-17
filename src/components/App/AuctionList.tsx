@@ -1,5 +1,6 @@
 import * as React from 'react';
 
+import { Currency } from '../util/Currency';
 import { FetchAuctionsLevel, Auction } from '../../types';
 
 export type StateProps = {
@@ -22,8 +23,8 @@ export class AuctionList extends React.Component<Props> {
         <td>{auction.owner}</td>
         <td>{auction.item}</td>
         <td>{auction.quantity}</td>
-        <td>{auction.bid}</td>
-        <td>{auction.buyout}</td>
+        <td><Currency amount={auction.bid}/></td>
+        <td><Currency amount={auction.buyout}/></td>
       </tr>
     );
   }
