@@ -11,5 +11,13 @@ export const Currency: React.SFC<Props> = (props: Props) => {
   const silver = amount % 100;
   const gold = amount / 100;
 
-  return <>{Number(gold.toFixed(0)).toLocaleString()}g {silver.toFixed(0)}s {copper.toFixed(0)}c</>;
+  const copperOutput = copper > 0 ? `${copper.toFixed()}c` : null;
+  let silverOutput = silver > 0 ? `${silver.toFixed()}s` : null;
+  if (copper > 0 && silver === 0) {
+    silverOutput = '0s';
+  }
+  const goldOutput = gold > 0 ? `${Number(gold.toFixed(0)).toLocaleString()}g` : null;
+  const output = [goldOutput, silverOutput, copperOutput].filter((v) => v !== null).join(' ');
+
+  return <>{output}</>;
 };
