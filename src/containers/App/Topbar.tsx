@@ -5,7 +5,7 @@ import { StoreState } from '../../types';
 import { Actions } from '../../actions';
 
 const mapStateToProps = (state: StoreState): StateProps => {
-  const user = state.profile === null ? null : state.profile.user;
+  const user = state.Main.profile === null ? null : state.Main.profile.user;
   return { user };
 };
 

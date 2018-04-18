@@ -4,7 +4,7 @@ import { FormikProps } from 'formik';
 
 import { DialogBody, DialogActions } from '../util';
 import { Generator as FormFieldGenerator } from '../util/FormField';
-import { Profile } from '../../types';
+import { Profile } from '../../types/main';
 
 export type StateProps = {
   isRegistered: boolean

@@ -7,7 +7,7 @@ import RealmToggle from '../../containers/App/RealmToggle';
 import Register from '../../containers/App/Register';
 import Login from '../../containers/App/Login';
 import LinkButton from '../../route-containers/util/LinkButton';
-import { User } from '../../types';
+import { User } from '../../types/main';
 
 export type StateProps = {
   user: User | null

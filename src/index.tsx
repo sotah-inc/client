@@ -6,25 +6,15 @@ import thunk from 'redux-thunk';
 import { BrowserRouter as Router } from 'react-router-dom';
 
 import App from './route-containers/App';
-import { sotah } from './reducers';
-import { StoreState, FetchPingLevel, FetchRegionLevel, FetchRealmLevel, FetchAuctionsLevel } from './types';
+import { rootReducer } from './reducers';
+import { StoreState, defaultMainState, defaultAuctionState } from './types';
 import registerServiceWorker from './registerServiceWorker';
 
 const preloadedState: StoreState = {
-  fetchPingLevel: FetchPingLevel.initial,
-  fetchRegionLevel: FetchRegionLevel.initial,
-  regions: {},
-  currentRegion: null,
-  fetchRealmLevel: FetchRealmLevel.initial,
-  realms: {},
-  currentRealm: null,
-  profile: null,
-  isRegistered: false,
-  isLoggedIn: false,
-  fetchAuctionsLevel: FetchAuctionsLevel.initial,
-  auctions: []
+  Auction: defaultAuctionState,
+  Main: defaultMainState
 };
-const store = createStore<StoreState>(sotah, preloadedState, applyMiddleware(thunk));
+const store = createStore<StoreState>(rootReducer, preloadedState, applyMiddleware(thunk));
 
 ReactDOM.render(
   <Provider store={store}>

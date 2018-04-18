@@ -2,11 +2,13 @@ import { connect, Dispatch } from 'react-redux';
 
 import { StateProps, DispatchProps, OwnProps } from '../../components/App/Register';
 import Register from '../../form-containers/App/Register';
-import { StoreState, Profile } from '../../types';
-import { Actions, UserRegister } from '../../actions';
+import { StoreState } from '../../types';
+import { Profile } from '../../types/main';
+import { Actions } from '../../actions';
+import { UserRegister } from '../../actions/main';
 
 const mapStateToProps = (state: StoreState): StateProps => {
-  return { isRegistered: state.isRegistered };
+  return { isRegistered: state.Main.isRegistered };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<Actions>): DispatchProps => {

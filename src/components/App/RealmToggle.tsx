@@ -9,7 +9,7 @@ import {
   IItemRendererProps
 } from '@blueprintjs/select';
 
-import { Realms, Realm, FetchRealmLevel } from '../../types';
+import { Realms, Realm, FetchRealmLevel } from '../../types/main';
 
 const RealmToggleSelect = Select.ofType<Realm>();
 

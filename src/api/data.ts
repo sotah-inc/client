@@ -1,7 +1,8 @@
 import * as HTTPStatus from 'http-status';
 
 import { apiEndpoint } from './index';
-import { Region, Realm, Auction } from '../types';
+import { Region, Realm } from '../types/main';
+import { Auction } from '../types/auction';
 
 export const getPing = async (): Promise<boolean> => {
   try {

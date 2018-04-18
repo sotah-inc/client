@@ -5,8 +5,8 @@ import { StoreState } from '../../types';
 import { Actions } from '../../actions';
 
 const mapStateToProps = (state: StoreState): StateProps => {
-  const { fetchAuctionsLevel, auctions } = state;
-  return { fetchAuctionsLevel, auctions };
+  const { fetchAuctionsLevel, items } = state.Auction;
+  return { fetchAuctionsLevel, auctions: items };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<Actions>): DispatchProps => {

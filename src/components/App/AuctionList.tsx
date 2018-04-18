@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { Currency } from '../util/Currency';
-import { FetchAuctionsLevel, Auction } from '../../types';
+import { FetchAuctionsLevel, Auction } from '../../types/auction';
 
 export type StateProps = {
   fetchAuctionsLevel: FetchAuctionsLevel

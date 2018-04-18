@@ -1,7 +1,7 @@
 import * as HTTPStatus from 'http-status';
 
 import { apiEndpoint } from './index';
-import { User, Errors } from '../types';
+import { User, Errors } from '../types/main';
 
 export type RegisterUserResponse = {
   profile: {

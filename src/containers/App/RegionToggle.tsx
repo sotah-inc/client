@@ -1,11 +1,13 @@
 import { connect, Dispatch } from 'react-redux';
 
 import { RegionToggle, StateProps, DispatchProps, OwnProps } from '../../components/App/RegionToggle';
-import { StoreState, Region } from '../../types';
-import { Actions, RegionChange } from '../../actions';
+import { StoreState } from '../../types';
+import { Region } from '../../types/main';
+import { Actions } from '../../actions';
+import { RegionChange } from '../../actions/main';
 
 const mapStateToProps = (state: StoreState): StateProps => {
-  const { regions, currentRegion, fetchRegionLevel } = state;
+  const { regions, currentRegion, fetchRegionLevel } = state.Main;
   return { regions, currentRegion, fetchRegionLevel };
 };
 

@@ -16,3 +16,6 @@ export function createAction<T extends string, P>(type: T, payload?: P) {
 type FunctionType = (...args: any[]) => any;
 type ActionCreatorsMapObject = { [actionCreator: string]: FunctionType };
 export type ActionsUnion<A extends ActionCreatorsMapObject> = ReturnType<A[keyof A]>;
+
+export const sleep = (duration: number): Promise<void> =>
+  new Promise<void>((resolve) => setTimeout(() => resolve(), duration));
