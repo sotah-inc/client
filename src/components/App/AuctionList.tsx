@@ -3,22 +3,98 @@ import { ButtonGroup } from '@blueprintjs/core';
 
 import RegionToggle from '@app/containers/App/AuctionList/RegionToggle';
 import RealmToggle from '@app/containers/App/AuctionList/RealmToggle';
-import { Auction } from '@app/types/global';
-import { FetchAuctionsLevel } from '@app/types/auction';
+import { Auction, Region, Realm } from '@app/types/global';
+import { FetchPingLevel } from '@app/types/main';
+import { FetchRegionLevel, FetchRealmLevel, FetchAuctionsLevel } from '@app/types/auction';
 import { Currency } from '../util/Currency';
 
 export type StateProps = {
+  fetchPingLevel: FetchPingLevel
+  fetchRegionLevel: FetchRegionLevel
+  currentRegion: Region | null
+  fetchRealmLevel: FetchRealmLevel
+  currentRealm: Realm | null
   fetchAuctionsLevel: FetchAuctionsLevel
   auctions: Auction[]
 };
 
-export type DispatchProps = {};
+export type DispatchProps = {
+  refreshRegions: () => void
+  refreshRealms: (region: Region) => void
+  refreshAuctions: (region: Region, realm: Realm) => void
+};
 
 export type OwnProps = {};
 
 type Props = Readonly<StateProps & DispatchProps & OwnProps>;
 
 export class AuctionList extends React.Component<Props> {
+  didRegionChange(prevRegion: Region | null, currentRegion: Region): boolean {
+    if (prevRegion === null) {
+      return true;
+    }
+
+    if (prevRegion.name === currentRegion.name) {
+      return false;
+    }
+
+    return true;
+  }
+
+  didRealmChange(prevRealm: Realm | null, currentRealm: Realm): boolean {
+    if (prevRealm === null) {
+      return true;
+    }
+
+    if (prevRealm.slug === currentRealm.slug) {
+      return false;
+    }
+
+    return true;
+  }
+
+  componentDidMount() {
+    const {
+      fetchPingLevel,
+      fetchRegionLevel
+    } = this.props;
+
+    if (fetchPingLevel === FetchPingLevel.success && fetchRegionLevel === FetchRegionLevel.initial) {
+      this.props.refreshRegions();
+
+      return;
+    }
+  }
+
+  componentDidUpdate(prevProps: Props) {
+    const {
+      fetchRealmLevel,
+      fetchAuctionsLevel,
+      currentRegion,
+      currentRealm
+    } = this.props;
+
+    if (currentRegion !== null) {
+      const shouldRefreshRealms = fetchRealmLevel === FetchRealmLevel.initial
+        || fetchRealmLevel === FetchRealmLevel.success
+          && this.didRegionChange(prevProps.currentRegion, currentRegion);
+      if (shouldRefreshRealms) {
+        this.props.refreshRealms(currentRegion);
+
+        return;
+      }
+    }
+
+    if (currentRegion !== null && currentRealm !== null) {
+      const shouldRefreshAuctions = fetchAuctionsLevel === FetchAuctionsLevel.initial
+        || fetchAuctionsLevel === FetchAuctionsLevel.success
+          && this.didRealmChange(prevProps.currentRealm, currentRealm);
+      if (shouldRefreshAuctions) {
+        this.props.refreshAuctions(currentRegion, currentRealm);
+      }
+    }
+  }
+
   renderAuction(auction: Auction, index: number) {
     return (
       <tr key={index}>
