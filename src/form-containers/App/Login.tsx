@@ -1,10 +1,10 @@
 import { withFormik, WithFormikConfig } from 'formik';
 import * as Yup from 'yup';
 
-import { FormValues, Login } from 'components/App/Login';
-import { loginUser } from 'api/user';
-import { Profile } from 'types/global';
-import { UserRules } from 'validator-rules';
+import { FormValues, Login } from '@app/components/App/Login';
+import { loginUser } from '@app/api/user';
+import { Profile } from '@app/types/global';
+import { UserRules } from '@app/validator-rules';
 
 interface FormProps {
   onUserLogin: (payload: Profile) => void;

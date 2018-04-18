@@ -1,14 +1,14 @@
 import {
   Regions,
   Realms
-} from 'types/global';
+} from '@app/types/global';
 import {
   AuctionState,
   FetchAuctionsLevel,
   FetchRegionLevel,
   FetchRealmLevel,
   defaultAuctionState
-} from 'types/auction';
+} from '@app/types/auction';
 import {
   AuctionActions,
   REQUEST_REGIONS, RECEIVE_REGIONS,
@@ -16,7 +16,7 @@ import {
   REQUEST_REALMS, RECEIVE_REALMS,
   REALM_CHANGE,
   REQUEST_AUCTIONS, RECEIVE_AUCTIONS
-} from 'actions/auction';
+} from '@app/actions/auction';
 
 type State = Readonly<AuctionState> | undefined;
 

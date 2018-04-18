@@ -2,10 +2,10 @@ import * as React from 'react';
 import { Navbar, NavbarGroup, NavbarHeading, NavbarDivider, Alignment, ButtonGroup } from '@blueprintjs/core';
 import { RouteComponentProps } from 'react-router-dom';
 
-import Register from 'containers/App/Register';
-import Login from 'containers/App/Login';
-import LinkButton from 'route-containers/util/LinkButton';
-import { User } from 'types/global';
+import Register from '@app/containers/App/Register';
+import Login from '@app/containers/App/Login';
+import LinkButton from '@app/route-containers/util/LinkButton';
+import { User } from '@app/types/global';
 
 export type StateProps = {
   user: User | null

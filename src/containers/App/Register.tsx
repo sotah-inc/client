@@ -1,11 +1,11 @@
 import { connect, Dispatch } from 'react-redux';
 
-import { StateProps, DispatchProps, OwnProps } from 'components/App/Register';
-import Register from 'form-containers/App/Register';
-import { StoreState } from 'types';
-import { Profile } from 'types/global';
-import { Actions } from 'actions';
-import { UserRegister } from 'actions/main';
+import { StateProps, DispatchProps, OwnProps } from '@app/components/App/Register';
+import Register from '@app/form-containers/App/Register';
+import { StoreState } from '@app/types';
+import { Profile } from '@app/types/global';
+import { Actions } from '@app/actions';
+import { UserRegister } from '@app/actions/main';
 
 const mapStateToProps = (state: StoreState): StateProps => {
   return { isRegistered: state.Main.isRegistered };

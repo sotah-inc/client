@@ -5,10 +5,10 @@ import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 import { BrowserRouter as Router } from 'react-router-dom';
 
-import App from './route-containers/App';
-import { rootReducer } from './reducers';
-import { StoreState, defaultMainState, defaultAuctionState } from './types';
-import registerServiceWorker from './registerServiceWorker';
+import App from '@app/route-containers/App';
+import { rootReducer } from '@app/reducers';
+import { StoreState, defaultMainState, defaultAuctionState } from '@app/types';
+import registerServiceWorker from '@app/registerServiceWorker';
 
 const preloadedState: StoreState = {
   Auction: defaultAuctionState,

@@ -1,12 +1,12 @@
 import { connect, Dispatch } from 'react-redux';
 
-import { App, StateProps, DispatchProps, OwnProps } from 'components/App';
-import { StoreState } from 'types';
-import { Region, Realm } from 'types/global';
-import { Actions } from 'actions';
-import { FetchPing } from 'actions/main';
-import { FetchRegions, FetchRealms } from 'actions/auction';
-import { FetchAuctions } from 'actions/auction';
+import { App, StateProps, DispatchProps, OwnProps } from '@app/components/App';
+import { StoreState } from '@app/types';
+import { Region, Realm } from '@app/types/global';
+import { Actions } from '@app/actions';
+import { FetchPing } from '@app/actions/main';
+import { FetchRegions, FetchRealms } from '@app/actions/auction';
+import { FetchAuctions } from '@app/actions/auction';
 
 const mapStateToProps = (state: StoreState): StateProps => {
   const { fetchPingLevel } = state.Main;

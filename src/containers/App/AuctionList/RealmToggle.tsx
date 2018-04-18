@@ -1,10 +1,10 @@
 import { connect, Dispatch } from 'react-redux';
 
-import { RealmToggle, StateProps, DispatchProps, OwnProps } from 'components/App/AuctionList/RealmToggle';
-import { StoreState } from 'types';
-import { Realm } from 'types/global';
-import { Actions } from 'actions';
-import { RealmChange } from 'actions/auction';
+import { RealmToggle, StateProps, DispatchProps, OwnProps } from '@app/components/App/AuctionList/RealmToggle';
+import { StoreState } from '@app/types';
+import { Realm } from '@app/types/global';
+import { Actions } from '@app/actions';
+import { RealmChange } from '@app/actions/auction';
 
 const mapStateToProps = (state: StoreState): StateProps => {
   const { realms, currentRealm, fetchRealmLevel } = state.Auction;
