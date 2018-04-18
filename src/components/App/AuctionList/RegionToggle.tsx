@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { Spinner, Button, Popover, Position, Menu, MenuItem, Intent } from '@blueprintjs/core';
 
-import { Region, Regions } from '../../types/global';
-import { FetchRegionLevel } from '../../types/auction';
+import { Region, Regions } from '../../../types/global';
+import { FetchRegionLevel } from '../../../types/auction';
 
 export type StateProps = {
   currentRegion: Region | null

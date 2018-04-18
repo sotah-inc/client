@@ -2,8 +2,8 @@ import * as React from 'react';
 import { ButtonGroup } from '@blueprintjs/core';
 
 import { Currency } from '../util/Currency';
-import RegionToggle from '../../containers/App/RegionToggle';
-import RealmToggle from '../../containers/App/RealmToggle';
+import RegionToggle from '../../containers/App/AuctionList/RegionToggle';
+import RealmToggle from '../../containers/App/AuctionList/RealmToggle';
 import { Auction } from '../../types/global';
 import { FetchAuctionsLevel } from '../../types/auction';
 
