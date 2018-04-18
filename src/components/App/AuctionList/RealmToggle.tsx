@@ -41,12 +41,15 @@ export class RealmToggle extends React.Component<Props> {
     }
 
     const { currentRealm } = this.props;
-    const isActive = currentRealm !== null && realm.slug === currentRealm.slug;
+    const intent = currentRealm !== null && realm.slug === currentRealm.slug
+      ? Intent.PRIMARY
+      : Intent.NONE;
 
     return (
       <MenuItem
         key={index}
-        className={isActive ? 'pt-active' : ''}
+        intent={intent}
+        className={modifiers.active ? 'pt-active' : ''}
         label={realm.battlegroup}
         onClick={handleClick}
         text={realm.name}
