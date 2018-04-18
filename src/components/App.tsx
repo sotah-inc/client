@@ -1,7 +1,9 @@
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 
-import { FetchPingLevel, FetchRegionLevel, Region, FetchRealmLevel, Realm } from '../types/main';
+import { Region, Realm } from '../types/global';
+import { FetchPingLevel } from '../types/main';
+import { FetchRegionLevel, FetchRealmLevel } from '../types/auction';
 import { FetchAuctionsLevel } from '../types/auction';
 import Topbar from '../route-containers/App/Topbar';
 import { Content } from './App/Content';

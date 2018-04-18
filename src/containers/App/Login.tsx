@@ -3,7 +3,7 @@ import { connect, Dispatch } from 'react-redux';
 import { StateProps, DispatchProps, OwnProps } from '../../components/App/Login';
 import Login from '../../form-containers/App/Login';
 import { StoreState } from '../../types';
-import { Profile } from '../../types/main';
+import { Profile } from '../../types/global';
 import { Actions } from '../../actions';
 import { UserLogin } from '../../actions/main';
 

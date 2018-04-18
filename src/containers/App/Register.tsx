@@ -3,7 +3,7 @@ import { connect, Dispatch } from 'react-redux';
 import { StateProps, DispatchProps, OwnProps } from '../../components/App/Register';
 import Register from '../../form-containers/App/Register';
 import { StoreState } from '../../types';
-import { Profile } from '../../types/main';
+import { Profile } from '../../types/global';
 import { Actions } from '../../actions';
 import { UserRegister } from '../../actions/main';
 
