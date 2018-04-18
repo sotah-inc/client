@@ -2,9 +2,9 @@ import * as React from 'react';
 import { Button, Dialog, Intent } from '@blueprintjs/core';
 import { FormikProps } from 'formik';
 
+import { Profile } from 'types/global';
 import { DialogBody, DialogActions } from '../util';
 import { Generator as FormFieldGenerator } from '../util/FormField';
-import { Profile } from '../../types/global';
 
 export type StateProps = {
   isLoggedIn: boolean

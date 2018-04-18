@@ -1,8 +1,8 @@
 import { connect, Dispatch } from 'react-redux';
 
-import { Topbar, StateProps, DispatchProps, OwnProps } from '../../components/App/Topbar';
-import { StoreState } from '../../types';
-import { Actions } from '../../actions';
+import { Topbar, StateProps, DispatchProps, OwnProps } from 'components/App/Topbar';
+import { StoreState } from 'types';
+import { Actions } from 'actions';
 
 const mapStateToProps = (state: StoreState): StateProps => {
   const user = state.Main.profile === null ? null : state.Main.profile.user;

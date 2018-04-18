@@ -2,13 +2,13 @@ import {
   MainState,
   FetchPingLevel,
   defaultMainState
-} from '../types/main';
+} from 'types/main';
 import {
   MainActions,
   REQUEST_PING, RECEIVE_PING,
   USER_REGISTER,
   USER_LOGIN
-} from '../actions/main';
+} from 'actions/main';
 
 type State = Readonly<MainState> | undefined;
 

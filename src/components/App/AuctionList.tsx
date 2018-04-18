@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { ButtonGroup } from '@blueprintjs/core';
 
+import RegionToggle from 'containers/App/AuctionList/RegionToggle';
+import RealmToggle from 'containers/App/AuctionList/RealmToggle';
+import { Auction } from 'types/global';
+import { FetchAuctionsLevel } from 'types/auction';
 import { Currency } from '../util/Currency';
-import RegionToggle from '../../containers/App/AuctionList/RegionToggle';
-import RealmToggle from '../../containers/App/AuctionList/RealmToggle';
-import { Auction } from '../../types/global';
-import { FetchAuctionsLevel } from '../../types/auction';
 
 export type StateProps = {
   fetchAuctionsLevel: FetchAuctionsLevel

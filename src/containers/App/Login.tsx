@@ -1,11 +1,11 @@
 import { connect, Dispatch } from 'react-redux';
 
-import { StateProps, DispatchProps, OwnProps } from '../../components/App/Login';
-import Login from '../../form-containers/App/Login';
-import { StoreState } from '../../types';
-import { Profile } from '../../types/global';
-import { Actions } from '../../actions';
-import { UserLogin } from '../../actions/main';
+import { StateProps, DispatchProps, OwnProps } from 'components/App/Login';
+import Login from 'form-containers/App/Login';
+import { StoreState } from 'types';
+import { Profile } from 'types/global';
+import { Actions } from 'actions';
+import { UserLogin } from 'actions/main';
 
 const mapStateToProps = (state: StoreState): StateProps => {
   return { isLoggedIn: state.Main.isLoggedIn };

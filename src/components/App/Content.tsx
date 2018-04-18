@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Route, Switch } from 'react-router-dom';
 
-import AuctionList from '../../containers/App/AuctionList';
+import AuctionList from 'containers/App/AuctionList';
 import { NotFound } from '../util/NotFound';
 
 export const Content: React.SFC = () => {

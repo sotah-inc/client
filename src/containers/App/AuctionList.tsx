@@ -1,8 +1,8 @@
 import { connect, Dispatch } from 'react-redux';
 
-import { AuctionList, StateProps, DispatchProps, OwnProps } from '../../components/App/AuctionList';
-import { StoreState } from '../../types';
-import { Actions } from '../../actions';
+import { AuctionList, StateProps, DispatchProps, OwnProps } from 'components/App/AuctionList';
+import { StoreState } from 'types';
+import { Actions } from 'actions';
 
 const mapStateToProps = (state: StoreState): StateProps => {
   const { fetchAuctionsLevel, auctions } = state.Auction;
