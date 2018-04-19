@@ -1,6 +1,7 @@
 import {
   Regions,
-  Realms
+  Realms,
+  Auction
 } from '@app/types/global';
 import {
   AuctionState,
@@ -65,7 +66,12 @@ export const auction = (state: State, action: AuctionActions): State => {
         return { ...state, fetchAuctionsLevel: FetchAuctionsLevel.failure };
       }
 
-      return { ...state, fetchAuctionsLevel: FetchAuctionsLevel.success, auctions: action.payload };
+      let auctions: Auction[] = [];
+      if (action.payload.auctions !== null) {
+        auctions = action.payload.auctions;
+      }
+
+      return { ...state, fetchAuctionsLevel: FetchAuctionsLevel.success, auctions };
     default:
       return state;
   }

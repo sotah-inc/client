@@ -1,8 +1,8 @@
 import { Dispatch } from 'redux';
 
 import { createAction, ActionsUnion } from './helpers';
-import { Region, Realm, Auction } from '../types/global';
-import { getAuctions, getStatus, getRegions } from '../api/data';
+import { Region, Realm } from '../types/global';
+import { getAuctions, getStatus, getRegions, AuctionsResponse } from '../api/data';
 
 export const REQUEST_REGIONS = 'REQUEST_REGIONS';
 export const RECEIVE_REGIONS = 'RECEIVE_REGIONS';
@@ -37,7 +37,7 @@ export const RealmChange = (payload: Realm) => createAction(REALM_CHANGE, payloa
 export const REQUEST_AUCTIONS = 'REQUEST_AUCTIONS';
 export const RECEIVE_AUCTIONS = 'RECEIVE_AUCTIONS';
 const RequestAuctions = () => createAction(REQUEST_AUCTIONS);
-const ReceiveAuctions = (payload: Auction[] | null) => createAction(RECEIVE_AUCTIONS, payload);
+const ReceiveAuctions = (payload: AuctionsResponse | null) => createAction(RECEIVE_AUCTIONS, payload);
 type FetchAuctionsType = ReturnType<typeof RequestAuctions | typeof ReceiveAuctions>;
 export const FetchAuctions = (region: Region, realm: Realm) => {
   return async (dispatch: Dispatch<FetchAuctionsType>) => {
