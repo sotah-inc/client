@@ -29,7 +29,7 @@ export const defaultAuctionState: AuctionState = {
   fetchRealmLevel: FetchRealmLevel.initial,
   realms: {},
   currentRealm: null,
-  currentPage: 0,
+  currentPage: 2638,
   auctionsPerPage: 10,
   totalResults: 0
 };

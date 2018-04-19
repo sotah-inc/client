@@ -14,27 +14,3 @@
 .pt-html-table {
     width: 100%;
 }
-
-ul.paginate-container {
-    padding-left: 0;
-    list-style-type: none;
-
-    .active-page a {
-        color: $pt-intent-primary;
-    }
-
-    li a.page-link {
-        border-radius: 0;
-    }
-    li:first-child a {
-        border-top-right-radius: 0;
-        border-bottom-right-radius: 0;
-    }
-    li:not(:last-child) a {
-        margin-right: -1px;
-    }
-    li:last-child a {
-        border-top-left-radius: 0;
-        border-bottom-left-radius: 0;
-    }
-}

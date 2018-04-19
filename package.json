@@ -64,11 +64,9 @@
     "@types/prop-types": "^15.5.2",
     "@types/react": "^16.1.0",
     "@types/react-dom": "^16.0.4",
-    "@types/react-paginate": "^4.3.2",
     "@types/react-redux": "^5.0.15",
     "@types/react-router-dom": "^4.2.6",
     "@types/yup": "^0.24.3",
-    "react-paginate": "^5.2.2",
     "typescript": "^2.8.1"
   },
   "jest": {

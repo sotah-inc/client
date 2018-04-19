@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { ButtonGroup, Spinner, Intent } from '@blueprintjs/core';
-import * as ReactPaginate from 'react-paginate';
 
 import RegionToggle from '@app/containers/App/AuctionList/RegionToggle';
 import RealmToggle from '@app/containers/App/AuctionList/RealmToggle';
@@ -8,7 +7,9 @@ import { Auction, Region, Realm } from '@app/types/global';
 import { FetchPingLevel } from '@app/types/main';
 import { FetchRegionLevel, FetchRealmLevel, FetchAuctionsLevel } from '@app/types/auction';
 import { GetAuctionsOptions } from '@app/api/data';
-import { Currency } from '../util/Currency';
+import { Currency, Pagination } from '../util';
+
+type ListAuction = Auction | null;
 
 export type StateProps = {
   fetchPingLevel: FetchPingLevel
@@ -17,7 +18,7 @@ export type StateProps = {
   fetchRealmLevel: FetchRealmLevel
   currentRealm: Realm | null
   fetchAuctionsLevel: FetchAuctionsLevel
-  auctions: Auction[]
+  auctions: ListAuction[]
   currentPage: number
   auctionsPerPage: number
   totalResults: number
@@ -129,7 +130,21 @@ export class AuctionList extends React.Component<Props> {
     );
   }
 
-  renderAuction(auction: Auction, index: number) {
+  renderAuction(auction: Auction | null, index: number) {
+    if (auction === null) {
+      return (
+        <tr key={index}>
+          <td>---</td>
+          <td>---</td>
+          <td>---</td>
+          <td>---</td>
+          <td>---</td>
+          <td>---</td>
+          <td>---</td>
+        </tr>
+      );
+    }
+
     return (
       <tr key={index}>
         <td>{auction.ownerRealm}</td>
@@ -150,7 +165,17 @@ export class AuctionList extends React.Component<Props> {
       return 'No auctions found!';
     }
 
-    const pageCount = Number((totalResults / auctionsPerPage).toFixed(0));
+    if (auctions.length < auctionsPerPage) {
+      for (let i = auctions.length; i < auctionsPerPage; i++) {
+        auctions[i] = null;
+      }
+    }
+
+    let pageCount = (totalResults / auctionsPerPage) - 1;
+    const remainder = totalResults % auctionsPerPage;
+    if (remainder > 0) {
+      pageCount = (totalResults - remainder) / auctionsPerPage;
+    }
 
     return (
       <>
@@ -174,21 +199,11 @@ export class AuctionList extends React.Component<Props> {
             {auctions.map((auction, index) => this.renderAuction(auction, index))}
           </tbody>
         </table>
-        <ReactPaginate
+        <Pagination
           pageCount={pageCount}
-          pageRangeDisplayed={5}
-          marginPagesDisplayed={1}
-          forcePage={currentPage}
-          onPageChange={(v) => {
-            console.log(v);
-            this.props.setCurrentPage(v.selected);
-          }}
-          pageLinkClassName="pt-button page-link"
-          previousLinkClassName="pt-button"
-          nextLinkClassName="pt-button"
-          breakClassName="pt-button pt-disabled"
-          containerClassName="pt-button-group paginate-container"
-          activeClassName="active-page"
+          currentPage={currentPage}
+          pagesShown={5}
+          onPageChange={(page) => this.props.setCurrentPage(page)}
         />
         {this.renderRefetchingSpinner()}
       </>
