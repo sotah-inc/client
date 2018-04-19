@@ -179,7 +179,16 @@ export class AuctionList extends React.Component<Props> {
           pageRangeDisplayed={5}
           marginPagesDisplayed={1}
           forcePage={currentPage}
-          onPageChange={(v) => { this.props.setCurrentPage(v.selected); }}
+          onPageChange={(v) => {
+            console.log(v);
+            this.props.setCurrentPage(v.selected);
+          }}
+          pageLinkClassName="pt-button page-link"
+          previousLinkClassName="pt-button next-link"
+          nextLinkClassName="pt-button prev-link"
+          breakClassName="pt-button pt-disabled"
+          containerClassName="pt-button-group paginate-container"
+          activeClassName="active-page"
         />
         {this.renderRefetchingSpinner()}
       </>

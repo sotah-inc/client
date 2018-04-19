@@ -14,3 +14,24 @@
 .pt-html-table {
     width: 100%;
 }
+
+ul.paginate-container {
+    padding-left: 0;
+    list-style-type: none;
+
+    .active-page a {
+        color: $pt-intent-primary;
+    }
+
+    .page-link {
+        border-radius: 0;
+    }
+    .next-link {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+    .prev-link {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+    }
+}
