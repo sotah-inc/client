@@ -183,7 +183,7 @@ export class AuctionList extends React.Component<Props> {
           <RealmToggle />
           <RegionToggle />
         </ButtonGroup>
-        <table className="pt-html-table">
+        <table className="pt-html-table pt-html-table-bordered auction-list">
           <thead>
             <tr>
               <th>Realm</th>
