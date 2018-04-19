@@ -42,7 +42,7 @@ export const auction = (state: State, action: AuctionActions): State => {
 
       return { ...state, fetchRegionLevel: FetchRegionLevel.success, regions, currentRegion };
     case REGION_CHANGE:
-      return { ...state, currentRegion: action.payload };
+      return { ...state, currentRegion: action.payload, currentPage: defaultAuctionState.currentPage };
     case REQUEST_REALMS:
       return { ...state, fetchRealmLevel: FetchRealmLevel.fetching };
     case RECEIVE_REALMS:
@@ -58,7 +58,7 @@ export const auction = (state: State, action: AuctionActions): State => {
 
       return { ...state, fetchRealmLevel: FetchRealmLevel.success, realms, currentRealm };
     case REALM_CHANGE:
-      return { ...state, currentRealm: action.payload };
+      return { ...state, currentRealm: action.payload, currentPage: defaultAuctionState.currentPage };
     case REQUEST_AUCTIONS:
       const fetchAuctionsLevel = state.fetchAuctionsLevel === FetchAuctionsLevel.initial
         ? FetchAuctionsLevel.fetching
