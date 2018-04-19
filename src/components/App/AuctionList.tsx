@@ -184,8 +184,8 @@ export class AuctionList extends React.Component<Props> {
             this.props.setCurrentPage(v.selected);
           }}
           pageLinkClassName="pt-button page-link"
-          previousLinkClassName="pt-button next-link"
-          nextLinkClassName="pt-button prev-link"
+          previousLinkClassName="pt-button"
+          nextLinkClassName="pt-button"
           breakClassName="pt-button pt-disabled"
           containerClassName="pt-button-group paginate-container"
           activeClassName="active-page"

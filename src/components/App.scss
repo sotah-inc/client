@@ -23,14 +23,17 @@ ul.paginate-container {
         color: $pt-intent-primary;
     }
 
-    .page-link {
+    li a.page-link {
         border-radius: 0;
     }
-    .next-link {
+    li:first-child a {
         border-top-right-radius: 0;
         border-bottom-right-radius: 0;
     }
-    .prev-link {
+    li:not(:last-child) a {
+        margin-right: -1px;
+    }
+    li:last-child a {
         border-top-left-radius: 0;
         border-bottom-left-radius: 0;
     }
