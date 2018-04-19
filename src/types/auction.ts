@@ -18,7 +18,7 @@ export enum FetchRegionLevel { initial, fetching, success, failure }
 
 export enum FetchRealmLevel { initial, fetching, success, failure }
 
-export enum FetchAuctionsLevel { initial, fetching, success, failure }
+export enum FetchAuctionsLevel { initial, fetching, refetching, success, failure }
 
 export const defaultAuctionState: AuctionState = {
   fetchAuctionsLevel: FetchAuctionsLevel.initial,

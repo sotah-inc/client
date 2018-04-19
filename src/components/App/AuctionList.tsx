@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ButtonGroup } from '@blueprintjs/core';
+import { ButtonGroup, Spinner, Intent } from '@blueprintjs/core';
 import * as ReactPaginate from 'react-paginate';
 
 import RegionToggle from '@app/containers/App/AuctionList/RegionToggle';
@@ -118,6 +118,17 @@ export class AuctionList extends React.Component<Props> {
     }
   }
 
+  renderRefetchingSpinner() {
+    const { fetchAuctionsLevel } = this.props;
+    if (fetchAuctionsLevel !== FetchAuctionsLevel.refetching) {
+      return null;
+    }
+
+    return (
+      <Spinner className="pt-small" intent={Intent.PRIMARY} />
+    );
+  }
+
   renderAuction(auction: Auction, index: number) {
     return (
       <tr key={index}>
@@ -170,6 +181,7 @@ export class AuctionList extends React.Component<Props> {
           forcePage={currentPage}
           onPageChange={(v) => { this.props.setCurrentPage(v.selected); }}
         />
+        {this.renderRefetchingSpinner()}
       </>
     );
   }
@@ -181,6 +193,7 @@ export class AuctionList extends React.Component<Props> {
         return <>Loading...</>;
       case FetchAuctionsLevel.failure:
         return <>Could not fetch auctions!</>;
+      case FetchAuctionsLevel.refetching:
       case FetchAuctionsLevel.success:
         return this.renderAuctions();
       default:

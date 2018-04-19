@@ -60,7 +60,10 @@ export const auction = (state: State, action: AuctionActions): State => {
     case REALM_CHANGE:
       return { ...state, currentRealm: action.payload };
     case REQUEST_AUCTIONS:
-      return { ...state, fetchAuctionsLevel: FetchAuctionsLevel.fetching };
+      const fetchAuctionsLevel = state.fetchAuctionsLevel === FetchAuctionsLevel.initial
+        ? FetchAuctionsLevel.fetching
+        : FetchAuctionsLevel.refetching;
+      return { ...state, fetchAuctionsLevel };
     case RECEIVE_AUCTIONS:
       if (action.payload === null) {
         return { ...state, fetchAuctionsLevel: FetchAuctionsLevel.failure };
