@@ -4,8 +4,7 @@ import { AuctionList, StateProps, DispatchProps, OwnProps } from '@app/component
 import { StoreState } from '@app/types';
 import { Region } from '@app/types/global';
 import { Actions } from '@app/actions';
-import { FetchRegions, FetchRealms } from '@app/actions/auction';
-import { FetchAuctions } from '@app/actions/auction';
+import { FetchRegions, FetchRealms, FetchAuctions, PageChange } from '@app/actions/auction';
 import { GetAuctionsOptions } from '@app/api/data';
 
 const mapStateToProps = (state: StoreState): StateProps => {
@@ -18,7 +17,8 @@ const mapStateToProps = (state: StoreState): StateProps => {
     fetchAuctionsLevel,
     auctions,
     currentPage,
-    auctionsPerPage
+    auctionsPerPage,
+    totalResults
   } = state.Auction;
   return {
     fetchPingLevel,
@@ -29,7 +29,8 @@ const mapStateToProps = (state: StoreState): StateProps => {
     currentRealm,
     auctions,
     currentPage,
-    auctionsPerPage
+    auctionsPerPage,
+    totalResults
   };
 };
 
@@ -37,7 +38,8 @@ const mapDispatchToProps = (dispatch: Dispatch<Actions>): DispatchProps => {
   return {
     refreshRegions: () => dispatch(FetchRegions()),
     refreshRealms: (region: Region) => dispatch(FetchRealms(region)),
-    refreshAuctions: (opts: GetAuctionsOptions) => dispatch(FetchAuctions(opts))
+    refreshAuctions: (opts: GetAuctionsOptions) => dispatch(FetchAuctions(opts)),
+    setCurrentPage: (page: number) => dispatch(PageChange(page))
   };
 };
 

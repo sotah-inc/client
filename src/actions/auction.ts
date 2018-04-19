@@ -46,12 +46,16 @@ export const FetchAuctions = (opts: GetAuctionsOptions) => {
   };
 };
 
+export const PAGE_CHANGE = 'PAGE_CHANGE';
+export const PageChange = (payload: number) => createAction(PAGE_CHANGE, payload);
+
 export const AuctionActions = {
   RequestRegions, ReceiveRegions,
   RegionChange,
   RequestRealms, ReceiveRealms,
   RealmChange,
-  RequestAuctions, ReceiveAuctions
+  RequestAuctions, ReceiveAuctions,
+  PageChange
 };
 
 export type AuctionActions = ActionsUnion<typeof AuctionActions>;

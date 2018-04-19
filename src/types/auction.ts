@@ -11,6 +11,7 @@ export type AuctionState = {
   currentRealm: Realm | null
   currentPage: number
   auctionsPerPage: number
+  totalResults: number
 };
 
 export enum FetchRegionLevel { initial, fetching, success, failure }
@@ -29,5 +30,6 @@ export const defaultAuctionState: AuctionState = {
   realms: {},
   currentRealm: null,
   currentPage: 0,
-  auctionsPerPage: 10
+  auctionsPerPage: 10,
+  totalResults: 0
 };

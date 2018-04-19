@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { ButtonGroup } from '@blueprintjs/core';
+import * as ReactPaginate from 'react-paginate';
 
 import RegionToggle from '@app/containers/App/AuctionList/RegionToggle';
 import RealmToggle from '@app/containers/App/AuctionList/RealmToggle';
@@ -19,12 +20,14 @@ export type StateProps = {
   auctions: Auction[]
   currentPage: number
   auctionsPerPage: number
+  totalResults: number
 };
 
 export type DispatchProps = {
   refreshRegions: () => void
   refreshRealms: (region: Region) => void
   refreshAuctions: (opts: GetAuctionsOptions) => void
+  setCurrentPage: (page: number) => void
 };
 
 export type OwnProps = {};
@@ -103,6 +106,16 @@ export class AuctionList extends React.Component<Props> {
         });
       }
     }
+
+    const didPageChange = currentPage !== prevProps.currentPage;
+    if (currentRegion !== null && currentRealm !== null && didPageChange) {
+      this.props.refreshAuctions({
+        regionName: currentRegion.name,
+        realmSlug: currentRealm.slug,
+        page: currentPage,
+        count: auctionsPerPage
+      });
+    }
   }
 
   renderAuction(auction: Auction, index: number) {
@@ -120,11 +133,13 @@ export class AuctionList extends React.Component<Props> {
   }
 
   renderAuctions() {
-    const { auctions } = this.props;
+    const { auctions, totalResults, auctionsPerPage, currentPage } = this.props;
 
     if (auctions.length === 0) {
       return 'No auctions found!';
     }
+
+    const pageCount = Number((totalResults / auctionsPerPage).toFixed(0));
 
     return (
       <>
@@ -148,6 +163,13 @@ export class AuctionList extends React.Component<Props> {
             {auctions.map((auction, index) => this.renderAuction(auction, index))}
           </tbody>
         </table>
+        <ReactPaginate
+          pageCount={pageCount}
+          pageRangeDisplayed={5}
+          marginPagesDisplayed={1}
+          forcePage={currentPage}
+          onPageChange={(v) => { this.props.setCurrentPage(v.selected); }}
+        />
       </>
     );
   }
