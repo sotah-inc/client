@@ -60,7 +60,7 @@ export const Pagination: React.SFC<Props> = (props: Props) => {
     }
 
     return (
-      <ButtonGroup>
+      <ButtonGroup style={{marginRight: '10px'}}>
         <Button
           icon="double-chevron-left"
           onClick={() => onPageChange(0)}
@@ -75,7 +75,7 @@ export const Pagination: React.SFC<Props> = (props: Props) => {
   return (
     <>
       {renderFirstPage()}
-      <ButtonGroup style={{marginLeft: '10px'}}>
+      <ButtonGroup>
         <Button
           icon="chevron-left"
           onClick={() => onPageChange(currentPage - 1)}
