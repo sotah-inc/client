@@ -9,7 +9,11 @@ type Props = {
 };
 
 export const Pagination: React.SFC<Props> = (props: Props) => {
-  const { currentPage, pagesShown, pageCount, onPageChange } = props;
+  const { currentPage, pageCount, onPageChange } = props;
+  let { pagesShown } = props;
+  if (pageCount < pagesShown) {
+    pagesShown = pageCount + 1;
+  }
 
   const mid = Math.floor(pagesShown / 2);
   let offset = mid;
