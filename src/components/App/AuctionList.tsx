@@ -6,6 +6,7 @@ import RealmToggle from '@app/containers/App/AuctionList/RealmToggle';
 import { Auction, Region, Realm } from '@app/types/global';
 import { FetchPingLevel } from '@app/types/main';
 import { FetchRegionLevel, FetchRealmLevel, FetchAuctionsLevel } from '@app/types/auction';
+import { GetAuctionsOptions } from '@app/api/data';
 import { Currency } from '../util/Currency';
 
 export type StateProps = {
@@ -16,12 +17,14 @@ export type StateProps = {
   currentRealm: Realm | null
   fetchAuctionsLevel: FetchAuctionsLevel
   auctions: Auction[]
+  currentPage: number
+  auctionsPerPage: number
 };
 
 export type DispatchProps = {
   refreshRegions: () => void
   refreshRealms: (region: Region) => void
-  refreshAuctions: (region: Region, realm: Realm) => void
+  refreshAuctions: (opts: GetAuctionsOptions) => void
 };
 
 export type OwnProps = {};
@@ -71,7 +74,9 @@ export class AuctionList extends React.Component<Props> {
       fetchRealmLevel,
       fetchAuctionsLevel,
       currentRegion,
-      currentRealm
+      currentRealm,
+      currentPage,
+      auctionsPerPage
     } = this.props;
 
     if (currentRegion !== null) {
@@ -90,7 +95,12 @@ export class AuctionList extends React.Component<Props> {
         || fetchAuctionsLevel === FetchAuctionsLevel.success
           && this.didRealmChange(prevProps.currentRealm, currentRealm);
       if (shouldRefreshAuctions) {
-        this.props.refreshAuctions(currentRegion, currentRealm);
+        this.props.refreshAuctions({
+          regionName: currentRegion.name,
+          realmSlug: currentRealm.slug,
+          page: currentPage,
+          count: auctionsPerPage
+        });
       }
     }
   }

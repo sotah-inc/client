@@ -25,13 +25,23 @@ export const getStatus = async (regionName: string): Promise<Realm[] | null> => 
   return (await res.json()).realms;
 };
 
+export type GetAuctionsOptions = {
+  regionName: string
+  realmSlug: string
+  page: number
+  count: number
+};
+
 export type AuctionsResponse = {
   auctions: Auction[] | null
   total: number
 };
 
-export const getAuctions = async (regionName: string, realmSlug: string): Promise<AuctionsResponse | null> => {
-  const res = await fetch(`${apiEndpoint}/region/${regionName}/realm/${realmSlug}/auctions`);
+export const getAuctions = async (opts: GetAuctionsOptions): Promise<AuctionsResponse | null> => {
+  const { regionName, realmSlug, page, count } = opts;
+  const res = await fetch(
+    `${apiEndpoint}/region/${regionName}/realm/${realmSlug}/auctions?page=${page}&count=${count}`
+  );
   if (res.status !== HTTPStatus.OK) {
     return null;
   }
