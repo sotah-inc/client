@@ -187,6 +187,7 @@ export class AuctionList extends React.Component<Props> {
               pagesShown={5}
               onPageChange={(page) => this.props.setCurrentPage(page)}
             />
+            {this.renderRefetchingSpinner()}
           </NavbarGroup>
           <NavbarGroup align={Alignment.RIGHT}>
             <ButtonGroup>
@@ -211,7 +212,6 @@ export class AuctionList extends React.Component<Props> {
             {auctions.map((auction, index) => this.renderAuction(auction, index))}
           </tbody>
         </table>
-        {this.renderRefetchingSpinner()}
       </>
     );
   }
