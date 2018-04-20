@@ -96,9 +96,13 @@ export class AuctionList extends React.Component<Props> {
     }
 
     if (currentRegion !== null && currentRealm !== null) {
+      const didPageChange = currentPage !== prevProps.currentPage;
+      const didCountChange = auctionsPerPage !== prevProps.auctionsPerPage;
       const shouldRefreshAuctions = fetchAuctionsLevel === FetchAuctionsLevel.initial
         || fetchAuctionsLevel === FetchAuctionsLevel.success
-        && this.didRealmChange(prevProps.currentRealm, currentRealm);
+        && (this.didRealmChange(prevProps.currentRealm, currentRealm)
+          || didPageChange
+          || didCountChange);
       if (shouldRefreshAuctions) {
         this.props.refreshAuctions({
           regionName: currentRegion.name,
@@ -107,16 +111,6 @@ export class AuctionList extends React.Component<Props> {
           count: auctionsPerPage
         });
       }
-    }
-
-    const didPageChange = currentPage !== prevProps.currentPage;
-    if (currentRegion !== null && currentRealm !== null && didPageChange) {
-      this.props.refreshAuctions({
-        regionName: currentRegion.name,
-        realmSlug: currentRealm.slug,
-        page: currentPage,
-        count: auctionsPerPage
-      });
     }
   }
 

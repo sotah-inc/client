@@ -78,7 +78,7 @@ export const auction = (state: State, action: AuctionActions): State => {
     case PAGE_CHANGE:
       return { ...state, currentPage: action.payload };
     case COUNT_CHANGE:
-      return { ...state, auctionsPerPage: action.payload };
+      return { ...state, auctionsPerPage: action.payload, currentPage: defaultAuctionState.currentPage };
     default:
       return state;
   }
