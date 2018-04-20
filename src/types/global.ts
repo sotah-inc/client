@@ -28,6 +28,7 @@ export type Errors = {
 export type RealmSlug = string;
 
 export type Realm = {
+  regionName: string
   type: string
   population: string
   queue: boolean

@@ -54,7 +54,7 @@ export class AuctionList extends React.Component<Props> {
       return true;
     }
 
-    if (prevRealm.slug === currentRealm.slug) {
+    if (prevRealm.regionName === currentRealm.regionName && prevRealm.slug === currentRealm.slug) {
       return false;
     }
 
@@ -90,8 +90,6 @@ export class AuctionList extends React.Component<Props> {
         && this.didRegionChange(prevProps.currentRegion, currentRegion);
       if (shouldRefreshRealms) {
         this.props.refreshRealms(currentRegion);
-
-        return;
       }
     }
 
