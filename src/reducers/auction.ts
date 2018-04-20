@@ -16,7 +16,7 @@ import {
   REGION_CHANGE,
   REQUEST_REALMS, RECEIVE_REALMS,
   REALM_CHANGE,
-  REQUEST_AUCTIONS, RECEIVE_AUCTIONS, PAGE_CHANGE
+  REQUEST_AUCTIONS, RECEIVE_AUCTIONS, PAGE_CHANGE, COUNT_CHANGE
 } from '@app/actions/auction';
 
 type State = Readonly<AuctionState> | undefined;
@@ -77,6 +77,8 @@ export const auction = (state: State, action: AuctionActions): State => {
       return { ...state, fetchAuctionsLevel: FetchAuctionsLevel.success, totalResults: action.payload.total, auctions };
     case PAGE_CHANGE:
       return { ...state, currentPage: action.payload };
+    case COUNT_CHANGE:
+      return { ...state, auctionsPerPage: action.payload };
     default:
       return state;
   }

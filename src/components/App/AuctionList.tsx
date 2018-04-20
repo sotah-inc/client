@@ -1,8 +1,9 @@
 import * as React from 'react';
-import { ButtonGroup, Spinner, Intent, Navbar, NavbarGroup, Alignment } from '@blueprintjs/core';
+import { ButtonGroup, Spinner, Intent, Navbar, NavbarGroup, Alignment, NavbarDivider } from '@blueprintjs/core';
 
 import RegionToggle from '@app/containers/App/AuctionList/RegionToggle';
 import RealmToggle from '@app/containers/App/AuctionList/RealmToggle';
+import CountToggle from '@app/containers/App/AuctionList/CountToggle';
 import { Auction, Region, Realm } from '@app/types/global';
 import { FetchPingLevel } from '@app/types/main';
 import { FetchRegionLevel, FetchRealmLevel, FetchAuctionsLevel } from '@app/types/auction';
@@ -179,6 +180,8 @@ export class AuctionList extends React.Component<Props> {
       <>
         <Navbar>
           <NavbarGroup align={Alignment.LEFT}>
+            <CountToggle/>
+            <NavbarDivider/>
             <Pagination
               pageCount={pageCount}
               currentPage={currentPage}
