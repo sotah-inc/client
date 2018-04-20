@@ -172,8 +172,8 @@ export class AuctionList extends React.Component<Props> {
       <>
         <Navbar>
           <NavbarGroup align={Alignment.LEFT}>
-            <CountToggle/>
-            <NavbarDivider/>
+            <CountToggle />
+            <NavbarDivider />
             <Pagination
               pageCount={pageCount}
               currentPage={currentPage}
