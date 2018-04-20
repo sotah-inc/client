@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ButtonGroup, Spinner, Intent } from '@blueprintjs/core';
+import { ButtonGroup, Spinner, Intent, Navbar, NavbarGroup, Alignment } from '@blueprintjs/core';
 
 import RegionToggle from '@app/containers/App/AuctionList/RegionToggle';
 import RealmToggle from '@app/containers/App/AuctionList/RealmToggle';
@@ -86,7 +86,7 @@ export class AuctionList extends React.Component<Props> {
     if (currentRegion !== null) {
       const shouldRefreshRealms = fetchRealmLevel === FetchRealmLevel.initial
         || fetchRealmLevel === FetchRealmLevel.success
-          && this.didRegionChange(prevProps.currentRegion, currentRegion);
+        && this.didRegionChange(prevProps.currentRegion, currentRegion);
       if (shouldRefreshRealms) {
         this.props.refreshRealms(currentRegion);
 
@@ -97,7 +97,7 @@ export class AuctionList extends React.Component<Props> {
     if (currentRegion !== null && currentRealm !== null) {
       const shouldRefreshAuctions = fetchAuctionsLevel === FetchAuctionsLevel.initial
         || fetchAuctionsLevel === FetchAuctionsLevel.success
-          && this.didRealmChange(prevProps.currentRealm, currentRealm);
+        && this.didRealmChange(prevProps.currentRealm, currentRealm);
       if (shouldRefreshAuctions) {
         this.props.refreshAuctions({
           regionName: currentRegion.name,
@@ -179,10 +179,22 @@ export class AuctionList extends React.Component<Props> {
 
     return (
       <>
-        <ButtonGroup>
-          <RealmToggle />
-          <RegionToggle />
-        </ButtonGroup>
+        <Navbar>
+          <NavbarGroup align={Alignment.LEFT}>
+            <Pagination
+              pageCount={pageCount}
+              currentPage={currentPage}
+              pagesShown={5}
+              onPageChange={(page) => this.props.setCurrentPage(page)}
+            />
+          </NavbarGroup>
+          <NavbarGroup align={Alignment.RIGHT}>
+            <ButtonGroup>
+              <RealmToggle />
+              <RegionToggle />
+            </ButtonGroup>
+          </NavbarGroup>
+        </Navbar>
         <table className="pt-html-table pt-html-table-bordered auction-list">
           <thead>
             <tr>
@@ -199,12 +211,6 @@ export class AuctionList extends React.Component<Props> {
             {auctions.map((auction, index) => this.renderAuction(auction, index))}
           </tbody>
         </table>
-        <Pagination
-          pageCount={pageCount}
-          currentPage={currentPage}
-          pagesShown={5}
-          onPageChange={(page) => this.props.setCurrentPage(page)}
-        />
         {this.renderRefetchingSpinner()}
       </>
     );
