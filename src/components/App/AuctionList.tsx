@@ -156,7 +156,7 @@ export class AuctionList extends React.Component<Props> {
       return 'No auctions found!';
     }
 
-    if (auctions.length < auctionsPerPage) {
+    if (auctionsPerPage === 10 && auctions.length < auctionsPerPage) {
       for (let i = auctions.length; i < auctionsPerPage; i++) {
         auctions[i] = null;
       }
