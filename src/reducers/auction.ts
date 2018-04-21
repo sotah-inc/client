@@ -16,7 +16,7 @@ import {
   REGION_CHANGE,
   REQUEST_REALMS, RECEIVE_REALMS,
   REALM_CHANGE,
-  REQUEST_AUCTIONS, RECEIVE_AUCTIONS, PAGE_CHANGE, COUNT_CHANGE
+  REQUEST_AUCTIONS, RECEIVE_AUCTIONS, PAGE_CHANGE, COUNT_CHANGE, SORT_CHANGE
 } from '@app/actions/auction';
 
 type State = Readonly<AuctionState> | undefined;
@@ -79,6 +79,9 @@ export const auction = (state: State, action: AuctionActions): State => {
       return { ...state, currentPage: action.payload };
     case COUNT_CHANGE:
       return { ...state, auctionsPerPage: action.payload, currentPage: defaultAuctionState.currentPage };
+    case SORT_CHANGE:
+      const { sortDirection, sortKind } = action.payload;
+      return { ...state, sortDirection, sortKind };
     default:
       return state;
   }

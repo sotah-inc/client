@@ -4,9 +4,10 @@ import { ButtonGroup, Spinner, Intent, Navbar, NavbarGroup, Alignment, NavbarDiv
 import RegionToggle from '@app/containers/App/AuctionList/RegionToggle';
 import RealmToggle from '@app/containers/App/AuctionList/RealmToggle';
 import CountToggle from '@app/containers/App/AuctionList/CountToggle';
+import SortToggle from '@app/containers/App/AuctionList/SortToggle';
 import { Auction, Region, Realm } from '@app/types/global';
 import { FetchPingLevel } from '@app/types/main';
-import { FetchRegionLevel, FetchRealmLevel, FetchAuctionsLevel } from '@app/types/auction';
+import { FetchRegionLevel, FetchRealmLevel, FetchAuctionsLevel, SortKind } from '@app/types/auction';
 import { GetAuctionsOptions } from '@app/api/data';
 import { Currency, Pagination } from '../util';
 
@@ -189,15 +190,15 @@ export class AuctionList extends React.Component<Props> {
             </ButtonGroup>
           </NavbarGroup>
         </Navbar>
-        <table className="pt-html-table pt-html-table-bordered auction-list">
+        <table className="pt-html-table pt-html-table-bordered pt-small auction-list">
           <thead>
             <tr>
-              <th>Item</th>
-              <th>Quantity</th>
-              <th>Bid</th>
-              <th>Buyout</th>
-              <th>Auctions</th>
-              <th>Owner</th>
+              <th><SortToggle label="Item" sortKind={SortKind.item} /></th>
+              <th><SortToggle label="Quantity" sortKind={SortKind.quantity} /></th>
+              <th><SortToggle label="Bid" sortKind={SortKind.bid} /></th>
+              <th><SortToggle label="Buyout" sortKind={SortKind.buyout} /></th>
+              <th><SortToggle label="Auctions" sortKind={SortKind.auctions} /></th>
+              <th><SortToggle label="Owner" sortKind={SortKind.owner} /></th>
             </tr>
           </thead>
           <tbody>

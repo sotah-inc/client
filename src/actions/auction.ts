@@ -2,6 +2,7 @@ import { Dispatch } from 'redux';
 
 import { createAction, ActionsUnion } from './helpers';
 import { Region, Realm } from '../types/global';
+import { SortChangeOptions } from '../types/auction';
 import { getAuctions, getStatus, getRegions, GetAuctionsOptions, AuctionsResponse } from '../api/data';
 
 export const REQUEST_REGIONS = 'REQUEST_REGIONS';
@@ -52,13 +53,16 @@ export const PageChange = (payload: number) => createAction(PAGE_CHANGE, payload
 export const COUNT_CHANGE = 'COUNT_CHANGE';
 export const CountChange = (payload: number) => createAction(COUNT_CHANGE, payload);
 
+export const SORT_CHANGE = 'SORT_CHANGE';
+export const SortChange = (payload: SortChangeOptions) => createAction(SORT_CHANGE, payload);
+
 export const AuctionActions = {
   RequestRegions, ReceiveRegions,
   RegionChange,
   RequestRealms, ReceiveRealms,
   RealmChange,
   RequestAuctions, ReceiveAuctions,
-  PageChange, CountChange
+  PageChange, CountChange, SortChange
 };
 
 export type AuctionActions = ActionsUnion<typeof AuctionActions>;
