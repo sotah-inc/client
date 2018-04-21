@@ -24,13 +24,15 @@ type Props = Readonly<StateProps & DispatchProps & OwnProps>;
 
 export class SortToggle extends React.Component<Props> {
   onToggle(sortKind: SortKind) {
-    const { currentSortDirection } = this.props;
+    const { currentSortDirection, currentSortKind } = this.props;
 
     let sortDirection = SortDirection.up;
-    if (currentSortDirection === SortDirection.up) {
-      sortDirection = SortDirection.down;
-    } else if (currentSortDirection === SortDirection.down) {
-      sortDirection = SortDirection.none;
+    if (currentSortKind === sortKind) {
+      if (currentSortDirection === SortDirection.up) {
+        sortDirection = SortDirection.down;
+      } else if (currentSortDirection === SortDirection.down) {
+        sortDirection = SortDirection.none;
+      }
     }
 
     this.props.onChange({ sortKind, sortDirection });
