@@ -39,9 +39,11 @@ export type AuctionsResponse = {
 
 export const getAuctions = async (opts: GetAuctionsOptions): Promise<AuctionsResponse | null> => {
   const { regionName, realmSlug, page, count } = opts;
-  const res = await fetch(
-    `${apiEndpoint}/region/${regionName}/realm/${realmSlug}/auctions?page=${page}&count=${count}`
-  );
+  const res = await fetch(`${apiEndpoint}/region/${regionName}/realm/${realmSlug}/auctions`, {
+    method: 'POST',
+    body: JSON.stringify({ page, count }),
+    headers: new Headers({ 'content-type': 'application/json' })
+  });
   if (res.status !== HTTPStatus.OK) {
     return null;
   }
