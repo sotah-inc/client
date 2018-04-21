@@ -7,7 +7,7 @@ import CountToggle from '@app/containers/App/AuctionList/CountToggle';
 import SortToggle from '@app/containers/App/AuctionList/SortToggle';
 import { Auction, Region, Realm } from '@app/types/global';
 import { FetchPingLevel } from '@app/types/main';
-import { FetchRegionLevel, FetchRealmLevel, FetchAuctionsLevel, SortKind } from '@app/types/auction';
+import { FetchRegionLevel, FetchRealmLevel, FetchAuctionsLevel, SortKind, SortDirection } from '@app/types/auction';
 import { GetAuctionsOptions } from '@app/api/data';
 import { Currency, Pagination } from '../util';
 
@@ -24,6 +24,8 @@ export type StateProps = {
   currentPage: number
   auctionsPerPage: number
   totalResults: number
+  sortKind: SortKind
+  sortDirection: SortDirection
 };
 
 export type DispatchProps = {
@@ -97,11 +99,15 @@ export class AuctionList extends React.Component<Props> {
     if (currentRegion !== null && currentRealm !== null) {
       const didPageChange = currentPage !== prevProps.currentPage;
       const didCountChange = auctionsPerPage !== prevProps.auctionsPerPage;
+      const didSortChange = prevProps.sortDirection !== this.props.sortDirection
+        && prevProps.sortKind !== this.props.sortKind;
       const shouldRefreshAuctions = fetchAuctionsLevel === FetchAuctionsLevel.initial
         || fetchAuctionsLevel === FetchAuctionsLevel.success
         && (this.didRealmChange(prevProps.currentRealm, currentRealm)
           || didPageChange
-          || didCountChange);
+          || didCountChange
+          || didSortChange);
+
       if (shouldRefreshAuctions) {
         this.props.refreshAuctions({
           regionName: currentRegion.name,

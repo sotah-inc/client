@@ -81,7 +81,7 @@ export const auction = (state: State, action: AuctionActions): State => {
       return { ...state, auctionsPerPage: action.payload, currentPage: defaultAuctionState.currentPage };
     case SORT_CHANGE:
       const { sortDirection, sortKind } = action.payload;
-      return { ...state, sortDirection, sortKind };
+      return { ...state, currentPage: defaultAuctionState.currentPage, sortDirection, sortKind };
     default:
       return state;
   }
