@@ -84,7 +84,9 @@ export class AuctionList extends React.Component<Props> {
       currentRegion,
       currentRealm,
       currentPage,
-      auctionsPerPage
+      auctionsPerPage,
+      sortDirection,
+      sortKind
     } = this.props;
 
     if (currentRegion !== null) {
@@ -100,7 +102,7 @@ export class AuctionList extends React.Component<Props> {
       const didPageChange = currentPage !== prevProps.currentPage;
       const didCountChange = auctionsPerPage !== prevProps.auctionsPerPage;
       const didSortChange = prevProps.sortDirection !== this.props.sortDirection
-        && prevProps.sortKind !== this.props.sortKind;
+        || prevProps.sortKind !== this.props.sortKind;
       const shouldRefreshAuctions = fetchAuctionsLevel === FetchAuctionsLevel.initial
         || fetchAuctionsLevel === FetchAuctionsLevel.success
         && (this.didRealmChange(prevProps.currentRealm, currentRealm)
@@ -113,7 +115,9 @@ export class AuctionList extends React.Component<Props> {
           regionName: currentRegion.name,
           realmSlug: currentRealm.slug,
           page: currentPage,
-          count: auctionsPerPage
+          count: auctionsPerPage,
+          sortDirection,
+          sortKind
         });
       }
     }
