@@ -6,6 +6,10 @@ type Props = {
 
 export const Currency: React.SFC<Props> = (props: Props) => {
   let { amount } = props;
+  if (amount === 0) {
+    return <>0g</>;
+  }
+
   const copper = amount % 100;
   amount = amount / 100;
   const silver = amount % 100;
