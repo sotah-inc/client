@@ -160,23 +160,50 @@ export class AuctionList extends React.Component<Props> {
     );
   }
 
+  renderAuctionTable() {
+    const { auctions } = this.props;
+
+    if (auctions.length === 0) {
+      return (
+        <p style={{marginTop: '10px'}}><em>No auctions found!</em></p>
+      );
+    }
+
+    return (
+      <table className="pt-html-table pt-html-table-bordered pt-small auction-list">
+      <thead>
+        <tr>
+          <th><SortToggle label="Item" sortKind={SortKind.item} /></th>
+          <th><SortToggle label="Quantity" sortKind={SortKind.quantity} /></th>
+          <th><SortToggle label="Bid" sortKind={SortKind.bid} /></th>
+          <th><SortToggle label="Buyout" sortKind={SortKind.buyout} /></th>
+          <th><SortToggle label="Auctions" sortKind={SortKind.auctions} /></th>
+          <th><SortToggle label="Owner" sortKind={SortKind.owner} /></th>
+        </tr>
+      </thead>
+      <tbody>
+        {auctions.map((auction, index) => this.renderAuction(auction, index))}
+      </tbody>
+    </table>
+    );
+  }
+
   renderAuctions() {
     const { auctions, totalResults, auctionsPerPage, currentPage } = this.props;
 
-    if (auctions.length === 0) {
-      return 'No auctions found!';
-    }
-
-    if (auctionsPerPage === 10 && auctions.length < auctionsPerPage) {
-      for (let i = auctions.length; i < auctionsPerPage; i++) {
-        auctions[i] = null;
+    let pageCount = 0;
+    if (totalResults > 0) {
+      if (auctionsPerPage === 10 && auctions.length < auctionsPerPage) {
+        for (let i = auctions.length; i < auctionsPerPage; i++) {
+          auctions[i] = null;
+        }
       }
-    }
 
-    let pageCount = (totalResults / auctionsPerPage) - 1;
-    const remainder = totalResults % auctionsPerPage;
-    if (remainder > 0) {
-      pageCount = (totalResults - remainder) / auctionsPerPage;
+      pageCount = (totalResults / auctionsPerPage) - 1;
+      const remainder = totalResults % auctionsPerPage;
+      if (remainder > 0) {
+        pageCount = (totalResults - remainder) / auctionsPerPage;
+      }
     }
 
     return (
@@ -200,21 +227,7 @@ export class AuctionList extends React.Component<Props> {
             </ButtonGroup>
           </NavbarGroup>
         </Navbar>
-        <table className="pt-html-table pt-html-table-bordered pt-small auction-list">
-          <thead>
-            <tr>
-              <th><SortToggle label="Item" sortKind={SortKind.item} /></th>
-              <th><SortToggle label="Quantity" sortKind={SortKind.quantity} /></th>
-              <th><SortToggle label="Bid" sortKind={SortKind.bid} /></th>
-              <th><SortToggle label="Buyout" sortKind={SortKind.buyout} /></th>
-              <th><SortToggle label="Auctions" sortKind={SortKind.auctions} /></th>
-              <th><SortToggle label="Owner" sortKind={SortKind.owner} /></th>
-            </tr>
-          </thead>
-          <tbody>
-            {auctions.map((auction, index) => this.renderAuction(auction, index))}
-          </tbody>
-        </table>
+        {this.renderAuctionTable()}
       </>
     );
   }
