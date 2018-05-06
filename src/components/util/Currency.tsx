@@ -10,10 +10,10 @@ export const Currency: React.SFC<Props> = (props: Props) => {
     return <>0g</>;
   }
 
-  const copper = amount % 100;
+  const copper = Math.floor(amount % 100);
   amount = amount / 100;
-  const silver = amount % 100;
-  const gold = amount / 100;
+  const silver = Math.floor(amount % 100);
+  const gold = Math.floor(amount / 100);
 
   const copperOutput = copper > 0 ? `${copper.toFixed()}c` : null;
   let silverOutput = silver > 0 ? `${silver.toFixed()}s` : null;
