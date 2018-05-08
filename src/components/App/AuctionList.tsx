@@ -171,20 +171,20 @@ export class AuctionList extends React.Component<Props> {
 
     return (
       <table className="pt-html-table pt-html-table-bordered pt-small auction-list">
-      <thead>
-        <tr>
-          <th><SortToggle label="Item" sortKind={SortKind.item} /></th>
-          <th><SortToggle label="Quantity" sortKind={SortKind.quantity} /></th>
-          <th><SortToggle label="Bid" sortKind={SortKind.bid} /></th>
-          <th><SortToggle label="Buyout" sortKind={SortKind.buyout} /></th>
-          <th><SortToggle label="Auctions" sortKind={SortKind.auctions} /></th>
-          <th><SortToggle label="Owner" sortKind={SortKind.owner} /></th>
-        </tr>
-      </thead>
-      <tbody>
-        {auctions.map((auction, index) => this.renderAuction(auction, index))}
-      </tbody>
-    </table>
+        <thead>
+          <tr>
+            <th><SortToggle label="Item" sortKind={SortKind.item} /></th>
+            <th><SortToggle label="Quantity" sortKind={SortKind.quantity} /></th>
+            <th><SortToggle label="Bid" sortKind={SortKind.bid} /></th>
+            <th><SortToggle label="Buyout" sortKind={SortKind.buyout} /></th>
+            <th><SortToggle label="Auctions" sortKind={SortKind.auctions} /></th>
+            <th><SortToggle label="Owner" sortKind={SortKind.owner} /></th>
+          </tr>
+        </thead>
+        <tbody>
+          {auctions.map((auction, index) => this.renderAuction(auction, index))}
+        </tbody>
+      </table>
     );
   }
 
