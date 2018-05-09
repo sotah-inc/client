@@ -9,9 +9,15 @@ export type Regions = {
   [key: string]: Region
 };
 
+export type OwnerName = string;
+
+export type Owner = {
+  name: OwnerName
+};
+
 export type Auction = {
   item: number
-  owner: string
+  owner: OwnerName
   ownerRealm: string
   bid: number
   buyout: number

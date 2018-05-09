@@ -5,10 +5,11 @@ import RegionToggle from '@app/containers/App/AuctionList/RegionToggle';
 import RealmToggle from '@app/containers/App/AuctionList/RealmToggle';
 import CountToggle from '@app/containers/App/AuctionList/CountToggle';
 import SortToggle from '@app/containers/App/AuctionList/SortToggle';
+import OwnerFilter from '@app/containers/App/AuctionList/OwnerFilter';
 import { Auction, Region, Realm } from '@app/types/global';
 import { FetchPingLevel } from '@app/types/main';
 import { FetchRegionLevel, FetchRealmLevel, FetchAuctionsLevel, SortKind, SortDirection } from '@app/types/auction';
-import { GetAuctionsOptions } from '@app/api/data';
+import { GetAuctionsOptions, GetOwnersOptions } from '@app/api/data';
 import { Currency, Pagination } from '../util';
 
 type ListAuction = Auction | null;
@@ -33,6 +34,7 @@ export type DispatchProps = {
   refreshRealms: (region: Region) => void
   refreshAuctions: (opts: GetAuctionsOptions) => void
   setCurrentPage: (page: number) => void
+  refreshOwners: (opts: GetOwnersOptions) => void
 };
 
 export type OwnProps = {};
@@ -118,6 +120,15 @@ export class AuctionList extends React.Component<Props> {
           count: auctionsPerPage,
           sortDirection,
           sortKind
+        });
+      }
+
+      const shouldRefreshOwners = this.didRealmChange(prevProps.currentRealm, currentRealm);
+      if (shouldRefreshOwners) {
+        this.props.refreshOwners({
+          regionName: currentRegion.name,
+          realmSlug: currentRealm.slug,
+          query: ''
         });
       }
     }
@@ -208,6 +219,11 @@ export class AuctionList extends React.Component<Props> {
 
     return (
       <>
+        <Navbar>
+          <NavbarGroup align={Alignment.LEFT}>
+            <OwnerFilter />
+          </NavbarGroup>
+        </Navbar>
         <Navbar>
           <NavbarGroup align={Alignment.LEFT}>
             <CountToggle />

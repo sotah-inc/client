@@ -14,6 +14,7 @@ export type AuctionState = {
   totalResults: number,
   sortDirection: SortDirection,
   sortKind: SortKind
+  fetchOwnersLevel: FetchOwnersLevel
 };
 
 export enum FetchRegionLevel { initial, fetching, success, failure }
@@ -31,6 +32,8 @@ export type SortChangeOptions = {
   sortDirection: SortDirection
 };
 
+export enum FetchOwnersLevel { initial, fetching, refetching, success, failure }
+
 export const defaultAuctionState: AuctionState = {
   fetchAuctionsLevel: FetchAuctionsLevel.initial,
   auctions: [],
@@ -44,5 +47,6 @@ export const defaultAuctionState: AuctionState = {
   auctionsPerPage: 10,
   totalResults: 0,
   sortDirection: SortDirection.none,
-  sortKind: SortKind.none
+  sortKind: SortKind.none,
+  fetchOwnersLevel: FetchOwnersLevel.initial
 };

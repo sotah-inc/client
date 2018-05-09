@@ -3,7 +3,16 @@ import { Dispatch } from 'redux';
 import { createAction, ActionsUnion } from './helpers';
 import { Region, Realm } from '../types/global';
 import { SortChangeOptions } from '../types/auction';
-import { getAuctions, getStatus, getRegions, GetAuctionsOptions, AuctionsResponse } from '../api/data';
+import {
+  getAuctions,
+  getStatus,
+  getRegions,
+  GetAuctionsOptions,
+  AuctionsResponse,
+  GetOwnersOptions,
+  OwnersResponse,
+  getOwners
+} from '../api/data';
 
 export const REQUEST_REGIONS = 'REQUEST_REGIONS';
 export const RECEIVE_REGIONS = 'RECEIVE_REGIONS';
@@ -56,13 +65,26 @@ export const CountChange = (payload: number) => createAction(COUNT_CHANGE, paylo
 export const SORT_CHANGE = 'SORT_CHANGE';
 export const SortChange = (payload: SortChangeOptions) => createAction(SORT_CHANGE, payload);
 
+export const REQUEST_OWNERS = 'REQUEST_OWNERS';
+export const RECEIVE_OWNERS = 'RECEIVE_OWNERS';
+const RequestOwners = () => createAction(REQUEST_OWNERS);
+const ReceiveOwners = (payload: OwnersResponse | null) => createAction(RECEIVE_OWNERS, payload);
+type FetchOwnersType = ReturnType<typeof RequestOwners | typeof ReceiveOwners>;
+export const FetchOwners = (opts: GetOwnersOptions) => {
+  return async (dispatch: Dispatch<FetchOwnersType>) => {
+    dispatch(RequestOwners());
+    dispatch(ReceiveOwners(await getOwners(opts)));
+  };
+};
+
 export const AuctionActions = {
   RequestRegions, ReceiveRegions,
   RegionChange,
   RequestRealms, ReceiveRealms,
   RealmChange,
   RequestAuctions, ReceiveAuctions,
-  PageChange, CountChange, SortChange
+  PageChange, CountChange, SortChange,
+  RequestOwners, ReceiveOwners
 };
 
 export type AuctionActions = ActionsUnion<typeof AuctionActions>;

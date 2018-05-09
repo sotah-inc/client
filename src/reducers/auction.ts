@@ -8,6 +8,7 @@ import {
   FetchAuctionsLevel,
   FetchRegionLevel,
   FetchRealmLevel,
+  FetchOwnersLevel,
   defaultAuctionState
 } from '@app/types/auction';
 import {
@@ -16,7 +17,8 @@ import {
   REGION_CHANGE,
   REQUEST_REALMS, RECEIVE_REALMS,
   REALM_CHANGE,
-  REQUEST_AUCTIONS, RECEIVE_AUCTIONS, PAGE_CHANGE, COUNT_CHANGE, SORT_CHANGE
+  REQUEST_AUCTIONS, RECEIVE_AUCTIONS, PAGE_CHANGE, COUNT_CHANGE, SORT_CHANGE,
+  REQUEST_OWNERS, RECEIVE_OWNERS
 } from '@app/actions/auction';
 
 type State = Readonly<AuctionState> | undefined;
@@ -82,6 +84,17 @@ export const auction = (state: State, action: AuctionActions): State => {
     case SORT_CHANGE:
       const { sortDirection, sortKind } = action.payload;
       return { ...state, currentPage: defaultAuctionState.currentPage, sortDirection, sortKind };
+    case REQUEST_OWNERS:
+      const fetchOwnersLevel = state.fetchOwnersLevel === FetchOwnersLevel.initial
+        ? FetchOwnersLevel.fetching
+        : FetchOwnersLevel.refetching;
+      return { ...state, fetchOwnersLevel };
+    case RECEIVE_OWNERS:
+      if (action.payload === null) {
+        return { ...state, fetchOwnersLevel: FetchOwnersLevel.failure };
+      }
+
+      return { ...state, fetchOwnersLevel: FetchOwnersLevel.success };
     default:
       return state;
   }
