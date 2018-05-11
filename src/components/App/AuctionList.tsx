@@ -6,7 +6,7 @@ import RealmToggle from '@app/containers/App/AuctionList/RealmToggle';
 import CountToggle from '@app/containers/App/AuctionList/CountToggle';
 import SortToggle from '@app/containers/App/AuctionList/SortToggle';
 import OwnerFilter from '@app/containers/App/AuctionList/OwnerFilter';
-import { Auction, Region, Realm } from '@app/types/global';
+import { Auction, Region, Realm, OwnerName } from '@app/types/global';
 import { FetchPingLevel } from '@app/types/main';
 import { FetchRegionLevel, FetchRealmLevel, FetchAuctionsLevel, SortKind, SortDirection } from '@app/types/auction';
 import { GetAuctionsOptions, GetOwnersOptions } from '@app/api/data';
@@ -27,6 +27,7 @@ export type StateProps = {
   totalResults: number
   sortKind: SortKind
   sortDirection: SortDirection
+  ownerFilter: OwnerName | null
 };
 
 export type DispatchProps = {
@@ -200,7 +201,7 @@ export class AuctionList extends React.Component<Props> {
   }
 
   renderAuctions() {
-    const { auctions, totalResults, auctionsPerPage, currentPage } = this.props;
+    const { auctions, totalResults, auctionsPerPage, currentPage, ownerFilter } = this.props;
 
     let pageCount = 0;
     if (totalResults > 0) {
@@ -222,6 +223,7 @@ export class AuctionList extends React.Component<Props> {
         <Navbar>
           <NavbarGroup align={Alignment.LEFT}>
             <OwnerFilter />
+            <em style={{marginLeft: '10px'}}>Filtered: {ownerFilter || 'none'}</em>
           </NavbarGroup>
         </Navbar>
         <Navbar>

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Spinner, Menu, MenuItem, Intent } from '@blueprintjs/core';
+import { Spinner, Menu, MenuItem, Intent, ControlGroup, Button } from '@blueprintjs/core';
 import {
   Suggest,
   ItemPredicate,
@@ -21,7 +21,7 @@ export type StateProps = {
 };
 
 export type DispatchProps = {
-  onOwnerFilterChange: (ownerName: OwnerName) => void
+  onOwnerFilterChange: (ownerName: OwnerName | null) => void
 };
 
 export type OwnProps = {};
@@ -93,27 +93,40 @@ export class OwnerFilter extends React.Component<Props, State> {
     this.setState({ ownerFilterValue });
   }
 
+  onFilterClear() {
+    this.setState({ ownerFilterValue: '' });
+    this.props.onOwnerFilterChange(null);
+  }
+
   render() {
-    const { fetchOwnersLevel, owners, ownerFilter } = this.props;
+    const { fetchOwnersLevel, owners } = this.props;
     const { ownerFilterValue } = this.state;
 
-    console.log(ownerFilter);
+    const canClearFilter = ownerFilterValue !== null && ownerFilterValue !== '';
 
     switch (fetchOwnersLevel) {
       case FetchOwnersLevel.success:
         return (
-          <OwnerFilterSuggest
-            items={owners}
-            itemRenderer={this.itemRenderer}
-            itemListRenderer={this.itemListRenderer}
-            itemPredicate={this.itemPredicate}
-            onItemSelect={(owner: Owner) => { this.onFilterSet(owner); }}
-            inputValueRenderer={(v) => v.name}
-            inputProps={{
-              value: ownerFilterValue,
-              onChange: (e: React.ChangeEvent<HTMLInputElement>) => { this.onFilterChange(e.target.value); }
-            }}
-          />
+          <ControlGroup>
+            <OwnerFilterSuggest
+              items={owners}
+              itemRenderer={this.itemRenderer}
+              itemListRenderer={this.itemListRenderer}
+              itemPredicate={this.itemPredicate}
+              onItemSelect={(owner: Owner) => { this.onFilterSet(owner); }}
+              inputValueRenderer={(v) => v.name}
+              inputProps={{
+                value: ownerFilterValue,
+                onChange: (e: React.ChangeEvent<HTMLInputElement>) => this.onFilterChange(e.target.value)
+              }}
+            />
+            <Button
+              icon="filter-remove"
+              disabled={!canClearFilter}
+              text="Clear"
+              onClick={() => this.onFilterClear()}
+            />
+          </ControlGroup>
         );
       case FetchOwnersLevel.failure:
         return <Spinner className="pt-small" intent={Intent.DANGER} value={1} />;

@@ -78,7 +78,7 @@ export const FetchOwners = (opts: GetOwnersOptions) => {
 };
 
 export const OWNER_FILTER_CHANGE = 'OWNER_FILTER_CHANGE';
-export const OwnerFilterChange = (payload: OwnerName) => createAction(OWNER_FILTER_CHANGE, payload);
+export const OwnerFilterChange = (payload: OwnerName | null) => createAction(OWNER_FILTER_CHANGE, payload);
 
 export const AuctionActions = {
   RequestRegions, ReceiveRegions,

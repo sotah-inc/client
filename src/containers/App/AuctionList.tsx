@@ -20,7 +20,8 @@ const mapStateToProps = (state: StoreState): StateProps => {
     auctionsPerPage,
     totalResults,
     sortDirection,
-    sortKind
+    sortKind,
+    ownerFilter
   } = state.Auction;
   return {
     fetchPingLevel,
@@ -34,7 +35,8 @@ const mapStateToProps = (state: StoreState): StateProps => {
     auctionsPerPage,
     totalResults,
     sortDirection,
-    sortKind
+    sortKind,
+    ownerFilter
   };
 };
 
