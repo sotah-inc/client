@@ -9,19 +9,23 @@ import {
   IItemRendererProps
 } from '@blueprintjs/select';
 
-import { Owner, OwnerName } from '@app/types/global';
+import { Owner, OwnerName, Region, Realm } from '@app/types/global';
 import { FetchOwnersLevel } from '@app/types/auction';
+import { GetOwnersOptions } from '@app/api/data';
 
 const OwnerFilterSuggest = Suggest.ofType<Owner>();
 
 export type StateProps = {
-  fetchOwnersLevel: FetchOwnersLevel,
-  owners: Owner[],
+  fetchOwnersLevel: FetchOwnersLevel
+  owners: Owner[]
   ownerFilter: OwnerName | null
+  currentRegion: Region | null
+  currentRealm: Realm | null
 };
 
 export type DispatchProps = {
   onOwnerFilterChange: (ownerName: OwnerName | null) => void
+  refreshOwners: (opts: GetOwnersOptions) => void
 };
 
 export type OwnProps = {};
@@ -30,11 +34,13 @@ type Props = Readonly<StateProps & DispatchProps & OwnProps>;
 
 type State = Readonly<{
   ownerFilterValue: string
+  timerId: NodeJS.Timer | null
 }>;
 
 export class OwnerFilter extends React.Component<Props, State> {
   state: State = {
-    ownerFilterValue: ''
+    ownerFilterValue: '',
+    timerId: null
   };
 
   itemPredicate: ItemPredicate<Owner> = (query: string, item: Owner) => {
@@ -90,12 +96,33 @@ export class OwnerFilter extends React.Component<Props, State> {
   }
 
   onFilterChange(ownerFilterValue: string) {
-    this.setState({ ownerFilterValue });
+    const { timerId } = this.state;
+
+    if (timerId !== null) {
+      clearTimeout(timerId);
+    }
+
+    const newTimerId = setTimeout(
+      () => {
+        this.props.refreshOwners({
+          regionName: this.props.currentRegion!.name,
+          realmSlug: this.props.currentRealm!.slug,
+          query: ownerFilterValue
+        });
+      },
+      0.25 * 1000
+    );
+    this.setState({ ownerFilterValue, timerId: newTimerId });
   }
 
   onFilterClear() {
     this.setState({ ownerFilterValue: '' });
     this.props.onOwnerFilterChange(null);
+    this.props.refreshOwners({
+      regionName: this.props.currentRegion!.name,
+      realmSlug: this.props.currentRealm!.slug,
+      query: ''
+    });
   }
 
   render() {
@@ -106,6 +133,7 @@ export class OwnerFilter extends React.Component<Props, State> {
 
     switch (fetchOwnersLevel) {
       case FetchOwnersLevel.success:
+      case FetchOwnersLevel.refetching:
         return (
           <ControlGroup>
             <OwnerFilterSuggest
