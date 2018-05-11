@@ -15,7 +15,8 @@ import { FetchOwnersLevel } from '@app/types/auction';
 const OwnerFilterSuggest = Suggest.ofType<Owner>();
 
 export type StateProps = {
-  fetchOwnersLevel: FetchOwnersLevel
+  fetchOwnersLevel: FetchOwnersLevel,
+  owners: Owner[]
 };
 
 export type DispatchProps = {};
@@ -42,7 +43,6 @@ export class OwnerFilter extends React.Component<Props> {
         key={index}
         intent={intent}
         className={modifiers.active ? 'pt-active' : ''}
-        label={owner.name}
         onClick={handleClick}
         text={owner.name}
       />
@@ -52,6 +52,17 @@ export class OwnerFilter extends React.Component<Props> {
   itemListRenderer: ItemListRenderer<Owner> = (params: IItemListRendererProps<Owner>) => {
     const { items, itemsParentRef, renderItem } = params;
     const renderedItems = items.map(renderItem).filter((renderedItem) => renderedItem !== null);
+    if (renderedItems.length === 0) {
+      return (
+        <Menu ulRef={itemsParentRef}>
+          <li>
+            <h6>Select Owner</h6>
+          </li>
+          <li><em>No results found.</em></li>
+        </Menu>
+      );
+    }
+
     return (
       <Menu ulRef={itemsParentRef}>
         <li>
@@ -63,14 +74,13 @@ export class OwnerFilter extends React.Component<Props> {
   }
 
   render() {
-    const { fetchOwnersLevel } = this.props;
-    const items: Owner[] = [];
+    const { fetchOwnersLevel, owners } = this.props;
 
     switch (fetchOwnersLevel) {
       case FetchOwnersLevel.success:
         return (
           <OwnerFilterSuggest
-            items={items}
+            items={owners}
             itemRenderer={this.itemRenderer}
             itemListRenderer={this.itemListRenderer}
             itemPredicate={this.itemPredicate}

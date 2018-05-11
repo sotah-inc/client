@@ -94,7 +94,7 @@ export const auction = (state: State, action: AuctionActions): State => {
         return { ...state, fetchOwnersLevel: FetchOwnersLevel.failure };
       }
 
-      return { ...state, fetchOwnersLevel: FetchOwnersLevel.success };
+      return { ...state, fetchOwnersLevel: FetchOwnersLevel.success, owners: action.payload.owners };
     default:
       return state;
   }
