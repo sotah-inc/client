@@ -89,7 +89,8 @@ export class AuctionList extends React.Component<Props> {
       currentPage,
       auctionsPerPage,
       sortDirection,
-      sortKind
+      sortKind,
+      ownerFilter
     } = this.props;
 
     if (currentRegion !== null) {
@@ -104,14 +105,16 @@ export class AuctionList extends React.Component<Props> {
     if (currentRegion !== null && currentRealm !== null) {
       const didPageChange = currentPage !== prevProps.currentPage;
       const didCountChange = auctionsPerPage !== prevProps.auctionsPerPage;
-      const didSortChange = prevProps.sortDirection !== this.props.sortDirection
+      const didSortChange = prevProps.sortDirection !== sortDirection
         || prevProps.sortKind !== this.props.sortKind;
+      const didOwnerFilterChange = ownerFilter !== prevProps.ownerFilter;
       const shouldRefreshAuctions = fetchAuctionsLevel === FetchAuctionsLevel.initial
         || fetchAuctionsLevel === FetchAuctionsLevel.success
         && (this.didRealmChange(prevProps.currentRealm, currentRealm)
           || didPageChange
           || didCountChange
-          || didSortChange);
+          || didSortChange
+          || didOwnerFilterChange);
 
       if (shouldRefreshAuctions) {
         this.props.refreshAuctions({
@@ -120,7 +123,8 @@ export class AuctionList extends React.Component<Props> {
           page: currentPage,
           count: auctionsPerPage,
           sortDirection,
-          sortKind
+          sortKind,
+          ownerFilter
         });
       }
 
