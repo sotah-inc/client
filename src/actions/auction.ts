@@ -1,7 +1,7 @@
 import { Dispatch } from 'redux';
 
 import { createAction, ActionsUnion } from './helpers';
-import { Region, Realm } from '../types/global';
+import { Region, Realm, OwnerName } from '../types/global';
 import { SortChangeOptions } from '../types/auction';
 import {
   getAuctions,
@@ -77,6 +77,9 @@ export const FetchOwners = (opts: GetOwnersOptions) => {
   };
 };
 
+export const OWNER_FILTER_CHANGE = 'OWNER_FILTER_CHANGE';
+export const OwnerFilterChange = (payload: OwnerName) => createAction(OWNER_FILTER_CHANGE, payload);
+
 export const AuctionActions = {
   RequestRegions, ReceiveRegions,
   RegionChange,
@@ -84,7 +87,8 @@ export const AuctionActions = {
   RealmChange,
   RequestAuctions, ReceiveAuctions,
   PageChange, CountChange, SortChange,
-  RequestOwners, ReceiveOwners
+  RequestOwners, ReceiveOwners,
+  OwnerFilterChange
 };
 
 export type AuctionActions = ActionsUnion<typeof AuctionActions>;

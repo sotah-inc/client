@@ -9,23 +9,34 @@ import {
   IItemRendererProps
 } from '@blueprintjs/select';
 
-import { Owner } from '@app/types/global';
+import { Owner, OwnerName } from '@app/types/global';
 import { FetchOwnersLevel } from '@app/types/auction';
 
 const OwnerFilterSuggest = Suggest.ofType<Owner>();
 
 export type StateProps = {
   fetchOwnersLevel: FetchOwnersLevel,
-  owners: Owner[]
+  owners: Owner[],
+  ownerFilter: OwnerName | null
 };
 
-export type DispatchProps = {};
+export type DispatchProps = {
+  onOwnerFilterChange: (ownerName: OwnerName) => void
+};
 
 export type OwnProps = {};
 
 type Props = Readonly<StateProps & DispatchProps & OwnProps>;
 
-export class OwnerFilter extends React.Component<Props> {
+type State = Readonly<{
+  ownerFilterValue: string
+}>;
+
+export class OwnerFilter extends React.Component<Props, State> {
+  state: State = {
+    ownerFilterValue: ''
+  };
+
   itemPredicate: ItemPredicate<Owner> = (query: string, item: Owner) => {
     query = query.toLowerCase();
     return item.name.toLowerCase().indexOf(query) >= 0;
@@ -73,8 +84,20 @@ export class OwnerFilter extends React.Component<Props> {
     );
   }
 
+  onFilterSet(owner: Owner) {
+    this.setState({ ownerFilterValue: owner.name });
+    this.props.onOwnerFilterChange(owner.name);
+  }
+
+  onFilterChange(ownerFilterValue: string) {
+    this.setState({ ownerFilterValue });
+  }
+
   render() {
-    const { fetchOwnersLevel, owners } = this.props;
+    const { fetchOwnersLevel, owners, ownerFilter } = this.props;
+    const { ownerFilterValue } = this.state;
+
+    console.log(ownerFilter);
 
     switch (fetchOwnersLevel) {
       case FetchOwnersLevel.success:
@@ -84,8 +107,12 @@ export class OwnerFilter extends React.Component<Props> {
             itemRenderer={this.itemRenderer}
             itemListRenderer={this.itemListRenderer}
             itemPredicate={this.itemPredicate}
-            onItemSelect={(owner: Owner) => { console.log(owner); }}
+            onItemSelect={(owner: Owner) => { this.onFilterSet(owner); }}
             inputValueRenderer={(v) => v.name}
+            inputProps={{
+              value: ownerFilterValue,
+              onChange: (e: React.ChangeEvent<HTMLInputElement>) => { this.onFilterChange(e.target.value); }
+            }}
           />
         );
       case FetchOwnersLevel.failure:

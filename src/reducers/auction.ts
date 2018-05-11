@@ -18,7 +18,8 @@ import {
   REQUEST_REALMS, RECEIVE_REALMS,
   REALM_CHANGE,
   REQUEST_AUCTIONS, RECEIVE_AUCTIONS, PAGE_CHANGE, COUNT_CHANGE, SORT_CHANGE,
-  REQUEST_OWNERS, RECEIVE_OWNERS
+  REQUEST_OWNERS, RECEIVE_OWNERS,
+  OWNER_FILTER_CHANGE
 } from '@app/actions/auction';
 
 type State = Readonly<AuctionState> | undefined;
@@ -95,6 +96,8 @@ export const auction = (state: State, action: AuctionActions): State => {
       }
 
       return { ...state, fetchOwnersLevel: FetchOwnersLevel.success, owners: action.payload.owners };
+    case OWNER_FILTER_CHANGE:
+      return { ...state, ownerFilter: action.payload };
     default:
       return state;
   }
