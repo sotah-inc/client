@@ -223,7 +223,7 @@ export class AuctionList extends React.Component<Props> {
         <Navbar>
           <NavbarGroup align={Alignment.LEFT}>
             <OwnerFilter />
-            <em style={{marginLeft: '10px'}}>Filtered: {ownerFilter || 'none'}</em>
+            <em style={{marginLeft: '10px'}}>Filter: {ownerFilter || 'none'}</em>
           </NavbarGroup>
         </Navbar>
         <Navbar>
