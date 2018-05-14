@@ -1,4 +1,4 @@
-import { Auction, Regions, Region, Realms, Realm, Owner, OwnerName } from './global';
+import { Auction, Regions, Region, Realms, Realm, Owner, OwnerName, Item } from './global';
 
 export type AuctionState = {
   fetchAuctionsLevel: FetchAuctionsLevel
@@ -17,6 +17,9 @@ export type AuctionState = {
   fetchOwnersLevel: FetchOwnersLevel
   owners: Owner[]
   ownerFilter: OwnerName | null
+  fetchItemsLevel: FetchItemsLevel
+  items: Item[]
+  itemFilter: string | null
 };
 
 export enum FetchRegionLevel { initial, fetching, success, failure }
@@ -36,6 +39,8 @@ export type SortChangeOptions = {
 
 export enum FetchOwnersLevel { initial, fetching, refetching, success, failure }
 
+export enum FetchItemsLevel { initial, fetching, refetching, success, failure }
+
 export const defaultAuctionState: AuctionState = {
   fetchAuctionsLevel: FetchAuctionsLevel.initial,
   auctions: [],
@@ -52,5 +57,8 @@ export const defaultAuctionState: AuctionState = {
   sortKind: SortKind.none,
   fetchOwnersLevel: FetchOwnersLevel.initial,
   owners: [],
-  ownerFilter: null
+  ownerFilter: null,
+  fetchItemsLevel: FetchItemsLevel.initial,
+  items: [],
+  itemFilter: null
 };

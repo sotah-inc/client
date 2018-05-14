@@ -11,7 +11,9 @@ import {
   AuctionsResponse,
   GetOwnersOptions,
   OwnersResponse,
-  getOwners
+  getOwners,
+  ItemsResponse,
+  getItems
 } from '../api/data';
 
 export const REQUEST_REGIONS = 'REQUEST_REGIONS';
@@ -79,6 +81,21 @@ export const FetchOwners = (opts: GetOwnersOptions) => {
 
 export const OWNER_FILTER_CHANGE = 'OWNER_FILTER_CHANGE';
 export const OwnerFilterChange = (payload: OwnerName | null) => createAction(OWNER_FILTER_CHANGE, payload);
+
+export const REQUEST_ITEMS = 'REQUEST_ITEMS';
+export const RECEIVE_ITEMS = 'RECEIVE_ITEMS';
+const RequestItems = () => createAction(REQUEST_ITEMS);
+const ReceiveItems = (payload: ItemsResponse | null) => createAction(RECEIVE_ITEMS, payload);
+type FetchItemsType = ReturnType<typeof RequestItems | typeof ReceiveItems>;
+export const FetchItems = (query: string) => {
+  return async (dispatch: Dispatch<FetchItemsType>) => {
+    dispatch(RequestItems());
+    dispatch(ReceiveItems(await getItems(query)));
+  };
+};
+
+export const ITEM_FILTER_CHANGE = 'ITEM_FILTER_CHANGE';
+export const ItemFilterChange = (itemName: string | null) => createAction(ITEM_FILTER_CHANGE, itemName);
 
 export const AuctionActions = {
   RequestRegions, ReceiveRegions,

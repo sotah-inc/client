@@ -1,7 +1,7 @@
 import * as HTTPStatus from 'http-status';
 
 import { apiEndpoint } from './index';
-import { Auction, Region, Realm, Owner, OwnerName } from '../types/global';
+import { Auction, Region, Realm, Owner, OwnerName, Item } from '../types/global';
 import { SortDirection, SortKind } from '../types/auction';
 
 export const getPing = async (): Promise<boolean> => {
@@ -68,6 +68,23 @@ export type OwnersResponse = {
 export const getOwners = async (opts: GetOwnersOptions): Promise<OwnersResponse | null> => {
   const { regionName, realmSlug, query } = opts;
   const res = await fetch(`${apiEndpoint}/region/${regionName}/realm/${realmSlug}/owners`, {
+    method: 'POST',
+    body: JSON.stringify({ query }),
+    headers: new Headers({ 'content-type': 'application/json' })
+  });
+  if (res.status !== HTTPStatus.OK) {
+    return null;
+  }
+
+  return await res.json();
+};
+
+export type ItemsResponse = {
+  items: Item[]
+};
+
+export const getItems = async (query: string): Promise<ItemsResponse | null> => {
+  const res = await fetch(`${apiEndpoint}/items`, {
     method: 'POST',
     body: JSON.stringify({ query }),
     headers: new Headers({ 'content-type': 'application/json' })

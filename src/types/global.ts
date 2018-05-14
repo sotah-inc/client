@@ -1,3 +1,4 @@
+// region types
 export type RegionName = string;
 
 export type Region = {
@@ -9,12 +10,22 @@ export type Regions = {
   [key: string]: Region
 };
 
+// item types
+export type ItemId = number;
+
+export type Item = {
+  itemId: ItemId
+  name: string
+};
+
+// owner types
 export type OwnerName = string;
 
 export type Owner = {
   name: OwnerName
 };
 
+// auction types
 export type Auction = {
   item: number
   owner: OwnerName
@@ -31,6 +42,7 @@ export type Errors = {
   [key: string]: string
 };
 
+// realm types
 export type RealmSlug = string;
 
 export type Realm = {
