@@ -32,13 +32,13 @@ export type OwnProps = {};
 type Props = Readonly<StateProps & DispatchProps & OwnProps>;
 
 type State = Readonly<{
-  ItemFilterValue: string
+  itemFilterValue: string
   timerId: NodeJS.Timer | null
 }>;
 
 export class ItemFilter extends React.Component<Props, State> {
   state: State = {
-    ItemFilterValue: '',
+    itemFilterValue: '',
     timerId: null
   };
 
@@ -90,11 +90,11 @@ export class ItemFilter extends React.Component<Props, State> {
   }
 
   onFilterSet(item: Item) {
-    this.setState({ ItemFilterValue: item.name });
+    this.setState({ itemFilterValue: item.name });
     this.props.onItemFilterChange(item.name);
   }
 
-  onFilterChange(ItemFilterValue: string) {
+  onFilterChange(itemFilterValue: string) {
     const { timerId } = this.state;
 
     if (timerId !== null) {
@@ -103,24 +103,24 @@ export class ItemFilter extends React.Component<Props, State> {
 
     const newTimerId = setTimeout(
       () => {
-        this.props.refreshItems(ItemFilterValue);
+        this.props.refreshItems(itemFilterValue);
       },
       0.25 * 1000
     );
-    this.setState({ ItemFilterValue, timerId: newTimerId });
+    this.setState({ itemFilterValue, timerId: newTimerId });
   }
 
   onFilterClear() {
-    this.setState({ ItemFilterValue: '' });
+    this.setState({ itemFilterValue: '' });
     this.props.onItemFilterChange(null);
     this.props.refreshItems('');
   }
 
   render() {
     const { fetchItemsLevel, items } = this.props;
-    const { ItemFilterValue } = this.state;
+    const { itemFilterValue } = this.state;
 
-    const canClearFilter = ItemFilterValue !== null && ItemFilterValue !== '';
+    const canClearFilter = itemFilterValue !== null && itemFilterValue !== '';
 
     switch (fetchItemsLevel) {
       case FetchItemsLevel.success:
@@ -135,7 +135,7 @@ export class ItemFilter extends React.Component<Props, State> {
               onItemSelect={(item: Item) => { this.onFilterSet(item); }}
               inputValueRenderer={(v) => v.name}
               inputProps={{
-                value: ItemFilterValue,
+                value: itemFilterValue,
                 onChange: (e: React.ChangeEvent<HTMLInputElement>) => this.onFilterChange(e.target.value)
               }}
             />
