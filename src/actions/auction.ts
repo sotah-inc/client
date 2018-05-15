@@ -105,7 +105,9 @@ export const AuctionActions = {
   RequestAuctions, ReceiveAuctions,
   PageChange, CountChange, SortChange,
   RequestOwners, ReceiveOwners,
-  OwnerFilterChange
+  OwnerFilterChange,
+  RequestItems, ReceiveItems,
+  ItemFilterChange
 };
 
 export type AuctionActions = ActionsUnion<typeof AuctionActions>;

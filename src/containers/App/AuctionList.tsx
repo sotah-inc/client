@@ -21,7 +21,8 @@ const mapStateToProps = (state: StoreState): StateProps => {
     totalResults,
     sortDirection,
     sortKind,
-    ownerFilter
+    ownerFilter,
+    itemFilter
   } = state.Auction;
   return {
     fetchPingLevel,
@@ -36,7 +37,8 @@ const mapStateToProps = (state: StoreState): StateProps => {
     totalResults,
     sortDirection,
     sortKind,
-    ownerFilter
+    ownerFilter,
+    itemFilter
   };
 };
 

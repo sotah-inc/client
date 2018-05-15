@@ -9,6 +9,7 @@ import {
   FetchRegionLevel,
   FetchRealmLevel,
   FetchOwnersLevel,
+  FetchItemsLevel,
   defaultAuctionState
 } from '@app/types/auction';
 import {
@@ -19,7 +20,9 @@ import {
   REALM_CHANGE,
   REQUEST_AUCTIONS, RECEIVE_AUCTIONS, PAGE_CHANGE, COUNT_CHANGE, SORT_CHANGE,
   REQUEST_OWNERS, RECEIVE_OWNERS,
-  OWNER_FILTER_CHANGE
+  OWNER_FILTER_CHANGE,
+  REQUEST_ITEMS, RECEIVE_ITEMS,
+  ITEM_FILTER_CHANGE
 } from '@app/actions/auction';
 
 type State = Readonly<AuctionState> | undefined;
@@ -98,6 +101,19 @@ export const auction = (state: State, action: AuctionActions): State => {
       return { ...state, fetchOwnersLevel: FetchOwnersLevel.success, owners: action.payload.owners };
     case OWNER_FILTER_CHANGE:
       return { ...state, ownerFilter: action.payload };
+    case REQUEST_ITEMS:
+      const fetchItemsLevel = state.fetchItemsLevel === FetchItemsLevel.initial
+        ? FetchItemsLevel.fetching
+        : FetchItemsLevel.refetching;
+      return { ...state, fetchItemsLevel };
+    case RECEIVE_ITEMS:
+      if (action.payload === null) {
+        return { ...state, fetchItemsLevel: FetchItemsLevel.failure };
+      }
+
+      return { ...state, fetchItemsLevel: FetchItemsLevel.success, items: action.payload.items };
+    case ITEM_FILTER_CHANGE:
+      return { ...state, itemFilter: action.payload };
     default:
       return state;
   }

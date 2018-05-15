@@ -28,6 +28,7 @@ export type StateProps = {
   sortKind: SortKind
   sortDirection: SortDirection
   ownerFilter: OwnerName | null
+  itemFilter: string | null
 };
 
 export type DispatchProps = {
@@ -211,7 +212,7 @@ export class AuctionList extends React.Component<Props> {
   }
 
   renderAuctions() {
-    const { auctions, totalResults, auctionsPerPage, currentPage, ownerFilter } = this.props;
+    const { auctions, totalResults, auctionsPerPage, currentPage, itemFilter } = this.props;
 
     let pageCount = 0;
     if (totalResults > 0) {
@@ -233,7 +234,7 @@ export class AuctionList extends React.Component<Props> {
         <Navbar>
           <NavbarGroup align={Alignment.LEFT}>
             <ItemFilter />
-            <em style={{marginLeft: '10px'}}>Filter: {ownerFilter || 'none'}</em>
+            <em style={{marginLeft: '10px'}}>Filter: {itemFilter || 'none'}</em>
           </NavbarGroup>
         </Navbar>
         <Navbar>
