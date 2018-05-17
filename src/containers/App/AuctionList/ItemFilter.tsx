@@ -2,6 +2,7 @@ import { connect, Dispatch } from 'react-redux';
 
 import { ItemFilter, StateProps, DispatchProps, OwnProps } from '@app/components/App/AuctionList/ItemFilter';
 import { StoreState } from '@app/types';
+import { Item } from '@app/types/global';
 import { Actions } from '@app/actions';
 import { ItemFilterChange, FetchItems } from '@app/actions/auction';
 
@@ -12,7 +13,7 @@ const mapStateToProps = (state: StoreState): StateProps => {
 
 const mapDispatchToProps = (dispatch: Dispatch<Actions>): DispatchProps => {
   return {
-    onItemFilterChange: (itemName: string | null) => dispatch(ItemFilterChange(itemName)),
+    onItemFilterChange: (item: Item | null) => dispatch(ItemFilterChange(item)),
     refreshItems: (query: string) => dispatch(FetchItems(query))
   };
 };

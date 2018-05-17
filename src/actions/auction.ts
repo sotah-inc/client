@@ -1,7 +1,7 @@
 import { Dispatch } from 'redux';
 
 import { createAction, ActionsUnion } from './helpers';
-import { Region, Realm, OwnerName } from '../types/global';
+import { Region, Realm, OwnerName, Item } from '../types/global';
 import { SortChangeOptions } from '../types/auction';
 import {
   getAuctions,
@@ -95,7 +95,7 @@ export const FetchItems = (query: string) => {
 };
 
 export const ITEM_FILTER_CHANGE = 'ITEM_FILTER_CHANGE';
-export const ItemFilterChange = (itemName: string | null) => createAction(ITEM_FILTER_CHANGE, itemName);
+export const ItemFilterChange = (item: Item | null) => createAction(ITEM_FILTER_CHANGE, item);
 
 export const AuctionActions = {
   RequestRegions, ReceiveRegions,

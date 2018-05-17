@@ -17,13 +17,13 @@ const ItemFilterSuggest = Suggest.ofType<Item>();
 export type StateProps = {
   fetchItemsLevel: FetchItemsLevel
   items: Item[]
-  itemFilter: string | null
+  itemFilter: Item | null
   currentRegion: Region | null
   currentRealm: Realm | null
 };
 
 export type DispatchProps = {
-  onItemFilterChange: (itemName: string | null) => void
+  onItemFilterChange: (item: Item | null) => void
   refreshItems: (query: string) => void
 };
 
@@ -91,7 +91,7 @@ export class ItemFilter extends React.Component<Props, State> {
 
   onFilterSet(item: Item) {
     this.setState({ itemFilterValue: item.name });
-    this.props.onItemFilterChange(item.name);
+    this.props.onItemFilterChange(item);
   }
 
   onFilterChange(itemFilterValue: string) {

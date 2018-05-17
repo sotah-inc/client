@@ -6,7 +6,7 @@ import RealmToggle from '@app/containers/App/AuctionList/RealmToggle';
 import CountToggle from '@app/containers/App/AuctionList/CountToggle';
 import SortToggle from '@app/containers/App/AuctionList/SortToggle';
 import ItemFilter from '@app/containers/App/AuctionList/ItemFilter';
-import { Auction, Region, Realm, OwnerName } from '@app/types/global';
+import { Auction, Region, Realm, OwnerName, Item } from '@app/types/global';
 import { FetchPingLevel } from '@app/types/main';
 import { FetchRegionLevel, FetchRealmLevel, FetchAuctionsLevel, SortKind, SortDirection } from '@app/types/auction';
 import { GetAuctionsOptions, GetOwnersOptions } from '@app/api/data';
@@ -28,7 +28,7 @@ export type StateProps = {
   sortKind: SortKind
   sortDirection: SortDirection
   ownerFilter: OwnerName | null
-  itemFilter: string | null
+  itemFilter: Item | null
 };
 
 export type DispatchProps = {
@@ -92,7 +92,8 @@ export class AuctionList extends React.Component<Props> {
       auctionsPerPage,
       sortDirection,
       sortKind,
-      ownerFilter
+      ownerFilter,
+      itemFilter
     } = this.props;
 
     if (currentRegion !== null) {
@@ -110,15 +111,18 @@ export class AuctionList extends React.Component<Props> {
       const didSortChange = prevProps.sortDirection !== sortDirection
         || prevProps.sortKind !== this.props.sortKind;
       const didOwnerFilterChange = ownerFilter !== prevProps.ownerFilter;
+      const didItemFilterChange = itemFilter !== prevProps.itemFilter;
       const shouldRefreshAuctions = fetchAuctionsLevel === FetchAuctionsLevel.initial
         || fetchAuctionsLevel === FetchAuctionsLevel.success
         && (this.didRealmChange(prevProps.currentRealm, currentRealm)
           || didPageChange
           || didCountChange
           || didSortChange
-          || didOwnerFilterChange);
+          || didOwnerFilterChange
+          || didItemFilterChange);
 
       if (shouldRefreshAuctions) {
+        const auctionsItemFilter = itemFilter === null ? null : itemFilter.id;
         this.props.refreshAuctions({
           regionName: currentRegion.name,
           realmSlug: currentRealm.slug,
@@ -126,7 +130,8 @@ export class AuctionList extends React.Component<Props> {
           count: auctionsPerPage,
           sortDirection,
           sortKind,
-          ownerFilter
+          ownerFilter,
+          itemFilter: auctionsItemFilter
         });
       }
 
@@ -234,7 +239,7 @@ export class AuctionList extends React.Component<Props> {
         <Navbar>
           <NavbarGroup align={Alignment.LEFT}>
             <ItemFilter />
-            <em style={{marginLeft: '10px'}}>Filter: {itemFilter || 'none'}</em>
+            <em style={{marginLeft: '10px'}}>Filter: {itemFilter === null ? 'none' : itemFilter.name}</em>
           </NavbarGroup>
         </Navbar>
         <Navbar>

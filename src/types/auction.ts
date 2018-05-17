@@ -19,7 +19,7 @@ export type AuctionState = {
   ownerFilter: OwnerName | null
   fetchItemsLevel: FetchItemsLevel
   items: Item[]
-  itemFilter: string | null
+  itemFilter: Item | null
 };
 
 export enum FetchRegionLevel { initial, fetching, success, failure }

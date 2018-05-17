@@ -14,7 +14,7 @@ export type Regions = {
 export type ItemId = number;
 
 export type Item = {
-  itemId: ItemId
+  id: ItemId
   name: string
 };
 
