@@ -14,7 +14,8 @@ import {
   FetchAuctionsLevel,
   SortKind,
   SortDirection,
-  QueryAuctionsLevel
+  QueryAuctionsLevel,
+  QueryAuctionResult
 } from '@app/types/auction';
 import { GetAuctionsOptions, QueryAuctionsOptions } from '@app/api/data';
 import { Currency, Pagination } from '../util';
@@ -35,6 +36,7 @@ export type StateProps = {
   sortKind: SortKind
   sortDirection: SortDirection
   queryAuctionsLevel: QueryAuctionsLevel
+  selectedQueryAuctionResults: QueryAuctionResult[]
 };
 
 export type DispatchProps = {
@@ -96,7 +98,8 @@ export class AuctionList extends React.Component<Props> {
       currentPage,
       auctionsPerPage,
       sortDirection,
-      sortKind
+      sortKind,
+      selectedQueryAuctionResults
     } = this.props;
 
     if (currentRegion !== null) {
@@ -113,12 +116,15 @@ export class AuctionList extends React.Component<Props> {
       const didCountChange = auctionsPerPage !== prevProps.auctionsPerPage;
       const didSortChange = prevProps.sortDirection !== sortDirection
         || prevProps.sortKind !== this.props.sortKind;
+      const didSqaResultsChange = prevProps.selectedQueryAuctionResults.length
+        !== selectedQueryAuctionResults.length;
       const shouldRefreshAuctions = fetchAuctionsLevel === FetchAuctionsLevel.initial
         || fetchAuctionsLevel === FetchAuctionsLevel.success
         && (this.didRealmChange(prevProps.currentRealm, currentRealm)
           || didPageChange
           || didCountChange
-          || didSortChange);
+          || didSortChange
+          || didSqaResultsChange);
 
       if (shouldRefreshAuctions) {
         this.props.refreshAuctions({
