@@ -74,23 +74,26 @@ export class QueryAuctionsFilter extends React.Component<Props, State> {
       return null;
     }
 
-    const intent = Intent.NONE;
     const { item, owner } = result;
 
+    let label = 'n/a';
     let text = 'n/a';
     if (item.name !== '') {
       text = item.name;
+      label = `#${item.id}`;
     } else if (owner.name !== '') {
       text = owner.name;
+      label = 'Owner';
     }
 
     return (
       <MenuItem
         key={index}
-        intent={intent}
+        icon={this.isResultSelected(result) ? 'tick' : 'blank'}
         className={modifiers.active ? 'pt-active' : ''}
         onClick={handleClick}
         text={text}
+        label={label}
       />
     );
   }
