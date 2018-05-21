@@ -1,7 +1,7 @@
 import * as HTTPStatus from 'http-status';
 
 import { apiEndpoint } from './index';
-import { Auction, Region, Realm, Owner, OwnerName, Item, ItemId } from '../types/global';
+import { Auction, Region, Realm, Owner, Item } from '../types/global';
 import { SortDirection, SortKind } from '../types/auction';
 
 export const getPing = async (): Promise<boolean> => {
@@ -33,8 +33,6 @@ export type GetAuctionsOptions = {
   count: number
   sortDirection: SortDirection
   sortKind: SortKind
-  ownerFilter: OwnerName | null
-  itemFilter: ItemId | null
 };
 
 export type AuctionsResponse = {
@@ -43,10 +41,10 @@ export type AuctionsResponse = {
 };
 
 export const getAuctions = async (opts: GetAuctionsOptions): Promise<AuctionsResponse | null> => {
-  const { regionName, realmSlug, page, count, sortDirection, sortKind, ownerFilter, itemFilter } = opts;
+  const { regionName, realmSlug, page, count, sortDirection, sortKind } = opts;
   const res = await fetch(`${apiEndpoint}/region/${regionName}/realm/${realmSlug}/auctions`, {
     method: 'POST',
-    body: JSON.stringify({ page, count, sortDirection, sortKind, ownerFilter, itemFilter }),
+    body: JSON.stringify({ page, count, sortDirection, sortKind }),
     headers: new Headers({ 'content-type': 'application/json' })
   });
   if (res.status !== HTTPStatus.OK) {
@@ -86,6 +84,38 @@ export type ItemsResponse = {
 
 export const getItems = async (query: string): Promise<ItemsResponse | null> => {
   const res = await fetch(`${apiEndpoint}/items`, {
+    method: 'POST',
+    body: JSON.stringify({ query }),
+    headers: new Headers({ 'content-type': 'application/json' })
+  });
+  if (res.status !== HTTPStatus.OK) {
+    return null;
+  }
+
+  return await res.json();
+};
+
+export type QueryAuctionsOptions = {
+  regionName: string
+  realmSlug: string
+  query: string
+};
+
+export type AuctionsQueryItem = {
+  target: string
+  item: Item
+  owner: Owner
+};
+
+export type AuctionsQueryItems = AuctionsQueryItem[];
+
+export type AuctionsQueryResponse = {
+  items: AuctionsQueryItems
+};
+
+export const queryAuctions = async (opts: QueryAuctionsOptions): Promise<AuctionsQueryResponse | null> => {
+  const { regionName, realmSlug, query } = opts;
+  const res = await fetch(`${apiEndpoint}/region/${regionName}/realm/${realmSlug}/query-auctions`, {
     method: 'POST',
     body: JSON.stringify({ query }),
     headers: new Headers({ 'content-type': 'application/json' })

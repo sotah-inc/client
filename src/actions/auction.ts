@@ -13,7 +13,10 @@ import {
   OwnersResponse,
   getOwners,
   ItemsResponse,
-  getItems
+  getItems,
+  QueryAuctionsOptions,
+  AuctionsQueryResponse,
+  queryAuctions
 } from '../api/data';
 
 export const REQUEST_REGIONS = 'REQUEST_REGIONS';
@@ -97,6 +100,18 @@ export const FetchItems = (query: string) => {
 export const ITEM_FILTER_CHANGE = 'ITEM_FILTER_CHANGE';
 export const ItemFilterChange = (item: Item | null) => createAction(ITEM_FILTER_CHANGE, item);
 
+export const REQUEST_AUCTIONS_QUERY = 'REQUEST_AUCTIONS_QUERY';
+export const RECEIVE_AUCTIONS_QUERY = 'RECEIVE_AUCTIONS_QUERY';
+const RequestAuctionsQuery = () => createAction(REQUEST_AUCTIONS_QUERY);
+const ReceiveAuctionsQuery = (payload: AuctionsQueryResponse | null) => createAction(RECEIVE_AUCTIONS_QUERY, payload);
+type QueryAuctionsType = ReturnType<typeof RequestAuctionsQuery | typeof ReceiveAuctionsQuery>;
+export const FetchAuctionsQuery = (opts: QueryAuctionsOptions) => {
+  return async (dispatch: Dispatch<QueryAuctionsType>) => {
+    dispatch(RequestAuctionsQuery());
+    dispatch(ReceiveAuctionsQuery(await queryAuctions(opts)));
+  };
+};
+
 export const AuctionActions = {
   RequestRegions, ReceiveRegions,
   RegionChange,
@@ -107,7 +122,8 @@ export const AuctionActions = {
   RequestOwners, ReceiveOwners,
   OwnerFilterChange,
   RequestItems, ReceiveItems,
-  ItemFilterChange
+  ItemFilterChange,
+  RequestAuctionsQuery, ReceiveAuctionsQuery
 };
 
 export type AuctionActions = ActionsUnion<typeof AuctionActions>;

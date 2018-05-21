@@ -5,11 +5,18 @@ import RegionToggle from '@app/containers/App/AuctionList/RegionToggle';
 import RealmToggle from '@app/containers/App/AuctionList/RealmToggle';
 import CountToggle from '@app/containers/App/AuctionList/CountToggle';
 import SortToggle from '@app/containers/App/AuctionList/SortToggle';
-import ItemFilter from '@app/containers/App/AuctionList/ItemFilter';
-import { Auction, Region, Realm, OwnerName, Item } from '@app/types/global';
+import QueryAuctionsFilter from '@app/containers/App/AuctionList/QueryAuctionsFilter';
+import { Auction, Region, Realm } from '@app/types/global';
 import { FetchPingLevel } from '@app/types/main';
-import { FetchRegionLevel, FetchRealmLevel, FetchAuctionsLevel, SortKind, SortDirection } from '@app/types/auction';
-import { GetAuctionsOptions, GetOwnersOptions } from '@app/api/data';
+import {
+  FetchRegionLevel,
+  FetchRealmLevel,
+  FetchAuctionsLevel,
+  SortKind,
+  SortDirection,
+  QueryAuctionsLevel
+} from '@app/types/auction';
+import { GetAuctionsOptions, QueryAuctionsOptions } from '@app/api/data';
 import { Currency, Pagination } from '../util';
 
 type ListAuction = Auction | null;
@@ -27,8 +34,7 @@ export type StateProps = {
   totalResults: number
   sortKind: SortKind
   sortDirection: SortDirection
-  ownerFilter: OwnerName | null
-  itemFilter: Item | null
+  queryAuctionsLevel: QueryAuctionsLevel
 };
 
 export type DispatchProps = {
@@ -36,8 +42,7 @@ export type DispatchProps = {
   refreshRealms: (region: Region) => void
   refreshAuctions: (opts: GetAuctionsOptions) => void
   setCurrentPage: (page: number) => void
-  refreshOwners: (opts: GetOwnersOptions) => void
-  refreshItems: (query: string) => void
+  refreshAuctionsQuery: (opts: QueryAuctionsOptions) => void
 };
 
 export type OwnProps = {};
@@ -91,9 +96,7 @@ export class AuctionList extends React.Component<Props> {
       currentPage,
       auctionsPerPage,
       sortDirection,
-      sortKind,
-      ownerFilter,
-      itemFilter
+      sortKind
     } = this.props;
 
     if (currentRegion !== null) {
@@ -110,43 +113,31 @@ export class AuctionList extends React.Component<Props> {
       const didCountChange = auctionsPerPage !== prevProps.auctionsPerPage;
       const didSortChange = prevProps.sortDirection !== sortDirection
         || prevProps.sortKind !== this.props.sortKind;
-      const didOwnerFilterChange = ownerFilter !== prevProps.ownerFilter;
-      const didItemFilterChange = itemFilter !== prevProps.itemFilter;
       const shouldRefreshAuctions = fetchAuctionsLevel === FetchAuctionsLevel.initial
         || fetchAuctionsLevel === FetchAuctionsLevel.success
         && (this.didRealmChange(prevProps.currentRealm, currentRealm)
           || didPageChange
           || didCountChange
-          || didSortChange
-          || didOwnerFilterChange
-          || didItemFilterChange);
+          || didSortChange);
 
       if (shouldRefreshAuctions) {
-        const auctionsItemFilter = itemFilter === null ? null : itemFilter.id;
         this.props.refreshAuctions({
           regionName: currentRegion.name,
           realmSlug: currentRealm.slug,
           page: currentPage,
           count: auctionsPerPage,
           sortDirection,
-          sortKind,
-          ownerFilter,
-          itemFilter: auctionsItemFilter
+          sortKind
         });
       }
 
-      const shouldRefreshOwners = this.didRealmChange(prevProps.currentRealm, currentRealm);
-      if (shouldRefreshOwners) {
-        this.props.refreshOwners({
+      const shouldRefreshAuctionsQuery = this.didRealmChange(prevProps.currentRealm, currentRealm);
+      if (shouldRefreshAuctionsQuery) {
+        this.props.refreshAuctionsQuery({
           regionName: currentRegion.name,
           realmSlug: currentRealm.slug,
           query: ''
         });
-      }
-
-      const shouldRefreshItems = this.didRealmChange(prevProps.currentRealm, currentRealm);
-      if (shouldRefreshItems) {
-        this.props.refreshItems('');
       }
     }
   }
@@ -217,7 +208,7 @@ export class AuctionList extends React.Component<Props> {
   }
 
   renderAuctions() {
-    const { auctions, totalResults, auctionsPerPage, currentPage, itemFilter } = this.props;
+    const { auctions, totalResults, auctionsPerPage, currentPage } = this.props;
 
     let pageCount = 0;
     if (totalResults > 0) {
@@ -238,8 +229,7 @@ export class AuctionList extends React.Component<Props> {
       <>
         <Navbar>
           <NavbarGroup align={Alignment.LEFT}>
-            <ItemFilter />
-            <em style={{marginLeft: '10px'}}>Filter: {itemFilter === null ? 'none' : itemFilter.name}</em>
+            <QueryAuctionsFilter />
           </NavbarGroup>
         </Navbar>
         <Navbar>

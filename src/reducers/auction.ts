@@ -8,8 +8,7 @@ import {
   FetchAuctionsLevel,
   FetchRegionLevel,
   FetchRealmLevel,
-  FetchOwnersLevel,
-  FetchItemsLevel,
+  QueryAuctionsLevel,
   defaultAuctionState
 } from '@app/types/auction';
 import {
@@ -18,11 +17,9 @@ import {
   REGION_CHANGE,
   REQUEST_REALMS, RECEIVE_REALMS,
   REALM_CHANGE,
-  REQUEST_AUCTIONS, RECEIVE_AUCTIONS, PAGE_CHANGE, COUNT_CHANGE, SORT_CHANGE,
-  REQUEST_OWNERS, RECEIVE_OWNERS,
-  OWNER_FILTER_CHANGE,
-  REQUEST_ITEMS, RECEIVE_ITEMS,
-  ITEM_FILTER_CHANGE
+  REQUEST_AUCTIONS, RECEIVE_AUCTIONS,
+  PAGE_CHANGE, COUNT_CHANGE, SORT_CHANGE,
+  REQUEST_AUCTIONS_QUERY, RECEIVE_AUCTIONS_QUERY
 } from '@app/actions/auction';
 
 type State = Readonly<AuctionState> | undefined;
@@ -88,32 +85,17 @@ export const auction = (state: State, action: AuctionActions): State => {
     case SORT_CHANGE:
       const { sortDirection, sortKind } = action.payload;
       return { ...state, currentPage: defaultAuctionState.currentPage, sortDirection, sortKind };
-    case REQUEST_OWNERS:
-      const fetchOwnersLevel = state.fetchOwnersLevel === FetchOwnersLevel.initial
-        ? FetchOwnersLevel.fetching
-        : FetchOwnersLevel.refetching;
-      return { ...state, fetchOwnersLevel };
-    case RECEIVE_OWNERS:
+    case REQUEST_AUCTIONS_QUERY:
+      const queryAuctionsLevel = state.queryAuctionsLevel === QueryAuctionsLevel.initial
+        ? QueryAuctionsLevel.fetching
+        : QueryAuctionsLevel.refetching;
+      return { ...state, queryAuctionsLevel };
+    case RECEIVE_AUCTIONS_QUERY:
       if (action.payload === null) {
-        return { ...state, fetchOwnersLevel: FetchOwnersLevel.failure };
+        return { ...state, queryAuctionsLevel: QueryAuctionsLevel.failure };
       }
 
-      return { ...state, fetchOwnersLevel: FetchOwnersLevel.success, owners: action.payload.owners };
-    case OWNER_FILTER_CHANGE:
-      return { ...state, ownerFilter: action.payload };
-    case REQUEST_ITEMS:
-      const fetchItemsLevel = state.fetchItemsLevel === FetchItemsLevel.initial
-        ? FetchItemsLevel.fetching
-        : FetchItemsLevel.refetching;
-      return { ...state, fetchItemsLevel };
-    case RECEIVE_ITEMS:
-      if (action.payload === null) {
-        return { ...state, fetchItemsLevel: FetchItemsLevel.failure };
-      }
-
-      return { ...state, fetchItemsLevel: FetchItemsLevel.success, items: action.payload.items };
-    case ITEM_FILTER_CHANGE:
-      return { ...state, itemFilter: action.payload };
+      return { ...state, queryAuctionsLevel: QueryAuctionsLevel.success, queryAuctionResults: action.payload.items };
     default:
       return state;
   }

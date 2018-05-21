@@ -4,8 +4,8 @@ import { AuctionList, StateProps, DispatchProps, OwnProps } from '@app/component
 import { StoreState } from '@app/types';
 import { Region } from '@app/types/global';
 import { Actions } from '@app/actions';
-import { FetchRegions, FetchRealms, FetchAuctions, PageChange, FetchOwners, FetchItems } from '@app/actions/auction';
-import { GetAuctionsOptions, GetOwnersOptions } from '@app/api/data';
+import { FetchRegions, FetchRealms, FetchAuctions, PageChange, FetchAuctionsQuery } from '@app/actions/auction';
+import { GetAuctionsOptions, QueryAuctionsOptions } from '@app/api/data';
 
 const mapStateToProps = (state: StoreState): StateProps => {
   const { fetchPingLevel } = state.Main;
@@ -21,8 +21,7 @@ const mapStateToProps = (state: StoreState): StateProps => {
     totalResults,
     sortDirection,
     sortKind,
-    ownerFilter,
-    itemFilter
+    queryAuctionsLevel
   } = state.Auction;
   return {
     fetchPingLevel,
@@ -37,8 +36,7 @@ const mapStateToProps = (state: StoreState): StateProps => {
     totalResults,
     sortDirection,
     sortKind,
-    ownerFilter,
-    itemFilter
+    queryAuctionsLevel
   };
 };
 
@@ -48,8 +46,7 @@ const mapDispatchToProps = (dispatch: Dispatch<Actions>): DispatchProps => {
     refreshRealms: (region: Region) => dispatch(FetchRealms(region)),
     refreshAuctions: (opts: GetAuctionsOptions) => dispatch(FetchAuctions(opts)),
     setCurrentPage: (page: number) => dispatch(PageChange(page)),
-    refreshOwners: (opts: GetOwnersOptions) => dispatch(FetchOwners(opts)),
-    refreshItems: (query: string) => dispatch(FetchItems(query))
+    refreshAuctionsQuery: (opts: QueryAuctionsOptions) => dispatch(FetchAuctionsQuery(opts))
   };
 };
 
