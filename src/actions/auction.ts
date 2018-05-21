@@ -16,7 +16,8 @@ import {
   getItems,
   QueryAuctionsOptions,
   AuctionsQueryResponse,
-  queryAuctions
+  queryAuctions,
+  AuctionsQueryItem
 } from '../api/data';
 
 export const REQUEST_REGIONS = 'REQUEST_REGIONS';
@@ -112,6 +113,11 @@ export const FetchAuctionsQuery = (opts: QueryAuctionsOptions) => {
   };
 };
 
+export const ADD_AUCTIONS_QUERY = 'ADD_AUCTIONS_QUERY';
+export const AddAuctionsQuery = (payload: AuctionsQueryItem) => createAction(ADD_AUCTIONS_QUERY, payload);
+export const REMOVE_AUCTIONS_QUERY = 'REMOVE_AUCTIONS_QUERY';
+export const RemoveAuctionsQuery = (payload: number) => createAction(REMOVE_AUCTIONS_QUERY, payload);
+
 export const AuctionActions = {
   RequestRegions, ReceiveRegions,
   RegionChange,
@@ -123,7 +129,8 @@ export const AuctionActions = {
   OwnerFilterChange,
   RequestItems, ReceiveItems,
   ItemFilterChange,
-  RequestAuctionsQuery, ReceiveAuctionsQuery
+  RequestAuctionsQuery, ReceiveAuctionsQuery,
+  AddAuctionsQuery, RemoveAuctionsQuery
 };
 
 export type AuctionActions = ActionsUnion<typeof AuctionActions>;

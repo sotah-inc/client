@@ -8,6 +8,8 @@ import {
 } from '@app/components/App/AuctionList/QueryAuctionsFilter';
 import { StoreState } from '@app/types';
 import { Actions } from '@app/actions';
+import { AddAuctionsQuery, RemoveAuctionsQuery } from '@app/actions/auction';
+import { AuctionsQueryItem } from '@app/api/data';
 
 const mapStateToProps = (state: StoreState): StateProps => {
   const {
@@ -15,19 +17,21 @@ const mapStateToProps = (state: StoreState): StateProps => {
     currentRegion,
     currentRealm,
     queryAuctionResults,
-    seletedQueryAuctionResults
+    selectedQueryAuctionResults
   } = state.Auction;
   return {
     queryAuctionsLevel,
     currentRegion,
     currentRealm,
     items: queryAuctionResults,
-    selectedItems: seletedQueryAuctionResults
+    selectedItems: selectedQueryAuctionResults
   };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<Actions>): DispatchProps => {
   return {
+    onAuctionsQuerySelect: (aqItem: AuctionsQueryItem) => dispatch(AddAuctionsQuery(aqItem)),
+    onAuctionsQueryDeselect: (index: number) => dispatch(RemoveAuctionsQuery(index))
   };
 };
 

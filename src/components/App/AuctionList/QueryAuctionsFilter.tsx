@@ -23,6 +23,8 @@ export type StateProps = {
 };
 
 export type DispatchProps = {
+  onAuctionsQuerySelect: (aqResult: QueryAuctionResult) => void
+  onAuctionsQueryDeselect: (index: number) => void
 };
 
 export type OwnProps = {};
@@ -118,7 +120,17 @@ export class QueryAuctionsFilter extends React.Component<Props, State> {
   }
 
   onItemSelect(result: QueryAuctionResult) {
-    console.log(result);
+    if (this.isResultSelected(result)) {
+      this.props.onAuctionsQueryDeselect(this.getSelectedResultIndex(result));
+
+      return;
+    }
+
+    this.props.onAuctionsQuerySelect(result);
+  }
+
+  onItemDeselect(index: number) {
+    this.props.onAuctionsQueryDeselect(index);
   }
 
   onFilterChange(filterValue: string) {
@@ -139,6 +151,14 @@ export class QueryAuctionsFilter extends React.Component<Props, State> {
 
   onFilterClear() {
     console.log('clear');
+  }
+
+  isResultSelected(result: QueryAuctionResult) {
+    return this.getSelectedResultIndex(result) > -1;
+  }
+
+  getSelectedResultIndex(result: QueryAuctionResult) {
+    return this.props.selectedItems.indexOf(result);
   }
 
   render() {

@@ -16,7 +16,7 @@ export type AuctionState = {
   sortKind: SortKind
   queryAuctionsLevel: QueryAuctionsLevel
   queryAuctionResults: QueryAuctionResult[]
-  seletedQueryAuctionResults: QueryAuctionResult[]
+  selectedQueryAuctionResults: QueryAuctionResult[]
 };
 
 export enum FetchRegionLevel { initial, fetching, success, failure }
@@ -61,5 +61,5 @@ export const defaultAuctionState: AuctionState = {
   sortKind: SortKind.none,
   queryAuctionsLevel: QueryAuctionsLevel.initial,
   queryAuctionResults: [],
-  seletedQueryAuctionResults: []
+  selectedQueryAuctionResults: []
 };

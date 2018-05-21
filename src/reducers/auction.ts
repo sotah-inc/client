@@ -9,7 +9,8 @@ import {
   FetchRegionLevel,
   FetchRealmLevel,
   QueryAuctionsLevel,
-  defaultAuctionState
+  defaultAuctionState,
+  QueryAuctionResult
 } from '@app/types/auction';
 import {
   AuctionActions,
@@ -19,7 +20,8 @@ import {
   REALM_CHANGE,
   REQUEST_AUCTIONS, RECEIVE_AUCTIONS,
   PAGE_CHANGE, COUNT_CHANGE, SORT_CHANGE,
-  REQUEST_AUCTIONS_QUERY, RECEIVE_AUCTIONS_QUERY
+  REQUEST_AUCTIONS_QUERY, RECEIVE_AUCTIONS_QUERY,
+  ADD_AUCTIONS_QUERY, REMOVE_AUCTIONS_QUERY
 } from '@app/actions/auction';
 
 type State = Readonly<AuctionState> | undefined;
@@ -95,7 +97,27 @@ export const auction = (state: State, action: AuctionActions): State => {
         return { ...state, queryAuctionsLevel: QueryAuctionsLevel.failure };
       }
 
-      return { ...state, queryAuctionsLevel: QueryAuctionsLevel.success, queryAuctionResults: action.payload.items };
+      const receivedQueryAuctionResults: QueryAuctionResult[] = action.payload.items.map((v) => {
+        return <QueryAuctionResult> { item: v.item, owner: v.owner };
+      });
+
+      return {
+        ...state,
+        queryAuctionsLevel: QueryAuctionsLevel.success,
+        queryAuctionResults: receivedQueryAuctionResults
+      };
+    case ADD_AUCTIONS_QUERY:
+      return {
+        ...state, selectedQueryAuctionResults: [
+          ...state.selectedQueryAuctionResults,
+          action.payload
+        ]
+      };
+    case REMOVE_AUCTIONS_QUERY:
+      const removedSelectedQueryAuctionResults = state
+        .selectedQueryAuctionResults
+        .filter((_result, i) => i !== action.payload);
+      return { ...state, selectedQueryAuctionResults: removedSelectedQueryAuctionResults };
     default:
       return state;
   }
