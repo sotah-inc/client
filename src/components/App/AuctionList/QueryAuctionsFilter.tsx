@@ -180,6 +180,9 @@ export class QueryAuctionsFilter extends React.Component<Props, State> {
               itemListRenderer={this.itemListRenderer}
               itemPredicate={this.itemPredicate}
               selectedItems={selectedItems}
+              tagInputProps={{
+                onRemove: (_tag: string, index: number) => { this.props.onAuctionsQueryDeselect(index); }
+              }}
             />
             <Button
               icon="filter-remove"
