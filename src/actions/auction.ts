@@ -2,7 +2,7 @@ import { Dispatch } from 'redux';
 
 import { createAction, ActionsUnion } from './helpers';
 import { Region, Realm, OwnerName, Item } from '../types/global';
-import { SortChangeOptions } from '../types/auction';
+import { SortChangeOptions, QueryAuctionResult } from '../types/auction';
 import {
   getAuctions,
   getStatus,
@@ -16,8 +16,7 @@ import {
   getItems,
   QueryAuctionsOptions,
   AuctionsQueryResponse,
-  queryAuctions,
-  AuctionsQueryItem
+  queryAuctions
 } from '../api/data';
 
 export const REQUEST_REGIONS = 'REQUEST_REGIONS';
@@ -114,7 +113,7 @@ export const FetchAuctionsQuery = (opts: QueryAuctionsOptions) => {
 };
 
 export const ADD_AUCTIONS_QUERY = 'ADD_AUCTIONS_QUERY';
-export const AddAuctionsQuery = (payload: AuctionsQueryItem) => createAction(ADD_AUCTIONS_QUERY, payload);
+export const AddAuctionsQuery = (payload: QueryAuctionResult) => createAction(ADD_AUCTIONS_QUERY, payload);
 export const REMOVE_AUCTIONS_QUERY = 'REMOVE_AUCTIONS_QUERY';
 export const RemoveAuctionsQuery = (payload: number) => createAction(REMOVE_AUCTIONS_QUERY, payload);
 

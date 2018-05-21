@@ -7,9 +7,10 @@ import {
   OwnProps
 } from '@app/components/App/AuctionList/QueryAuctionsFilter';
 import { StoreState } from '@app/types';
+import { QueryAuctionResult } from '@app/types/auction';
 import { Actions } from '@app/actions';
 import { AddAuctionsQuery, RemoveAuctionsQuery, FetchAuctionsQuery } from '@app/actions/auction';
-import { AuctionsQueryItem, QueryAuctionsOptions } from '@app/api/data';
+import { QueryAuctionsOptions } from '@app/api/data';
 
 const mapStateToProps = (state: StoreState): StateProps => {
   const {
@@ -30,7 +31,7 @@ const mapStateToProps = (state: StoreState): StateProps => {
 
 const mapDispatchToProps = (dispatch: Dispatch<Actions>): DispatchProps => {
   return {
-    onAuctionsQuerySelect: (aqItem: AuctionsQueryItem) => dispatch(AddAuctionsQuery(aqItem)),
+    onAuctionsQuerySelect: (aqItem: QueryAuctionResult) => dispatch(AddAuctionsQuery(aqItem)),
     onAuctionsQueryDeselect: (index: number) => dispatch(RemoveAuctionsQuery(index)),
     refreshAuctionsQuery: (opts: QueryAuctionsOptions) => dispatch(FetchAuctionsQuery(opts))
   };

@@ -2,7 +2,7 @@ import * as HTTPStatus from 'http-status';
 
 import { apiEndpoint } from './index';
 import { Auction, Region, Realm, Owner, Item, OwnerName, ItemId } from '../types/global';
-import { SortDirection, SortKind } from '../types/auction';
+import { SortDirection, SortKind, QueryAuctionResult } from '../types/auction';
 
 export const getPing = async (): Promise<boolean> => {
   try {
@@ -103,13 +103,7 @@ export type QueryAuctionsOptions = {
   query: string
 };
 
-export type AuctionsQueryItem = {
-  target: string
-  item: Item
-  owner: Owner
-};
-
-export type AuctionsQueryItems = AuctionsQueryItem[];
+export type AuctionsQueryItems = QueryAuctionResult[];
 
 export type AuctionsQueryResponse = {
   items: AuctionsQueryItems

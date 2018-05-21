@@ -55,17 +55,8 @@ export class QueryAuctionsFilter extends React.Component<Props, State> {
     return 'n/a';
   }
 
-  itemPredicate: ItemPredicate<QueryAuctionResult> = (query: string, result: QueryAuctionResult) => {
-    const { item, owner } = result;
-
-    query = query.toLowerCase();
-    if (item.name !== '') {
-      return item.name.toLowerCase().indexOf(query) >= 0;
-    } else if (owner.name !== '') {
-      return owner.name.toLowerCase().indexOf(query) >= 0;
-    }
-
-    return false;
+  itemPredicate: ItemPredicate<QueryAuctionResult> = (_query: string, result: QueryAuctionResult) => {
+    return result.rank > -1;
   }
 
   itemRenderer: ItemRenderer<QueryAuctionResult> = (
@@ -79,12 +70,9 @@ export class QueryAuctionsFilter extends React.Component<Props, State> {
     const { item, owner } = result;
 
     let label = 'n/a';
-    let text = 'n/a';
     if (item.name !== '') {
-      text = item.name;
       label = `#${item.id}`;
     } else if (owner.name !== '') {
-      text = owner.name;
       label = 'Owner';
     }
 
@@ -94,7 +82,7 @@ export class QueryAuctionsFilter extends React.Component<Props, State> {
         icon={this.isResultSelected(result) ? 'tick' : 'blank'}
         className={modifiers.active ? 'pt-active' : ''}
         onClick={handleClick}
-        text={text}
+        text={this.resolveResultTextValue(result)}
         label={label}
       />
     );
@@ -158,10 +146,6 @@ export class QueryAuctionsFilter extends React.Component<Props, State> {
     this.setState({ filterValue, timerId: newTimerId });
   }
 
-  onFilterClear() {
-    console.log('clear');
-  }
-
   isResultSelected(result: QueryAuctionResult) {
     return this.getSelectedResultIndex(result) > -1;
   }
@@ -203,7 +187,7 @@ export class QueryAuctionsFilter extends React.Component<Props, State> {
     return (
       <Navbar>
         <NavbarGroup>
-          {selectedItems.map((v, i) => this.renderSelectedItem(i, v))}
+          Items: {selectedItems.map((v, i) => this.renderSelectedItem(i, v))}
         </NavbarGroup>
       </Navbar>
     );

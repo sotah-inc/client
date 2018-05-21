@@ -43,6 +43,8 @@ export enum QueryAuctionsLevel { initial, fetching, refetching, success, failure
 export type QueryAuctionResult = {
   item: Item
   owner: Owner
+  target: string
+  rank: number
 };
 
 export const defaultAuctionState: AuctionState = {

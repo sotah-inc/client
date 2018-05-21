@@ -9,8 +9,7 @@ import {
   FetchRegionLevel,
   FetchRealmLevel,
   QueryAuctionsLevel,
-  defaultAuctionState,
-  QueryAuctionResult
+  defaultAuctionState
 } from '@app/types/auction';
 import {
   AuctionActions,
@@ -97,14 +96,10 @@ export const auction = (state: State, action: AuctionActions): State => {
         return { ...state, queryAuctionsLevel: QueryAuctionsLevel.failure };
       }
 
-      const receivedQueryAuctionResults: QueryAuctionResult[] = action.payload.items.map((v) => {
-        return <QueryAuctionResult> { item: v.item, owner: v.owner };
-      });
-
       return {
         ...state,
         queryAuctionsLevel: QueryAuctionsLevel.success,
-        queryAuctionResults: receivedQueryAuctionResults
+        queryAuctionResults: action.payload.items
       };
     case ADD_AUCTIONS_QUERY:
       return {
