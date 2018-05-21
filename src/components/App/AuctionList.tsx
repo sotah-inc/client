@@ -6,7 +6,7 @@ import RealmToggle from '@app/containers/App/AuctionList/RealmToggle';
 import CountToggle from '@app/containers/App/AuctionList/CountToggle';
 import SortToggle from '@app/containers/App/AuctionList/SortToggle';
 import QueryAuctionsFilter from '@app/containers/App/AuctionList/QueryAuctionsFilter';
-import { Auction, Region, Realm } from '@app/types/global';
+import { Auction, Region, Realm, OwnerName, ItemId } from '@app/types/global';
 import { FetchPingLevel } from '@app/types/main';
 import {
   FetchRegionLevel,
@@ -127,13 +127,19 @@ export class AuctionList extends React.Component<Props> {
           || didSqaResultsChange);
 
       if (shouldRefreshAuctions) {
+        const ownerFilters: OwnerName[] = selectedQueryAuctionResults
+          .filter((v) => v.owner.name !== '')
+          .map((v) => v.owner.name);
+        const itemFilters: ItemId[] = selectedQueryAuctionResults
+          .filter((v) => v.item.name !== '')
+          .map((v) => v.item.id);
         this.props.refreshAuctions({
           regionName: currentRegion.name,
           realmSlug: currentRealm.slug,
           page: currentPage,
           count: auctionsPerPage,
-          sortDirection,
-          sortKind
+          sortDirection, sortKind,
+          ownerFilters, itemFilters
         });
       }
 
@@ -233,11 +239,7 @@ export class AuctionList extends React.Component<Props> {
 
     return (
       <>
-        <Navbar>
-          <NavbarGroup align={Alignment.LEFT}>
-            <QueryAuctionsFilter />
-          </NavbarGroup>
-        </Navbar>
+        <QueryAuctionsFilter />
         <Navbar>
           <NavbarGroup align={Alignment.LEFT}>
             <CountToggle />

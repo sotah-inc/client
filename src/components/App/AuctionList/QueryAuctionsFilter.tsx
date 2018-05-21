@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { Spinner, Menu, MenuItem, Intent, ControlGroup, Button } from '@blueprintjs/core';
+import { Spinner, Menu, MenuItem, Intent, Tag, Navbar, NavbarGroup, Alignment } from '@blueprintjs/core';
 import {
-  MultiSelect,
+  Suggest,
   ItemPredicate,
   ItemListRenderer,
   IItemListRendererProps,
@@ -11,8 +11,9 @@ import {
 
 import { Region, Realm } from '@app/types/global';
 import { QueryAuctionsLevel, QueryAuctionResult } from '@app/types/auction';
+import { QueryAuctionsOptions } from '@app/api/data';
 
-const QueryAuctionResultMultiselect = MultiSelect.ofType<QueryAuctionResult>();
+const QueryAuctionResultMultiselect = Suggest.ofType<QueryAuctionResult>();
 
 export type StateProps = {
   queryAuctionsLevel: QueryAuctionsLevel
@@ -25,6 +26,7 @@ export type StateProps = {
 export type DispatchProps = {
   onAuctionsQuerySelect: (aqResult: QueryAuctionResult) => void
   onAuctionsQueryDeselect: (index: number) => void
+  refreshAuctionsQuery: (opts: QueryAuctionsOptions) => void
 };
 
 export type OwnProps = {};
@@ -105,7 +107,7 @@ export class QueryAuctionsFilter extends React.Component<Props, State> {
       return (
         <Menu ulRef={itemsParentRef}>
           <li>
-            <h6>Select Item</h6>
+            <h6>Queried Results</h6>
           </li>
           <li><em>No results found.</em></li>
         </Menu>
@@ -115,7 +117,7 @@ export class QueryAuctionsFilter extends React.Component<Props, State> {
     return (
       <Menu ulRef={itemsParentRef}>
         <li>
-          <h6>Queried Result</h6>
+          <h6>Queried Results</h6>
         </li>
         {renderedItems}
       </Menu>
@@ -145,7 +147,11 @@ export class QueryAuctionsFilter extends React.Component<Props, State> {
 
     const newTimerId = setTimeout(
       () => {
-        console.log(`refreshing via ${filterValue}`);
+        this.props.refreshAuctionsQuery({
+          regionName: this.props.currentRegion!.name,
+          realmSlug: this.props.currentRealm!.slug,
+          query: filterValue
+        });
       },
       0.25 * 1000
     );
@@ -164,36 +170,75 @@ export class QueryAuctionsFilter extends React.Component<Props, State> {
     return this.props.selectedItems.indexOf(result);
   }
 
-  render() {
-    const { queryAuctionsLevel, items, selectedItems } = this.props;
-    const { filterValue } = this.state;
+  resolveResultTextValue(result: QueryAuctionResult) {
+    const { item, owner } = result;
 
-    const canClearFilter = filterValue !== null && filterValue !== '';
+    if (item.name !== '') {
+      return item.name;
+    } else if (owner.name !== '') {
+      return owner.name;
+    }
+
+    return 'n/a';
+  }
+
+  renderSelectedItem(index: number, result: QueryAuctionResult) {
+    return (
+      <div>
+        <Tag
+          key={index}
+          onRemove={() => this.props.onAuctionsQueryDeselect(index)}
+          style={{marginRight: '5px'}}
+        >
+          {this.resolveResultTextValue(result)}
+        </Tag>
+      </div>
+    );
+  }
+
+  renderSelectedItems() {
+    const { selectedItems } = this.props;
+    if (selectedItems.length === 0) {
+      return;
+    }
+
+    return (
+      <Navbar>
+        <NavbarGroup>
+          {selectedItems.map((v, i) => this.renderSelectedItem(i, v))}
+        </NavbarGroup>
+      </Navbar>
+    );
+  }
+
+  render() {
+    const { queryAuctionsLevel, items } = this.props;
+    const { filterValue } = this.state;
 
     switch (queryAuctionsLevel) {
       case QueryAuctionsLevel.success:
       case QueryAuctionsLevel.refetching:
         return (
-          <ControlGroup>
-            <QueryAuctionResultMultiselect
-              itemRenderer={this.itemRenderer}
-              items={items}
-              onItemSelect={(result: QueryAuctionResult) => { this.onItemSelect(result); }}
-              tagRenderer={this.tagRenderer}
-              itemListRenderer={this.itemListRenderer}
-              itemPredicate={this.itemPredicate}
-              selectedItems={selectedItems}
-              tagInputProps={{
-                onRemove: (_tag: string, index: number) => { this.props.onAuctionsQueryDeselect(index); }
-              }}
-            />
-            <Button
-              icon="filter-remove"
-              disabled={!canClearFilter}
-              text="Clear"
-              onClick={() => this.onFilterClear()}
-            />
-          </ControlGroup>
+          <>
+            <Navbar>
+              <NavbarGroup align={Alignment.LEFT}>
+                <QueryAuctionResultMultiselect
+                  inputValueRenderer={(v) => this.resolveResultTextValue(v)}
+                  itemRenderer={this.itemRenderer}
+                  items={items}
+                  onItemSelect={(result: QueryAuctionResult) => { this.onItemSelect(result); }}
+                  closeOnSelect={false}
+                  inputProps={{
+                    value: filterValue,
+                    onChange: (e: React.ChangeEvent<HTMLInputElement>) => this.onFilterChange(e.target.value)
+                  }}
+                  itemPredicate={this.itemPredicate}
+                  itemListRenderer={this.itemListRenderer}
+                />
+              </NavbarGroup>
+            </Navbar>
+            {this.renderSelectedItems()}
+          </>
         );
       case QueryAuctionsLevel.failure:
         return <Spinner className="pt-small" intent={Intent.DANGER} value={1} />;

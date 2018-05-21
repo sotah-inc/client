@@ -1,7 +1,7 @@
 import * as HTTPStatus from 'http-status';
 
 import { apiEndpoint } from './index';
-import { Auction, Region, Realm, Owner, Item } from '../types/global';
+import { Auction, Region, Realm, Owner, Item, OwnerName, ItemId } from '../types/global';
 import { SortDirection, SortKind } from '../types/auction';
 
 export const getPing = async (): Promise<boolean> => {
@@ -33,6 +33,8 @@ export type GetAuctionsOptions = {
   count: number
   sortDirection: SortDirection
   sortKind: SortKind
+  ownerFilters: OwnerName[]
+  itemFilters: ItemId[]
 };
 
 export type AuctionsResponse = {
@@ -41,10 +43,10 @@ export type AuctionsResponse = {
 };
 
 export const getAuctions = async (opts: GetAuctionsOptions): Promise<AuctionsResponse | null> => {
-  const { regionName, realmSlug, page, count, sortDirection, sortKind } = opts;
+  const { regionName, realmSlug, page, count, sortDirection, sortKind, ownerFilters, itemFilters } = opts;
   const res = await fetch(`${apiEndpoint}/region/${regionName}/realm/${realmSlug}/auctions`, {
     method: 'POST',
-    body: JSON.stringify({ page, count, sortDirection, sortKind }),
+    body: JSON.stringify({ page, count, sortDirection, sortKind, ownerFilters, itemFilters }),
     headers: new Headers({ 'content-type': 'application/json' })
   });
   if (res.status !== HTTPStatus.OK) {
