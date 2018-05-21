@@ -179,9 +179,11 @@ export class AuctionList extends React.Component<Props> {
       );
     }
 
+    const itemText = auction.item.name === '' ? auction.item.id : auction.item.name;
+
     return (
       <tr key={index}>
-        <td>{auction.item}</td>
+        <td>{itemText}</td>
         <td>{auction.quantity}</td>
         <td><Currency amount={auction.bid} /></td>
         <td><Currency amount={auction.buyout} /></td>

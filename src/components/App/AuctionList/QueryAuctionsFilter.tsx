@@ -184,15 +184,13 @@ export class QueryAuctionsFilter extends React.Component<Props, State> {
 
   renderSelectedItem(index: number, result: QueryAuctionResult) {
     return (
-      <div>
-        <Tag
-          key={index}
-          onRemove={() => this.props.onAuctionsQueryDeselect(index)}
-          style={{marginRight: '5px'}}
-        >
-          {this.resolveResultTextValue(result)}
-        </Tag>
-      </div>
+      <Tag
+        key={index}
+        onRemove={() => this.props.onAuctionsQueryDeselect(index)}
+        style={{marginRight: '5px'}}
+      >
+        {this.resolveResultTextValue(result)}
+      </Tag>
     );
   }
 
