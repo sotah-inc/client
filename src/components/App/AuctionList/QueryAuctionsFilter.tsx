@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Spinner, Menu, MenuItem, Intent, Tag, Navbar, NavbarGroup, Alignment } from '@blueprintjs/core';
+import { Spinner, Menu, MenuItem, Intent, Tag, Navbar, NavbarGroup, Alignment, Callout } from '@blueprintjs/core';
 import {
   Suggest,
   ItemPredicate,
@@ -185,11 +185,14 @@ export class QueryAuctionsFilter extends React.Component<Props, State> {
     }
 
     return (
-      <Navbar>
-        <NavbarGroup>
-          Items: {selectedItems.map((v, i) => this.renderSelectedItem(i, v))}
-        </NavbarGroup>
-      </Navbar>
+      <Callout>
+        <h4 className="pt-callout-title">Filters</h4>
+        <div className="pt-tag-input">
+          <div className="pt-tag-input-values">
+            {selectedItems.map((v, i) => this.renderSelectedItem(i, v))}
+          </div>
+        </div>
+      </Callout>
     );
   }
 
