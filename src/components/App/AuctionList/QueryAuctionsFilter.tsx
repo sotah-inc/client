@@ -1,5 +1,13 @@
 import * as React from 'react';
-import { Spinner, Menu, MenuItem, Intent, Tag, Navbar, NavbarGroup, Alignment, Callout } from '@blueprintjs/core';
+import {
+  Spinner,
+  Menu, MenuItem,
+  Intent, Alignment,
+  Tag,
+  Navbar, NavbarGroup,
+  Callout,
+  Button
+} from '@blueprintjs/core';
 import {
   Suggest,
   ItemPredicate,
@@ -13,7 +21,7 @@ import { Region, Realm } from '@app/types/global';
 import { QueryAuctionsLevel, QueryAuctionResult } from '@app/types/auction';
 import { QueryAuctionsOptions } from '@app/api/data';
 
-const QueryAuctionResultMultiselect = Suggest.ofType<QueryAuctionResult>();
+const QueryAuctionResultSuggest = Suggest.ofType<QueryAuctionResult>();
 
 export type StateProps = {
   queryAuctionsLevel: QueryAuctionsLevel
@@ -196,6 +204,28 @@ export class QueryAuctionsFilter extends React.Component<Props, State> {
     );
   }
 
+  renderClearButton() {
+    const { filterValue } = this.state;
+    if (filterValue === null || filterValue === '') {
+      return;
+    }
+
+    return (
+      <Button
+        icon="cross"
+        className="pt-minimal"
+        onClick={() => {
+          this.setState({ filterValue: '' });
+          this.props.refreshAuctionsQuery({
+            regionName: this.props.currentRegion!.name,
+            realmSlug: this.props.currentRealm!.slug,
+            query: ''
+          });
+        }}
+      />
+    );
+  }
+
   render() {
     const { queryAuctionsLevel, items } = this.props;
     const { filterValue } = this.state;
@@ -207,7 +237,7 @@ export class QueryAuctionsFilter extends React.Component<Props, State> {
           <>
             <Navbar>
               <NavbarGroup align={Alignment.LEFT}>
-                <QueryAuctionResultMultiselect
+                <QueryAuctionResultSuggest
                   inputValueRenderer={(v) => this.resolveResultTextValue(v)}
                   itemRenderer={this.itemRenderer}
                   items={items}
@@ -215,7 +245,10 @@ export class QueryAuctionsFilter extends React.Component<Props, State> {
                   closeOnSelect={false}
                   inputProps={{
                     value: filterValue,
-                    onChange: (e: React.ChangeEvent<HTMLInputElement>) => this.onFilterChange(e.target.value)
+                    onChange: (e: React.ChangeEvent<HTMLInputElement>) => this.onFilterChange(e.target.value),
+                    type: 'search',
+                    leftIcon: 'search',
+                    rightElement: this.renderClearButton()
                   }}
                   itemPredicate={this.itemPredicate}
                   itemListRenderer={this.itemListRenderer}
