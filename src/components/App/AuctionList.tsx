@@ -165,6 +165,15 @@ export class AuctionList extends React.Component<Props> {
     );
   }
 
+  renderAuctionsFooter() {
+    const { currentPage } = this.props;
+    const pageCount = this.getPageCount();
+
+    return (
+      <p style={{textAlign: 'center'}}>Page {currentPage + 1} of {pageCount + 1}</p>
+    );
+  }
+
   renderAuction(auction: Auction | null, index: number) {
     if (auction === null) {
       return (
@@ -221,23 +230,34 @@ export class AuctionList extends React.Component<Props> {
     );
   }
 
-  renderAuctions() {
-    const { auctions, totalResults, auctionsPerPage, currentPage } = this.props;
+  getPageCount() {
+    const { totalResults, auctionsPerPage } = this.props;
 
     let pageCount = 0;
     if (totalResults > 0) {
-      if (auctionsPerPage === 10 && auctions.length < auctionsPerPage) {
-        for (let i = auctions.length; i < auctionsPerPage; i++) {
-          auctions[i] = null;
-        }
-      }
-
       pageCount = (totalResults / auctionsPerPage) - 1;
       const remainder = totalResults % auctionsPerPage;
       if (remainder > 0) {
         pageCount = (totalResults - remainder) / auctionsPerPage;
       }
     }
+
+    return pageCount;
+  }
+
+  renderAuctions() {
+    const { auctions, totalResults, auctionsPerPage, currentPage } = this.props;
+
+    // optionally appending blank auction lines
+    if (totalResults > 0) {
+      if (auctionsPerPage === 10 && auctions.length < auctionsPerPage) {
+        for (let i = auctions.length; i < auctionsPerPage; i++) {
+          auctions[i] = null;
+        }
+      }
+    }
+
+    const pageCount = this.getPageCount();
 
     return (
       <>
@@ -262,6 +282,7 @@ export class AuctionList extends React.Component<Props> {
           </NavbarGroup>
         </Navbar>
         {this.renderAuctionTable()}
+        {this.renderAuctionsFooter()}
       </>
     );
   }
