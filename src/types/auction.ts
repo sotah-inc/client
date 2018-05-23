@@ -27,7 +27,7 @@ export enum FetchAuctionsLevel { initial, fetching, refetching, success, failure
 
 export enum SortDirection { none, up, down }
 
-export enum SortKind { none, item, quantity, bid, buyout, auctions, owner }
+export enum SortKind { none, item, quantity, bid, buyout, buyoutPer, auctions, owner }
 
 export type SortChangeOptions = {
   sortKind: SortKind

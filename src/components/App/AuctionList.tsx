@@ -194,8 +194,8 @@ export class AuctionList extends React.Component<Props> {
       <tr key={index}>
         <td>{itemText}</td>
         <td>{auction.quantity}</td>
-        <td><Currency amount={auction.bid} /></td>
         <td><Currency amount={auction.buyout} /></td>
+        <td><Currency amount={auction.buyoutPer} /></td>
         <td>{auction.aucList.length}</td>
         <td>{auction.owner}</td>
       </tr>
@@ -217,8 +217,8 @@ export class AuctionList extends React.Component<Props> {
           <tr>
             <th><SortToggle label="Item" sortKind={SortKind.item} /></th>
             <th><SortToggle label="Quantity" sortKind={SortKind.quantity} /></th>
-            <th><SortToggle label="Bid" sortKind={SortKind.bid} /></th>
             <th><SortToggle label="Buyout" sortKind={SortKind.buyout} /></th>
+            <th><SortToggle label="BuyoutPer" sortKind={SortKind.buyoutPer} /></th>
             <th><SortToggle label="Auctions" sortKind={SortKind.auctions} /></th>
             <th><SortToggle label="Owner" sortKind={SortKind.owner} /></th>
           </tr>

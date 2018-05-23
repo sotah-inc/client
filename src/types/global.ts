@@ -32,6 +32,7 @@ export type Auction = {
   ownerRealm: string
   bid: number
   buyout: number
+  buyoutPer: number
   quantity: number
   timeLeft: string
   aucList: number[]
