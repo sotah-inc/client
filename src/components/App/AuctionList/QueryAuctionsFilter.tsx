@@ -20,6 +20,7 @@ import {
 import { Region, Realm } from '@app/types/global';
 import { QueryAuctionsLevel, QueryAuctionResult } from '@app/types/auction';
 import { QueryAuctionsOptions } from '@app/api/data';
+import { qualityToColorClass } from '@app/util';
 
 const QueryAuctionResultSuggest = Suggest.ofType<QueryAuctionResult>();
 
@@ -76,10 +77,12 @@ export class QueryAuctionsFilter extends React.Component<Props, State> {
     }
 
     const { item, owner } = result;
+    let className = modifiers.active ? 'pt-active' : '';
 
     let label = 'n/a';
     if (item.name !== '') {
       label = `#${item.id}`;
+      className = `${className} ${qualityToColorClass(result.item.quality)}`;
     } else if (owner.name !== '') {
       label = 'Owner';
     }
@@ -88,7 +91,7 @@ export class QueryAuctionsFilter extends React.Component<Props, State> {
       <MenuItem
         key={index}
         icon={this.isResultSelected(result) ? 'tick' : 'blank'}
-        className={modifiers.active ? 'pt-active' : ''}
+        className={className}
         onClick={handleClick}
         text={this.resolveResultTextValue(result)}
         label={label}

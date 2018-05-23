@@ -15,3 +15,23 @@
     width: 100%;
     margin: 10px 0;
 }
+
+.poor-text {
+    color: $gray1 !important;
+}
+
+.common-text {
+    color: $dark-gray5 !important;
+}
+
+.uncommon-text {
+    color: $green4 !important;
+}
+
+.rare-text {
+    color: $blue4 !important;
+}
+
+.epic-text {
+    color: $violet4 !important;
+}

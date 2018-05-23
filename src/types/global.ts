@@ -13,9 +13,21 @@ export type Regions = {
 // item types
 export type ItemId = number;
 
+export enum ItemQuality {
+  Poor,
+  Common,
+  Uncommon,
+  Rare,
+  Epic,
+  Legendary,
+  Artifact,
+  Heirloom
+}
+
 export type Item = {
   id: ItemId
   name: string
+  quality: ItemQuality
 };
 
 // owner types

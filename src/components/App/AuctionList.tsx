@@ -19,6 +19,7 @@ import {
 } from '@app/types/auction';
 import { GetAuctionsOptions, QueryAuctionsOptions } from '@app/api/data';
 import { Currency, Pagination } from '../util';
+import { qualityToColorClass } from '@app/util';
 
 type ListAuction = Auction | null;
 
@@ -192,7 +193,7 @@ export class AuctionList extends React.Component<Props> {
 
     return (
       <tr key={index}>
-        <td>{itemText}</td>
+        <td className={qualityToColorClass(auction.item.quality)}>{itemText}</td>
         <td>{auction.quantity}</td>
         <td><Currency amount={auction.buyout} /></td>
         <td><Currency amount={auction.buyoutPer} /></td>
