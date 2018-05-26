@@ -28,6 +28,7 @@ export type Item = {
   id: ItemId
   name: string
   quality: ItemQuality
+  icon: string
 };
 
 // owner types

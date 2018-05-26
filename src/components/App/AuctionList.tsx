@@ -6,7 +6,7 @@ import RealmToggle from '@app/containers/App/AuctionList/RealmToggle';
 import CountToggle from '@app/containers/App/AuctionList/CountToggle';
 import SortToggle from '@app/containers/App/AuctionList/SortToggle';
 import QueryAuctionsFilter from '@app/containers/App/AuctionList/QueryAuctionsFilter';
-import { Auction, Region, Realm, OwnerName, ItemId } from '@app/types/global';
+import { Auction, Region, Realm, OwnerName, ItemId, Item } from '@app/types/global';
 import { FetchPingLevel } from '@app/types/main';
 import {
   FetchRegionLevel,
@@ -17,6 +17,7 @@ import {
   QueryAuctionsLevel,
   QueryAuctionResult
 } from '@app/types/auction';
+import { apiEndpoint } from '@app/api';
 import { GetAuctionsOptions, QueryAuctionsOptions } from '@app/api/data';
 import { Currency, Pagination } from '../util';
 import { qualityToColorClass } from '@app/util';
@@ -175,6 +176,21 @@ export class AuctionList extends React.Component<Props> {
     );
   }
 
+  renderItem(item: Item) {
+    const itemText = item.name === '' ? item.id : item.name;
+    if (item.icon === '') {
+      return itemText;
+    }
+
+    const src = `${apiEndpoint}/item-icons/${item.icon}.jpg`;
+
+    return (
+      <div className="item-icon-container">
+        <img src={src} className="item-icon" /> {itemText}
+      </div>
+    );
+  }
+
   renderAuction(auction: Auction | null, index: number) {
     if (auction === null) {
       return (
@@ -189,11 +205,9 @@ export class AuctionList extends React.Component<Props> {
       );
     }
 
-    const itemText = auction.item.name === '' ? auction.item.id : auction.item.name;
-
     return (
       <tr key={index}>
-        <td className={qualityToColorClass(auction.item.quality)}>{itemText}</td>
+        <td className={qualityToColorClass(auction.item.quality)}>{this.renderItem(auction.item)}</td>
         <td>{auction.quantity}</td>
         <td><Currency amount={auction.buyout} /></td>
         <td><Currency amount={auction.buyoutPer} /></td>
