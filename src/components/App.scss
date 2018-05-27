@@ -36,13 +36,29 @@
     color: $violet4 !important;
 }
 
-.item-icon-container {
+.item-icon-container,
+.quantity-container,
+.currency-container,
+.buyout-container,
+.auclist-container,
+.owner-container {
     line-height: 24px;
 }
 
-.item-icon {
+.auction-list .item-icon {
     width: 24px;
     height: 24px;
     border-radius: 3px;
+    margin-bottom: -5px;
+}
+
+.qaf-menu {
+    min-width: 350px;
+}
+
+.qaf-menu-item .item-icon {
+    width: 20px;
+    height: 20px;
+    border-radius: 2px;
     margin-bottom: -5px;
 }

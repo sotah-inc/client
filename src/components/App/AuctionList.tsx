@@ -17,10 +17,9 @@ import {
   QueryAuctionsLevel,
   QueryAuctionResult
 } from '@app/types/auction';
-import { apiEndpoint } from '@app/api';
 import { GetAuctionsOptions, QueryAuctionsOptions } from '@app/api/data';
 import { Currency, Pagination } from '../util';
-import { qualityToColorClass } from '@app/util';
+import { qualityToColorClass, getItemIconUrl, getItemTextValue } from '@app/util';
 
 type ListAuction = Auction | null;
 
@@ -177,16 +176,15 @@ export class AuctionList extends React.Component<Props> {
   }
 
   renderItem(item: Item) {
-    const itemText = item.name === '' ? item.id : item.name;
-    if (item.icon === '') {
+    const itemText = getItemTextValue(item);
+    const itemIconUrl = getItemIconUrl(item);
+    if (itemIconUrl === null) {
       return itemText;
     }
 
-    const src = `${apiEndpoint}/item-icons/${item.icon}.jpg`;
-
     return (
       <div className="item-icon-container">
-        <img src={src} className="item-icon" /> {itemText}
+        <img src={itemIconUrl} className="item-icon" /> {itemText}
       </div>
     );
   }
@@ -208,11 +206,11 @@ export class AuctionList extends React.Component<Props> {
     return (
       <tr key={index}>
         <td className={qualityToColorClass(auction.item.quality)}>{this.renderItem(auction.item)}</td>
-        <td>{auction.quantity}</td>
-        <td><Currency amount={auction.buyout} /></td>
-        <td><Currency amount={auction.buyoutPer} /></td>
-        <td>{auction.aucList.length}</td>
-        <td>{auction.owner}</td>
+        <td className="quantity-container">{auction.quantity}</td>
+        <td className="currency-container"><Currency amount={auction.buyout} /></td>
+        <td className="buyout-container"><Currency amount={auction.buyoutPer} /></td>
+        <td className="auclist-container">{auction.aucList.length}</td>
+        <td className="owner-container">{auction.owner}</td>
       </tr>
     );
   }

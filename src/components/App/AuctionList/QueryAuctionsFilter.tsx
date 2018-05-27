@@ -17,10 +17,10 @@ import {
   IItemRendererProps
 } from '@blueprintjs/select';
 
-import { Region, Realm } from '@app/types/global';
+import { Region, Realm, Item } from '@app/types/global';
 import { QueryAuctionsLevel, QueryAuctionResult } from '@app/types/auction';
 import { QueryAuctionsOptions } from '@app/api/data';
-import { qualityToColorClass } from '@app/util';
+import { qualityToColorClass, getItemIconUrl, getItemTextValue } from '@app/util';
 
 const QueryAuctionResultSuggest = Suggest.ofType<QueryAuctionResult>();
 
@@ -68,6 +68,39 @@ export class QueryAuctionsFilter extends React.Component<Props, State> {
     return result.rank > -1;
   }
 
+  renderItemAsItemRendererText(item: Item) {
+    const itemText = getItemTextValue(item);
+    const itemIconUrl = getItemIconUrl(item);
+
+    if (itemIconUrl === null) {
+      return itemText;
+    }
+
+    return (
+      <>
+        <img src={itemIconUrl} className="item-icon" /> {itemText}
+      </>
+    );
+  }
+
+  renderItemRendererTextContent(result: QueryAuctionResult) {
+    const { item, owner } = result;
+
+    if (item.id > 0) {
+      return this.renderItemAsItemRendererText(result.item);
+    } else if (owner.name !== '') {
+      return owner.name;
+    }
+
+    return 'n/a';
+  }
+
+  renderItemRendererText(result: QueryAuctionResult) {
+    return (
+      <span className="qaf-menu-item">{this.renderItemRendererTextContent(result)}</span>
+    );
+  }
+
   itemRenderer: ItemRenderer<QueryAuctionResult> = (
     result: QueryAuctionResult,
     { handleClick, modifiers, index }: IItemRendererProps
@@ -93,7 +126,7 @@ export class QueryAuctionsFilter extends React.Component<Props, State> {
         icon={this.isResultSelected(result) ? 'tick' : 'blank'}
         className={className}
         onClick={handleClick}
-        text={this.resolveResultTextValue(result)}
+        text={this.renderItemRendererText(result)}
         label={label}
       />
     );
@@ -114,7 +147,7 @@ export class QueryAuctionsFilter extends React.Component<Props, State> {
     }
 
     return (
-      <Menu ulRef={itemsParentRef}>
+      <Menu ulRef={itemsParentRef} className="qaf-menu">
         <li>
           <h6>Queried Results</h6>
         </li>
@@ -165,11 +198,11 @@ export class QueryAuctionsFilter extends React.Component<Props, State> {
     return this.props.selectedItems.indexOf(result);
   }
 
-  resolveResultTextValue(result: QueryAuctionResult) {
+  resolveResultTextValue(result: QueryAuctionResult): string {
     const { item, owner } = result;
 
-    if (item.name !== '') {
-      return item.name;
+    if (item.id > 0) {
+      return getItemTextValue(item);
     } else if (owner.name !== '') {
       return owner.name;
     }
