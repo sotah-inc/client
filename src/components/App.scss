@@ -62,3 +62,21 @@
     border-radius: 3px;
     margin-bottom: -5px;
 }
+
+.auction-popover-content {
+    padding: 10px;
+
+    .item-icon {
+        border-radius: 3px;
+        width: 56px;
+        height: 56px;
+        margin-bottom: -22px;
+        border-width: 3px;
+        border-style: solid;
+    }
+
+    .item-text {
+        line-height: 56px;
+        margin-bottom: 0;
+    }
+}

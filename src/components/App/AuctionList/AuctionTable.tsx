@@ -1,10 +1,11 @@
 import * as React from 'react';
+import { Popover, PopoverInteractionKind } from '@blueprintjs/core';
 
 import SortToggle from '@app/containers/App/AuctionList/SortToggle';
+import { Currency } from '../../util';
 
 import { Auction, Item } from '@app/types/global';
 import { SortKind } from '@app/types/auction';
-import { Currency } from '../../util';
 import { qualityToColorClass, getItemIconUrl, getItemTextValue } from '@app/util';
 
 type ListAuction = Auction | null;
@@ -21,7 +22,17 @@ export type OwnProps = {};
 type Props = Readonly<StateProps & DispatchProps & OwnProps>;
 
 export class AuctionTable extends React.Component<Props> {
-  renderItem(item: Item) {
+  renderItemPopoverContent(item: Item) {
+    const itemTextClass = `${qualityToColorClass(item.quality)} item-text`;
+    return (
+      <div className="auction-popover-content">
+        <p className={itemTextClass}>{this.renderItemDisplay(item)}</p>
+        <p>Item level {item.itemLevel}</p>
+      </div>
+    );
+  }
+
+  renderItemDisplay(item: Item) {
     const itemText = getItemTextValue(item);
     const itemIconUrl = getItemIconUrl(item);
     if (itemIconUrl === null) {
@@ -29,9 +40,27 @@ export class AuctionTable extends React.Component<Props> {
     }
 
     return (
-      <div className="item-icon-container">
+      <>
         <img src={itemIconUrl} className="item-icon" /> {itemText}
+      </>
+    );
+  }
+
+  renderItemPopoverTarget(item: Item) {
+    return (
+      <div className="item-icon-container">
+        {this.renderItemDisplay(item)}
       </div>
+    );
+  }
+
+  renderItemPopover(item: Item) {
+    return (
+      <Popover
+        content={this.renderItemPopoverContent(item)}
+        target={this.renderItemPopoverTarget(item)}
+        interactionKind={PopoverInteractionKind.HOVER}
+      />
     );
   }
 
@@ -51,7 +80,7 @@ export class AuctionTable extends React.Component<Props> {
 
     return (
       <tr key={index}>
-        <td className={qualityToColorClass(auction.item.quality)}>{this.renderItem(auction.item)}</td>
+        <td className={qualityToColorClass(auction.item.quality)}>{this.renderItemPopover(auction.item)}</td>
         <td className="quantity-container">{auction.quantity}</td>
         <td className="currency-container"><Currency amount={auction.buyout} /></td>
         <td className="buyout-container"><Currency amount={auction.buyoutPer} /></td>

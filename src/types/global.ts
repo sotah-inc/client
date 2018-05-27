@@ -29,6 +29,7 @@ export type Item = {
   name: string
   quality: ItemQuality
   icon: string
+  itemLevel: number
 };
 
 // owner types
