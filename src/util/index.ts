@@ -1,5 +1,5 @@
 import { apiEndpoint } from '@app/api';
-import { ItemQuality, Item } from '../types/global';
+import { ItemQuality, Item } from '@app/types/global';
 
 export const qualityToColorClass = (quality: ItemQuality): string => {
   switch (quality) {

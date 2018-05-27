@@ -194,8 +194,37 @@ export class QueryAuctionsFilter extends React.Component<Props, State> {
     return this.getSelectedResultIndex(result) > -1;
   }
 
-  getSelectedResultIndex(result: QueryAuctionResult) {
-    return this.props.selectedItems.indexOf(result);
+  getSelectedResultIndex(result: QueryAuctionResult): number {
+    const selectedItems = this.props.selectedItems;
+    if (selectedItems.length === 0) {
+      return -1;
+    }
+
+    for (let i = 0; i < selectedItems.length; i++) {
+      const selectedItem = selectedItems[i];
+
+      if (selectedItem.item.id > 0) {
+        if (result.owner.name !== '') {
+          continue;
+        }
+
+        if (result.item.id === selectedItem.item.id) {
+          return Number(i);
+        }
+      }
+
+      if (selectedItem.owner.name !== '') {
+        if (result.item.id > 0) {
+          continue;
+        }
+
+        if (result.owner.name === selectedItem.owner.name) {
+          return Number(i);
+        }
+      }
+    }
+
+    return -1;
   }
 
   resolveResultTextValue(result: QueryAuctionResult): string {
