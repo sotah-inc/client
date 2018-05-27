@@ -4,9 +4,9 @@ import { ButtonGroup, Spinner, Intent, Navbar, NavbarGroup, Alignment, NavbarDiv
 import RegionToggle from '@app/containers/App/AuctionList/RegionToggle';
 import RealmToggle from '@app/containers/App/AuctionList/RealmToggle';
 import CountToggle from '@app/containers/App/AuctionList/CountToggle';
-import SortToggle from '@app/containers/App/AuctionList/SortToggle';
 import QueryAuctionsFilter from '@app/containers/App/AuctionList/QueryAuctionsFilter';
-import { Auction, Region, Realm, OwnerName, ItemId, Item } from '@app/types/global';
+import AuctionTable from '@app/containers/App/AuctionList/AuctionTable';
+import { Auction, Region, Realm, OwnerName, ItemId } from '@app/types/global';
 import { FetchPingLevel } from '@app/types/main';
 import {
   FetchRegionLevel,
@@ -18,8 +18,7 @@ import {
   QueryAuctionResult
 } from '@app/types/auction';
 import { GetAuctionsOptions, QueryAuctionsOptions } from '@app/api/data';
-import { Currency, Pagination } from '../util';
-import { qualityToColorClass, getItemIconUrl, getItemTextValue } from '@app/util';
+import { Pagination } from '../util';
 
 type ListAuction = Auction | null;
 
@@ -175,74 +174,6 @@ export class AuctionList extends React.Component<Props> {
     );
   }
 
-  renderItem(item: Item) {
-    const itemText = getItemTextValue(item);
-    const itemIconUrl = getItemIconUrl(item);
-    if (itemIconUrl === null) {
-      return itemText;
-    }
-
-    return (
-      <div className="item-icon-container">
-        <img src={itemIconUrl} className="item-icon" /> {itemText}
-      </div>
-    );
-  }
-
-  renderAuction(auction: Auction | null, index: number) {
-    if (auction === null) {
-      return (
-        <tr key={index}>
-          <td>---</td>
-          <td>---</td>
-          <td>---</td>
-          <td>---</td>
-          <td>---</td>
-          <td>---</td>
-        </tr>
-      );
-    }
-
-    return (
-      <tr key={index}>
-        <td className={qualityToColorClass(auction.item.quality)}>{this.renderItem(auction.item)}</td>
-        <td className="quantity-container">{auction.quantity}</td>
-        <td className="currency-container"><Currency amount={auction.buyout} /></td>
-        <td className="buyout-container"><Currency amount={auction.buyoutPer} /></td>
-        <td className="auclist-container">{auction.aucList.length}</td>
-        <td className="owner-container">{auction.owner}</td>
-      </tr>
-    );
-  }
-
-  renderAuctionTable() {
-    const { auctions } = this.props;
-
-    if (auctions.length === 0) {
-      return (
-        <p style={{marginTop: '10px'}}><em>No auctions found!</em></p>
-      );
-    }
-
-    return (
-      <table className="pt-html-table pt-html-table-bordered pt-small auction-list">
-        <thead>
-          <tr>
-            <th><SortToggle label="Item" sortKind={SortKind.item} /></th>
-            <th><SortToggle label="Quantity" sortKind={SortKind.quantity} /></th>
-            <th><SortToggle label="Buyout" sortKind={SortKind.buyout} /></th>
-            <th><SortToggle label="BuyoutPer" sortKind={SortKind.buyoutPer} /></th>
-            <th><SortToggle label="Auctions" sortKind={SortKind.auctions} /></th>
-            <th><SortToggle label="Owner" sortKind={SortKind.owner} /></th>
-          </tr>
-        </thead>
-        <tbody>
-          {auctions.map((auction, index) => this.renderAuction(auction, index))}
-        </tbody>
-      </table>
-    );
-  }
-
   getPageCount() {
     const { totalResults, auctionsPerPage } = this.props;
 
@@ -294,7 +225,7 @@ export class AuctionList extends React.Component<Props> {
             </ButtonGroup>
           </NavbarGroup>
         </Navbar>
-        {this.renderAuctionTable()}
+        <AuctionTable />
         {this.renderAuctionsFooter()}
       </>
     );
