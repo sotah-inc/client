@@ -88,3 +88,15 @@ export type Profile = {
   user: User
   token: string
 };
+
+// item-classes
+export type subItemClass = {
+  subclass: number
+  name: string
+};
+
+export type ItemClass = {
+  class: number
+  name: string
+  subclasses: subItemClass[]
+};

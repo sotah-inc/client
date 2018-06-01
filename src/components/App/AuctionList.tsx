@@ -15,7 +15,8 @@ import {
   SortKind,
   SortDirection,
   QueryAuctionsLevel,
-  QueryAuctionResult
+  QueryAuctionResult,
+  FetchItemClassesLevel
 } from '@app/types/auction';
 import { GetAuctionsOptions, QueryAuctionsOptions } from '@app/api/data';
 import { Pagination } from '../util';
@@ -37,6 +38,7 @@ export type StateProps = {
   sortDirection: SortDirection
   queryAuctionsLevel: QueryAuctionsLevel
   selectedQueryAuctionResults: QueryAuctionResult[]
+  fetchItemClassesLevel: FetchItemClassesLevel
 };
 
 export type DispatchProps = {
@@ -45,6 +47,7 @@ export type DispatchProps = {
   refreshAuctions: (opts: GetAuctionsOptions) => void
   setCurrentPage: (page: number) => void
   refreshAuctionsQuery: (opts: QueryAuctionsOptions) => void
+  refreshItemClasses: () => void
 };
 
 export type OwnProps = {};
@@ -99,7 +102,8 @@ export class AuctionList extends React.Component<Props> {
       auctionsPerPage,
       sortDirection,
       sortKind,
-      selectedQueryAuctionResults
+      selectedQueryAuctionResults,
+      fetchItemClassesLevel
     } = this.props;
 
     if (currentRegion !== null) {
@@ -109,6 +113,10 @@ export class AuctionList extends React.Component<Props> {
       if (shouldRefreshRealms) {
         this.props.refreshRealms(currentRegion);
       }
+    }
+
+    if (fetchItemClassesLevel === FetchItemClassesLevel.initial) {
+      this.props.refreshItemClasses();
     }
 
     if (currentRegion !== null && currentRealm !== null) {

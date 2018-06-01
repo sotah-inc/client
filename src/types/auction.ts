@@ -1,4 +1,4 @@
-import { Auction, Regions, Region, Realms, Realm, Owner, Item } from './global';
+import { Auction, Regions, Region, Realms, Realm, Owner, Item, ItemClass } from './global';
 
 export type AuctionState = {
   fetchAuctionsLevel: FetchAuctionsLevel
@@ -16,7 +16,9 @@ export type AuctionState = {
   sortKind: SortKind
   queryAuctionsLevel: QueryAuctionsLevel
   queryAuctionResults: QueryAuctionResult[]
-  selectedQueryAuctionResults: QueryAuctionResult[]
+  selectedQueryAuctionResults: QueryAuctionResult[],
+  fetchItemClassesLevel: FetchItemClassesLevel,
+  itemClasses: ItemClass[]
 };
 
 export enum FetchRegionLevel { initial, fetching, success, failure }
@@ -47,6 +49,8 @@ export type QueryAuctionResult = {
   rank: number
 };
 
+export enum FetchItemClassesLevel { initial, fetching, refetching, success, failure }
+
 export const defaultAuctionState: AuctionState = {
   fetchAuctionsLevel: FetchAuctionsLevel.initial,
   auctions: [],
@@ -63,5 +67,7 @@ export const defaultAuctionState: AuctionState = {
   sortKind: SortKind.none,
   queryAuctionsLevel: QueryAuctionsLevel.initial,
   queryAuctionResults: [],
-  selectedQueryAuctionResults: []
+  selectedQueryAuctionResults: [],
+  fetchItemClassesLevel: FetchItemClassesLevel.initial,
+  itemClasses: []
 };

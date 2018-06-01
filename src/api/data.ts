@@ -1,7 +1,7 @@
 import * as HTTPStatus from 'http-status';
 
 import { apiEndpoint } from './index';
-import { Auction, Region, Realm, Owner, Item, OwnerName, ItemId } from '../types/global';
+import { Auction, Region, Realm, Owner, Item, OwnerName, ItemId, ItemClass } from '../types/global';
 import { SortDirection, SortKind, QueryAuctionResult } from '../types/auction';
 
 export const getPing = async (): Promise<boolean> => {
@@ -121,4 +121,12 @@ export const queryAuctions = async (opts: QueryAuctionsOptions): Promise<Auction
   }
 
   return await res.json();
+};
+
+export type GetItemClassesResponse = {
+  classes: ItemClass[]
+};
+
+export const getItemClasses = async (): Promise<GetItemClassesResponse | null> => {
+  return await (await fetch(`${apiEndpoint}/item-classes`)).json();
 };

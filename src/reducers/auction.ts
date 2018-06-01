@@ -9,7 +9,8 @@ import {
   FetchRegionLevel,
   FetchRealmLevel,
   QueryAuctionsLevel,
-  defaultAuctionState
+  defaultAuctionState,
+  FetchItemClassesLevel
 } from '@app/types/auction';
 import {
   AuctionActions,
@@ -20,7 +21,8 @@ import {
   REQUEST_AUCTIONS, RECEIVE_AUCTIONS,
   PAGE_CHANGE, COUNT_CHANGE, SORT_CHANGE,
   REQUEST_AUCTIONS_QUERY, RECEIVE_AUCTIONS_QUERY,
-  ADD_AUCTIONS_QUERY, REMOVE_AUCTIONS_QUERY
+  ADD_AUCTIONS_QUERY, REMOVE_AUCTIONS_QUERY,
+  REQUEST_ITEMCLASSES, RECEIVE_ITEMCLASSES
 } from '@app/actions/auction';
 
 type State = Readonly<AuctionState> | undefined;
@@ -113,6 +115,14 @@ export const auction = (state: State, action: AuctionActions): State => {
         .selectedQueryAuctionResults
         .filter((_result, i) => i !== action.payload);
       return { ...state, selectedQueryAuctionResults: removedSelectedQueryAuctionResults };
+    case REQUEST_ITEMCLASSES:
+      return { ...state, fetchItemClassesLevel: FetchItemClassesLevel.fetching };
+    case RECEIVE_ITEMCLASSES:
+      if (action.payload === null) {
+        return { ...state, fetchItemClassesLevel: FetchItemClassesLevel.failure };
+      }
+
+      return { ...state, fetchItemClassesLevel: FetchItemClassesLevel.success, itemClasses: action.payload.classes };
     default:
       return state;
   }

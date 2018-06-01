@@ -16,7 +16,9 @@ import {
   getItems,
   QueryAuctionsOptions,
   AuctionsQueryResponse,
-  queryAuctions
+  queryAuctions,
+  getItemClasses,
+  GetItemClassesResponse
 } from '../api/data';
 
 export const REQUEST_REGIONS = 'REQUEST_REGIONS';
@@ -117,6 +119,18 @@ export const AddAuctionsQuery = (payload: QueryAuctionResult) => createAction(AD
 export const REMOVE_AUCTIONS_QUERY = 'REMOVE_AUCTIONS_QUERY';
 export const RemoveAuctionsQuery = (payload: number) => createAction(REMOVE_AUCTIONS_QUERY, payload);
 
+export const REQUEST_ITEMCLASSES = 'REQUEST_ITEMCLASSES';
+export const RECEIVE_ITEMCLASSES = 'RECEIVE_ITEMCLASSES';
+const RequestItemClasses = () => createAction(REQUEST_ITEMCLASSES);
+const ReceiveItemClasses = (payload: GetItemClassesResponse | null) => createAction(RECEIVE_ITEMCLASSES, payload);
+type FetchItemClassesType = ReturnType<typeof RequestItemClasses | typeof ReceiveItemClasses>;
+export const FetchItemClasses = () => {
+  return async (dispatch: Dispatch<FetchItemClassesType>) => {
+    dispatch(RequestItemClasses());
+    dispatch(ReceiveItemClasses(await getItemClasses()));
+  };
+};
+
 export const AuctionActions = {
   RequestRegions, ReceiveRegions,
   RegionChange,
@@ -129,7 +143,8 @@ export const AuctionActions = {
   RequestItems, ReceiveItems,
   ItemFilterChange,
   RequestAuctionsQuery, ReceiveAuctionsQuery,
-  AddAuctionsQuery, RemoveAuctionsQuery
+  AddAuctionsQuery, RemoveAuctionsQuery,
+  RequestItemClasses, ReceiveItemClasses
 };
 
 export type AuctionActions = ActionsUnion<typeof AuctionActions>;
