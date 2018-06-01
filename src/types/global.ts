@@ -90,13 +90,21 @@ export type Profile = {
 };
 
 // item-classes
-export type subItemClass = {
+export type SubItemClass = {
   subclass: number
   name: string
+};
+
+export type SubItemClasses = {
+  [key: number]: SubItemClass
 };
 
 export type ItemClass = {
   class: number
   name: string
-  subclasses: subItemClass[]
+  subClasses: SubItemClasses
+};
+
+export type ItemClasses = {
+  [key: number]: ItemClass
 };

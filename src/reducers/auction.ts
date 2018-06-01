@@ -1,7 +1,9 @@
 import {
   Regions,
   Realms,
-  Auction
+  Auction,
+  ItemClasses,
+  SubItemClasses
 } from '@app/types/global';
 import {
   AuctionState,
@@ -122,7 +124,20 @@ export const auction = (state: State, action: AuctionActions): State => {
         return { ...state, fetchItemClassesLevel: FetchItemClassesLevel.failure };
       }
 
-      return { ...state, fetchItemClassesLevel: FetchItemClassesLevel.success, itemClasses: action.payload.classes };
+      const itemClasses: ItemClasses = {};
+      for (const itemClass of action.payload.classes) {
+        const subClasses: SubItemClasses = {};
+        for (const subItemClass of itemClass.subclasses) {
+          subClasses[subItemClass.subclass] = subItemClass;
+        }
+        itemClasses[itemClass.class] = {
+          class: itemClass.class,
+          name: name,
+          subClasses
+        };
+      }
+
+      return { ...state, fetchItemClassesLevel: FetchItemClassesLevel.success, itemClasses };
     default:
       return state;
   }
