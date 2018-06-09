@@ -1,5 +1,5 @@
 import { apiEndpoint } from '@app/api';
-import { ItemQuality, Item } from '@app/types/global';
+import { ItemQuality, Item, InventoryType } from '@app/types/global';
 
 export const qualityToColorClass = (quality: ItemQuality): string => {
   switch (quality) {
@@ -31,4 +31,21 @@ export const getItemTextValue = (item: Item): string => {
   }
 
   return item.id.toString();
+};
+
+export const inventoryTypeToString = (iType: InventoryType): string => {
+  if (!(iType in InventoryType)) {
+    return 'n/a';
+  }
+
+  switch (iType) {
+    case InventoryType.Wrist:
+      return 'Wrist';
+    case InventoryType.Robe:
+      return 'Chest';
+    case InventoryType.OneHand:
+      return 'One-Hand';
+    default:
+      return InventoryType[iType];
+  }
 };

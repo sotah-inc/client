@@ -65,6 +65,17 @@
 
 .auction-popover-content {
     padding: 10px;
+    width: 350px;
+
+    ul {
+        list-style: none;
+        padding-left: 0;
+        margin: 0;
+    }
+
+    .postscript {
+        float: right;
+    }
 
     .item-icon {
         border-radius: 3px;
@@ -78,5 +89,18 @@
     .item-text {
         line-height: 56px;
         margin-bottom: 0;
+    }
+
+    .item-level {
+        color: #D99E0B;
+    }
+
+    .on-use,
+    .random-stats {
+        color: #29A634;
+    }
+    
+    .crafting-reagent {
+        color: #137CBD;
     }
 }

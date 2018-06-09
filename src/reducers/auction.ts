@@ -132,7 +132,7 @@ export const auction = (state: State, action: AuctionActions): State => {
         }
         itemClasses[itemClass.class] = {
           class: itemClass.class,
-          name: name,
+          name: itemClass.name,
           subClasses
         };
       }
