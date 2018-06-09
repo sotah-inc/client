@@ -122,8 +122,23 @@ type ItemWeaponInfo = {
 };
 
 export enum ItemStat {
-  Int =  5
+  Int =  5,
+  Stam = 7,
+  Parry = 14,
+  Crit = 32,
+  PvPResil = 35,
+  Vers = 40,
+  Mastery = 49,
+  NatResist = 55,
+  AgiOrStr = 72,
+  AgiOrInt = 73,
+  StrOrInt = 74
 }
+
+export const SecondaryItemStats: ItemStat[] = [
+  ItemStat.Crit,
+  ItemStat.PvPResil
+];
 
 export type ItemBonusStat = {
   stat: ItemStat

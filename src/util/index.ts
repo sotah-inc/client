@@ -58,6 +58,22 @@ export const itemStatToString = (stat: ItemStat): string => {
   switch (stat) {
     case ItemStat.Int:
       return 'Intellect';
+    case ItemStat.Stam:
+      return 'Stamina';
+    case ItemStat.Crit:
+      return 'Critical Strike';
+    case ItemStat.NatResist:
+      return 'Nature Resistance';
+    case ItemStat.Vers:
+      return 'Versatility';
+    case ItemStat.PvPResil:
+      return 'PvP Resilience';
+    case ItemStat.AgiOrInt:
+      return '[Agility or Intellect]';
+    case ItemStat.StrOrInt:
+      return '[Strength or Intellect]';
+    case ItemStat.AgiOrStr:
+      return '[Agility or Strength]';
     default:
       return ItemStat[stat];
   }

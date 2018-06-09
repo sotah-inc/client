@@ -301,7 +301,7 @@ export class AuctionTable extends React.Component<Props> {
       <div className="auction-popover-content">
         <div className="pure-g">
           <div className="pure-u-1-5">
-            <p className={itemTextClass} style={{textAlign: 'center'}}>
+            <p className={itemTextClass} style={{paddingBottom: '17px', marginBottom: 0}}>
               <img src={itemIconUrl} className="item-icon" />
             </p>
           </div>
