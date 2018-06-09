@@ -15,7 +15,13 @@ import {
   ItemBonusStat
 } from '@app/types/global';
 import { SortKind } from '@app/types/auction';
-import { qualityToColorClass, getItemIconUrl, getItemTextValue, inventoryTypeToString } from '@app/util';
+import {
+  qualityToColorClass,
+  getItemIconUrl,
+  getItemTextValue,
+  inventoryTypeToString,
+  itemStatToString
+} from '@app/util';
 
 type ListAuction = Auction | null;
 
@@ -216,7 +222,7 @@ export class AuctionTable extends React.Component<Props> {
 
   renderItemStat(stat: ItemBonusStat) {
     return (
-      <li>+{stat.amount} #{stat.stat}</li>
+      <li>+{stat.amount} {itemStatToString(stat.stat)}</li>
     );
   }
 

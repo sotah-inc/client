@@ -121,8 +121,12 @@ type ItemWeaponInfo = {
   dps: number
 };
 
+export enum ItemStat {
+  Int =  5
+}
+
 export type ItemBonusStat = {
-  stat: number
+  stat: ItemStat
   amount: number
 };
 
