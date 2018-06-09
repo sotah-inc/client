@@ -278,8 +278,15 @@ export class AuctionTable extends React.Component<Props> {
     if (itemIconUrl === null) {
       return (
         <div className="auction-popover-content">
-          <p className={itemTextClass}>{itemText}</p>
-          {this.renderItemData(item)}
+          <ul>
+            <li className={itemTextClass}>{itemText}</li>
+            {this.renderItemData(item)}
+          </ul>
+          <hr />
+          <ul>
+            <li>{this.renderItemClass(item)}</li>
+            <li>Item id: {item.id}</li>
+          </ul>
         </div>
       );
     }
