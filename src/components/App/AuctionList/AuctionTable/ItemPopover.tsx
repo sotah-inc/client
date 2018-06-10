@@ -343,11 +343,11 @@ export class ItemPopover extends React.Component<Props> {
     const { item } = this.props;
 
     return (
-        <Popover
-          content={this.renderItemPopoverContent(item)}
-          target={this.renderItemPopoverTarget(item)}
-          interactionKind={PopoverInteractionKind.HOVER}
-        />
-      );
+      <Popover
+        content={this.renderItemPopoverContent(item)}
+        target={this.renderItemPopoverTarget(item)}
+        interactionKind={PopoverInteractionKind.HOVER}
+      />
+    );
   }
 }
