@@ -127,6 +127,7 @@ export enum ItemStat {
   Parry = 14,
   Crit = 32,
   PvPResil = 35,
+  Haste = 36,
   Vers = 40,
   Mastery = 49,
   NatResist = 55,
@@ -137,7 +138,8 @@ export enum ItemStat {
 
 export const SecondaryItemStats: ItemStat[] = [
   ItemStat.Crit,
-  ItemStat.PvPResil
+  ItemStat.PvPResil,
+  ItemStat.Haste
 ];
 
 export type ItemBonusStat = {
