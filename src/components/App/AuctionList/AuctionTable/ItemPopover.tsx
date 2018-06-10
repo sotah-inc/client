@@ -45,7 +45,7 @@ export class ItemPopover extends React.Component<Props> {
     );
   }
 
-  renderItemBind(item: Item) {
+  renderBind(item: Item) {
     switch (item.itemBind) {
       case (ItemBind.bindOnPickup):
         return <li>Binds when picked up</li>;
@@ -57,7 +57,7 @@ export class ItemPopover extends React.Component<Props> {
     }
   }
 
-  renderItemClass(item: Item) {
+  renderClass(item: Item) {
     const { itemClasses } = this.props;
 
     if (!(item.itemClass in itemClasses)) {
@@ -151,7 +151,7 @@ export class ItemPopover extends React.Component<Props> {
     }
   }
 
-  renderItemArmor(item: Item) {
+  renderLevel(item: Item) {
     if (item.armor === 0) {
       return;
     }
@@ -222,7 +222,7 @@ export class ItemPopover extends React.Component<Props> {
     );
   }
 
-  renderItemStats(item: Item) {
+  renderStats(item: Item) {
     const statItemClasses = [ItemClassClasses.Weapon, ItemClassClasses.Armor];
     if (statItemClasses.indexOf(item.itemClass) === -1) {
       return;
@@ -253,15 +253,15 @@ export class ItemPopover extends React.Component<Props> {
     );
   }
 
-  renderItemData(item: Item) {
+  renderData(item: Item) {
     return (
       <>
         {this.renderItemLevel(item)}
-        {this.renderItemBind(item)}
+        {this.renderBind(item)}
         {this.renderInventoryType(item)}
         {this.renderWeaponInfo(item)}
-        {this.renderItemArmor(item)}
-        {this.renderItemStats(item)}
+        {this.renderLevel(item)}
+        {this.renderStats(item)}
         {this.renderDurability(item)}
         {this.renderOnUse(item)}
         {this.renderRequiredLevel(item)}
@@ -272,7 +272,7 @@ export class ItemPopover extends React.Component<Props> {
     );
   }
 
-  renderItemPopoverContent(item: Item) {
+  renderPopoverContent(item: Item) {
     const itemTextClass = qualityToColorClass(item.quality);
     const itemIconUrl = getItemIconUrl(item);
     const itemText = getItemTextValue(item);
@@ -282,11 +282,11 @@ export class ItemPopover extends React.Component<Props> {
         <div className="auction-popover-content">
           <ul>
             <li className={itemTextClass}>{itemText}</li>
-            {this.renderItemData(item)}
+            {this.renderData(item)}
           </ul>
           <hr />
           <ul>
-            <li>{this.renderItemClass(item)}</li>
+            <li>{this.renderClass(item)}</li>
             <li>Item id: {item.id}</li>
           </ul>
         </div>
@@ -304,11 +304,11 @@ export class ItemPopover extends React.Component<Props> {
           <div className="pure-u-4-5">
             <ul>
               <li className={itemTextClass}>{itemText}</li>
-              {this.renderItemData(item)}
+              {this.renderData(item)}
             </ul>
             <hr />
             <ul>
-              <li>{this.renderItemClass(item)}</li>
+              <li>{this.renderClass(item)}</li>
               <li>Item id: {item.id}</li>
             </ul>
           </div>
@@ -317,7 +317,7 @@ export class ItemPopover extends React.Component<Props> {
     );
   }
 
-  renderItemDisplay(item: Item) {
+  renderDisplay(item: Item) {
     const itemText = getItemTextValue(item);
     const itemIconUrl = getItemIconUrl(item);
     if (itemIconUrl === null) {
@@ -331,10 +331,10 @@ export class ItemPopover extends React.Component<Props> {
     );
   }
 
-  renderItemPopoverTarget(item: Item) {
+  renderPopoverTarget(item: Item) {
     return (
       <div className="item-icon-container">
-        {this.renderItemDisplay(item)}
+        {this.renderDisplay(item)}
       </div>
     );
   }
@@ -344,8 +344,8 @@ export class ItemPopover extends React.Component<Props> {
 
     return (
       <Popover
-        content={this.renderItemPopoverContent(item)}
-        target={this.renderItemPopoverTarget(item)}
+        content={this.renderPopoverContent(item)}
+        target={this.renderPopoverTarget(item)}
         interactionKind={PopoverInteractionKind.HOVER}
       />
     );
