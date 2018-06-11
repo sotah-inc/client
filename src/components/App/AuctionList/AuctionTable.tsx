@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import SortToggle from '@app/containers/App/AuctionList/SortToggle';
-import { ItemPopover } from '@app/components/App/AuctionList/AuctionTable/ItemPopover';
+import ItemPopover from '@app/containers/App/AuctionList/AuctionTable/ItemPopover';
 import { Currency } from '../../util';
 
 import { Auction, Item, ItemClasses } from '@app/types/global';

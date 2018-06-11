@@ -1,5 +1,6 @@
 import { apiEndpoint } from '@app/api';
 import { ItemQuality, Item, InventoryType, ItemStat } from '@app/types/global';
+import { QueryAuctionResult } from '@app/types/auction';
 
 export const qualityToColorClass = (quality: ItemQuality): string => {
   switch (quality) {
@@ -83,4 +84,36 @@ export const itemStatToString = (stat: ItemStat): string => {
     default:
       return ItemStat[stat];
   }
+};
+
+export const getSelectedResultIndex = (result: QueryAuctionResult, selectedItems: QueryAuctionResult[]): number => {
+  if (selectedItems.length === 0) {
+    return -1;
+  }
+
+  for (let i = 0; i < selectedItems.length; i++) {
+    const selectedItem = selectedItems[i];
+
+    if (selectedItem.item.id > 0) {
+      if (result.owner.name !== '') {
+        continue;
+      }
+
+      if (result.item.id === selectedItem.item.id) {
+        return Number(i);
+      }
+    }
+
+    if (selectedItem.owner.name !== '') {
+      if (result.item.id > 0) {
+        continue;
+      }
+
+      if (result.owner.name === selectedItem.owner.name) {
+        return Number(i);
+      }
+    }
+  }
+
+  return -1;
 };

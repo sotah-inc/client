@@ -20,7 +20,7 @@ import {
 import { Region, Realm, Item } from '@app/types/global';
 import { QueryAuctionsLevel, QueryAuctionResult } from '@app/types/auction';
 import { QueryAuctionsOptions } from '@app/api/data';
-import { qualityToColorClass, getItemIconUrl, getItemTextValue } from '@app/util';
+import { qualityToColorClass, getItemIconUrl, getItemTextValue, getSelectedResultIndex } from '@app/util';
 
 const QueryAuctionResultSuggest = Suggest.ofType<QueryAuctionResult>();
 
@@ -196,35 +196,7 @@ export class QueryAuctionsFilter extends React.Component<Props, State> {
 
   getSelectedResultIndex(result: QueryAuctionResult): number {
     const selectedItems = this.props.selectedItems;
-    if (selectedItems.length === 0) {
-      return -1;
-    }
-
-    for (let i = 0; i < selectedItems.length; i++) {
-      const selectedItem = selectedItems[i];
-
-      if (selectedItem.item.id > 0) {
-        if (result.owner.name !== '') {
-          continue;
-        }
-
-        if (result.item.id === selectedItem.item.id) {
-          return Number(i);
-        }
-      }
-
-      if (selectedItem.owner.name !== '') {
-        if (result.item.id > 0) {
-          continue;
-        }
-
-        if (result.owner.name === selectedItem.owner.name) {
-          return Number(i);
-        }
-      }
-    }
-
-    return -1;
+    return getSelectedResultIndex(result, selectedItems);
   }
 
   resolveResultTextValue(result: QueryAuctionResult): string {

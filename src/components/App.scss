@@ -16,23 +16,28 @@
     margin: 10px 0;
 }
 
-.poor-text {
+.poor-text,
+.poor-text a {
     color: $gray1 !important;
 }
 
-.common-text {
+.common-text,
+.common-text a {
     color: $dark-gray5 !important;
 }
 
-.uncommon-text {
+.uncommon-text,
+.uncommon-text a {
     color: $green4 !important;
 }
 
-.rare-text {
+.rare-text,
+.rare-text a {
     color: $blue4 !important;
 }
 
-.epic-text {
+.epic-text,
+.epic-text a {
     color: $violet4 !important;
 }
 

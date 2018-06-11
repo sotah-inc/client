@@ -12,18 +12,23 @@ import {
   ItemSpellTrigger,
   ItemBonusStat
 } from '@app/types/global';
+import { QueryAuctionResult } from '@app/types/auction';
 import {
   qualityToColorClass,
   getItemIconUrl,
   getItemTextValue,
   inventoryTypeToString,
-  itemStatToString
+  itemStatToString,
+  getSelectedResultIndex
 } from '@app/util';
 
 export type StateProps = {
+  selectedItems: QueryAuctionResult[]
 };
 
 export type DispatchProps = {
+  onAuctionsQuerySelect: (aqResult: QueryAuctionResult) => void
+  onAuctionsQueryDeselect: (index: number) => void
 };
 
 export type OwnProps = {
@@ -317,6 +322,32 @@ export class ItemPopover extends React.Component<Props> {
     );
   }
 
+  isResultSelected(result: QueryAuctionResult) {
+    return this.getSelectedResultIndex(result) > -1;
+  }
+
+  getSelectedResultIndex(result: QueryAuctionResult): number {
+    const selectedItems = this.props.selectedItems;
+    return getSelectedResultIndex(result, selectedItems);
+  }
+
+  onItemClick(item: Item) {
+    const result: QueryAuctionResult = {
+      item,
+      owner: { name: '' },
+      rank: 0,
+      target: ''
+    };
+    
+    if (this.isResultSelected(result)) {
+      this.props.onAuctionsQueryDeselect(this.getSelectedResultIndex(result));
+
+      return;
+    }
+
+    this.props.onAuctionsQuerySelect(result);
+  }
+
   renderDisplay(item: Item) {
     const itemText = getItemTextValue(item);
     const itemIconUrl = getItemIconUrl(item);
@@ -326,7 +357,7 @@ export class ItemPopover extends React.Component<Props> {
 
     return (
       <>
-        <img src={itemIconUrl} className="item-icon" /> {itemText}
+        <img src={itemIconUrl} className="item-icon" /> <a onClick={() => this.onItemClick(item)}>{itemText}</a>
       </>
     );
   }
