@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Popover, PopoverInteractionKind } from '@blueprintjs/core';
+import { Popover, PopoverInteractionKind, Position } from '@blueprintjs/core';
 
 import { Currency } from '../../../util';
 
@@ -347,6 +347,7 @@ export class ItemPopover extends React.Component<Props> {
         content={this.renderPopoverContent(item)}
         target={this.renderPopoverTarget(item)}
         interactionKind={PopoverInteractionKind.HOVER}
+        position={Position.RIGHT}
       />
     );
   }

@@ -124,6 +124,7 @@ type ItemWeaponInfo = {
 export enum ItemStat {
   Int =  5,
   Stam = 7,
+  Dodge = 13,
   Parry = 14,
   Crit = 32,
   PvPResil = 35,
