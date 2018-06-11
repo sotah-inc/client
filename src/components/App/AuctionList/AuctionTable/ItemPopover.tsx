@@ -208,7 +208,7 @@ export class ItemPopover extends React.Component<Props> {
     return (
       <>
         <li>
-          {weaponInfo.damage.min}-{weaponInfo.damage.max} Damage
+          {weaponInfo.damage.min} - {weaponInfo.damage.max} Damage
           <span className="postscript">Speed {weaponInfo.weaponSpeed}</span>
         </li>
         <li>({dpsText} damage per second)</li>

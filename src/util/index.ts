@@ -70,6 +70,8 @@ export const itemStatToString = (stat: ItemStat): string => {
       return 'PvP Resilience';
     case ItemStat.Agi:
       return 'Agility';
+    case ItemStat.PvpPow:
+      return 'PvP Power';
     case ItemStat.AgiOrInt:
       return '[Agility or Intellect]';
     case ItemStat.StrOrInt:
