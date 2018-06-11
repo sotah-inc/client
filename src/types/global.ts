@@ -122,7 +122,8 @@ type ItemWeaponInfo = {
 };
 
 export enum ItemStat {
-  Agi = 4,
+  Agi = 3,
+  Str = 4,
   Int =  5,
   Stam = 7,
   Dodge = 13,
