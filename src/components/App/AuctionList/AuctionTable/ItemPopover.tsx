@@ -216,9 +216,9 @@ export class ItemPopover extends React.Component<Props> {
     );
   }
 
-  renderItemStat(stat: ItemBonusStat) {
+  renderItemStat(stat: ItemBonusStat, index: number) {
     return (
-      <li>+{stat.amount} {itemStatToString(stat.stat)}</li>
+      <li key={index}>+{stat.amount} {itemStatToString(stat.stat)}</li>
     );
   }
 
@@ -234,7 +234,7 @@ export class ItemPopover extends React.Component<Props> {
       );
     }
 
-    return item.bonusStats.map((v) => this.renderItemStat(v));
+    return item.bonusStats.map((v, i) => this.renderItemStat(v, i));
   }
 
   renderCraftingReagent(item: Item) {
