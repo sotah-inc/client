@@ -5,7 +5,9 @@ import { StoreState } from '@app/types';
 import { Actions } from '@app/actions';
 
 const mapStateToProps = (state: StoreState): StateProps => {
-  return {};
+  console.log(state);
+  const { lists } = state.PriceLists;
+  return { lists };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<Actions>): DispatchProps => {

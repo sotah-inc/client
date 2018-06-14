@@ -7,14 +7,15 @@ import { BrowserRouter as Router } from 'react-router-dom';
 
 import App from '@app/route-containers/App';
 import { rootReducer } from '@app/reducers';
-import { StoreState, defaultMainState, defaultAuctionState } from '@app/types';
+import { StoreState, defaultMainState, defaultAuctionState, defaultPriceListsState } from '@app/types';
 import registerServiceWorker from '@app/registerServiceWorker';
 
-const preloadedState: StoreState = {
+const ayy: StoreState = {
   Auction: defaultAuctionState,
-  Main: defaultMainState
+  Main: defaultMainState,
+  PriceLists: defaultPriceListsState
 };
-const store = createStore<StoreState>(rootReducer, preloadedState, applyMiddleware(thunk));
+const store = createStore<StoreState>(rootReducer, ayy, applyMiddleware(thunk));
 
 ReactDOM.render(
   <Provider store={store}>
