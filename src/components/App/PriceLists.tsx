@@ -35,7 +35,7 @@ export class PriceLists extends React.Component<Props, State> {
   };
 
   componentDidUpdate(prevProps: Props) {
-    const { onCreateLevel } = this.props;
+    const { onCreateLevel, lists } = this.props;
 
     if (onCreateLevel !== prevProps.onCreateLevel) {
       switch (onCreateLevel) {
@@ -46,6 +46,12 @@ export class PriceLists extends React.Component<Props, State> {
         default:
           break;
       }
+    }
+
+    if (lists.length !== prevProps.lists.length) {
+      this.setState({
+        selectedTabId: `list-${lists[lists.length - 1].id.toString()}`
+      });
     }
   }
 
@@ -142,8 +148,6 @@ export class PriceLists extends React.Component<Props, State> {
         onChange={(id) => this.onTabChange(id)}
         vertical={true}
       >
-        {lists.map((v, i) => this.renderTab(v, i))}
-        <Tabs.Expander />
         <Button
           className="pt-fill"
           icon="plus"
@@ -152,6 +156,8 @@ export class PriceLists extends React.Component<Props, State> {
         >
           Add List
         </Button>
+        <Tabs.Expander />
+        {lists.map((v, i) => this.renderTab(v, i))}
       </Tabs>
     );
   }
