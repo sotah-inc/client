@@ -21,8 +21,9 @@ const config: WithFormikConfig<FormProps, FormValues> = {
   validationSchema: Yup.object().shape({
     name: PriceListRules.name
   }),
-  handleSubmit: async (values, { setSubmitting, props }) => {
+  handleSubmit: async (values, { setSubmitting, props, resetForm }) => {
     setSubmitting(false);
+    resetForm();
     props.onSubmit(values.name);
   }
 };
