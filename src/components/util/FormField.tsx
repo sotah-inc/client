@@ -13,6 +13,7 @@ type PropsOptions = {
   label?: string
   type?: string
   placeholder?: string
+  autofocus?: boolean
   getError: () => string
   getValue: () => string
   getTouched: () => boolean
@@ -23,7 +24,18 @@ type Props = Readonly<GeneratorOptions & PropsOptions>;
 type FormFieldType = React.SFC<Props>;
 
 export const FormField: FormFieldType = (props: Props) => {
-  const { setFieldValue, fieldName, helperText, label, type, placeholder, getError, getValue, getTouched } = props;
+  const {
+    setFieldValue,
+    fieldName,
+    helperText,
+    label,
+    type,
+    placeholder,
+    getError,
+    getValue,
+    getTouched,
+    autofocus
+  } = props;
   const error = getError();
   const isTouched = getTouched();
   const intent = error && isTouched ? Intent.DANGER : Intent.NONE;
@@ -42,6 +54,7 @@ export const FormField: FormFieldType = (props: Props) => {
         placeholder={placeholder}
         value={getValue()}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFieldValue(fieldName, e.target.value)}
+        autoFocus={autofocus}
       />
     </FormGroup>
   );
@@ -58,7 +71,7 @@ interface GeneratorFunc {
 export const Generator: GeneratorInterface = (opts: GeneratorOptions) => {
   const { setFieldValue } = opts;
   return (propsOpts: PropsOptions) => {
-    const { fieldName, helperText, label, type, placeholder, getError, getTouched, getValue } = propsOpts;
+    const { fieldName, helperText, label, type, placeholder, getError, getTouched, getValue, autofocus } = propsOpts;
     return (
       <FormField
         setFieldValue={setFieldValue}
@@ -70,6 +83,7 @@ export const Generator: GeneratorInterface = (opts: GeneratorOptions) => {
         getError={getError}
         getTouched={getTouched}
         getValue={getValue}
+        autofocus={autofocus}
       />
     );
   };

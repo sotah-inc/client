@@ -25,11 +25,13 @@ export type Props = Readonly<StateProps & DispatchProps & OwnProps & FormikProps
 
 type State = Readonly<{
   isDialogOpen: boolean
+  selectedTabId: string
 }>;
 
 export class PriceLists extends React.Component<Props, State> {
   state: State = {
-    isDialogOpen: false
+    isDialogOpen: false,
+    selectedTabId: ''
   };
 
   componentDidUpdate(prevProps: Props) {
@@ -39,29 +41,12 @@ export class PriceLists extends React.Component<Props, State> {
       switch (onCreateLevel) {
         case OnCreateLevel.success:
           this.setState({ isDialogOpen: false });
-  
+
           break;
         default:
           break;
       }
     }
-  }
-
-  renderPanel(list: PriceList) {
-    return (
-      <p>Hello, world!</p>
-    );
-  }
-
-  renderTab(list: PriceList, index: number) {
-    return (
-      <Tab
-        key={index}
-        id={`list-${list.id}`}
-        title={list.name}
-        panel={this.renderPanel(list)}
-      />
-    );
   }
 
   renderForm() {
@@ -86,7 +71,8 @@ export class PriceLists extends React.Component<Props, State> {
             placeholder: '',
             getError: () => errors.name,
             getTouched: () => !!touched.name,
-            getValue: () => values.name
+            getValue: () => values.name,
+            autofocus: true
           })}
         </DialogBody>
         <DialogActions>
@@ -112,12 +98,33 @@ export class PriceLists extends React.Component<Props, State> {
     this.setState({ isDialogOpen: !this.state.isDialogOpen });
   }
 
+  renderPanel(list: PriceList) {
+    return (
+      <p>Hello, world!</p>
+    );
+  }
+
+  renderTab(list: PriceList, index: number) {
+    return (
+      <Tab
+        key={index}
+        id={`list-${list.id}`}
+        title={list.name}
+        panel={this.renderPanel(list)}
+      />
+    );
+  }
+
+  onTabChange(id: React.ReactText) {
+    this.setState({ selectedTabId: id.toString() });
+  }
+
   renderTabs() {
     const { lists } = this.props;
 
     if (lists.length === 0) {
       return (
-        <div style={{marginTop: '10px'}}>
+        <div style={{ marginTop: '10px' }}>
           <NonIdealState
             title="No price lists"
             description="You have no price lists."
@@ -129,17 +136,22 @@ export class PriceLists extends React.Component<Props, State> {
     }
 
     return (
-      <Tabs id="price-lists" selectedTabId="ayy" vertical={true}>
+      <Tabs
+        id="price-lists"
+        selectedTabId={this.state.selectedTabId}
+        onChange={(id) => this.onTabChange(id)}
+        vertical={true}
+      >
+        {lists.map((v, i) => this.renderTab(v, i))}
+        <Tabs.Expander />
         <Button
           className="pt-fill"
           icon="plus"
-          style={{marginBottom: '10px'}}
+          style={{ marginBottom: '10px' }}
           onClick={() => this.toggleDialog()}
         >
           Add List
         </Button>
-        <Tabs.Expander />
-        {lists.map((v, i) => this.renderTab(v, i))}
       </Tabs>
     );
   }

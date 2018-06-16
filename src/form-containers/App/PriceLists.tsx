@@ -23,7 +23,7 @@ const config: WithFormikConfig<FormProps, FormValues> = {
   }),
   handleSubmit: async (values, { setSubmitting, props }) => {
     setSubmitting(false);
-    props.onSubmit(name);
+    props.onSubmit(values.name);
   }
 };
 
