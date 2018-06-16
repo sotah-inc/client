@@ -3,8 +3,9 @@ import { Tab, Tabs, Button, NonIdealState, Dialog, Intent } from '@blueprintjs/c
 import { FormikProps } from 'formik';
 
 import { PriceList, OnCreateLevel } from '@app/types/price-lists';
-import { DialogBody, DialogActions } from '../util';
-import { Generator as FormFieldGenerator } from '../util/FormField';
+import PriceListPanel from '@app/form-containers/App/PriceLists/PriceListPanel';
+import { DialogBody, DialogActions } from '@app/components/util';
+import { Generator as FormFieldGenerator } from '@app/components/util/FormField';
 
 export type StateProps = {
   lists: PriceList[]
@@ -116,7 +117,7 @@ export class PriceLists extends React.Component<Props, State> {
         key={index}
         id={`list-${list.id}`}
         title={list.name}
-        panel={this.renderPanel(list)}
+        panel={<PriceListPanel list={list} />}
       />
     );
   }
