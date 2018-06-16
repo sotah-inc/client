@@ -48,7 +48,7 @@ export class PriceLists extends React.Component<Props, State> {
       }
     }
 
-    if (lists.length !== prevProps.lists.length) {
+    if (lists.length > prevProps.lists.length) {
       this.setState({
         selectedTabId: `list-${lists[lists.length - 1].id.toString()}`
       });
