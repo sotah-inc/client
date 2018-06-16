@@ -4,14 +4,17 @@ import { StateProps, DispatchProps, OwnProps } from '@app/components/App/PriceLi
 import PriceLists from '@app/form-containers/App/PriceLists';
 import { StoreState } from '@app/types';
 import { Actions } from '@app/actions';
+import { CreatePricelist } from '@app/actions/price-lists';
 
 const mapStateToProps = (state: StoreState): StateProps => {
-  const { lists } = state.PriceLists;
-  return { lists };
+  const { lists, onCreateLevel } = state.PriceLists;
+  return { lists, onCreateLevel };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<Actions>): DispatchProps => {
-  return {};
+  return {
+    onSubmit: (name: string) => dispatch(CreatePricelist(name))
+  };
 };
 
 export default connect<StateProps, DispatchProps, OwnProps>(

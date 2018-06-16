@@ -2,22 +2,23 @@ import * as React from 'react';
 import { Tab, Tabs, Button, NonIdealState, Dialog, Intent } from '@blueprintjs/core';
 import { FormikProps } from 'formik';
 
-import { ItemId } from '@app/types/global';
-import { PriceList } from '@app/types/price-lists';
+import { PriceList, OnCreateLevel } from '@app/types/price-lists';
 import { DialogBody, DialogActions } from '../util';
 import { Generator as FormFieldGenerator } from '../util/FormField';
 
 export type StateProps = {
   lists: PriceList[]
+  onCreateLevel: OnCreateLevel
 };
 
-export type DispatchProps = {};
+export type DispatchProps = {
+  onSubmit: (name: string) => void
+};
 
 export type OwnProps = {};
 
 export type FormValues = {
-  quantity: number
-  itemId: ItemId
+  name: string
 };
 
 export type Props = Readonly<StateProps & DispatchProps & OwnProps & FormikProps<FormValues>>;
@@ -26,10 +27,25 @@ type State = Readonly<{
   isDialogOpen: boolean
 }>;
 
-export class PriceLists extends React.Component<Props> {
+export class PriceLists extends React.Component<Props, State> {
   state: State = {
     isDialogOpen: false
   };
+
+  componentDidUpdate(prevProps: Props) {
+    const { onCreateLevel } = this.props;
+
+    if (onCreateLevel !== prevProps.onCreateLevel) {
+      switch (onCreateLevel) {
+        case OnCreateLevel.success:
+          this.setState({ isDialogOpen: false });
+  
+          break;
+        default:
+          break;
+      }
+    }
+  }
 
   renderPanel(list: PriceList) {
     return (
@@ -65,20 +81,12 @@ export class PriceLists extends React.Component<Props> {
       <form onSubmit={handleSubmit}>
         <DialogBody>
           {createFormField({
-            fieldName: 'quantity',
-            type: 'number',
-            placeholder: '-1',
-            getError: () => errors.quantity,
-            getTouched: () => !!touched.quantity,
-            getValue: () => values.quantity.toString()
-          })}
-          {createFormField({
-            fieldName: 'itemId',
-            type: 'number',
-            placeholder: '-1',
-            getError: () => errors.itemId,
-            getTouched: () => !!touched.itemId,
-            getValue: () => values.itemId.toString()
+            fieldName: 'name',
+            type: 'string',
+            placeholder: '',
+            getError: () => errors.name,
+            getTouched: () => !!touched.name,
+            getValue: () => values.name
           })}
         </DialogBody>
         <DialogActions>
@@ -90,7 +98,7 @@ export class PriceLists extends React.Component<Props> {
           />
           <Button
             type="submit"
-            text="Add List"
+            text="Start List"
             intent={Intent.PRIMARY}
             icon="edit"
             disabled={isSubmitting}

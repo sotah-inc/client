@@ -3,26 +3,27 @@ import * as Yup from 'yup';
 
 import { FormValues, PriceLists } from '@app/components/App/PriceLists';
 import { PriceListRules } from '@app/validator-rules';
-import { PriceList } from '@app/types/price-lists';
+import { PriceList, OnCreateLevel } from '@app/types/price-lists';
 
 interface FormProps {
   lists: PriceList[];
+  onCreateLevel: OnCreateLevel;
+
+  onSubmit: (name: string) => void;
 }
 
 const config: WithFormikConfig<FormProps, FormValues> = {
   mapPropsToValues: (_: FormProps) => {
     return {
-      itemId: -1,
-      quantity: -1
+      name: ''
     };
   },
   validationSchema: Yup.object().shape({
-    itemId: PriceListRules.itemId,
-    quantity: PriceListRules.quantity
+    name: PriceListRules.name
   }),
-  handleSubmit: async (values, { setSubmitting }) => {
-    console.log(values);
+  handleSubmit: async (values, { setSubmitting, props }) => {
     setSubmitting(false);
+    props.onSubmit(name);
   }
 };
 

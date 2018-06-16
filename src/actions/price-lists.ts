@@ -1,10 +1,10 @@
 import { createAction, ActionsUnion } from './helpers';
 
-export const REQUEST_PING = 'REQUEST_PING';
-const RequestPing = () => createAction(REQUEST_PING);
+export const CREATE_PRICELIST = 'CREATE_PRICELIST';
+export const CreatePricelist = (payload: string) => createAction(CREATE_PRICELIST, payload);
 
 export const PriceListsActions = {
-  RequestPing
+  CreatePricelist
 };
 
 export type PriceListsActions = ActionsUnion<typeof PriceListsActions>;
