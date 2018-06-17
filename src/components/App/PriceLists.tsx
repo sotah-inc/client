@@ -143,23 +143,23 @@ export class PriceLists extends React.Component<Props, State> {
     }
 
     return (
-      <Tabs
-        id="price-lists"
-        selectedTabId={this.state.selectedTabId}
-        onChange={(id) => this.onTabChange(id)}
-        vertical={true}
-      >
+      <>
         <Button
-          className="pt-fill"
           icon="plus"
           style={{ marginBottom: '10px' }}
           onClick={() => this.toggleDialog()}
+          text={'Add List'}
+        />
+        <Tabs
+          id="price-lists"
+          className="price-lists"
+          selectedTabId={this.state.selectedTabId}
+          onChange={(id) => this.onTabChange(id)}
+          vertical={true}
         >
-          Add List
-        </Button>
-        <Tabs.Expander />
-        {lists.map((v, i) => this.renderTab(v, i))}
-      </Tabs>
+          {lists.map((v, i) => this.renderTab(v, i))}
+        </Tabs>
+      </>
     );
   }
 
