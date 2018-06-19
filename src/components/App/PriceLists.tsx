@@ -2,18 +2,22 @@ import * as React from 'react';
 import { Tab, Tabs, Button, NonIdealState, Dialog, Intent } from '@blueprintjs/core';
 import { FormikProps } from 'formik';
 
-import { PriceList, OnCreateLevel } from '@app/types/price-lists';
-import PriceListPanel from '@app/form-containers/App/PriceLists/PriceListPanel';
+import { PriceList, ListCreateLevel } from '@app/types/price-lists';
+import PriceListPanel from '@app/containers/App/PriceLists/PriceListPanel';
 import { DialogBody, DialogActions } from '@app/components/util';
 import { Generator as FormFieldGenerator } from '@app/components/util/FormField';
+import { priceListEntryTabId } from '@app/util';
 
 export type StateProps = {
   lists: PriceList[]
-  onCreateLevel: OnCreateLevel
+  listCreateLevel: ListCreateLevel
+  selectedList: PriceList | null
 };
 
 export type DispatchProps = {
   onSubmit: (name: string) => void
+  changeCreateLevel: (createLevel: ListCreateLevel) => void
+  changeSelectedList: (list: PriceList) => void
 };
 
 export type OwnProps = {};
@@ -26,33 +30,26 @@ export type Props = Readonly<StateProps & DispatchProps & OwnProps & FormikProps
 
 type State = Readonly<{
   isDialogOpen: boolean
-  selectedTabId: string
 }>;
 
 export class PriceLists extends React.Component<Props, State> {
   state: State = {
-    isDialogOpen: false,
-    selectedTabId: ''
+    isDialogOpen: false
   };
 
   componentDidUpdate(prevProps: Props) {
-    const { onCreateLevel, lists } = this.props;
+    const { listCreateLevel } = this.props;
 
-    if (onCreateLevel !== prevProps.onCreateLevel) {
-      switch (onCreateLevel) {
-        case OnCreateLevel.success:
+    if (listCreateLevel !== prevProps.listCreateLevel) {
+      switch (listCreateLevel) {
+        case ListCreateLevel.success:
           this.setState({ isDialogOpen: false });
+          this.props.changeCreateLevel(ListCreateLevel.initial);
 
           break;
         default:
           break;
       }
-    }
-
-    if (lists.length > prevProps.lists.length) {
-      this.setState({
-        selectedTabId: `list-${lists[lists.length - 1].id.toString()}`
-      });
     }
   }
 
@@ -115,7 +112,7 @@ export class PriceLists extends React.Component<Props, State> {
     return (
       <Tab
         key={index}
-        id={`list-${list.id}`}
+        id={priceListEntryTabId(list)}
         title={list.name}
         panel={<PriceListPanel list={list} />}
       />
@@ -123,11 +120,30 @@ export class PriceLists extends React.Component<Props, State> {
   }
 
   onTabChange(id: React.ReactText) {
-    this.setState({ selectedTabId: id.toString() });
+    const list = this.props.lists.reduce(
+      (result, v) => {
+        if (result !== null) {
+          return result;
+        }
+
+        if (priceListEntryTabId(v) === id.toString()) {
+          return v;
+        }
+
+        return null;
+      },
+      null
+    );
+
+    if (list === null) {
+      return;
+    }
+
+    this.props.changeSelectedList(list);
   }
 
   renderTabs() {
-    const { lists } = this.props;
+    const { lists, selectedList } = this.props;
 
     if (lists.length === 0) {
       return (
@@ -153,7 +169,7 @@ export class PriceLists extends React.Component<Props, State> {
         <Tabs
           id="price-lists"
           className="price-lists"
-          selectedTabId={this.state.selectedTabId}
+          selectedTabId={selectedList ? `tab-${selectedList.id}` : ''}
           onChange={(id) => this.onTabChange(id)}
           vertical={true}
         >

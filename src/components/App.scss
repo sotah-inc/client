@@ -115,3 +115,18 @@
         width: 100%;
     }
 }
+
+.new-entry-item {
+    overflow: auto;
+    margin-bottom: 0;
+}
+
+.new-entry-item img {
+    width: 32px;
+    height: 32px;
+    margin-right: 5px;
+    border-radius: 3px;
+    border-width: 2px;
+    border-style: solid;
+    float: left;
+}

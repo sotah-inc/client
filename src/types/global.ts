@@ -250,3 +250,10 @@ export type ItemClass = {
 export type ItemClasses = {
   [key: number]: ItemClass
 };
+
+// item-query types
+export type QueryItemResult = {
+  item: Item
+  target: string
+  rank: number
+};

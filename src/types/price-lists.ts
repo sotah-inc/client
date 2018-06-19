@@ -2,15 +2,19 @@ import { Item } from './global';
 
 export type PriceListsState = {
   lists: PriceList[]
-  onCreateLevel: OnCreateLevel
+  listCreateLevel: ListCreateLevel
+  entryCreateLevel: EntryCreateLevel
+  selectedList: PriceList | null
 };
 
-export enum OnCreateLevel { initial, success, failure }
+export enum EntryCreateLevel { initial, success, failure }
 
 export type PriceListEntry = {
   item: Item,
   quantity: number
 };
+
+export enum ListCreateLevel { initial, success, failure }
 
 export type PriceList = {
   id: number
@@ -20,5 +24,7 @@ export type PriceList = {
 
 export const defaultPriceListsState: PriceListsState = {
   lists: [],
-  onCreateLevel: OnCreateLevel.initial
+  listCreateLevel: ListCreateLevel.initial,
+  entryCreateLevel: EntryCreateLevel.initial,
+  selectedList: null
 };

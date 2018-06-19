@@ -1,7 +1,7 @@
 import * as HTTPStatus from 'http-status';
 
 import { apiEndpoint } from './index';
-import { Auction, Region, Realm, Owner, Item, OwnerName, ItemId } from '../types/global';
+import { Auction, Region, Realm, Owner, OwnerName, ItemId, QueryItemResult } from '../types/global';
 import { SortDirection, SortKind, QueryAuctionResult } from '../types/auction';
 
 export const getPing = async (): Promise<boolean> => {
@@ -81,7 +81,7 @@ export const getOwners = async (opts: GetOwnersOptions): Promise<OwnersResponse 
 };
 
 export type ItemsResponse = {
-  items: Item[]
+  items: QueryItemResult[]
 };
 
 export const getItems = async (query: string): Promise<ItemsResponse | null> => {

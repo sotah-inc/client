@@ -3,13 +3,16 @@ import * as Yup from 'yup';
 
 import { FormValues, PriceLists } from '@app/components/App/PriceLists';
 import { PriceListRules } from '@app/validator-rules';
-import { PriceList, OnCreateLevel } from '@app/types/price-lists';
+import { PriceList, ListCreateLevel } from '@app/types/price-lists';
 
 interface FormProps {
   lists: PriceList[];
-  onCreateLevel: OnCreateLevel;
+  listCreateLevel: ListCreateLevel;
+  selectedList: PriceList | null;
 
   onSubmit: (name: string) => void;
+  changeCreateLevel: (createLevel: ListCreateLevel) => void;
+  changeSelectedList: (list: PriceList) => void;
 }
 
 const config: WithFormikConfig<FormProps, FormValues> = {

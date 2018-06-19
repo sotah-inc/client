@@ -1,6 +1,7 @@
 import { apiEndpoint } from '@app/api';
 import { ItemQuality, Item, InventoryType, ItemStat } from '@app/types/global';
 import { QueryAuctionResult } from '@app/types/auction';
+import { PriceList } from '@app/types/price-lists';
 
 export const qualityToColorClass = (quality: ItemQuality): string => {
   switch (quality) {
@@ -117,3 +118,5 @@ export const getSelectedResultIndex = (result: QueryAuctionResult, selectedItems
 
   return -1;
 };
+
+export const priceListEntryTabId = (list: PriceList): string => `tab-${list.id}`;
