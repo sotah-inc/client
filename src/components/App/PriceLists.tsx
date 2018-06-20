@@ -1,11 +1,9 @@
 import * as React from 'react';
-import { Tab, Tabs, Button, NonIdealState, Dialog, Intent } from '@blueprintjs/core';
-import { FormikProps } from 'formik';
+import { Tab, Tabs, Button, NonIdealState, Dialog } from '@blueprintjs/core';
 
 import { PriceList, ListCreateLevel } from '@app/types/price-lists';
 import PriceListPanel from '@app/containers/App/PriceLists/PriceListPanel';
-import { DialogBody, DialogActions } from '@app/components/util';
-import { Generator as FormFieldGenerator } from '@app/components/util/FormField';
+import CreateListForm from '@app/containers/App/PriceLists/CreateListForm';
 import { priceListEntryTabId } from '@app/util';
 
 export type StateProps = {
@@ -15,18 +13,13 @@ export type StateProps = {
 };
 
 export type DispatchProps = {
-  onSubmit: (name: string) => void
   changeCreateLevel: (createLevel: ListCreateLevel) => void
   changeSelectedList: (list: PriceList) => void
 };
 
 export type OwnProps = {};
 
-export type FormValues = {
-  name: string
-};
-
-export type Props = Readonly<StateProps & DispatchProps & OwnProps & FormikProps<FormValues>>;
+export type Props = Readonly<StateProps & DispatchProps & OwnProps>;
 
 type State = Readonly<{
   isDialogOpen: boolean
@@ -51,51 +44,6 @@ export class PriceLists extends React.Component<Props, State> {
           break;
       }
     }
-  }
-
-  renderForm() {
-    const {
-      values,
-      setFieldValue,
-      isSubmitting,
-      handleReset,
-      handleSubmit,
-      dirty,
-      errors,
-      touched
-    } = this.props;
-    const createFormField = FormFieldGenerator({ setFieldValue });
-
-    return (
-      <form onSubmit={handleSubmit}>
-        <DialogBody>
-          {createFormField({
-            fieldName: 'name',
-            type: 'string',
-            placeholder: '',
-            getError: () => errors.name,
-            getTouched: () => !!touched.name,
-            getValue: () => values.name,
-            autofocus: true
-          })}
-        </DialogBody>
-        <DialogActions>
-          <Button
-            text="Reset"
-            intent={Intent.NONE}
-            onClick={handleReset}
-            disabled={!dirty || isSubmitting}
-          />
-          <Button
-            type="submit"
-            text="Start List"
-            intent={Intent.PRIMARY}
-            icon="edit"
-            disabled={isSubmitting}
-          />
-        </DialogActions>
-      </form>
-    );
   }
 
   toggleDialog() {
@@ -189,7 +137,7 @@ export class PriceLists extends React.Component<Props, State> {
           title="New Price List"
           icon="manually-entered-data"
         >
-          {this.renderForm()}
+          <CreateListForm />
         </Dialog>
       </>
     );
