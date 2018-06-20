@@ -1,11 +1,9 @@
 import * as React from 'react';
-import { Button, NonIdealState, Dialog, Intent, FormGroup } from '@blueprintjs/core';
-import { FormikProps } from 'formik';
+import { Button, NonIdealState, Dialog } from '@blueprintjs/core';
 
 import { Item } from '@app/types/global';
-import { PriceList, PriceListEntry, EntryCreateLevel } from '@app/types/price-lists';
-import { DialogBody, DialogActions, ItemInput } from '@app/components/util';
-import { Generator as FormFieldGenerator } from '@app/components/util/FormField';
+import { PriceList, EntryCreateLevel } from '@app/types/price-lists';
+import CreateEntryForm from '@app/containers/App/PriceLists/CreateEntryForm';
 import { getItemIconUrl, getItemTextValue, qualityToColorClass } from '@app/util';
 
 export type StateProps = {
@@ -13,7 +11,6 @@ export type StateProps = {
 };
 
 export type DispatchProps = {
-  onSubmit: (entry: PriceListEntry) => void
   changeCreateLevel: (createLevel: EntryCreateLevel) => void
 };
 
@@ -26,7 +23,7 @@ export type FormValues = {
   item: Item | null
 };
 
-export type Props = Readonly<StateProps & DispatchProps & OwnProps & FormikProps<FormValues>>;
+export type Props = Readonly<StateProps & DispatchProps & OwnProps>;
 
 type State = Readonly<{
   isDialogOpen: boolean
@@ -74,75 +71,6 @@ export class PriceListPanel extends React.Component<Props, State> {
     );
   }
 
-  renderForm() {
-    const {
-      values,
-      setFieldValue,
-      isSubmitting,
-      handleReset,
-      handleSubmit,
-      dirty,
-      errors,
-      touched
-    } = this.props;
-    const createFormField = FormFieldGenerator({ setFieldValue });
-
-    const itemIntent = errors.item && touched.item ? Intent.DANGER : Intent.NONE;
-
-    return (
-      <form onSubmit={handleSubmit}>
-        <DialogBody>
-          <div className="pure-g">
-            <div className="pure-u-1-2">
-              <FormGroup
-                helperText={errors.item}
-                label="Item"
-                requiredLabel={true}
-                intent={itemIntent}
-              >
-                <ItemInput
-                  onSelect={(item) => setFieldValue('item', item)}
-                  autoFocus={true}
-                />
-              </FormGroup>
-            </div>
-            <div className="pure-u-1-2">
-              <FormGroup
-                label="Selected item"
-                intent={itemIntent}
-              >
-                {this.renderSelectedItem(values.item)}
-              </FormGroup>
-            </div>
-          </div>
-          {createFormField({
-            fieldName: 'quantity',
-            type: 'number',
-            placeholder: '-1',
-            getError: () => errors.quantity,
-            getTouched: () => !!touched.quantity,
-            getValue: () => values.quantity.toString()
-          })}
-        </DialogBody>
-        <DialogActions>
-          <Button
-            text="Reset"
-            intent={Intent.NONE}
-            onClick={handleReset}
-            disabled={!dirty || isSubmitting}
-          />
-          <Button
-            type="submit"
-            text="Add Entry"
-            intent={Intent.PRIMARY}
-            icon="edit"
-            disabled={isSubmitting}
-          />
-        </DialogActions>
-      </form>
-    );
-  }
-
   toggleDialog() {
     this.setState({ isDialogOpen: !this.state.isDialogOpen });
   }
@@ -176,7 +104,7 @@ export class PriceListPanel extends React.Component<Props, State> {
           icon="manually-entered-data"
           canOutsideClickClose={false}
         >
-          {this.renderForm()}
+          <CreateEntryForm />
         </Dialog>
       </>
     );

@@ -1,16 +1,12 @@
 import { withFormik, WithFormikConfig } from 'formik';
 import * as Yup from 'yup';
 
-import { FormValues, PriceListPanel } from '@app/components/App/PriceLists/PriceListPanel';
+import { FormValues, CreateEntryForm } from '@app/components/App/PriceLists/CreateEntryForm';
 import { PriceListRules } from '@app/validator-rules';
-import { PriceList, PriceListEntry, EntryCreateLevel } from '@app/types/price-lists';
+import { PriceListEntry } from '@app/types/price-lists';
 
 interface FormProps {
-  list: PriceList;
-  entryCreateLevel: EntryCreateLevel;
-
-  onSubmit: (entry: PriceListEntry) => void;
-  changeCreateLevel: (level: EntryCreateLevel) => void;
+  createEntry: (entry: PriceListEntry) => void;
 }
 
 const config: WithFormikConfig<FormProps, FormValues> = {
@@ -27,11 +23,11 @@ const config: WithFormikConfig<FormProps, FormValues> = {
   handleSubmit: async (values, { setSubmitting, resetForm, props }) => {
     setSubmitting(false);
     resetForm();
-    props.onSubmit({
+    props.createEntry({
       item: values.item!,
       quantity: values.quantity
     });
   }
 };
 
-export default withFormik(config)(PriceListPanel);
+export default withFormik(config)(CreateEntryForm);
