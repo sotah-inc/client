@@ -8,6 +8,8 @@ import { DialogBody, DialogActions, ItemInput } from '@app/components/util';
 import { Generator as FormFieldGenerator } from '@app/components/util/FormField';
 import { getItemIconUrl, getItemTextValue, qualityToColorClass } from '@app/util';
 
+import './CreateEntryForm.scss';
+
 export type StateProps = {};
 
 export type DispatchProps = {

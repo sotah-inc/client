@@ -1,13 +1,7 @@
 import * as React from 'react';
 
 import ItemPopover from '@app/containers/util/ItemPopover';
-import { Item } from '@app/types/global';
 import { PriceListEntry } from '@app/types/price-lists';
-import {
-  qualityToColorClass,
-  getItemIconUrl,
-  getItemTextValue
-} from '@app/util';
 
 export type StateProps = {};
 
@@ -24,26 +18,12 @@ export class PriceListTable extends React.Component<Props> {
     console.log(this.props.entries);
   }
 
-  renderItem(item: Item) {
-    const iconUrl = getItemIconUrl(item);
-    const itemText = getItemTextValue(item);
-    if (iconUrl === null) {
-      return itemText;
-    }
-
-    return (
-      <>
-        <img src={iconUrl} /> {itemText}
-      </>
-    );
-  }
-
   renderEntry(index: number, entry: PriceListEntry) {
     const { item, quantity } = entry;
 
     return (
       <tr key={index}>
-        <td className={qualityToColorClass(item.quality)}>
+        <td>
           <ItemPopover item={item} onItemClick={() => { return; }} /><br />
           x{quantity}
         </td>

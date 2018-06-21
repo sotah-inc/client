@@ -8,6 +8,8 @@ import { Auction, Item } from '@app/types/global';
 import { SortKind, QueryAuctionResult } from '@app/types/auction';
 import { qualityToColorClass, getSelectedResultIndex } from '@app/util';
 
+import './AuctionTable.scss';
+
 type ListAuction = Auction | null;
 
 export type StateProps = {

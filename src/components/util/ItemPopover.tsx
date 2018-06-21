@@ -20,6 +20,8 @@ import {
   itemStatToString
 } from '@app/util';
 
+import './ItemPopover.scss';
+
 export type StateProps = {
   itemClasses: ItemClasses
 };
@@ -280,7 +282,7 @@ export class ItemPopover extends React.Component<Props> {
 
     if (itemIconUrl === null) {
       return (
-        <div className="auction-popover-content">
+        <div className="item-popover-content">
           <ul>
             <li className={itemTextClass}>{itemText}</li>
             {this.renderData(item)}
@@ -295,7 +297,7 @@ export class ItemPopover extends React.Component<Props> {
     }
 
     return (
-      <div className="auction-popover-content">
+      <div className="item-popover-content">
         <div className="pure-g">
           <div className="pure-u-1-5">
             <p className={itemTextClass} style={{paddingBottom: '17px', marginBottom: 0}}>

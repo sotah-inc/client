@@ -63,7 +63,7 @@ export class ItemInput extends React.Component<Props, State> {
 
   renderItemRendererText(item: Item) {
     return (
-      <span className="qaf-menu-item">{this.renderItemRendererTextContent(item)}</span>
+      <span className="item-input-menu-item">{this.renderItemRendererTextContent(item)}</span>
     );
   }
 
@@ -170,7 +170,7 @@ export class ItemInput extends React.Component<Props, State> {
     }
 
     return (
-      <Menu ulRef={itemsParentRef} className="qaf-menu">
+      <Menu ulRef={itemsParentRef} className="item-input-menu">
         <li>
           <h6>Queried Results</h6>
         </li>

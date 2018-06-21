@@ -6,6 +6,8 @@ import PriceListPanel from '@app/containers/App/PriceLists/PriceListPanel';
 import CreateListForm from '@app/containers/App/PriceLists/CreateListForm';
 import { priceListEntryTabId } from '@app/util';
 
+import './PriceLists.scss';
+
 export type StateProps = {
   lists: PriceList[]
   listCreateLevel: ListCreateLevel
