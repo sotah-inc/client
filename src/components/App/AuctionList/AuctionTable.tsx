@@ -89,7 +89,7 @@ export class AuctionTable extends React.Component<Props> {
     const { auctions } = this.props;
 
     return (
-      <table className="pt-html-table pt-html-table-bordered pt-small auction-list">
+      <table className="pt-html-table pt-html-table-bordered pt-small auction-table">
         <thead>
           <tr>
             <th><SortToggle label="Item" sortKind={SortKind.item} /></th>
