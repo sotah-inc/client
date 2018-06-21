@@ -48,3 +48,16 @@
     border-radius: 3px;
     margin-bottom: -5px;
 }
+
+.auction-table,
+.price-list-table {
+    width: 100%;
+    margin: 10px 0;
+
+    .item-icon {
+        width: 24px;
+        height: 24px;
+        border-radius: 3px;
+        margin-bottom: -5px;
+    }
+}

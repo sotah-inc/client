@@ -2,6 +2,7 @@ import * as React from 'react';
 
 import ItemPopover from '@app/containers/util/ItemPopover';
 import { PriceListEntry } from '@app/types/price-lists';
+import { qualityToColorClass } from '@app/util';
 
 export type StateProps = {};
 
@@ -23,9 +24,8 @@ export class PriceListTable extends React.Component<Props> {
 
     return (
       <tr key={index}>
-        <td>
-          <ItemPopover item={item} onItemClick={() => { return; }} /><br />
-          x{quantity}
+        <td className={qualityToColorClass(item.quality)}>
+          <ItemPopover item={item} onItemClick={() => { return; }} /> x{quantity}
         </td>
       </tr>
     );
@@ -35,7 +35,7 @@ export class PriceListTable extends React.Component<Props> {
     const { entries } = this.props;
 
     return (
-      <table>
+      <table className="pt-html-table pt-html-table-bordered pt-small price-list-table">
         <thead>
           <tr>
             <th>Item</th>
