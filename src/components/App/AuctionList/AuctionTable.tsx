@@ -1,21 +1,23 @@
 import * as React from 'react';
 
 import SortToggle from '@app/containers/App/AuctionList/SortToggle';
-import ItemPopover from '@app/containers/App/AuctionList/AuctionTable/ItemPopover';
-import { Currency } from '../../util';
+import { Currency, ItemPopover } from '@app/components/util';
 
 import { Auction, Item, ItemClasses } from '@app/types/global';
-import { SortKind } from '@app/types/auction';
-import { qualityToColorClass } from '@app/util';
+import { SortKind, QueryAuctionResult } from '@app/types/auction';
+import { qualityToColorClass, getSelectedResultIndex } from '@app/util';
 
 type ListAuction = Auction | null;
 
 export type StateProps = {
   auctions: ListAuction[]
   itemClasses: ItemClasses
+  selectedItems: QueryAuctionResult[]
 };
 
 export type DispatchProps = {
+  onAuctionsQuerySelect: (aqResult: QueryAuctionResult) => void
+  onAuctionsQueryDeselect: (index: number) => void
 };
 
 export type OwnProps = {};
@@ -23,11 +25,37 @@ export type OwnProps = {};
 type Props = Readonly<StateProps & DispatchProps & OwnProps>;
 
 export class AuctionTable extends React.Component<Props> {
+  isResultSelected(result: QueryAuctionResult) {
+    return this.getSelectedResultIndex(result) > -1;
+  }
+
+  getSelectedResultIndex(result: QueryAuctionResult): number {
+    const selectedItems = this.props.selectedItems;
+    return getSelectedResultIndex(result, selectedItems);
+  }
+
+  onItemClick(item: Item) {
+    const result: QueryAuctionResult = {
+      item,
+      owner: { name: '' },
+      rank: 0,
+      target: ''
+    };
+    
+    if (this.isResultSelected(result)) {
+      this.props.onAuctionsQueryDeselect(this.getSelectedResultIndex(result));
+
+      return;
+    }
+
+    this.props.onAuctionsQuerySelect(result);
+  }
+
   renderItemPopover(item: Item) {
     const { itemClasses } = this.props;
 
     return (
-      <ItemPopover item={item} itemClasses={itemClasses} />
+      <ItemPopover item={item} itemClasses={itemClasses} onItemClick={() => this.onItemClick(item)} />
     );
   }
 

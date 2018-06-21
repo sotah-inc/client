@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Popover, PopoverInteractionKind, Position } from '@blueprintjs/core';
 
-import { Currency } from '../../../util';
+import { Currency } from '@app/components/util';
 
 import {
   Item,
@@ -18,8 +18,7 @@ import {
   getItemIconUrl,
   getItemTextValue,
   inventoryTypeToString,
-  itemStatToString,
-  getSelectedResultIndex
+  itemStatToString
 } from '@app/util';
 
 export type StateProps = {
@@ -31,12 +30,12 @@ export type DispatchProps = {
   onAuctionsQueryDeselect: (index: number) => void
 };
 
-export type OwnProps = {
+type Props = Readonly<{
   itemClasses: ItemClasses
   item: Item
-};
 
-type Props = Readonly<StateProps & DispatchProps & OwnProps>;
+  onItemClick: () => void
+}>;
 
 export class ItemPopover extends React.Component<Props> {
   renderItemLevel(item: Item) {
@@ -322,32 +321,6 @@ export class ItemPopover extends React.Component<Props> {
     );
   }
 
-  isResultSelected(result: QueryAuctionResult) {
-    return this.getSelectedResultIndex(result) > -1;
-  }
-
-  getSelectedResultIndex(result: QueryAuctionResult): number {
-    const selectedItems = this.props.selectedItems;
-    return getSelectedResultIndex(result, selectedItems);
-  }
-
-  onItemClick(item: Item) {
-    const result: QueryAuctionResult = {
-      item,
-      owner: { name: '' },
-      rank: 0,
-      target: ''
-    };
-    
-    if (this.isResultSelected(result)) {
-      this.props.onAuctionsQueryDeselect(this.getSelectedResultIndex(result));
-
-      return;
-    }
-
-    this.props.onAuctionsQuerySelect(result);
-  }
-
   renderDisplay(item: Item) {
     const itemText = getItemTextValue(item);
     const itemIconUrl = getItemIconUrl(item);
@@ -357,7 +330,7 @@ export class ItemPopover extends React.Component<Props> {
 
     return (
       <>
-        <img src={itemIconUrl} className="item-icon" /> <a onClick={() => this.onItemClick(item)}>{itemText}</a>
+        <img src={itemIconUrl} className="item-icon" /> <a onClick={() => this.props.onItemClick()}>{itemText}</a>
       </>
     );
   }
