@@ -4,7 +4,7 @@ import { Button, NonIdealState, Dialog } from '@blueprintjs/core';
 import { Item } from '@app/types/global';
 import { PriceList, EntryCreateLevel } from '@app/types/price-lists';
 import CreateEntryForm from '@app/containers/App/PriceLists/CreateEntryForm';
-import { getItemIconUrl, getItemTextValue, qualityToColorClass } from '@app/util';
+import { PriceListTable } from '@app/components/App/PriceLists/PriceListPanel/PriceListTable';
 
 export type StateProps = {
   entryCreateLevel: EntryCreateLevel
@@ -48,35 +48,13 @@ export class PriceListPanel extends React.Component<Props, State> {
     }
   }
 
-  renderSelectedItem(item: Item | null) {
-    if (item === null) {
-      return (
-        <p><em>No item selected.</em></p>
-      );
-    }
-
-    const className = qualityToColorClass(item.quality);
-    const textValue = getItemTextValue(item);
-    const itemIcon = getItemIconUrl(item);
-    if (itemIcon === null) {
-      return (
-        <p className={className}>{textValue}</p>
-      );
-    }
-
-    return (
-      <h5 className={`${className} new-entry-item`}>
-        <img src={itemIcon} /> {textValue}
-      </h5>
-    );
-  }
-
   toggleDialog() {
     this.setState({ isDialogOpen: !this.state.isDialogOpen });
   }
 
   renderEntries() {
     const { entries } = this.props.list;
+
     if (entries.length === 0) {
       return (
         <NonIdealState
@@ -89,7 +67,7 @@ export class PriceListPanel extends React.Component<Props, State> {
     }
 
     return (
-      <p>Hello, world! {entries.length}</p>
+      <PriceListTable entries={entries} />
     );
   }
 
