@@ -7,8 +7,8 @@ import { Actions } from '@app/actions';
 import { AddAuctionsQuery, RemoveAuctionsQuery } from '@app/actions/auction';
 
 const mapStateToProps = (state: StoreState): StateProps => {
-  const { auctions, itemClasses, selectedQueryAuctionResults } = state.Auction;
-  return { auctions, itemClasses, selectedItems: selectedQueryAuctionResults };
+  const { auctions, selectedQueryAuctionResults } = state.Auction;
+  return { auctions, selectedItems: selectedQueryAuctionResults };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<Actions>): DispatchProps => {

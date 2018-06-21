@@ -12,7 +12,6 @@ import {
   ItemSpellTrigger,
   ItemBonusStat
 } from '@app/types/global';
-import { QueryAuctionResult } from '@app/types/auction';
 import {
   qualityToColorClass,
   getItemIconUrl,
@@ -22,20 +21,18 @@ import {
 } from '@app/util';
 
 export type StateProps = {
-  selectedItems: QueryAuctionResult[]
-};
-
-export type DispatchProps = {
-  onAuctionsQuerySelect: (aqResult: QueryAuctionResult) => void
-  onAuctionsQueryDeselect: (index: number) => void
-};
-
-type Props = Readonly<{
   itemClasses: ItemClasses
+};
+
+export type DispatchProps = {};
+
+export type OwnProps = {
   item: Item
 
   onItemClick: () => void
-}>;
+};
+
+type Props = Readonly<StateProps & DispatchProps & OwnProps>;
 
 export class ItemPopover extends React.Component<Props> {
   renderItemLevel(item: Item) {

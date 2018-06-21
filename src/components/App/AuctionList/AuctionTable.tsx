@@ -1,9 +1,10 @@
 import * as React from 'react';
 
 import SortToggle from '@app/containers/App/AuctionList/SortToggle';
-import { Currency, ItemPopover } from '@app/components/util';
+import ItemPopover from '@app/containers/util/ItemPopover';
+import { Currency } from '@app/components/util';
 
-import { Auction, Item, ItemClasses } from '@app/types/global';
+import { Auction, Item } from '@app/types/global';
 import { SortKind, QueryAuctionResult } from '@app/types/auction';
 import { qualityToColorClass, getSelectedResultIndex } from '@app/util';
 
@@ -11,7 +12,6 @@ type ListAuction = Auction | null;
 
 export type StateProps = {
   auctions: ListAuction[]
-  itemClasses: ItemClasses
   selectedItems: QueryAuctionResult[]
 };
 
@@ -52,10 +52,8 @@ export class AuctionTable extends React.Component<Props> {
   }
 
   renderItemPopover(item: Item) {
-    const { itemClasses } = this.props;
-
     return (
-      <ItemPopover item={item} itemClasses={itemClasses} onItemClick={() => this.onItemClick(item)} />
+      <ItemPopover item={item} onItemClick={() => this.onItemClick(item)} />
     );
   }
 

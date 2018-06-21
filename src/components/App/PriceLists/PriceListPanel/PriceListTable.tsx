@@ -1,5 +1,6 @@
 import * as React from 'react';
 
+import ItemPopover from '@app/containers/util/ItemPopover';
 import { Item } from '@app/types/global';
 import { PriceListEntry } from '@app/types/price-lists';
 import {
@@ -43,7 +44,7 @@ export class PriceListTable extends React.Component<Props> {
     return (
       <tr key={index}>
         <td className={qualityToColorClass(item.quality)}>
-          {this.renderItem(item)}<br />
+          <ItemPopover item={item} onItemClick={() => { return; }} /><br />
           x{quantity}
         </td>
       </tr>
