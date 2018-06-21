@@ -120,6 +120,7 @@ export class PriceLists extends React.Component<Props, State> {
           selectedTabId={selectedList ? `tab-${selectedList.id}` : ''}
           onChange={(id) => this.onTabChange(id)}
           vertical={true}
+          renderActiveTabPanelOnly={true}
         >
           {lists.map((v, i) => this.renderTab(v, i))}
         </Tabs>
