@@ -1,5 +1,5 @@
 import { apiEndpoint } from '@app/api';
-import { ItemQuality, Item, InventoryType, ItemStat } from '@app/types/global';
+import { ItemQuality, Item, InventoryType, ItemStat, Region, Realm } from '@app/types/global';
 import { QueryAuctionResult } from '@app/types/auction';
 import { PriceList } from '@app/types/price-lists';
 
@@ -120,3 +120,27 @@ export const getSelectedResultIndex = (result: QueryAuctionResult, selectedItems
 };
 
 export const priceListEntryTabId = (list: PriceList): string => `tab-${list.id}`;
+
+export const didRegionChange = (prevRegion: Region | null, currentRegion: Region): boolean => {
+  if (prevRegion === null) {
+    return true;
+  }
+
+  if (prevRegion.name === currentRegion.name) {
+    return false;
+  }
+
+  return true;
+};
+
+export const didRealmChange = (prevRealm: Realm | null, currentRealm: Realm): boolean => {
+  if (prevRealm === null) {
+    return true;
+  }
+
+  if (prevRealm.regionName === currentRealm.regionName && prevRealm.slug === currentRealm.slug) {
+    return false;
+  }
+
+  return true;
+};

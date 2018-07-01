@@ -64,12 +64,6 @@ export class PriceLists extends React.Component<Props, State> {
     this.setState({ isDialogOpen: !this.state.isDialogOpen });
   }
 
-  renderPanel(list: PriceList) {
-    return (
-      <p>Hello, world!</p>
-    );
-  }
-
   renderTab(list: PriceList, index: number) {
     return (
       <Tab
