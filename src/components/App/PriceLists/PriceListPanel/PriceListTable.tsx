@@ -15,10 +15,6 @@ export type OwnProps = {
 type Props = Readonly<StateProps & DispatchProps & OwnProps>;
 
 export class PriceListTable extends React.Component<Props> {
-  componentDidMount() {
-    console.log(this.props.entries);
-  }
-
   renderEntry(index: number, entry: PriceListEntry) {
     const { item, quantity } = entry;
 
