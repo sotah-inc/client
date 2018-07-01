@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { ButtonGroup, Spinner, Intent, Navbar, NavbarGroup, Alignment, NavbarDivider } from '@blueprintjs/core';
 
-import RegionToggle from '@app/containers/App/AuctionList/RegionToggle';
-import RealmToggle from '@app/containers/App/AuctionList/RealmToggle';
+import RegionToggle from '@app/containers/util/RegionToggle';
+import RealmToggle from '@app/containers/util/RealmToggle';
 import CountToggle from '@app/containers/App/AuctionList/CountToggle';
 import QueryAuctionsFilter from '@app/containers/App/AuctionList/QueryAuctionsFilter';
 import AuctionTable from '@app/containers/App/AuctionList/AuctionTable';

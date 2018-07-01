@@ -1,6 +1,6 @@
 import { connect, Dispatch } from 'react-redux';
 
-import { RegionToggle, StateProps, DispatchProps, OwnProps } from '@app/components/App/AuctionList/RegionToggle';
+import { RegionToggle, StateProps, DispatchProps, OwnProps } from '@app/components/util/RegionToggle';
 import { StoreState } from '@app/types';
 import { Region } from '@app/types/global';
 import { Actions } from '@app/actions';

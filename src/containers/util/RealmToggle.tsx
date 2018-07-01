@@ -1,6 +1,6 @@
 import { connect, Dispatch } from 'react-redux';
 
-import { RealmToggle, StateProps, DispatchProps, OwnProps } from '@app/components/App/AuctionList/RealmToggle';
+import { RealmToggle, StateProps, DispatchProps, OwnProps } from '@app/components/util/RealmToggle';
 import { StoreState } from '@app/types';
 import { Realm } from '@app/types/global';
 import { Actions } from '@app/actions';
