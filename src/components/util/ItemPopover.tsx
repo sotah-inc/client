@@ -32,17 +32,15 @@ export type OwnProps = {
   item: Item
 
   onItemClick?: () => void
+  itemTextFormatter?: (itemText: string) => string
 };
 
 type Props = Readonly<StateProps & DispatchProps & OwnProps>;
 
 export class ItemPopover extends React.Component<Props> {
   public static defaultProps: Partial<Props> = {
-    onItemClick: () => {
-      console.log('defaultProps.onItemClick()');
-
-      return;
-    }
+    onItemClick: () => { return; },
+    itemTextFormatter: (itemText: string) => itemText
   };
 
   renderItemLevel(item: Item) {
@@ -337,8 +335,17 @@ export class ItemPopover extends React.Component<Props> {
     onItemClick();
   }
 
+  itemTextFormatter(itemText: string) {
+    const { itemTextFormatter } = this.props;
+    if (!itemTextFormatter) {
+      return itemText;
+    }
+
+    return itemTextFormatter(itemText);
+  }
+
   renderDisplay(item: Item) {
-    const itemText = getItemTextValue(item);
+    const itemText = this.itemTextFormatter(getItemTextValue(item));
     const itemIconUrl = getItemIconUrl(item);
     if (itemIconUrl === null) {
       return itemText;

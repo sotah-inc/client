@@ -25,7 +25,10 @@ export class PriceListTable extends React.Component<Props> {
     return (
       <tr key={index}>
         <td className={qualityToColorClass(item.quality)}>
-          <ItemPopover item={item} /> x{quantity}
+          <ItemPopover
+            item={item}
+            itemTextFormatter={(itemText) => `${itemText} x${quantity}`}
+          />
         </td>
       </tr>
     );
