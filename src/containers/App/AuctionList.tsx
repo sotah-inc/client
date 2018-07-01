@@ -5,22 +5,23 @@ import { StoreState } from '@app/types';
 import { Region } from '@app/types/global';
 import { Actions } from '@app/actions';
 import {
-  FetchRegions,
-  FetchRealms,
   FetchAuctions,
   PageChange,
   FetchAuctionsQuery,
   FetchItemClasses
 } from '@app/actions/auction';
+import { FetchRegions, FetchRealms } from '@app/actions/main';
 import { GetAuctionsOptions, QueryAuctionsOptions } from '@app/api/data';
 
 const mapStateToProps = (state: StoreState): StateProps => {
-  const { fetchPingLevel } = state.Main;
   const {
+    fetchPingLevel, 
     fetchRegionLevel,
     currentRegion,
     fetchRealmLevel,
-    currentRealm,
+    currentRealm
+  } = state.Main;
+  const {
     fetchAuctionsLevel,
     auctions,
     currentPage,

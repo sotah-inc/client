@@ -4,10 +4,10 @@ import { RealmToggle, StateProps, DispatchProps, OwnProps } from '@app/component
 import { StoreState } from '@app/types';
 import { Realm } from '@app/types/global';
 import { Actions } from '@app/actions';
-import { RealmChange } from '@app/actions/auction';
+import { RealmChange } from '@app/actions/main';
 
 const mapStateToProps = (state: StoreState): StateProps => {
-  const { realms, currentRealm, fetchRealmLevel } = state.Auction;
+  const { realms, currentRealm, fetchRealmLevel } = state.Main;
   return { realms, currentRealm, fetchRealmLevel };
 };
 

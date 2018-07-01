@@ -1,8 +1,8 @@
 import { Dispatch } from 'redux';
 
 import { createAction, ActionsUnion } from './helpers';
-import { Profile } from '../types/global';
-import { getPing } from '../api/data';
+import { Profile, Region, Realm } from '../types/global';
+import { getPing, getStatus, getRegions } from '../api/data';
 
 export const REQUEST_PING = 'REQUEST_PING';
 export const RECEIVE_PING = 'RECEIVE_PING';
@@ -22,9 +22,41 @@ export const UserRegister = (payload: Profile) => createAction(USER_REGISTER, pa
 export const USER_LOGIN = 'USER_LOGIN';
 export const UserLogin = (payload: Profile) => createAction(USER_LOGIN, payload);
 
+export const REQUEST_REGIONS = 'REQUEST_REGIONS';
+export const RECEIVE_REGIONS = 'RECEIVE_REGIONS';
+const RequestRegions = () => createAction(REQUEST_REGIONS);
+const ReceiveRegions = (payload: Region[] | null) => createAction(RECEIVE_REGIONS, payload);
+type FetchRegionsType = ReturnType<typeof RequestRegions | typeof ReceiveRegions>;
+export const FetchRegions = () => {
+  return async (dispatch: Dispatch<FetchRegionsType>) => {
+    dispatch(RequestRegions());
+    dispatch(ReceiveRegions(await getRegions()));
+  };
+};
+
+export const REGION_CHANGE = 'REGION_CHANGE';
+export const RegionChange = (payload: Region) => createAction(REGION_CHANGE, payload);
+
+export const REQUEST_REALMS = 'REQUEST_REALMS';
+export const RECEIVE_REALMS = 'RECEIVE_REALMS';
+const RequestRealms = () => createAction(REQUEST_REALMS);
+const ReceiveRealms = (payload: Realm[] | null) => createAction(RECEIVE_REALMS, payload);
+type FetchRealmType = ReturnType<typeof RequestRealms | typeof ReceiveRealms>;
+export const FetchRealms = (region: Region) => {
+  return async (dispatch: Dispatch<FetchRealmType>) => {
+    dispatch(RequestRealms());
+    dispatch(ReceiveRealms(await getStatus(region.name)));
+  };
+};
+
+export const REALM_CHANGE = 'REALM_CHANGE';
+export const RealmChange = (payload: Realm) => createAction(REALM_CHANGE, payload);
+
 export const MainActions = {
   RequestPing, ReceivePing,
-  UserRegister, UserLogin
+  UserRegister, UserLogin,
+  RequestRegions, ReceiveRegions, RegionChange,
+  RequestRealms, ReceiveRealms, RealmChange
 };
 
 export type MainActions = ActionsUnion<typeof MainActions>;

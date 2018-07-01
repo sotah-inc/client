@@ -7,10 +7,12 @@ import CountToggle from '@app/containers/App/AuctionList/CountToggle';
 import QueryAuctionsFilter from '@app/containers/App/AuctionList/QueryAuctionsFilter';
 import AuctionTable from '@app/containers/App/AuctionList/AuctionTable';
 import { Auction, Region, Realm, OwnerName, ItemId } from '@app/types/global';
-import { FetchPingLevel } from '@app/types/main';
 import {
+  FetchPingLevel, 
   FetchRegionLevel,
-  FetchRealmLevel,
+  FetchRealmLevel
+} from '@app/types/main';
+import {
   FetchAuctionsLevel,
   SortKind,
   SortDirection,

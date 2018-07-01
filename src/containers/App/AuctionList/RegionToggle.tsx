@@ -4,10 +4,10 @@ import { RegionToggle, StateProps, DispatchProps, OwnProps } from '@app/componen
 import { StoreState } from '@app/types';
 import { Region } from '@app/types/global';
 import { Actions } from '@app/actions';
-import { RegionChange } from '@app/actions/auction';
+import { RegionChange } from '@app/actions/main';
 
 const mapStateToProps = (state: StoreState): StateProps => {
-  const { regions, currentRegion, fetchRegionLevel } = state.Auction;
+  const { regions, currentRegion, fetchRegionLevel } = state.Main;
   return { regions, currentRegion, fetchRegionLevel };
 };
 

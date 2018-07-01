@@ -14,9 +14,11 @@ import { QueryAuctionsOptions } from '@app/api/data';
 
 const mapStateToProps = (state: StoreState): StateProps => {
   const {
-    queryAuctionsLevel,
     currentRegion,
-    currentRealm,
+    currentRealm
+  } = state.Main;
+  const {
+    queryAuctionsLevel,
     queryAuctionResults,
     selectedQueryAuctionResults
   } = state.Auction;

@@ -10,7 +10,7 @@ import {
 } from '@blueprintjs/select';
 
 import { Realms, Realm } from '@app/types/global';
-import { FetchRealmLevel } from '@app/types/auction';
+import { FetchRealmLevel } from '@app/types/main';
 
 const RealmToggleSelect = Select.ofType<Realm>();
 
