@@ -1,7 +1,15 @@
 import * as HTTPStatus from 'http-status';
 
 import { apiEndpoint } from './index';
-import { Auction, Region, Realm, Owner, OwnerName, ItemId, QueryItemResult } from '../types/global';
+import {
+  Auction,
+  Region,
+  Realm,
+  Owner,
+  OwnerName,
+  ItemId,
+  QueryItemResult
+} from '../types/global';
 import { SortDirection, SortKind, QueryAuctionResult } from '../types/auction';
 
 export const getPing = async (): Promise<boolean> => {
@@ -140,4 +148,35 @@ export type GetItemClassesResponse = {
 
 export const getItemClasses = async (): Promise<GetItemClassesResponse | null> => {
   return await (await fetch(`${apiEndpoint}/item-classes`)).json();
+};
+
+export type GetPriceListOptions = {
+  regionName: string
+  realmSlug: string
+  itemIds: ItemId[]
+};
+
+export type PriceListMap = {
+  [key: number]: {
+    bid: number
+    buyout: number
+  }
+};
+
+export type GetPriceListResponse = {
+  price_list: PriceListMap
+};
+
+export const getPriceList = async (opts: GetPriceListOptions): Promise<GetPriceListResponse | null> => {
+  const { regionName, realmSlug, itemIds } = opts;
+  const res = await fetch(`${apiEndpoint}/region/${regionName}/realm/${realmSlug}/price-list`, {
+    method: 'POST',
+    body: JSON.stringify({ item_ids: itemIds }),
+    headers: new Headers({ 'content-type': 'application/json' })
+  });
+  if (res.status !== HTTPStatus.OK) {
+    return null;
+  }
+
+  return await res.json();
 };
