@@ -31,12 +31,20 @@ export type DispatchProps = {};
 export type OwnProps = {
   item: Item
 
-  onItemClick: () => void
+  onItemClick?: () => void
 };
 
 type Props = Readonly<StateProps & DispatchProps & OwnProps>;
 
 export class ItemPopover extends React.Component<Props> {
+  public static defaultProps: Partial<Props> = {
+    onItemClick: () => {
+      console.log('defaultProps.onItemClick()');
+
+      return;
+    }
+  };
+
   renderItemLevel(item: Item) {
     const exludedItemClasses = [ItemClassClasses.Consumable, ItemClassClasses.Battlepet];
     if (exludedItemClasses.indexOf(item.itemClass) > -1) {
@@ -320,6 +328,15 @@ export class ItemPopover extends React.Component<Props> {
     );
   }
 
+  onItemClick() {
+    const { onItemClick } = this.props;
+    if (!onItemClick) {
+      return;
+    }
+
+    onItemClick();
+  }
+
   renderDisplay(item: Item) {
     const itemText = getItemTextValue(item);
     const itemIconUrl = getItemIconUrl(item);
@@ -329,7 +346,7 @@ export class ItemPopover extends React.Component<Props> {
 
     return (
       <>
-        <img src={itemIconUrl} className="item-icon" /> <a onClick={() => this.props.onItemClick()}>{itemText}</a>
+        <img src={itemIconUrl} className="item-icon" /> <a onClick={() => this.onItemClick()}>{itemText}</a>
       </>
     );
   }
