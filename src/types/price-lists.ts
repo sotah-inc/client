@@ -10,7 +10,7 @@ export type PriceListsState = {
 export enum EntryCreateLevel { initial, success, failure }
 
 export type PriceListEntry = {
-  item: Item,
+  item: Item
   quantity: number
 };
 
