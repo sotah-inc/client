@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Tab, Tabs, Button, NonIdealState, Dialog } from '@blueprintjs/core';
+import { Tab, Tabs, Button, NonIdealState, Dialog, Navbar, NavbarGroup, Alignment } from '@blueprintjs/core';
 
 import { PriceList, ListCreateLevel } from '@app/types/price-lists';
 import PriceListPanel from '@app/containers/App/PriceLists/PriceListPanel';
@@ -97,25 +97,17 @@ export class PriceLists extends React.Component<Props, State> {
 
     if (lists.length === 0) {
       return (
-        <div style={{ marginTop: '10px' }}>
-          <NonIdealState
-            title="No price lists"
-            description="You have no price lists."
-            visual="list"
-            action={<Button className="pt-fill" icon="plus" onClick={() => this.toggleDialog()}>Add List</Button>}
-          />
-        </div>
+        <NonIdealState
+          title="No price lists"
+          description="You have no price lists."
+          visual="list"
+          action={<Button className="pt-fill" icon="plus" onClick={() => this.toggleDialog()}>Add List</Button>}
+        />
       );
     }
 
     return (
       <>
-        <Button
-          icon="plus"
-          style={{ marginBottom: '10px' }}
-          onClick={() => this.toggleDialog()}
-          text={'Add List'}
-        />
         <Tabs
           id="price-lists"
           className="price-lists"
@@ -130,10 +122,17 @@ export class PriceLists extends React.Component<Props, State> {
     );
   }
 
+  renderContent() {
+    return (
+      <div style={{marginTop: '20px'}}>
+        {this.renderTabs()}
+      </div>
+    );
+  }
+
   render() {
     return (
       <>
-        {this.renderTabs()}
         <Dialog
           isOpen={this.state.isDialogOpen}
           onClose={() => this.toggleDialog()}
@@ -142,6 +141,16 @@ export class PriceLists extends React.Component<Props, State> {
         >
           <CreateListForm />
         </Dialog>
+        <Navbar>
+          <NavbarGroup align={Alignment.LEFT}>
+            <Button
+              icon="plus"
+              onClick={() => this.toggleDialog()}
+              text={'Add List'}
+            />
+          </NavbarGroup>
+        </Navbar>
+        {this.renderContent()}
       </>
     );
   }
