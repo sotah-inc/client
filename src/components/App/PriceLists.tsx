@@ -1,9 +1,21 @@
 import * as React from 'react';
-import { Tab, Tabs, Button, NonIdealState, Dialog, Navbar, NavbarGroup, Alignment } from '@blueprintjs/core';
+import {
+  Tab,
+  Tabs,
+  Button,
+  NonIdealState,
+  Dialog,
+  Navbar,
+  NavbarGroup,
+  Alignment,
+  ButtonGroup
+} from '@blueprintjs/core';
 
 import { PriceList, ListCreateLevel } from '@app/types/price-lists';
 import PriceListPanel from '@app/containers/App/PriceLists/PriceListPanel';
 import CreateListForm from '@app/containers/App/PriceLists/CreateListForm';
+import RegionToggle from '@app/containers/util/RegionToggle';
+import RealmToggle from '@app/containers/util/RealmToggle';
 import { priceListEntryTabId } from '@app/util';
 
 import './PriceLists.scss';
@@ -148,6 +160,12 @@ export class PriceLists extends React.Component<Props, State> {
               onClick={() => this.toggleDialog()}
               text={'Add List'}
             />
+          </NavbarGroup>
+          <NavbarGroup align={Alignment.RIGHT}>
+            <ButtonGroup>
+              <RealmToggle />
+              <RegionToggle />
+            </ButtonGroup>
           </NavbarGroup>
         </Navbar>
         {this.renderContent()}
