@@ -69,25 +69,29 @@ export class CreateEntryForm extends React.Component<Props> {
         <DialogBody>
           <div className="pure-g">
             <div className="pure-u-1-2">
-              <FormGroup
-                helperText={errors.item}
-                label="Item"
-                requiredLabel={true}
-                intent={itemIntent}
-              >
-                <ItemInput
-                  onSelect={(item) => setFieldValue('item', item)}
-                  autoFocus={true}
-                />
-              </FormGroup>
+              <div style={{paddingRight: '5px'}}>
+                <FormGroup
+                  helperText={errors.item}
+                  label="Item"
+                  requiredLabel={true}
+                  intent={itemIntent}
+                >
+                  <ItemInput
+                    onSelect={(item) => setFieldValue('item', item)}
+                    autoFocus={true}
+                  />
+                </FormGroup>
+              </div>
             </div>
             <div className="pure-u-1-2">
-              <FormGroup
-                label="Selected item"
-                intent={itemIntent}
-              >
-                {this.renderSelectedItem(values.item)}
-              </FormGroup>
+              <div style={{paddingLeft: '5px'}}>
+                <FormGroup
+                  label="Selected item"
+                  intent={itemIntent}
+                >
+                  {this.renderSelectedItem(values.item)}
+                </FormGroup>
+              </div>
             </div>
           </div>
           {createFormField({
