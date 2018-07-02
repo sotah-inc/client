@@ -64,6 +64,8 @@ export const itemStatToString = (stat: ItemStat): string => {
       return 'Stamina';
     case ItemStat.Crit:
       return 'Critical Strike';
+    case ItemStat.FireResist:
+      return 'Fire Resistance';
     case ItemStat.NatResist:
       return 'Nature Resistance';
     case ItemStat.Vers:
