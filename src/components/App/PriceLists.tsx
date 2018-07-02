@@ -156,7 +156,7 @@ export class PriceLists extends React.Component<Props, State> {
     );
   }
 
-  renderAddButton() {
+  renderButtons() {
     const { currentRegion, currentRealm } = this.props;
 
     if (currentRegion === null || currentRealm === null) {
@@ -169,7 +169,7 @@ export class PriceLists extends React.Component<Props, State> {
       <Button
         icon="plus"
         onClick={() => this.toggleDialog()}
-        text={'Add List'}
+        text="List"
       />
     );
   }
@@ -187,7 +187,7 @@ export class PriceLists extends React.Component<Props, State> {
         </Dialog>
         <Navbar>
           <NavbarGroup align={Alignment.LEFT}>
-            {this.renderAddButton()}
+            {this.renderButtons()}
           </NavbarGroup>
           <NavbarGroup align={Alignment.RIGHT}>
             <ButtonGroup>
