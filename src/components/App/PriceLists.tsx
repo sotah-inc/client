@@ -8,9 +8,12 @@ import {
   Navbar,
   NavbarGroup,
   Alignment,
-  ButtonGroup
+  ButtonGroup,
+  Spinner,
+  Intent
 } from '@blueprintjs/core';
 
+import { Region, Realm } from '@app/types/global';
 import { PriceList, ListCreateLevel } from '@app/types/price-lists';
 import PriceListPanel from '@app/containers/App/PriceLists/PriceListPanel';
 import CreateListForm from '@app/containers/App/PriceLists/CreateListForm';
@@ -24,6 +27,8 @@ export type StateProps = {
   lists: PriceList[]
   listCreateLevel: ListCreateLevel
   selectedList: PriceList | null
+  currentRegion: Region | null
+  currentRealm: Realm | null
 };
 
 export type DispatchProps = {
@@ -99,15 +104,30 @@ export class PriceLists extends React.Component<Props, State> {
   }
 
   renderTabs() {
-    const { lists, selectedList } = this.props;
+    const { lists, selectedList, currentRegion, currentRealm } = this.props;
+
+    if (currentRegion === null || currentRealm === null) {
+      return (
+        <NonIdealState
+          title="Loading"
+          visual={<Spinner className="pt-large" intent={Intent.PRIMARY} />}
+        />
+      );
+    }
 
     if (lists.length === 0) {
       return (
         <NonIdealState
           title="No price lists"
-          description="You have no price lists."
+          description={`You have no price lists in ${currentRealm.name}.`}
           visual="list"
-          action={<Button className="pt-fill" icon="plus" onClick={() => this.toggleDialog()}>Add List</Button>}
+          action={<Button
+            className="pt-fill"
+            icon="plus"
+            onClick={() => this.toggleDialog()}
+          >
+            Add List to {currentRealm.name}
+          </Button>}
         />
       );
     }
@@ -136,6 +156,24 @@ export class PriceLists extends React.Component<Props, State> {
     );
   }
 
+  renderAddButton() {
+    const { currentRegion, currentRealm } = this.props;
+
+    if (currentRegion === null || currentRealm === null) {
+      return (
+        <Spinner className="pt-small" intent={Intent.PRIMARY} />
+      );
+    }
+
+    return (
+      <Button
+        icon="plus"
+        onClick={() => this.toggleDialog()}
+        text={'Add List'}
+      />
+    );
+  }
+
   render() {
     return (
       <>
@@ -149,11 +187,7 @@ export class PriceLists extends React.Component<Props, State> {
         </Dialog>
         <Navbar>
           <NavbarGroup align={Alignment.LEFT}>
-            <Button
-              icon="plus"
-              onClick={() => this.toggleDialog()}
-              text={'Add List'}
-            />
+            {this.renderAddButton()}
           </NavbarGroup>
           <NavbarGroup align={Alignment.RIGHT}>
             <ButtonGroup>

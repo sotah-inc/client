@@ -8,8 +8,9 @@ import { Actions } from '@app/actions';
 import { ChangeListCreateLevel, ChangeSelectedList } from '@app/actions/price-lists';
 
 const mapStateToProps = (state: StoreState): StateProps => {
+  const { currentRegion, currentRealm } = state.Main;
   const { lists, listCreateLevel, selectedList } = state.PriceLists;
-  return { lists, listCreateLevel, selectedList };
+  return { lists, listCreateLevel, selectedList, currentRegion, currentRealm };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<Actions>): DispatchProps => {
