@@ -52,10 +52,10 @@ export class PriceListPanel extends React.Component<Props, State> {
     this.setState({ isDialogOpen: !this.state.isDialogOpen });
   }
 
-  renderEntries() {
-    const { entries } = this.props.list;
+  renderList() {
+    const { list } = this.props;
 
-    if (entries.length === 0) {
+    if (list.entries.length === 0) {
       return (
         <NonIdealState
           title="No entries"
@@ -67,7 +67,7 @@ export class PriceListPanel extends React.Component<Props, State> {
     }
 
     return (
-      <PriceListTable entries={entries} />
+      <PriceListTable list={list} />
     );
   }
 
@@ -83,7 +83,7 @@ export class PriceListPanel extends React.Component<Props, State> {
         >
           <CreateEntryForm />
         </Dialog>
-        {this.renderEntries()}
+        {this.renderList()}
       </>
     );
   }
