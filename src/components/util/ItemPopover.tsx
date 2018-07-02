@@ -348,7 +348,9 @@ export class ItemPopover extends React.Component<Props> {
     const itemText = this.itemTextFormatter(getItemTextValue(item));
     const itemIconUrl = getItemIconUrl(item);
     if (itemIconUrl === null) {
-      return itemText;
+      return (
+        <a onClick={() => this.onItemClick()}>{itemText}</a>
+      );
     }
 
     return (
