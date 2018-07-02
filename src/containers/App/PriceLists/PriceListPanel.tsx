@@ -7,8 +7,9 @@ import { Actions } from '@app/actions';
 import { ChangeEntryCreateLevel } from '@app/actions/price-lists';
 
 const mapStateToProps = (state: StoreState): StateProps => {
+  const { currentRegion, currentRealm } = state.Main;
   const { entryCreateLevel } = state.PriceLists;
-  return { entryCreateLevel };
+  return { entryCreateLevel, currentRegion, currentRealm };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<Actions>): DispatchProps => {

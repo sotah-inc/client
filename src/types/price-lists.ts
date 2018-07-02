@@ -30,6 +30,8 @@ export type PriceList = {
   realm: Realm
 };
 
+export enum GetPriceListLevel { initial, success, failure }
+
 export const defaultPriceListsState: PriceListsState = {
   lists: [],
   listCreateLevel: ListCreateLevel.initial,

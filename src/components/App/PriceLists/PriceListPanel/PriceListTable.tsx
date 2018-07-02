@@ -1,9 +1,12 @@
 import * as React from 'react';
+import { NonIdealState, Spinner, Intent } from '@blueprintjs/core';
 
+import { PriceList, PriceListEntry, GetPriceListLevel } from '@app/types/price-lists';
+import { Region, Realm } from '@app/types/global';
 import ItemPopover from '@app/containers/util/ItemPopover';
 import { Currency } from '@app/components/util';
-import { PriceList, PriceListEntry } from '@app/types/price-lists';
 import { qualityToColorClass } from '@app/util';
+import { getPriceList, PriceListMap } from '@app/api/data';
 
 export type StateProps = {};
 
@@ -11,13 +14,59 @@ export type DispatchProps = {};
 
 export type OwnProps = {
   list: PriceList
+  region: Region
+  realm: Realm
 };
 
 type Props = Readonly<StateProps & DispatchProps & OwnProps>;
 
-export class PriceListTable extends React.Component<Props> {
+type State = Readonly<{
+  getPriceListLevel: GetPriceListLevel
+  priceListMap: PriceListMap
+}>;
+
+export class PriceListTable extends React.Component<Props, State> {
+  state: State = {
+    getPriceListLevel: GetPriceListLevel.initial,
+    priceListMap: {}
+  };
+
+  async componentDidMount() {
+    const { list, region, realm } = this.props;
+
+    const itemIds = list.entries.map((v) => v.item.id);
+    const plMap = await getPriceList({
+      regionName: region.name,
+      realmSlug: realm.slug,
+      itemIds
+    });
+    if (plMap === null) {
+      this.setState({ getPriceListLevel: GetPriceListLevel.failure });
+
+      return;
+    }
+
+    this.setState({
+      getPriceListLevel: GetPriceListLevel.success,
+      priceListMap: plMap.price_list
+    });
+  }
+
   renderEntry(index: number, entry: PriceListEntry) {
     const { item, quantity } = entry;
+    const { priceListMap } = this.state;
+
+    if (!(item.id in priceListMap)) {
+      return (
+        <tr key={index}>
+          <td colSpan={3}>
+            <Spinner className="pt-small" intent={Intent.WARNING} />
+          </td>
+        </tr>
+      );
+    }
+
+    const { bid, buyout } = priceListMap[item.id];
 
     return (
       <tr key={index}>
@@ -28,13 +77,16 @@ export class PriceListTable extends React.Component<Props> {
           />
         </td>
         <td>
-          <Currency amount={0} />
+          <Currency amount={bid} />
+        </td>
+        <td>
+          <Currency amount={buyout} />
         </td>
       </tr>
     );
   }
 
-  render() {
+  renderTable() {
     const { list } = this.props;
 
     return (
@@ -42,7 +94,8 @@ export class PriceListTable extends React.Component<Props> {
         <thead>
           <tr>
             <th>Item</th>
-            <th>Price</th>
+            <th>Bid</th>
+            <th>Buyout</th>
           </tr>
         </thead>
         <tbody>
@@ -50,5 +103,29 @@ export class PriceListTable extends React.Component<Props> {
         </tbody>
       </table>
     );
+  }
+
+  render() {
+    const { getPriceListLevel } = this.state;
+
+    switch (getPriceListLevel) {
+      case GetPriceListLevel.failure:
+        return (
+          <NonIdealState
+            title="Could not load price-lists"
+            visual={<Spinner className="pt-large" intent={Intent.DANGER} value={0} />}
+          />
+        );
+      case GetPriceListLevel.success:
+        return this.renderTable();
+      case GetPriceListLevel.initial:
+      default:
+        return (
+          <NonIdealState
+            title="Loading"
+            visual={<Spinner className="pt-large" intent={Intent.PRIMARY} />}
+          />
+        );
+    }
   }
 }

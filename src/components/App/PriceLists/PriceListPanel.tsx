@@ -1,13 +1,15 @@
 import * as React from 'react';
 import { Button, NonIdealState, Dialog } from '@blueprintjs/core';
 
-import { Item } from '@app/types/global';
+import { Item, Region, Realm } from '@app/types/global';
 import { PriceList, EntryCreateLevel } from '@app/types/price-lists';
 import CreateEntryForm from '@app/containers/App/PriceLists/CreateEntryForm';
 import { PriceListTable } from '@app/components/App/PriceLists/PriceListPanel/PriceListTable';
 
 export type StateProps = {
   entryCreateLevel: EntryCreateLevel
+  currentRegion: Region | null
+  currentRealm: Realm | null
 };
 
 export type DispatchProps = {
@@ -53,7 +55,7 @@ export class PriceListPanel extends React.Component<Props, State> {
   }
 
   renderList() {
-    const { list } = this.props;
+    const { list, currentRegion, currentRealm } = this.props;
 
     if (list.entries.length === 0) {
       return (
@@ -67,7 +69,7 @@ export class PriceListPanel extends React.Component<Props, State> {
     }
 
     return (
-      <PriceListTable list={list} />
+      <PriceListTable list={list} region={currentRegion!} realm={currentRealm!} />
     );
   }
 
