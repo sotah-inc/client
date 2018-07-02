@@ -4,10 +4,10 @@ import * as Yup from 'yup';
 import { FormValues, CreateListForm } from '@app/components/App/PriceLists/CreateListForm';
 import { PriceListRules } from '@app/validator-rules';
 import { Region, Realm } from '@app/types/global';
-import { PriceListOpts } from '@app/types/price-lists';
+import { PriceListOptions } from '@app/types/price-lists';
 
 interface FormProps {
-  createList: (opts: PriceListOpts) => void;
+  createList: (opts: PriceListOptions) => void;
   currentRegion: Region | null;
   currentRealm: Realm | null;
 }

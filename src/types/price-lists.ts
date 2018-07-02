@@ -14,7 +14,7 @@ export type PriceListEntry = {
   quantity: number
 };
 
-export type PriceListOpts = {
+export type PriceListOptions = {
   name: string
   region: Region
   realm: Realm

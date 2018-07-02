@@ -5,7 +5,7 @@ import { FormikProps } from 'formik';
 import { DialogBody, DialogActions } from '@app/components/util';
 import { Generator as FormFieldGenerator } from '@app/components/util/FormField';
 import { Region, Realm } from '@app/types/global';
-import { PriceListOpts } from '@app/types/price-lists';
+import { PriceListOptions } from '@app/types/price-lists';
 
 export type StateProps = {
   currentRegion: Region | null
@@ -13,7 +13,7 @@ export type StateProps = {
 };
 
 export type DispatchProps = {
-  createList: (opts: PriceListOpts) => void
+  createList: (opts: PriceListOptions) => void
 };
 
 export type OwnProps = {};
