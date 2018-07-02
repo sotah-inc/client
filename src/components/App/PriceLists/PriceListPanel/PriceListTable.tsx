@@ -77,10 +77,10 @@ export class PriceListTable extends React.Component<Props, State> {
           />
         </td>
         <td>
-          <Currency amount={bid} />
+          <Currency amount={bid * quantity} />
         </td>
         <td>
-          <Currency amount={buyout} />
+          <Currency amount={buyout * quantity} />
         </td>
       </tr>
     );
