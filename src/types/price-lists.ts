@@ -1,4 +1,4 @@
-import { Item } from './global';
+import { Item, Region, Realm } from './global';
 
 export type PriceListsState = {
   lists: PriceList[]
@@ -14,12 +14,20 @@ export type PriceListEntry = {
   quantity: number
 };
 
+export type PriceListOpts = {
+  name: string
+  region: Region
+  realm: Realm
+};
+
 export enum ListCreateLevel { initial, success, failure }
 
 export type PriceList = {
   id: number
   name: string
   entries: PriceListEntry[]
+  region: Region
+  realm: Realm
 };
 
 export const defaultPriceListsState: PriceListsState = {

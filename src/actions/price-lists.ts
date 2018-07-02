@@ -1,9 +1,9 @@
-import { PriceList, PriceListEntry, ListCreateLevel, EntryCreateLevel } from '@app/types/price-lists';
+import { PriceList, PriceListEntry, ListCreateLevel, EntryCreateLevel, PriceListOpts } from '@app/types/price-lists';
 
 import { createAction, ActionsUnion } from './helpers';
 
 export const CREATE_PRICELIST = 'CREATE_PRICELIST';
-export const CreateList = (payload: string) => createAction(CREATE_PRICELIST, payload);
+export const CreateList = (payload: PriceListOpts) => createAction(CREATE_PRICELIST, payload);
 
 export const CHANGE_LIST_CREATELEVEL = 'CHANGE_LIST_CREATELEVEL';
 export const ChangeListCreateLevel = (payload: ListCreateLevel) => createAction(CHANGE_LIST_CREATELEVEL, payload);

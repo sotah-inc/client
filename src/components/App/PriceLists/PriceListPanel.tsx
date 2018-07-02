@@ -74,7 +74,6 @@ export class PriceListPanel extends React.Component<Props, State> {
   render() {
     return (
       <>
-        {this.renderEntries()}
         <Dialog
           isOpen={this.state.isDialogOpen}
           onClose={() => this.toggleDialog()}
@@ -84,6 +83,7 @@ export class PriceListPanel extends React.Component<Props, State> {
         >
           <CreateEntryForm />
         </Dialog>
+        {this.renderEntries()}
       </>
     );
   }

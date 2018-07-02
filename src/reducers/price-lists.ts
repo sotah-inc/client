@@ -21,7 +21,11 @@ export const priceLists = (state: State, action: PriceListsActions): State => {
 
   switch (action.type) {
     case CREATE_PRICELIST:
-      const createdPricelist: PriceList = { name: action.payload, entries: [], id: state.lists.length };
+      const createdPricelist: PriceList = {
+        ...action.payload,
+        entries: [],
+        id: state.lists.length
+      };
       const createdList: PriceList[] = [
         ...state.lists,
         createdPricelist

@@ -3,9 +3,13 @@ import * as Yup from 'yup';
 
 import { FormValues, CreateListForm } from '@app/components/App/PriceLists/CreateListForm';
 import { PriceListRules } from '@app/validator-rules';
+import { Region, Realm } from '@app/types/global';
+import { PriceListOpts } from '@app/types/price-lists';
 
 interface FormProps {
-  createList: (name: string) => void;
+  createList: (opts: PriceListOpts) => void;
+  currentRegion: Region | null;
+  currentRealm: Realm | null;
 }
 
 const config: WithFormikConfig<FormProps, FormValues> = {
@@ -20,7 +24,11 @@ const config: WithFormikConfig<FormProps, FormValues> = {
   handleSubmit: async (values, { setSubmitting, resetForm, props }) => {
     setSubmitting(false);
     resetForm();
-    props.createList(values.name);
+    props.createList({
+      name: values.name,
+      region: props.currentRegion!,
+      realm: props.currentRealm!
+    });
   }
 };
 
