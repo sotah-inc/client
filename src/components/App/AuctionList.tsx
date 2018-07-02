@@ -49,10 +49,18 @@ type Props = Readonly<StateProps & DispatchProps & OwnProps>;
 
 export class AuctionList extends React.Component<Props> {
   componentDidMount() {
-    const { fetchAuctionsLevel } = this.props;
+    const { fetchAuctionsLevel, refreshAuctionsQuery, currentRegion, currentRealm } = this.props;
 
     if (fetchAuctionsLevel === FetchAuctionsLevel.initial) {
       this.refreshAuctions();
+
+      if (currentRegion !== null && currentRealm !== null) {
+        refreshAuctionsQuery({
+          regionName: currentRegion.name,
+          realmSlug: currentRealm.slug,
+          query: ''
+        });
+      }
     }
   }
 
@@ -68,10 +76,7 @@ export class AuctionList extends React.Component<Props> {
       refreshAuctions
     } = this.props;
 
-    if (currentRegion === null) {
-      return;
-    }
-    if (currentRealm === null) {
+    if (currentRegion === null || currentRealm === null) {
       return;
     }
 
@@ -100,7 +105,8 @@ export class AuctionList extends React.Component<Props> {
       auctionsPerPage,
       sortDirection,
       selectedQueryAuctionResults,
-      fetchItemClassesLevel
+      fetchItemClassesLevel,
+      refreshAuctionsQuery
     } = this.props;
 
     if (fetchItemClassesLevel === FetchItemClassesLevel.initial) {
@@ -128,7 +134,7 @@ export class AuctionList extends React.Component<Props> {
 
       const shouldRefreshAuctionsQuery = didRealmChange(prevProps.currentRealm, currentRealm);
       if (shouldRefreshAuctionsQuery) {
-        this.props.refreshAuctionsQuery({
+        refreshAuctionsQuery({
           regionName: currentRegion.name,
           realmSlug: currentRealm.slug,
           query: ''
