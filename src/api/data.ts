@@ -143,7 +143,7 @@ export type ResponseItemClass = {
 };
 
 export type GetItemClassesResponse = {
-  classes: ResponseItemClass[]
+  classes: ResponseItemClass[] | null
 };
 
 export const getItemClasses = async (): Promise<GetItemClassesResponse | null> => {

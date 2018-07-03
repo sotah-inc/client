@@ -167,7 +167,7 @@ export type Item = {
   armor: number
   maxDurability: number
   sellPrice: number
-  itemSpells: ItemSpell[]
+  itemSpells: ItemSpell[] | null
   equippable: boolean
   stackable: number
   weaponInfo: ItemWeaponInfo

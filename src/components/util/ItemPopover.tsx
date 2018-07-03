@@ -83,7 +83,7 @@ export class ItemPopover extends React.Component<Props> {
   }
 
   renderOnUseContent(item: Item) {
-    const onUseSpells = item.itemSpells.filter((v) => v.trigger === ItemSpellTrigger.OnUse);
+    const onUseSpells = item.itemSpells!.filter((v) => v.trigger === ItemSpellTrigger.OnUse);
     const [onUseSpell] = onUseSpells;
     
     let { description } = onUseSpell.spell;
@@ -105,6 +105,10 @@ export class ItemPopover extends React.Component<Props> {
   }
 
   renderOnUse(item: Item) {
+    if (item.itemSpells === null) {
+      return;
+    }
+
     if (item.itemSpells.length === 0) {
       return;
     }

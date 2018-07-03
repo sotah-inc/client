@@ -80,7 +80,7 @@ export const auction = (state: State, action: AuctionActions): State => {
     case REQUEST_ITEMCLASSES:
       return { ...state, fetchItemClassesLevel: FetchItemClassesLevel.fetching };
     case RECEIVE_ITEMCLASSES:
-      if (action.payload === null) {
+      if (action.payload === null || action.payload.classes === null) {
         return { ...state, fetchItemClassesLevel: FetchItemClassesLevel.failure };
       }
 
