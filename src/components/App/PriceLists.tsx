@@ -44,13 +44,13 @@ export type Props = Readonly<StateProps & DispatchProps & OwnProps>;
 
 export class PriceLists extends React.Component<Props> {
   componentDidUpdate(prevProps: Props) {
-    const { listCreateLevel } = this.props;
+    const { listCreateLevel, changeIsAddListDialogOpen, changeCreateLevel } = this.props;
 
     if (listCreateLevel !== prevProps.listCreateLevel) {
       switch (listCreateLevel) {
         case ListCreateLevel.success:
-          this.setState({ isDialogOpen: false });
-          this.props.changeCreateLevel(ListCreateLevel.initial);
+          changeIsAddListDialogOpen(false);
+          changeCreateLevel(ListCreateLevel.initial);
 
           break;
         default:
