@@ -17,10 +17,14 @@ export const ChangeEntryCreateLevel = (payload: EntryCreateLevel) => createActio
 export const CHANGE_SELECTED_LIST = 'CHANGE_SELECTED_LIST';
 export const ChangeSelectedList = (payload: PriceList) => createAction(CHANGE_SELECTED_LIST, payload);
 
+export const CHANGE_IS_ADD_LIST_DIALOG_OPEN = 'CHANGE_IS_ADD_LIST_DIALOG_OPEN';
+export const ChangeIsAddListDialogOpen = (payload: boolean) => createAction(CHANGE_IS_ADD_LIST_DIALOG_OPEN, payload);
+
 export const PriceListsActions = {
   CreateList, ChangeListCreateLevel,
   CreateEntry, ChangeEntryCreateLevel,
-  ChangeSelectedList
+  ChangeSelectedList,
+  ChangeIsAddListDialogOpen
 };
 
 export type PriceListsActions = ActionsUnion<typeof PriceListsActions>;

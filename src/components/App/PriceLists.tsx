@@ -29,26 +29,20 @@ export type StateProps = {
   selectedList: PriceList | null
   currentRegion: Region | null
   currentRealm: Realm | null
+  isAddListDialogOpen: boolean
 };
 
 export type DispatchProps = {
   changeCreateLevel: (createLevel: ListCreateLevel) => void
   changeSelectedList: (list: PriceList) => void
+  changeIsAddListDialogOpen: (isDialogOpen: boolean) => void
 };
 
 export type OwnProps = {};
 
 export type Props = Readonly<StateProps & DispatchProps & OwnProps>;
 
-type State = Readonly<{
-  isDialogOpen: boolean
-}>;
-
-export class PriceLists extends React.Component<Props, State> {
-  state: State = {
-    isDialogOpen: false
-  };
-
+export class PriceLists extends React.Component<Props> {
   componentDidUpdate(prevProps: Props) {
     const { listCreateLevel } = this.props;
 
@@ -66,7 +60,7 @@ export class PriceLists extends React.Component<Props, State> {
   }
 
   toggleDialog() {
-    this.setState({ isDialogOpen: !this.state.isDialogOpen });
+    this.props.changeIsAddListDialogOpen(!this.props.isAddListDialogOpen);
   }
 
   renderTab(list: PriceList, index: number) {
@@ -175,10 +169,12 @@ export class PriceLists extends React.Component<Props, State> {
   }
 
   render() {
+    const { isAddListDialogOpen } = this.props;
+
     return (
       <>
         <Dialog
-          isOpen={this.state.isDialogOpen}
+          isOpen={isAddListDialogOpen}
           onClose={() => this.toggleDialog()}
           title="New Price List"
           icon="manually-entered-data"
