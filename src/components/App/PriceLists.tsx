@@ -5,10 +5,6 @@ import {
   Button,
   NonIdealState,
   Dialog,
-  Navbar,
-  NavbarGroup,
-  Alignment,
-  ButtonGroup,
   Spinner,
   Intent
 } from '@blueprintjs/core';
@@ -17,8 +13,7 @@ import { Region, Realm } from '@app/types/global';
 import { PriceList, ListCreateLevel } from '@app/types/price-lists';
 import PriceListPanel from '@app/containers/App/PriceLists/PriceListPanel';
 import CreateListForm from '@app/containers/App/PriceLists/CreateListForm';
-import RegionToggle from '@app/containers/util/RegionToggle';
-import RealmToggle from '@app/containers/util/RealmToggle';
+import ActionBar from '@app/containers/App/PriceLists/ActionBar';
 import { priceListEntryTabId } from '@app/util';
 
 import './PriceLists.scss';
@@ -150,24 +145,6 @@ export class PriceLists extends React.Component<Props> {
     );
   }
 
-  renderButtons() {
-    const { currentRegion, currentRealm } = this.props;
-
-    if (currentRegion === null || currentRealm === null) {
-      return (
-        <Spinner className="pt-small" intent={Intent.PRIMARY} />
-      );
-    }
-
-    return (
-      <Button
-        icon="plus"
-        onClick={() => this.toggleDialog()}
-        text="List"
-      />
-    );
-  }
-
   render() {
     const { isAddListDialogOpen } = this.props;
 
@@ -181,17 +158,7 @@ export class PriceLists extends React.Component<Props> {
         >
           <CreateListForm />
         </Dialog>
-        <Navbar>
-          <NavbarGroup align={Alignment.LEFT}>
-            {this.renderButtons()}
-          </NavbarGroup>
-          <NavbarGroup align={Alignment.RIGHT}>
-            <ButtonGroup>
-              <RealmToggle />
-              <RegionToggle />
-            </ButtonGroup>
-          </NavbarGroup>
-        </Navbar>
+        <ActionBar />
         {this.renderContent()}
       </>
     );
