@@ -6,6 +6,7 @@ export type PriceListsState = {
   entryCreateLevel: EntryCreateLevel
   selectedList: PriceList | null
   isAddListDialogOpen: boolean
+  isAddEntryDialogOpen: boolean
 };
 
 export enum EntryCreateLevel { initial, success, failure }
@@ -38,5 +39,6 @@ export const defaultPriceListsState: PriceListsState = {
   listCreateLevel: ListCreateLevel.initial,
   entryCreateLevel: EntryCreateLevel.initial,
   selectedList: null,
-  isAddListDialogOpen: false
+  isAddListDialogOpen: false,
+  isAddEntryDialogOpen: false
 };
