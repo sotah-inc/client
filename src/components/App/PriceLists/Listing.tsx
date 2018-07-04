@@ -9,13 +9,12 @@ import {
 } from '@blueprintjs/core';
 
 import { Region, Realm } from '@app/types/global';
-import { PriceList, ListCreateLevel } from '@app/types/price-lists';
+import { PriceList } from '@app/types/price-lists';
 import PriceListPanel from '@app/containers/App/PriceLists/PriceListPanel';
 import { priceListEntryTabId } from '@app/util';
 
 export type StateProps = {
   lists: PriceList[]
-  listCreateLevel: ListCreateLevel
   selectedList: PriceList | null
   currentRegion: Region | null
   currentRealm: Realm | null
@@ -23,7 +22,6 @@ export type StateProps = {
 };
 
 export type DispatchProps = {
-  changeCreateLevel: (createLevel: ListCreateLevel) => void
   changeSelectedList: (list: PriceList) => void
   changeIsAddListDialogOpen: (isDialogOpen: boolean) => void
 };
@@ -33,22 +31,6 @@ export type OwnProps = {};
 export type Props = Readonly<StateProps & DispatchProps & OwnProps>;
 
 export class Listing extends React.Component<Props> {
-  componentDidUpdate(prevProps: Props) {
-    const { listCreateLevel, changeIsAddListDialogOpen, changeCreateLevel } = this.props;
-
-    if (listCreateLevel !== prevProps.listCreateLevel) {
-      switch (listCreateLevel) {
-        case ListCreateLevel.success:
-          changeIsAddListDialogOpen(false);
-          changeCreateLevel(ListCreateLevel.initial);
-
-          break;
-        default:
-          break;
-      }
-    }
-  }
-
   toggleDialog() {
     this.props.changeIsAddListDialogOpen(!this.props.isAddListDialogOpen);
   }

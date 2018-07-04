@@ -34,8 +34,9 @@ export const priceLists = (state: State, action: PriceListsActions): State => {
       return {
         ...state,
         lists: createdList,
-        listCreateLevel: ListCreateLevel.success,
-        selectedList: createdPricelist
+        listCreateLevel: ListCreateLevel.initial,
+        selectedList: createdPricelist,
+        isAddListDialogOpen: false
       };
     case CHANGE_LIST_CREATELEVEL:
       return { ...state, listCreateLevel: action.payload };
