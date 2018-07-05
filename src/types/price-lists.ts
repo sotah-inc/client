@@ -11,6 +11,8 @@ export type PriceListsState = {
 
 export enum CreateListStep { list, entries }
 
+export enum CreateListCompletion { initial, list, entries }
+
 export enum EntryCreateLevel { initial, success, failure }
 
 export type PriceListEntry = {

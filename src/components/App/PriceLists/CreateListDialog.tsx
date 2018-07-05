@@ -3,7 +3,7 @@ import { Dialog, Breadcrumb } from '@blueprintjs/core';
 
 import CreateListForm from '@app/containers/App/PriceLists/CreateListDialog/CreateListForm';
 import CreateEntryForm from '@app/containers/App/PriceLists/CreateEntryForm';
-import { CreateListStep, PriceListEntry } from '@app/types/price-lists';
+import { CreateListStep, PriceListEntry, CreateListCompletion } from '@app/types/price-lists';
 
 export type StateProps = {
   isAddListDialogOpen: boolean
@@ -20,36 +20,42 @@ export type Props = Readonly<StateProps & DispatchProps & OwnProps>;
 type State = Readonly<{
   createListStep: CreateListStep
   listName: string
+  createListCompletion: CreateListCompletion
 }>;
 
 export class CreateListDialog extends React.Component<Props, State> {
   state: State = {
     createListStep: CreateListStep.list,
-    listName: ''
+    listName: '',
+    createListCompletion: CreateListCompletion.initial
   };
 
   toggleListDialog() {
     this.props.changeIsAddListDialogOpen(!this.props.isAddListDialogOpen);
   }
 
+  onNavClick(createListStep: CreateListStep) {
+    this.setState({ createListStep });
+  }
+
   renderNav() {
-    const { createListStep } = this.state;
+    const { createListCompletion } = this.state;
 
     return (
       <ul className="pt-breadcrumbs">
         <li>
           <Breadcrumb
             text="List"
-            onClick={() => console.log('list')}
-            className={createListStep === CreateListStep.list ? 'pt-breadcrumb-current' : ''}
+            onClick={() => this.onNavClick(CreateListStep.list)}
+            className={createListCompletion === CreateListCompletion.initial ? 'pt-breadcrumb-current' : ''}
           />
         </li>
         <li>
           <Breadcrumb
             text="Entry"
-            disabled={createListStep < CreateListStep.entries}
-            onClick={() => console.log('Entry')}
-            className={createListStep === CreateListStep.entries ? 'pt-breadcrumb-current' : ''}
+            disabled={createListCompletion < CreateListCompletion.list}
+            onClick={() => this.onNavClick(CreateListStep.entries)}
+            className={createListCompletion === CreateListCompletion.list ? 'pt-breadcrumb-current' : ''}
           />
         </li>
       </ul>
@@ -57,7 +63,11 @@ export class CreateListDialog extends React.Component<Props, State> {
   }
 
   onCreateListFormComplete(name: string) {
-    this.setState({ listName: name, createListStep: CreateListStep.entries });
+    this.setState({
+      listName: name,
+      createListStep: CreateListStep.entries,
+      createListCompletion: CreateListCompletion.list
+    });
   }
 
   renderCreateListForm() {
