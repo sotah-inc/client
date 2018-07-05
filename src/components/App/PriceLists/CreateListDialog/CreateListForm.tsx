@@ -34,13 +34,15 @@ export class CreateListForm extends React.Component<Props> {
       handleSubmit,
       dirty,
       errors,
-      touched
+      touched,
+      children
     } = this.props;
     const createFormField = FormFieldGenerator({ setFieldValue });
 
     return (
       <form onSubmit={handleSubmit}>
         <DialogBody>
+          {children}
           {createFormField({
             fieldName: 'name',
             type: 'string',

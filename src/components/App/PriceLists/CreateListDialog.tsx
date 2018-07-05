@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { Dialog } from '@blueprintjs/core';
+import { Dialog, Breadcrumb, Icon, Intent } from '@blueprintjs/core';
 
-import CreateListForm from '@app/containers/App/PriceLists/CreateListForm';
+import CreateListForm from '@app/containers/App/PriceLists/CreateListDialog/CreateListForm';
 
 export type StateProps = {
   isAddListDialogOpen: boolean
@@ -20,6 +20,20 @@ export class CreateListDialog extends React.Component<Props> {
     this.props.changeIsAddListDialogOpen(!this.props.isAddListDialogOpen);
   }
 
+  renderNav() {
+    return (
+      <ul className="pt-breadcrumbs">
+        <Breadcrumb
+          text="Define List"
+          icon={<Icon icon="caret-right" />}
+          href="#"
+          intent={Intent.DANGER}
+          onClick={() => console.log('list')}
+        />
+      </ul>
+    );
+  }
+
   render() {
     const { isAddListDialogOpen } = this.props;
 
@@ -30,7 +44,9 @@ export class CreateListDialog extends React.Component<Props> {
         title="New Price List"
         icon="manually-entered-data"
       >
-        <CreateListForm />
+        <CreateListForm>
+          {this.renderNav()}
+        </CreateListForm>
       </Dialog>
     );
   }

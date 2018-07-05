@@ -1,7 +1,7 @@
 import { withFormik, WithFormikConfig } from 'formik';
 import * as Yup from 'yup';
 
-import { FormValues, CreateListForm } from '@app/components/App/PriceLists/CreateListForm';
+import { FormValues, CreateListForm } from '@app/components/App/PriceLists/CreateListDialog/CreateListForm';
 import { PriceListRules } from '@app/validator-rules';
 import { Region, Realm } from '@app/types/global';
 import { PriceListOptions } from '@app/types/price-lists';

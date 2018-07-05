@@ -1,7 +1,7 @@
 import { connect, Dispatch } from 'react-redux';
 
-import { StateProps, DispatchProps, OwnProps } from '@app/components/App/PriceLists/CreateListForm';
-import CreateListForm from '@app/form-containers/App/PriceLists/CreateListForm';
+import { StateProps, DispatchProps, OwnProps } from '@app/components/App/PriceLists/CreateListDialog/CreateListForm';
+import CreateListForm from '@app/form-containers/App/PriceLists/CreateListDialog/CreateListForm';
 import { StoreState } from '@app/types';
 import { PriceListOptions } from '@app/types/price-lists';
 import { Actions } from '@app/actions';
