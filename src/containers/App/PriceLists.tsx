@@ -2,8 +2,9 @@ import { connect, Dispatch } from 'react-redux';
 
 import { PriceLists, StateProps, DispatchProps, OwnProps } from '@app/components/App/PriceLists';
 import { StoreState } from '@app/types';
+import { PriceListEntry } from '@app/types/price-lists';
 import { Actions } from '@app/actions';
-import { ChangeIsAddEntryDialogOpen } from '@app/actions/price-lists';
+import { ChangeIsAddEntryDialogOpen, CreateEntry } from '@app/actions/price-lists';
 
 const mapStateToProps = (state: StoreState): StateProps => {
   const { isAddEntryDialogOpen } = state.PriceLists;
@@ -12,7 +13,8 @@ const mapStateToProps = (state: StoreState): StateProps => {
 
 const mapDispatchToProps = (dispatch: Dispatch<Actions>): DispatchProps => {
   return {
-    changeIsAddEntryDialogOpen: (isDialogOpen: boolean) => dispatch(ChangeIsAddEntryDialogOpen(isDialogOpen))
+    changeIsAddEntryDialogOpen: (isDialogOpen: boolean) => dispatch(ChangeIsAddEntryDialogOpen(isDialogOpen)),
+    createEntry: (entry: PriceListEntry) => dispatch(CreateEntry(entry))
   };
 };
 

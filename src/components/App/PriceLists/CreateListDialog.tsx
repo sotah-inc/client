@@ -2,7 +2,8 @@ import * as React from 'react';
 import { Dialog, Breadcrumb } from '@blueprintjs/core';
 
 import CreateListForm from '@app/containers/App/PriceLists/CreateListDialog/CreateListForm';
-import { CreateListStep } from '@app/types/price-lists';
+import CreateEntryForm from '@app/containers/App/PriceLists/CreateEntryForm';
+import { CreateListStep, PriceListEntry } from '@app/types/price-lists';
 
 export type StateProps = {
   isAddListDialogOpen: boolean
@@ -73,6 +74,10 @@ export class CreateListDialog extends React.Component<Props, State> {
     );
   }
 
+  onCreateEntryFormComplete(entry: PriceListEntry) {
+    console.log(entry);
+  }
+
   renderCreateEntriesForm() {
     const { createListStep } = this.state;
 
@@ -81,7 +86,9 @@ export class CreateListDialog extends React.Component<Props, State> {
     }
 
     return (
-      <p>wew lad</p>
+      <CreateEntryForm onComplete={(v) => this.onCreateEntryFormComplete(v)}>
+        {this.renderNav()}
+      </CreateEntryForm>
     );
   }
 

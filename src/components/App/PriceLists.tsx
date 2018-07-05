@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Dialog } from '@blueprintjs/core';
 
+import { PriceListEntry } from '@app/types/price-lists';
 import CreateListDialog from '@app/containers/App/PriceLists/CreateListDialog';
 import CreateEntryForm from '@app/containers/App/PriceLists/CreateEntryForm';
 import ActionBar from '@app/containers/App/PriceLists/ActionBar';
@@ -14,6 +15,7 @@ export type StateProps = {
 
 export type DispatchProps = {
   changeIsAddEntryDialogOpen: (isDialogOpen: boolean) => void
+  createEntry: (entry: PriceListEntry) => void
 };
 
 export type OwnProps = {};
@@ -23,6 +25,10 @@ export type Props = Readonly<StateProps & DispatchProps & OwnProps>;
 export class PriceLists extends React.Component<Props> {
   toggleEntryDialog() {
     this.props.changeIsAddEntryDialogOpen(!this.props.isAddEntryDialogOpen);
+  }
+
+  onCreateEntryFormComplete(entry: PriceListEntry) {
+    this.props.createEntry(entry);
   }
 
   render() {
@@ -37,7 +43,7 @@ export class PriceLists extends React.Component<Props> {
           title="New Entry"
           icon="manually-entered-data"
         >
-          <CreateEntryForm />
+          <CreateEntryForm onComplete={(v) => this.onCreateEntryFormComplete(v)} />
         </Dialog>
         <ActionBar />
         <Listing />

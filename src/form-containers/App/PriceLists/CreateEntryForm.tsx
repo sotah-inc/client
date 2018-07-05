@@ -6,7 +6,7 @@ import { PriceListRules } from '@app/validator-rules';
 import { PriceListEntry } from '@app/types/price-lists';
 
 interface FormProps {
-  createEntry: (entry: PriceListEntry) => void;
+  onComplete: (entry: PriceListEntry) => void;
 }
 
 const config: WithFormikConfig<FormProps, FormValues> = {
@@ -23,7 +23,7 @@ const config: WithFormikConfig<FormProps, FormValues> = {
   handleSubmit: async (values, { setSubmitting, resetForm, props }) => {
     setSubmitting(false);
     resetForm();
-    props.createEntry({
+    props.onComplete({
       item: values.item!,
       quantity: values.quantity
     });

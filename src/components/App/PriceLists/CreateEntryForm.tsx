@@ -12,11 +12,11 @@ import './CreateEntryForm.scss';
 
 export type StateProps = {};
 
-export type DispatchProps = {
-  createEntry: (entry: PriceListEntry) => void
-};
+export type DispatchProps = {};
 
-export type OwnProps = {};
+export type OwnProps = {
+  onComplete: (entry: PriceListEntry) => void
+};
 
 export type FormValues = {
   quantity: number
@@ -58,7 +58,8 @@ export class CreateEntryForm extends React.Component<Props> {
       handleSubmit,
       dirty,
       errors,
-      touched
+      touched,
+      children
     } = this.props;
     const createFormField = FormFieldGenerator({ setFieldValue });
 
@@ -67,6 +68,7 @@ export class CreateEntryForm extends React.Component<Props> {
     return (
       <form onSubmit={handleSubmit}>
         <DialogBody>
+          {children}
           <div className="pure-g">
             <div className="pure-u-1-2">
               <div style={{paddingRight: '5px'}}>
