@@ -4,19 +4,14 @@ import { FormikProps } from 'formik';
 
 import { DialogActions, DialogBody } from '@app/components/util';
 import { Generator as FormFieldGenerator } from '@app/components/util/FormField';
-import { Region, Realm } from '@app/types/global';
-import { PriceListOptions } from '@app/types/price-lists';
 
-export type StateProps = {
-  currentRegion: Region | null
-  currentRealm: Realm | null
+export type StateProps = {};
+
+export type DispatchProps = {};
+
+export type OwnProps = {
+  onComplete: (name: string) => void
 };
-
-export type DispatchProps = {
-  createList: (opts: PriceListOptions) => void
-};
-
-export type OwnProps = {};
 
 export type FormValues = {
   name: string
@@ -62,9 +57,9 @@ export class CreateListForm extends React.Component<Props> {
           />
           <Button
             type="submit"
-            text="Start List"
+            text="Next"
             intent={Intent.PRIMARY}
-            icon="edit"
+            icon="caret-right"
             disabled={isSubmitting}
           />
         </DialogActions>
