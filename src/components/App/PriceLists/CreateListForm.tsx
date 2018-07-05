@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Button, Intent } from '@blueprintjs/core';
 import { FormikProps } from 'formik';
 
-import { DialogActions } from '@app/components/util';
+import { DialogActions, DialogBody } from '@app/components/util';
 import { Generator as FormFieldGenerator } from '@app/components/util/FormField';
 import { Region, Realm } from '@app/types/global';
 import { PriceListOptions } from '@app/types/price-lists';
@@ -40,15 +40,17 @@ export class CreateListForm extends React.Component<Props> {
 
     return (
       <form onSubmit={handleSubmit}>
-        {createFormField({
-          fieldName: 'name',
-          type: 'string',
-          placeholder: '',
-          getError: () => errors.name,
-          getTouched: () => !!touched.name,
-          getValue: () => values.name,
-          autofocus: true
-        })}
+        <DialogBody>
+          {createFormField({
+            fieldName: 'name',
+            type: 'string',
+            placeholder: '',
+            getError: () => errors.name,
+            getTouched: () => !!touched.name,
+            getValue: () => values.name,
+            autofocus: true
+          })}
+        </DialogBody>
         <DialogActions>
           <Button
             text="Reset"
