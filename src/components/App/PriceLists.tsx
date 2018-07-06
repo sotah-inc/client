@@ -42,6 +42,7 @@ export class PriceLists extends React.Component<Props> {
           onClose={() => this.toggleEntryDialog()}
           title="New Entry"
           icon="manually-entered-data"
+          canOutsideClickClose={false}
         >
           <CreateEntryForm onComplete={(v: PriceListEntry) => this.onCreateEntryFormComplete(v)} />
         </Dialog>
