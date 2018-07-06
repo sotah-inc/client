@@ -31,7 +31,7 @@ export class PriceListTable extends React.Component<Props, State> {
     priceListMap: {}
   };
 
-  async componentDidMount() {
+  async reloadPricelistData() {
     const { list, region, realm } = this.props;
 
     const itemIds = list.entries.map((v) => v.item.id);
@@ -50,6 +50,16 @@ export class PriceListTable extends React.Component<Props, State> {
       getPriceListLevel: GetPriceListLevel.success,
       priceListMap: plMap.price_list
     });
+  }
+
+  async componentDidMount() {
+    await this.reloadPricelistData();
+  }
+
+  componentDidUpdate(prevProps: Props) {
+    if (this.props.list.entries.length !== prevProps.list.entries.length) {
+      this.reloadPricelistData();
+    }
   }
 
   renderEntry(index: number, entry: PriceListEntry) {
