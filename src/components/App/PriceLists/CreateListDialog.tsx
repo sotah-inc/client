@@ -88,10 +88,6 @@ export class CreateListDialog extends React.Component<Props, State> {
     });
   }
 
-  onCreateListFormMount() {
-    return;
-  }
-
   renderCreateListForm() {
     const { createListStep } = this.state;
 
@@ -102,7 +98,6 @@ export class CreateListDialog extends React.Component<Props, State> {
     return (
       <CreateListForm
         onComplete={(v: string) => this.onCreateListFormComplete(v)}
-        onMount={() => this.onCreateListFormMount()}
       >
         {this.renderNav()}
       </CreateListForm>
