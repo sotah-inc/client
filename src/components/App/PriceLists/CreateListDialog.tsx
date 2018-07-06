@@ -4,16 +4,19 @@ import { Dialog, Breadcrumb, Button, Intent } from '@blueprintjs/core';
 import CreateListForm from '@app/containers/App/PriceLists/CreateListDialog/CreateListForm';
 import CreateEntryForm from '@app/containers/App/PriceLists/CreateEntryForm';
 import { DialogBody, DialogActions, ItemPopover } from '@app/components/util';
-import { ItemClasses } from '@app/types/global';
-import { CreateListStep, PriceListEntry, CreateListCompletion } from '@app/types/price-lists';
+import { ItemClasses, Region, Realm } from '@app/types/global';
+import { CreateListStep, PriceListEntry, CreateListCompletion, PriceListOptions } from '@app/types/price-lists';
 
 export type StateProps = {
   isAddListDialogOpen: boolean
   itemClasses: ItemClasses
+  currentRegion: Region | null
+  currentRealm: Realm | null
 };
 
 export type DispatchProps = {
   changeIsAddListDialogOpen: (isDialogOpen: boolean) => void
+  createList: (opts: PriceListOptions) => void
 };
 
 export type OwnProps = {};
@@ -143,6 +146,7 @@ export class CreateListDialog extends React.Component<Props, State> {
   }
 
   renderFinish() {
+    const { createList, currentRegion, currentRealm } = this.props;
     const { createListStep, listName, entries } = this.state;
 
     if (createListStep !== CreateListStep.finish) {
@@ -173,9 +177,16 @@ export class CreateListDialog extends React.Component<Props, State> {
             icon="caret-left"
           />
           <Button
-            text={`Finish ${listName} list`}
+            text={`Finish "${listName}"`}
             intent={Intent.PRIMARY}
-            onClick={() => console.log('finish')}
+            onClick={() => {
+              createList({
+                name: listName,
+                entries,
+                region: currentRegion!,
+                realm: currentRealm!
+              });
+            }}
             icon="edit"
           />
         </DialogActions>

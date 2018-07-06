@@ -22,6 +22,7 @@ export type PriceListEntry = {
 
 export type PriceListOptions = {
   name: string
+  entries: PriceListEntry[]
   region: Region
   realm: Realm
 };
