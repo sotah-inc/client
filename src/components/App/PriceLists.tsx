@@ -43,7 +43,7 @@ export class PriceLists extends React.Component<Props> {
           title="New Entry"
           icon="manually-entered-data"
         >
-          <CreateEntryForm onComplete={(v) => this.onCreateEntryFormComplete(v)} />
+          <CreateEntryForm onComplete={(v: PriceListEntry) => this.onCreateEntryFormComplete(v)} />
         </Dialog>
         <ActionBar />
         <Listing />

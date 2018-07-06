@@ -70,6 +70,12 @@ export class CreateListDialog extends React.Component<Props, State> {
     });
   }
 
+  onCreateListFormMount() {
+    if (this.state.createListCompletion >= CreateListCompletion.list) {
+      this.setState({ createListCompletion: CreateListCompletion.initial });
+    }
+  }
+
   renderCreateListForm() {
     const { createListStep } = this.state;
 
@@ -78,7 +84,10 @@ export class CreateListDialog extends React.Component<Props, State> {
     }
 
     return (
-      <CreateListForm onComplete={(v) => this.onCreateListFormComplete(v)}>
+      <CreateListForm
+        onComplete={(v: string) => this.onCreateListFormComplete(v)}
+        onMount={() => this.onCreateListFormMount()}
+      >
         {this.renderNav()}
       </CreateListForm>
     );
@@ -96,7 +105,7 @@ export class CreateListDialog extends React.Component<Props, State> {
     }
 
     return (
-      <CreateEntryForm onComplete={(v) => this.onCreateEntryFormComplete(v)}>
+      <CreateEntryForm onComplete={(v: PriceListEntry) => this.onCreateEntryFormComplete(v)}>
         {this.renderNav()}
       </CreateEntryForm>
     );
@@ -111,6 +120,7 @@ export class CreateListDialog extends React.Component<Props, State> {
         onClose={() => this.toggleListDialog()}
         title="New Price List"
         icon="manually-entered-data"
+        canOutsideClickClose={false}
       >
         {this.renderCreateListForm()}
         {this.renderCreateEntriesForm()}

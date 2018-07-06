@@ -6,6 +6,7 @@ import { PriceListRules } from '@app/validator-rules';
 
 interface FormProps {
   onComplete: (name: string) => void;
+  onMount: () => void;
 }
 
 const config: WithFormikConfig<FormProps, FormValues> = {

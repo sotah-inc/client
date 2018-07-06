@@ -11,6 +11,7 @@ export type DispatchProps = {};
 
 export type OwnProps = {
   onComplete: (name: string) => void
+  onMount: () => void
 };
 
 export type FormValues = {
@@ -20,6 +21,10 @@ export type FormValues = {
 export type Props = Readonly<StateProps & DispatchProps & OwnProps & FormikProps<FormValues>>;
 
 export class CreateListForm extends React.Component<Props> {
+  componentDidMount() {
+    this.props.onMount();
+  }
+
   render() {
     const {
       values,
