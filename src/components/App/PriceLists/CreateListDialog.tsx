@@ -1,12 +1,15 @@
 import * as React from 'react';
-import { Dialog, Breadcrumb } from '@blueprintjs/core';
+import { Dialog, Breadcrumb, Button, Intent } from '@blueprintjs/core';
 
 import CreateListForm from '@app/containers/App/PriceLists/CreateListDialog/CreateListForm';
 import CreateEntryForm from '@app/containers/App/PriceLists/CreateEntryForm';
+import { DialogBody, DialogActions, ItemPopover } from '@app/components/util';
+import { ItemClasses } from '@app/types/global';
 import { CreateListStep, PriceListEntry, CreateListCompletion } from '@app/types/price-lists';
 
 export type StateProps = {
   isAddListDialogOpen: boolean
+  itemClasses: ItemClasses
 };
 
 export type DispatchProps = {
@@ -21,13 +24,15 @@ type State = Readonly<{
   createListStep: CreateListStep
   listName: string
   createListCompletion: CreateListCompletion
+  entries: PriceListEntry[]
 }>;
 
 export class CreateListDialog extends React.Component<Props, State> {
   state: State = {
     createListStep: CreateListStep.list,
     listName: '',
-    createListCompletion: CreateListCompletion.initial
+    createListCompletion: CreateListCompletion.initial,
+    entries: []
   };
 
   toggleListDialog() {
@@ -54,8 +59,16 @@ export class CreateListDialog extends React.Component<Props, State> {
           <Breadcrumb
             text="Entry"
             disabled={createListCompletion < CreateListCompletion.list}
-            onClick={() => this.onNavClick(CreateListStep.entries)}
+            onClick={() => this.onNavClick(CreateListStep.entry)}
             className={createListCompletion === CreateListCompletion.list ? 'pt-breadcrumb-current' : ''}
+          />
+        </li>
+        <li>
+          <Breadcrumb
+            text="Finish"
+            disabled={createListCompletion < CreateListCompletion.entry}
+            onClick={() => this.onNavClick(CreateListStep.finish)}
+            className={createListCompletion === CreateListCompletion.entry ? 'pt-breadcrumb-current' : ''}
           />
         </li>
       </ul>
@@ -63,17 +76,20 @@ export class CreateListDialog extends React.Component<Props, State> {
   }
 
   onCreateListFormComplete(name: string) {
+    let createListCompletion = CreateListCompletion.list;
+    if (this.state.createListCompletion > createListCompletion)  {
+      createListCompletion = this.state.createListCompletion;
+    }
+
     this.setState({
       listName: name,
-      createListStep: CreateListStep.entries,
-      createListCompletion: CreateListCompletion.list
+      createListStep: CreateListStep.entry,
+      createListCompletion
     });
   }
 
   onCreateListFormMount() {
-    if (this.state.createListCompletion >= CreateListCompletion.list) {
-      this.setState({ createListCompletion: CreateListCompletion.initial });
-    }
+    return;
   }
 
   renderCreateListForm() {
@@ -94,13 +110,17 @@ export class CreateListDialog extends React.Component<Props, State> {
   }
 
   onCreateEntryFormComplete(entry: PriceListEntry) {
-    console.log(entry);
+    this.setState({
+      entries: [...this.state.entries, entry],
+      createListStep: CreateListStep.finish,
+      createListCompletion: CreateListCompletion.entry
+    });
   }
 
   renderCreateEntriesForm() {
     const { createListStep } = this.state;
 
-    if (createListStep !== CreateListStep.entries) {
+    if (createListStep !== CreateListStep.entry) {
       return;
     }
 
@@ -108,6 +128,63 @@ export class CreateListDialog extends React.Component<Props, State> {
       <CreateEntryForm onComplete={(v: PriceListEntry) => this.onCreateEntryFormComplete(v)}>
         {this.renderNav()}
       </CreateEntryForm>
+    );
+  }
+
+  renderEntry(index: number, entry: PriceListEntry) {
+    const { itemClasses } = this.props;
+
+    return (
+      <tr key={index}>
+        <td>
+          <ItemPopover
+            item={entry.item}
+            itemClasses={itemClasses}
+          />
+        </td>
+        <td>x{entry.quantity}</td>
+      </tr>
+    );
+  }
+
+  renderFinish() {
+    const { createListStep, listName, entries } = this.state;
+
+    if (createListStep !== CreateListStep.finish) {
+      return;
+    }
+
+    return (
+      <>
+        <DialogBody>
+          {this.renderNav()}
+          <table className="pt-html-table pt-html-table-bordered pt-small create-list-dialog-table">
+            <thead>
+              <tr>
+                <th>Item</th>
+                <th>Quantity</th>
+              </tr>
+            </thead>
+            <tbody>
+              {entries.map((v, i) => this.renderEntry(i, v))}
+            </tbody>
+          </table>
+        </DialogBody>
+        <DialogActions>
+          <Button
+            text="Add More Entries"
+            intent={Intent.NONE}
+            onClick={() => this.setState({ createListStep: CreateListStep.entry })}
+            icon="caret-left"
+          />
+          <Button
+            text={`Finish ${listName} list`}
+            intent={Intent.PRIMARY}
+            onClick={() => console.log('finish')}
+            icon="edit"
+          />
+        </DialogActions>
+      </>
     );
   }
 
@@ -124,6 +201,7 @@ export class CreateListDialog extends React.Component<Props, State> {
       >
         {this.renderCreateListForm()}
         {this.renderCreateEntriesForm()}
+        {this.renderFinish()}
       </Dialog>
     );
   }

@@ -9,9 +9,9 @@ export type PriceListsState = {
   isAddEntryDialogOpen: boolean
 };
 
-export enum CreateListStep { list, entries }
+export enum CreateListStep { list, entry, finish }
 
-export enum CreateListCompletion { initial, list, entries }
+export enum CreateListCompletion { initial, list, entry }
 
 export enum EntryCreateLevel { initial, success, failure }
 
