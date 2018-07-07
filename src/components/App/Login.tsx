@@ -62,7 +62,8 @@ export class Login extends React.Component<Props> {
             placeholder: 'test@example.com',
             getError: () => errors.email,
             getTouched: () => !!touched.email,
-            getValue: () => values.email
+            getValue: () => values.email,
+            autofocus: true
           })}
           {createFormField({
             fieldName: 'password',

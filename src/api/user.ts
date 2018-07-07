@@ -44,3 +44,26 @@ export const loginUser = async (email: string, password: string): Promise<LoginU
 
   return { profile: await res.json(), errors: null };
 };
+
+export type ReloadUserResponse = {
+  user: User | null
+  error: string | null
+};
+
+export const reloadUser = async (token: string): Promise<ReloadUserResponse> => {
+  const res = await fetch(`${apiEndpoint}/user`, {
+    method: 'GET',
+    headers: new Headers({
+      'content-type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    })
+  });
+  if (res.status === HTTPStatus.UNAUTHORIZED) {
+    return {
+      user: null,
+      error: 'Unauthorized'
+    };
+  }
+
+  return { user: await res.json(), error: null };
+};

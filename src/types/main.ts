@@ -3,6 +3,7 @@ import { Profile, Regions, Region, Realms, Realm } from './global';
 export type MainState = {
   fetchPingLevel: FetchPingLevel
   profile: Profile | null
+  preloadedToken: string
   isRegistered: boolean
   isLoggedIn: boolean
   fetchRegionLevel: FetchRegionLevel
@@ -22,6 +23,7 @@ export enum FetchRealmLevel { initial, fetching, success, failure }
 export const defaultMainState: MainState = {
   fetchPingLevel: FetchPingLevel.initial,
   profile: null,
+  preloadedToken: '',
   isRegistered: false,
   isLoggedIn: false,
   fetchRegionLevel: FetchRegionLevel.initial,

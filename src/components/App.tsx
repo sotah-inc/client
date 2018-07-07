@@ -19,10 +19,12 @@ export type StateProps = {
   currentRegion: Region | null
   fetchRealmLevel: FetchRealmLevel
   currentRealm: Realm | null
+  preloadedToken: string
 };
 
 export type DispatchProps = {
   onLoad: () => void
+  reloadUser: (token: string) => void
   refreshRegions: () => void
   refreshRealms: (region: Region) => void
 };
@@ -33,7 +35,13 @@ export type Props = Readonly<StateProps & DispatchProps & OwnProps>;
 
 export class App extends React.Component<Props> {
   componentDidMount() {
-    this.props.onLoad();
+    const { onLoad, preloadedToken, reloadUser } = this.props;
+
+    onLoad();
+
+    if (preloadedToken.length > 0) {
+      reloadUser(preloadedToken);
+    }
   }
 
   componentDidUpdate(prevProps: Props) {

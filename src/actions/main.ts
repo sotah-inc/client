@@ -2,7 +2,8 @@ import { Dispatch } from 'redux';
 
 import { createAction, ActionsUnion } from './helpers';
 import { Profile, Region, Realm } from '../types/global';
-import { getPing, getStatus, getRegions } from '../api/data';
+import { getPing, getStatus, getRegions,  } from '../api/data';
+import { ReloadUserResponse, reloadUser } from '../api/user';
 
 export const REQUEST_PING = 'REQUEST_PING';
 export const RECEIVE_PING = 'RECEIVE_PING';
@@ -21,6 +22,18 @@ export const UserRegister = (payload: Profile) => createAction(USER_REGISTER, pa
 
 export const USER_LOGIN = 'USER_LOGIN';
 export const UserLogin = (payload: Profile) => createAction(USER_LOGIN, payload);
+
+export const REQUEST_USER_RELOAD = 'REQUEST_USER_RELOAD';
+export const RECEIVE_USER_RELOAD = 'RECEIVE_USER_RELOAD';
+const RequestUserReload = () => createAction(REQUEST_USER_RELOAD);
+const ReceiveUserReload = (payload: ReloadUserResponse) => createAction(RECEIVE_USER_RELOAD, payload);
+type FetchUserReloadType = ReturnType<typeof RequestUserReload | typeof ReceiveUserReload>;
+export const FetchUserReload = (token: string) => {
+  return async (dispatch: Dispatch<FetchUserReloadType>) => {
+    dispatch(RequestUserReload());
+    dispatch(ReceiveUserReload(await reloadUser(token)));
+  };
+};
 
 export const REQUEST_REGIONS = 'REQUEST_REGIONS';
 export const RECEIVE_REGIONS = 'RECEIVE_REGIONS';
@@ -55,6 +68,7 @@ export const RealmChange = (payload: Realm) => createAction(REALM_CHANGE, payloa
 export const MainActions = {
   RequestPing, ReceivePing,
   UserRegister, UserLogin,
+  RequestUserReload, ReceiveUserReload,
   RequestRegions, ReceiveRegions, RegionChange,
   RequestRealms, ReceiveRealms, RealmChange
 };

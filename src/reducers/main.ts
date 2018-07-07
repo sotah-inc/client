@@ -9,8 +9,7 @@ import { Regions, Realms } from '@app/types/global';
 import {
   MainActions,
   REQUEST_PING, RECEIVE_PING,
-  USER_REGISTER,
-  USER_LOGIN,
+  USER_REGISTER, USER_LOGIN, RECEIVE_USER_RELOAD,
   REQUEST_REGIONS, RECEIVE_REGIONS,
   REGION_CHANGE,
   REQUEST_REALMS, RECEIVE_REALMS,
@@ -36,6 +35,12 @@ export const main = (state: State, action: MainActions): State => {
       return { ...state, profile: action.payload, isRegistered: true };
     case USER_LOGIN:
       return { ...state, profile: action.payload, isLoggedIn: true };
+    case RECEIVE_USER_RELOAD:
+      if (action.payload.error !== null) {
+        return { ...state };
+      }
+
+      return { ...state, profile: { user: action.payload.user!, token: state.preloadedToken } };
     case REQUEST_REGIONS:
       return { ...state, fetchRegionLevel: FetchRegionLevel.fetching };
     case RECEIVE_REGIONS:
