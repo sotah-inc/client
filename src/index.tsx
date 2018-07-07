@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, Middleware } from 'redux';
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 import { BrowserRouter as Router } from 'react-router-dom';
@@ -15,7 +15,10 @@ const ayy: StoreState = {
   Main: defaultMainState,
   PriceLists: defaultPriceListsState
 };
-const store = createStore<StoreState>(rootReducer, ayy, applyMiddleware(thunk));
+
+const localStorageMiddleware: Middleware = () => next => action => next(action);
+
+const store = createStore<StoreState>(rootReducer, ayy, applyMiddleware(localStorageMiddleware, thunk));
 
 ReactDOM.render(
   <Provider store={store}>
