@@ -7,8 +7,10 @@ import { Profile } from '@app/types/global';
 import { UserRules } from '@app/validator-rules';
 
 interface FormProps {
-  onUserLogin: (payload: Profile) => void;
   isLoggedIn: boolean;
+  isLoginDialogOpen: boolean;
+  onUserLogin: (payload: Profile) => void;
+  changeIsLoginDialogOpen: (isLoginDialogOpen: boolean) => void;
 }
 
 const config: WithFormikConfig<FormProps, FormValues> = {

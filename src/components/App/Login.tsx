@@ -8,10 +8,12 @@ import { Generator as FormFieldGenerator } from '../util/FormField';
 
 export type StateProps = {
   isLoggedIn: boolean
+  isLoginDialogOpen: boolean
 };
 
 export type DispatchProps = {
   onUserLogin: (payload: Profile) => void
+  changeIsLoginDialogOpen: (isLoginDialogOpen: boolean) => void
 };
 
 export type OwnProps = {};
@@ -23,20 +25,12 @@ export type FormValues = {
 
 export type Props = Readonly<StateProps & DispatchProps & OwnProps & FormikProps<FormValues>>;
 
-type State = Readonly<{
-  isDialogOpen: boolean
-}>;
-
 export class Login extends React.Component<Props> {
-  state: State = {
-    isDialogOpen: false
-  };
-
   componentDidUpdate() {
     const { isLoggedIn } = this.props;
 
     if (isLoggedIn) {
-      this.setState({ isDialogOpen: false });
+      this.toggleDialog();
     }
   }
 
@@ -93,15 +87,17 @@ export class Login extends React.Component<Props> {
   }
 
   toggleDialog() {
-    this.setState({ isDialogOpen: !this.state.isDialogOpen });
+    this.props.changeIsLoginDialogOpen(!this.props.isLoginDialogOpen);
   }
 
   render() {
+    const { isLoginDialogOpen } = this.props;
+
     return (
       <>
         <Button onClick={() => this.toggleDialog()} type="button" icon="log-in" text="Login" />
         <Dialog
-          isOpen={this.state.isDialogOpen}
+          isOpen={isLoginDialogOpen}
           onClose={() => this.toggleDialog()}
           title="Login"
           icon="manually-entered-data"

@@ -65,12 +65,16 @@ export const FetchRealms = (region: Region) => {
 export const REALM_CHANGE = 'REALM_CHANGE';
 export const RealmChange = (payload: Realm) => createAction(REALM_CHANGE, payload);
 
+export const CHANGE_IS_LOGIN_DIALOG_OPEN = 'CHANGE_IS_LOGIN_DIALOG_OPEN';
+export const ChangeIsLoginDialogOpen = (payload: boolean) => createAction(CHANGE_IS_LOGIN_DIALOG_OPEN, payload);
+
 export const MainActions = {
   RequestPing, ReceivePing,
   UserRegister, UserLogin,
   RequestUserReload, ReceiveUserReload,
   RequestRegions, ReceiveRegions, RegionChange,
-  RequestRealms, ReceiveRealms, RealmChange
+  RequestRealms, ReceiveRealms, RealmChange,
+  ChangeIsLoginDialogOpen
 };
 
 export type MainActions = ActionsUnion<typeof MainActions>;

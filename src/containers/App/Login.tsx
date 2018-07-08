@@ -1,19 +1,21 @@
 import { connect, Dispatch } from 'react-redux';
 
-import { StateProps, DispatchProps, OwnProps } from '@app/components/App/Login';
-import Login from '@app/form-containers/App/Login';
 import { StoreState } from '@app/types';
 import { Profile } from '@app/types/global';
+import { StateProps, DispatchProps, OwnProps } from '@app/components/App/Login';
+import Login from '@app/form-containers/App/Login';
 import { Actions } from '@app/actions';
-import { UserLogin } from '@app/actions/main';
+import { UserLogin, ChangeIsLoginDialogOpen } from '@app/actions/main';
 
 const mapStateToProps = (state: StoreState): StateProps => {
-  return { isLoggedIn: state.Main.isLoggedIn };
+  const { isLoggedIn, isLoginDialogOpen } = state.Main;
+  return { isLoggedIn, isLoginDialogOpen };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<Actions>): DispatchProps => {
   return {
-    onUserLogin: (payload: Profile) => dispatch(UserLogin(payload))
+    onUserLogin: (payload: Profile) => dispatch(UserLogin(payload)),
+    changeIsLoginDialogOpen: (isLoginDialogOpen: boolean) => dispatch(ChangeIsLoginDialogOpen(isLoginDialogOpen))
   };
 };
 

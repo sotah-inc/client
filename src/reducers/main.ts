@@ -11,10 +11,9 @@ import {
   MainActions,
   REQUEST_PING, RECEIVE_PING,
   USER_REGISTER, USER_LOGIN, RECEIVE_USER_RELOAD,
-  REQUEST_REGIONS, RECEIVE_REGIONS,
-  REGION_CHANGE,
-  REQUEST_REALMS, RECEIVE_REALMS,
-  REALM_CHANGE
+  REQUEST_REGIONS, RECEIVE_REGIONS, REGION_CHANGE,
+  REQUEST_REALMS, RECEIVE_REALMS, REALM_CHANGE,
+  CHANGE_IS_LOGIN_DIALOG_OPEN
 } from '@app/actions/main';
 
 type State = Readonly<MainState> | undefined;
@@ -75,6 +74,8 @@ export const main = (state: State, action: MainActions): State => {
       return { ...state, fetchRealmLevel: FetchRealmLevel.success, realms, currentRealm };
     case REALM_CHANGE:
       return { ...state, currentRealm: action.payload };
+    case CHANGE_IS_LOGIN_DIALOG_OPEN:
+      return { ...state, isLoginDialogOpen: action.payload };
     default:
       return state;
   }
