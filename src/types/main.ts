@@ -12,6 +12,8 @@ export type MainState = {
   fetchRealmLevel: FetchRealmLevel
   realms: Realms
   currentRealm: Realm | null
+  authLevel: AuthLevel
+  isLoginDialogOpen: boolean
 };
 
 export enum FetchPingLevel { initial, fetching, success, failure }
@@ -19,6 +21,8 @@ export enum FetchPingLevel { initial, fetching, success, failure }
 export enum FetchRegionLevel { initial, fetching, success, failure }
 
 export enum FetchRealmLevel { initial, fetching, success, failure }
+
+export enum AuthLevel { initial, authenticated, unauthenticated }
 
 export const defaultMainState: MainState = {
   fetchPingLevel: FetchPingLevel.initial,
@@ -31,5 +35,7 @@ export const defaultMainState: MainState = {
   currentRegion: null,
   fetchRealmLevel: FetchRealmLevel.initial,
   realms: {},
-  currentRealm: null
+  currentRealm: null,
+  authLevel: AuthLevel.initial,
+  isLoginDialogOpen: false
 };

@@ -3,6 +3,7 @@ import {
   FetchPingLevel,
   FetchRegionLevel,
   FetchRealmLevel,
+  AuthLevel,
   defaultMainState
 } from '@app/types/main';
 import { Regions, Realms } from '@app/types/global';
@@ -37,7 +38,7 @@ export const main = (state: State, action: MainActions): State => {
       return { ...state, profile: action.payload, isLoggedIn: true };
     case RECEIVE_USER_RELOAD:
       if (action.payload.error !== null) {
-        return { ...state };
+        return { ...state, authLevel: AuthLevel.unauthenticated };
       }
 
       return { ...state, profile: { user: action.payload.user!, token: state.preloadedToken } };

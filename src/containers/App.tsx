@@ -13,7 +13,8 @@ const mapStateToProps = (state: StoreState): StateProps => {
     currentRegion,
     fetchRealmLevel,
     currentRealm,
-    preloadedToken
+    preloadedToken,
+    authLevel
   } = state.Main;
   return {
     fetchPingLevel, 
@@ -21,7 +22,8 @@ const mapStateToProps = (state: StoreState): StateProps => {
     currentRegion,
     fetchRealmLevel,
     currentRealm,
-    preloadedToken
+    preloadedToken,
+    authLevel
   };
 };
 
