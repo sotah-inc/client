@@ -31,11 +31,12 @@ export const main = (state: State, action: MainActions): State => {
       if (action.payload === false) {
         return { ...state, fetchPingLevel: FetchPingLevel.failure };
       }
+
       return { ...state, fetchPingLevel: FetchPingLevel.success };
     case USER_REGISTER:
-      return { ...state, profile: action.payload, isRegistered: true };
+      return { ...state, profile: action.payload, isRegistered: true, authLevel: AuthLevel.authenticated };
     case USER_LOGIN:
-      return { ...state, profile: action.payload, isLoggedIn: true };
+      return { ...state, profile: action.payload, isLoggedIn: true, authLevel: AuthLevel.authenticated };
     case RECEIVE_USER_RELOAD:
       if (action.payload.error !== null) {
         return { ...state, authLevel: AuthLevel.unauthenticated };
