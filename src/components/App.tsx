@@ -24,6 +24,7 @@ export type StateProps = {
   currentRealm: Realm | null
   preloadedToken: string
   authLevel: AuthLevel
+  isLoginDialogOpen: boolean
 };
 
 export type DispatchProps = {
@@ -31,6 +32,7 @@ export type DispatchProps = {
   reloadUser: (token: string) => void
   refreshRegions: () => void
   refreshRealms: (region: Region) => void
+  changeIsLoginDialogOpen: (isLoginDialogOpen: boolean) => void
 };
 
 export interface OwnProps extends RouteComponentProps<{}> {}
@@ -58,7 +60,9 @@ export class App extends React.Component<Props> {
       refreshRegions,
       fetchRealmLevel,
       refreshRealms,
-      authLevel
+      authLevel,
+      isLoginDialogOpen,
+      changeIsLoginDialogOpen
     } = this.props;
 
     if (prevProps.authLevel !== authLevel) {
@@ -74,7 +78,8 @@ export class App extends React.Component<Props> {
               action: {
                 text: 'Login',
                 intent: Intent.PRIMARY,
-                icon: 'log-in'
+                icon: 'log-in',
+                onClick: () => changeIsLoginDialogOpen(!isLoginDialogOpen)
               }
             });
           }
