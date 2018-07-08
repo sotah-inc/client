@@ -66,6 +66,8 @@ export class App extends React.Component<Props> {
     } = this.props;
 
     if (prevProps.authLevel !== authLevel) {
+      console.log(AuthLevel[prevProps.authLevel], AuthLevel[authLevel]);
+
       switch (authLevel) {
         case AuthLevel.unauthenticated:
           if (this.didHandleUnauth === false) {
@@ -88,7 +90,7 @@ export class App extends React.Component<Props> {
         case AuthLevel.authenticated:
           this.didHandleUnauth = false;
 
-          if (prevProps.authLevel === AuthLevel.unauthenticated) {
+          if ([AuthLevel.unauthenticated, AuthLevel.initial].indexOf(prevProps.authLevel)) {
             AppToaster.show({
               message: 'You are logged in.',
               intent: Intent.SUCCESS,

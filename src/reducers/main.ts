@@ -41,7 +41,11 @@ export const main = (state: State, action: MainActions): State => {
         return { ...state, authLevel: AuthLevel.unauthenticated };
       }
 
-      return { ...state, profile: { user: action.payload.user!, token: state.preloadedToken } };
+      return {
+        ...state,
+        profile: { user: action.payload.user!, token: state.preloadedToken },
+        authLevel: AuthLevel.authenticated
+      };
     case REQUEST_REGIONS:
       return { ...state, fetchRegionLevel: FetchRegionLevel.fetching };
     case RECEIVE_REGIONS:
