@@ -24,7 +24,8 @@ const mapStateToProps = (state: StoreState): StateProps => {
     authLevel,
     isLoginDialogOpen,
     fetchUserPreferencesLevel,
-    userPreferences
+    userPreferences,
+    profile
   } = state.Main;
   return {
     fetchPingLevel, 
@@ -36,7 +37,8 @@ const mapStateToProps = (state: StoreState): StateProps => {
     authLevel,
     isLoginDialogOpen,
     fetchUserPreferencesLevel,
-    userPreferences
+    userPreferences,
+    profile
   };
 };
 

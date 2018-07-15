@@ -2,7 +2,7 @@ import * as React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import { Intent } from '@blueprintjs/core';
 
-import { Region, Realm, UserPreferences } from '@app/types/global';
+import { Region, Realm, UserPreferences, Profile } from '@app/types/global';
 import {
   FetchPingLevel,
   FetchRegionLevel,
@@ -28,6 +28,7 @@ export type StateProps = {
   isLoginDialogOpen: boolean
   fetchUserPreferencesLevel: FetchUserPreferencesLevel
   userPreferences: UserPreferences | null
+  profile: Profile | null
 };
 
 export type DispatchProps = {
@@ -68,9 +69,9 @@ export class App extends React.Component<Props> {
       isLoginDialogOpen,
       fetchUserPreferencesLevel,
       changeIsLoginDialogOpen,
-      preloadedToken,
       loadUserPreferences,
-      userPreferences
+      userPreferences,
+      profile
     } = this.props;
 
     if (prevProps.authLevel !== authLevel) {
@@ -107,7 +108,7 @@ export class App extends React.Component<Props> {
           });
 
           if (fetchUserPreferencesLevel === FetchUserPreferencesLevel.initial) {
-            loadUserPreferences(preloadedToken);
+            loadUserPreferences(profile!.token);
           }
   
           break;
