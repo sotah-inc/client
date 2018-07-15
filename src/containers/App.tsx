@@ -4,7 +4,14 @@ import { StoreState } from '@app/types';
 import { Region } from '@app/types/global';
 import { App, StateProps, DispatchProps, OwnProps } from '@app/components/App';
 import { Actions } from '@app/actions';
-import { FetchPing, FetchRegions, FetchRealms, FetchUserReload, ChangeIsLoginDialogOpen } from '@app/actions/main';
+import {
+  FetchPing,
+  FetchRegions,
+  FetchRealms,
+  FetchUserReload,
+  ChangeIsLoginDialogOpen,
+  FetchUserPreferences
+} from '@app/actions/main';
 
 const mapStateToProps = (state: StoreState): StateProps => {
   const {
@@ -15,7 +22,9 @@ const mapStateToProps = (state: StoreState): StateProps => {
     currentRealm,
     preloadedToken,
     authLevel,
-    isLoginDialogOpen
+    isLoginDialogOpen,
+    fetchUserPreferencesLevel,
+    userPreferences
   } = state.Main;
   return {
     fetchPingLevel, 
@@ -25,7 +34,9 @@ const mapStateToProps = (state: StoreState): StateProps => {
     currentRealm,
     preloadedToken,
     authLevel,
-    isLoginDialogOpen
+    isLoginDialogOpen,
+    fetchUserPreferencesLevel,
+    userPreferences
   };
 };
 
@@ -35,7 +46,8 @@ const mapDispatchToProps = (dispatch: Dispatch<Actions>): DispatchProps => {
     reloadUser: (token: string) => dispatch(FetchUserReload(token)),
     refreshRegions: () => dispatch(FetchRegions()),
     refreshRealms: (region: Region) => dispatch(FetchRealms(region)),
-    changeIsLoginDialogOpen: (isLoginDialogOpen: boolean) => dispatch(ChangeIsLoginDialogOpen(isLoginDialogOpen))
+    changeIsLoginDialogOpen: (isLoginDialogOpen: boolean) => dispatch(ChangeIsLoginDialogOpen(isLoginDialogOpen)),
+    loadUserPreferences: (token: string) => dispatch(FetchUserPreferences(token))
   };
 };
 

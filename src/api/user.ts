@@ -81,11 +81,19 @@ export const getPreferences = async (token: string): Promise<GetPreferencesRespo
       'Authorization': `Bearer ${token}`
     })
   });
-  if (res.status === HTTPStatus.UNAUTHORIZED) {
-    return {
-      preference: null,
-      error: 'Unauthorized'
-    };
+  switch (res.status) {
+    case HTTPStatus.UNAUTHORIZED:
+      return {
+        preference: null,
+        error: 'Unauthorized'
+      };
+    case HTTPStatus.NOT_FOUND:
+      return {
+        preference: null,
+        error: null
+      };
+    default:
+      break;
   }
 
   return { preference: (await res.json()).preference, error: null };

@@ -2,12 +2,13 @@ import * as React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import { Intent } from '@blueprintjs/core';
 
-import { Region, Realm } from '@app/types/global';
+import { Region, Realm, UserPreferences } from '@app/types/global';
 import {
   FetchPingLevel,
   FetchRegionLevel,
   FetchRealmLevel,
-  AuthLevel
+  AuthLevel,
+  FetchUserPreferencesLevel
 } from '@app/types/main';
 import Topbar from '@app/route-containers/App/Topbar';
 import { Content } from '@app/components/App/Content';
@@ -25,6 +26,8 @@ export type StateProps = {
   preloadedToken: string
   authLevel: AuthLevel
   isLoginDialogOpen: boolean
+  fetchUserPreferencesLevel: FetchUserPreferencesLevel
+  userPreferences: UserPreferences | null
 };
 
 export type DispatchProps = {
@@ -33,6 +36,7 @@ export type DispatchProps = {
   refreshRegions: () => void
   refreshRealms: (region: Region) => void
   changeIsLoginDialogOpen: (isLoginDialogOpen: boolean) => void
+  loadUserPreferences: (token: string) => void
 };
 
 export interface OwnProps extends RouteComponentProps<{}> {}
@@ -62,7 +66,11 @@ export class App extends React.Component<Props> {
       refreshRealms,
       authLevel,
       isLoginDialogOpen,
-      changeIsLoginDialogOpen
+      fetchUserPreferencesLevel,
+      changeIsLoginDialogOpen,
+      preloadedToken,
+      loadUserPreferences,
+      userPreferences
     } = this.props;
 
     if (prevProps.authLevel !== authLevel) {
@@ -97,6 +105,37 @@ export class App extends React.Component<Props> {
             intent: Intent.SUCCESS,
             icon: 'user'
           });
+
+          if (fetchUserPreferencesLevel === FetchUserPreferencesLevel.initial) {
+            loadUserPreferences(preloadedToken);
+          }
+  
+          break;
+        default:
+          break;
+      }
+    }
+
+    if (fetchUserPreferencesLevel !== prevProps.fetchUserPreferencesLevel) {
+      switch (fetchUserPreferencesLevel) {
+        case FetchUserPreferencesLevel.failure:
+          AppToaster.show({
+            message: 'There was an error loading your preferences.',
+            intent: Intent.WARNING,
+            icon: 'user'
+          });
+  
+          break;
+        case FetchUserPreferencesLevel.success:
+          if (userPreferences === null) {
+            AppToaster.show({
+              message: 'You have no preferences.',
+              intent: Intent.WARNING,
+              icon: 'user'
+            });
+  
+            break;
+          }
   
           break;
         default:
