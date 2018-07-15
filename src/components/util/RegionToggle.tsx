@@ -1,17 +1,23 @@
 import * as React from 'react';
 import { Spinner, Button, Popover, Position, Menu, MenuItem, Intent } from '@blueprintjs/core';
 
-import { Region, Regions } from '@app/types/global';
-import { FetchRegionLevel } from '@app/types/main';
+import { Region, Regions, UserPreferences, Profile } from '@app/types/global';
+import { FetchRegionLevel, AuthLevel } from '@app/types/main';
+import { CreatePreferencesRequestBody } from '@app/api/user';
+import { didRegionChange } from '@app/util';
 
 export type StateProps = {
   currentRegion: Region | null
   regions: Regions
   fetchRegionLevel: FetchRegionLevel
+  userPreferences: UserPreferences | null
+  authLevel: AuthLevel
+  profile: Profile | null
 };
 
 export type DispatchProps = {
   onRegionChange: (region: Region) => void
+  createUserPreferences: (token: string, body: CreatePreferencesRequestBody) => void
 };
 
 export type OwnProps = {};
@@ -19,6 +25,26 @@ export type OwnProps = {};
 type Props = Readonly<StateProps & DispatchProps & OwnProps>;
 
 export class RegionToggle extends React.Component<Props> {
+  componentDidUpdate(prevProps: Props) {
+    const {
+      currentRegion,
+      authLevel,
+      userPreferences,
+      profile,
+      createUserPreferences
+    } = this.props;
+
+    if (currentRegion !== null) {
+      if (didRegionChange(prevProps.currentRegion, currentRegion)) {
+        if (authLevel === AuthLevel.authenticated) {
+          if (userPreferences === null) {
+            createUserPreferences(profile!.token, { current_region: currentRegion.name });
+          }
+        }
+      }
+    }
+  }
+
   renderMenuItem(region: Region, index: number) {
     let className = '';
     if (this.props.currentRegion !== null && region.name === this.props.currentRegion.name) {
