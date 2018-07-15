@@ -232,6 +232,13 @@ export type Profile = {
   token: string
 };
 
+export type UserPreferences = {
+  id: number
+  user_id: number
+  current_region: RegionName | null
+  current_realm: RealmSlug | null
+};
+
 // item-classes
 export type SubItemClass = {
   subclass: number

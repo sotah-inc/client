@@ -3,7 +3,12 @@ import { Dispatch } from 'redux';
 import { createAction, ActionsUnion } from './helpers';
 import { Profile, Region, Realm } from '../types/global';
 import { getPing, getStatus, getRegions,  } from '../api/data';
-import { ReloadUserResponse, reloadUser } from '../api/user';
+import {
+  ReloadUserResponse,
+  reloadUser,
+  getPreferences,
+  GetPreferencesResponse
+} from '../api/user';
 
 export const REQUEST_PING = 'REQUEST_PING';
 export const RECEIVE_PING = 'RECEIVE_PING';
@@ -32,6 +37,18 @@ export const FetchUserReload = (token: string) => {
   return async (dispatch: Dispatch<FetchUserReloadType>) => {
     dispatch(RequestUserReload());
     dispatch(ReceiveUserReload(await reloadUser(token)));
+  };
+};
+
+export const REQUEST_USER_PREFERENCES = 'REQUEST_USER_PREFERENCES';
+export const RECEIVE_USER_PREFERENCES = 'RECEIVE_USER_PREFERENCES';
+const RequestUserPreferences = () => createAction(REQUEST_USER_PREFERENCES);
+const ReceiveUserPreferences = (payload: GetPreferencesResponse) => createAction(RECEIVE_USER_PREFERENCES, payload);
+type FetchUserPreferencesType = ReturnType<typeof RequestUserPreferences | typeof ReceiveUserPreferences>;
+export const FetchUserPreferences = (token: string) => {
+  return async (dispatch: Dispatch<FetchUserPreferencesType>) => {
+    dispatch(RequestUserPreferences());
+    dispatch(ReceiveUserPreferences(await getPreferences(token)));
   };
 };
 
@@ -72,6 +89,7 @@ export const MainActions = {
   RequestPing, ReceivePing,
   UserRegister, UserLogin,
   RequestUserReload, ReceiveUserReload,
+  RequestUserPreferences, ReceiveUserPreferences,
   RequestRegions, ReceiveRegions, RegionChange,
   RequestRealms, ReceiveRealms, RealmChange,
   ChangeIsLoginDialogOpen
