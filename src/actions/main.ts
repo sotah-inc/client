@@ -9,7 +9,9 @@ import {
   getPreferences,
   GetPreferencesResponse,
   CreatePreferencesRequestBody,
-  createPreferences
+  createPreferences,
+  UpdatePreferencesRequestBody,
+  updatePreferences
 } from '../api/user';
 
 export const REQUEST_PING = 'REQUEST_PING';
@@ -67,6 +69,22 @@ export const FetchUserPreferencesCreate = (token: string, body: CreatePreference
   return async (dispatch: Dispatch<FetchUserPreferencesCreateType>) => {
     dispatch(RequestUserPreferencesCreate());
     dispatch(ReceiveUserPreferencesCreate(await createPreferences(token, body)));
+  };
+};
+
+export const REQUEST_USER_PREFERENCES_UPDATE = 'REQUEST_USER_PREFERENCES_UPDATE';
+export const RECEIVE_USER_PREFERENCES_UPDATE = 'RECEIVE_USER_PREFERENCES_UPDATE';
+const RequestUserPreferencesUpdate = () => createAction(REQUEST_USER_PREFERENCES_UPDATE);
+const ReceiveUserPreferencesUpdate = (
+  payload: GetPreferencesResponse
+) => createAction(RECEIVE_USER_PREFERENCES_UPDATE, payload);
+type FetchUserPreferencesUpdateType = ReturnType<
+  typeof RequestUserPreferencesUpdate | typeof ReceiveUserPreferencesUpdate
+>;
+export const FetchUserPreferencesUpdate = (token: string, body: UpdatePreferencesRequestBody) => {
+  return async (dispatch: Dispatch<FetchUserPreferencesUpdateType>) => {
+    dispatch(RequestUserPreferencesUpdate());
+    dispatch(ReceiveUserPreferencesUpdate(await updatePreferences(token, body)));
   };
 };
 

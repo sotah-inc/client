@@ -3,7 +3,7 @@ import { Spinner, Button, Popover, Position, Menu, MenuItem, Intent } from '@blu
 
 import { Region, Regions, UserPreferences, Profile } from '@app/types/global';
 import { FetchRegionLevel, AuthLevel } from '@app/types/main';
-import { CreatePreferencesRequestBody } from '@app/api/user';
+import { CreatePreferencesRequestBody, UpdatePreferencesRequestBody } from '@app/api/user';
 import { didRegionChange } from '@app/util';
 
 export type StateProps = {
@@ -18,6 +18,7 @@ export type StateProps = {
 export type DispatchProps = {
   onRegionChange: (region: Region) => void
   createUserPreferences: (token: string, body: CreatePreferencesRequestBody) => void
+  updateUserPreferences: (token: string, body: UpdatePreferencesRequestBody) => void
 };
 
 export type OwnProps = {};
@@ -31,7 +32,8 @@ export class RegionToggle extends React.Component<Props> {
       authLevel,
       userPreferences,
       profile,
-      createUserPreferences
+      createUserPreferences,
+      updateUserPreferences
     } = this.props;
 
     if (currentRegion !== null) {
@@ -39,6 +41,8 @@ export class RegionToggle extends React.Component<Props> {
         if (authLevel === AuthLevel.authenticated) {
           if (userPreferences === null) {
             createUserPreferences(profile!.token, { current_region: currentRegion.name });
+          } else {
+            updateUserPreferences(profile!.token, {  current_region: currentRegion.name });
           }
         }
       }
