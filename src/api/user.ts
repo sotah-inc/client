@@ -118,7 +118,8 @@ export const createPreferences = async (
     headers: new Headers({
       'content-type': 'application/json',
       'Authorization': `Bearer ${token}`
-    })
+    }),
+    body: JSON.stringify(body)
   });
   if (res.status === HTTPStatus.UNAUTHORIZED) {
     return {
@@ -143,7 +144,8 @@ export const updatePreferences = async (
     headers: new Headers({
       'content-type': 'application/json',
       'Authorization': `Bearer ${token}`
-    })
+    }),
+    body: JSON.stringify(body)
   });
   if (res.status === HTTPStatus.UNAUTHORIZED) {
     return {
