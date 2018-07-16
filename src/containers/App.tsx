@@ -10,7 +10,8 @@ import {
   FetchRealms,
   FetchUserReload,
   ChangeIsLoginDialogOpen,
-  FetchUserPreferences
+  FetchUserPreferences,
+  RegionChange
 } from '@app/actions/main';
 
 const mapStateToProps = (state: StoreState): StateProps => {
@@ -25,7 +26,8 @@ const mapStateToProps = (state: StoreState): StateProps => {
     isLoginDialogOpen,
     fetchUserPreferencesLevel,
     userPreferences,
-    profile
+    profile,
+    regions
   } = state.Main;
   return {
     fetchPingLevel, 
@@ -38,7 +40,8 @@ const mapStateToProps = (state: StoreState): StateProps => {
     isLoginDialogOpen,
     fetchUserPreferencesLevel,
     userPreferences,
-    profile
+    profile,
+    regions
   };
 };
 
@@ -49,7 +52,8 @@ const mapDispatchToProps = (dispatch: Dispatch<Actions>): DispatchProps => {
     refreshRegions: () => dispatch(FetchRegions()),
     refreshRealms: (region: Region) => dispatch(FetchRealms(region)),
     changeIsLoginDialogOpen: (isLoginDialogOpen: boolean) => dispatch(ChangeIsLoginDialogOpen(isLoginDialogOpen)),
-    loadUserPreferences: (token: string) => dispatch(FetchUserPreferences(token))
+    loadUserPreferences: (token: string) => dispatch(FetchUserPreferences(token)),
+    onRegionChange: (region: Region) => dispatch(RegionChange(region)),
   };
 };
 

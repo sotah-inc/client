@@ -2,7 +2,7 @@ import * as React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import { Intent } from '@blueprintjs/core';
 
-import { Region, Realm, UserPreferences, Profile } from '@app/types/global';
+import { Region, Realm, UserPreferences, Profile, Regions } from '@app/types/global';
 import {
   FetchPingLevel,
   FetchRegionLevel,
@@ -29,6 +29,7 @@ export type StateProps = {
   fetchUserPreferencesLevel: FetchUserPreferencesLevel
   userPreferences: UserPreferences | null
   profile: Profile | null
+  regions: Regions
 };
 
 export type DispatchProps = {
@@ -38,6 +39,7 @@ export type DispatchProps = {
   refreshRealms: (region: Region) => void
   changeIsLoginDialogOpen: (isLoginDialogOpen: boolean) => void
   loadUserPreferences: (token: string) => void
+  onRegionChange: (region: Region) => void
 };
 
 export interface OwnProps extends RouteComponentProps<{}> {}
@@ -71,7 +73,9 @@ export class App extends React.Component<Props> {
       changeIsLoginDialogOpen,
       loadUserPreferences,
       userPreferences,
-      profile
+      profile,
+      onRegionChange,
+      regions
     } = this.props;
 
     if (prevProps.authLevel !== authLevel) {
@@ -136,6 +140,10 @@ export class App extends React.Component<Props> {
             });
   
             break;
+          } else {
+            if (userPreferences.current_region !== null) {
+              onRegionChange(regions[userPreferences.current_region]);
+            }
           }
   
           break;
