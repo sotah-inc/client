@@ -12,7 +12,14 @@ import {
 import { GetAuctionsOptions, QueryAuctionsOptions } from '@app/api/data';
 
 const mapStateToProps = (state: StoreState): StateProps => {
-  const { currentRegion, currentRealm } = state.Main;
+  const {
+    currentRegion,
+    currentRealm,
+    authLevel,
+    fetchUserPreferencesLevel,
+    userPreferences,
+    fetchRealmLevel
+  } = state.Main;
   const {
     fetchAuctionsLevel,
     auctions,
@@ -37,7 +44,11 @@ const mapStateToProps = (state: StoreState): StateProps => {
     sortKind,
     queryAuctionsLevel,
     selectedQueryAuctionResults,
-    fetchItemClassesLevel
+    fetchItemClassesLevel,
+    authLevel,
+    fetchUserPreferencesLevel,
+    userPreferences,
+    fetchRealmLevel
   };
 };
 

@@ -6,7 +6,8 @@ import RealmToggle from '@app/containers/util/RealmToggle';
 import CountToggle from '@app/containers/App/AuctionList/CountToggle';
 import QueryAuctionsFilter from '@app/containers/App/AuctionList/QueryAuctionsFilter';
 import AuctionTable from '@app/containers/App/AuctionList/AuctionTable';
-import { Auction, Region, Realm, OwnerName, ItemId } from '@app/types/global';
+import { Auction, Region, Realm, OwnerName, ItemId, UserPreferences } from '@app/types/global';
+import { AuthLevel, FetchUserPreferencesLevel, FetchRealmLevel } from '@app/types/main';
 import {
   FetchAuctionsLevel,
   SortKind,
@@ -34,6 +35,10 @@ export type StateProps = {
   queryAuctionsLevel: QueryAuctionsLevel
   selectedQueryAuctionResults: QueryAuctionResult[]
   fetchItemClassesLevel: FetchItemClassesLevel
+  authLevel: AuthLevel
+  fetchUserPreferencesLevel: FetchUserPreferencesLevel
+  userPreferences: UserPreferences | null
+  fetchRealmLevel: FetchRealmLevel
 };
 
 export type DispatchProps = {
@@ -52,9 +57,8 @@ export class AuctionList extends React.Component<Props> {
     const { fetchAuctionsLevel, refreshAuctionsQuery, currentRegion, currentRealm } = this.props;
 
     if (fetchAuctionsLevel === FetchAuctionsLevel.initial) {
-      this.refreshAuctions();
-
       if (currentRegion !== null && currentRealm !== null) {
+        this.refreshAuctions();
         refreshAuctionsQuery({
           regionName: currentRegion.name,
           realmSlug: currentRealm.slug,
@@ -106,7 +110,10 @@ export class AuctionList extends React.Component<Props> {
       sortDirection,
       selectedQueryAuctionResults,
       fetchItemClassesLevel,
-      refreshAuctionsQuery
+      refreshAuctionsQuery,
+      authLevel,
+      fetchUserPreferencesLevel,
+      fetchRealmLevel
     } = this.props;
 
     if (fetchItemClassesLevel === FetchItemClassesLevel.initial) {
@@ -120,16 +127,24 @@ export class AuctionList extends React.Component<Props> {
         || prevProps.sortKind !== this.props.sortKind;
       const didSqaResultsChange = prevProps.selectedQueryAuctionResults.length
         !== selectedQueryAuctionResults.length;
+      const didOptionsChange = didRealmChange(prevProps.currentRealm, currentRealm)
+        || didPageChange
+        || didCountChange
+        || didSortChange
+        || didSqaResultsChange;
       const shouldRefreshAuctions = fetchAuctionsLevel === FetchAuctionsLevel.initial
         || fetchAuctionsLevel === FetchAuctionsLevel.success
-        && (didRealmChange(prevProps.currentRealm, currentRealm)
-          || didPageChange
-          || didCountChange
-          || didSortChange
-          || didSqaResultsChange);
+        && didOptionsChange;
 
       if (shouldRefreshAuctions) {
-        this.refreshAuctions();
+        if (authLevel === AuthLevel.unauthenticated) {
+          this.refreshAuctions();
+        } else if (authLevel === AuthLevel.authenticated) {
+          if (fetchUserPreferencesLevel === FetchUserPreferencesLevel.success) {
+            console.log('FetchRealmLevel', FetchRealmLevel[fetchRealmLevel]);
+            this.refreshAuctions();
+          }
+        }
       }
 
       const shouldRefreshAuctionsQuery = didRealmChange(prevProps.currentRealm, currentRealm);
