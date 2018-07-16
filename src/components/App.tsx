@@ -59,69 +59,71 @@ export class App extends React.Component<Props> {
     }
   }
 
-  componentDidUpdate(prevProps: Props) {
+  handleUnauth(prevProps: Props) {
     const {
-      fetchPingLevel,
-      fetchRegionLevel,
+      isLoginDialogOpen,
+      changeIsLoginDialogOpen,
       currentRegion,
-      refreshRegions,
+      fetchRealmLevel,
+      refreshRealms
+    } = this.props;
+
+    if (this.didHandleUnauth === false) {
+      this.didHandleUnauth = true;
+
+      AppToaster.show({
+        message: 'Your session has expired.',
+        intent: Intent.WARNING,
+        icon: 'info-sign',
+        action: {
+          text: 'Login',
+          intent: Intent.PRIMARY,
+          icon: 'log-in',
+          onClick: () => changeIsLoginDialogOpen(!isLoginDialogOpen)
+        }
+      });
+    }
+
+    if (currentRegion !== null) {
+      const shouldRefreshRealms = fetchRealmLevel === FetchRealmLevel.initial
+        || fetchRealmLevel === FetchRealmLevel.success
+        && didRegionChange(prevProps.currentRegion, currentRegion);
+      if (shouldRefreshRealms) {
+        refreshRealms(currentRegion);
+      }
+    }
+  }
+
+  handleAuth(prevProps: Props) {
+    const {
+      fetchUserPreferencesLevel,
+      loadUserPreferences,
+      profile,
+      userPreferences,
+      onRegionChange,
+      regions,
+      currentRegion,
       fetchRealmLevel,
       refreshRealms,
-      authLevel,
-      isLoginDialogOpen,
-      fetchUserPreferencesLevel,
-      changeIsLoginDialogOpen,
-      loadUserPreferences,
-      userPreferences,
-      profile,
-      onRegionChange,
-      regions
+      authLevel
     } = this.props;
 
     if (prevProps.authLevel !== authLevel) {
-      switch (authLevel) {
-        case AuthLevel.unauthenticated:
-          if (this.didHandleUnauth === false) {
-            this.didHandleUnauth = true;
-      
-            AppToaster.show({
-              message: 'Your session has expired.',
-              intent: Intent.WARNING,
-              icon: 'info-sign',
-              action: {
-                text: 'Login',
-                intent: Intent.PRIMARY,
-                icon: 'log-in',
-                onClick: () => changeIsLoginDialogOpen(!isLoginDialogOpen)
-              }
-            });
-          }
-  
-          break;
-        case AuthLevel.authenticated:
-          this.didHandleUnauth = false;
-
-          if ([AuthLevel.unauthenticated, AuthLevel.initial].indexOf(prevProps.authLevel) === -1) {
-            break;
-          }
-
-          AppToaster.show({
-            message: 'You are logged in.',
-            intent: Intent.SUCCESS,
-            icon: 'user'
-          });
-
-          if (fetchUserPreferencesLevel === FetchUserPreferencesLevel.initial) {
-            loadUserPreferences(profile!.token);
-          }
-  
-          break;
-        default:
-          break;
+      const hasBeenAuthorized = [AuthLevel.unauthenticated, AuthLevel.initial].indexOf(prevProps.authLevel) > -1;
+      if (hasBeenAuthorized) {
+        AppToaster.show({
+          message: 'You are logged in.',
+          intent: Intent.SUCCESS,
+          icon: 'user'
+        });
+    
+        if (fetchUserPreferencesLevel === FetchUserPreferencesLevel.initial) {
+          loadUserPreferences(profile!.token);
+        }
       }
     }
 
-    if (fetchUserPreferencesLevel !== prevProps.fetchUserPreferencesLevel) {
+    if (prevProps.fetchUserPreferencesLevel !== fetchUserPreferencesLevel) {
       switch (fetchUserPreferencesLevel) {
         case FetchUserPreferencesLevel.failure:
           AppToaster.show({
@@ -152,19 +154,59 @@ export class App extends React.Component<Props> {
       }
     }
 
-    if (fetchPingLevel === FetchPingLevel.success && fetchRegionLevel === FetchRegionLevel.initial) {
-      refreshRegions();
+    if (currentRegion !== null) {
+      switch (fetchRealmLevel) {
+        case FetchRealmLevel.initial:
+          refreshRealms(currentRegion);
 
-      return;
+          break;
+        case FetchRealmLevel.success:
+          if (didRegionChange(prevProps.currentRegion, currentRegion)) {
+            refreshRealms(currentRegion);
+          }
+
+          break;
+        default:
+          break;
+      }
+    }
+  }
+
+  componentDidUpdate(prevProps: Props) {
+    const {
+      fetchPingLevel,
+      fetchRegionLevel,
+      refreshRegions,
+      authLevel
+    } = this.props;
+
+    switch (authLevel) {
+      case AuthLevel.unauthenticated:
+        this.handleUnauth(prevProps);
+
+        break;
+      case AuthLevel.authenticated:
+        this.handleAuth(prevProps);
+
+        break;
+      default:
+        break;
     }
 
-    if (currentRegion !== null) {
-      const shouldRefreshRealms = fetchRealmLevel === FetchRealmLevel.initial
-        || fetchRealmLevel === FetchRealmLevel.success
-        && didRegionChange(prevProps.currentRegion, currentRegion);
-      if (shouldRefreshRealms) {
-        refreshRealms(currentRegion);
-      }
+    switch (fetchPingLevel) {
+      case FetchPingLevel.success:
+        switch (fetchRegionLevel) {
+          case FetchRegionLevel.initial:
+            refreshRegions();
+
+            break;
+          default:
+            break;
+        }
+
+        break;
+      default:
+        break;
     }
   }
 
