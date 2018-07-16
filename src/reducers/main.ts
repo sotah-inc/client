@@ -15,7 +15,7 @@ import {
   REQUEST_REGIONS, RECEIVE_REGIONS, REGION_CHANGE,
   REQUEST_REALMS, RECEIVE_REALMS, REALM_CHANGE,
   CHANGE_IS_LOGIN_DIALOG_OPEN,
-  RECEIVE_USER_PREFERENCES
+  REQUEST_USER_PREFERENCES, RECEIVE_USER_PREFERENCES
 } from '@app/actions/main';
 
 type State = Readonly<MainState> | undefined;
@@ -48,6 +48,8 @@ export const main = (state: State, action: MainActions): State => {
         profile: { user: action.payload.user!, token: state.preloadedToken },
         authLevel: AuthLevel.authenticated
       };
+    case REQUEST_USER_PREFERENCES:
+      return { ...state, fetchUserPreferencesLevel: FetchUserPreferencesLevel.fetching };
     case RECEIVE_USER_PREFERENCES:
       if (action.payload.error !== null) {
         return { ...state, fetchUserPreferencesLevel: FetchUserPreferencesLevel.failure };
