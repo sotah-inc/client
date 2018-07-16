@@ -36,15 +36,14 @@ export class RegionToggle extends React.Component<Props> {
       updateUserPreferences
     } = this.props;
 
-    if (currentRegion !== null) {
+    if (authLevel === AuthLevel.authenticated && currentRegion !== null) {
+      let persistUserPreferences = createUserPreferences;
+      if (userPreferences !== null) {
+        persistUserPreferences = updateUserPreferences;
+      }
+
       if (didRegionChange(prevProps.currentRegion, currentRegion)) {
-        if (authLevel === AuthLevel.authenticated) {
-          if (userPreferences === null) {
-            createUserPreferences(profile!.token, { current_region: currentRegion.name });
-          } else {
-            updateUserPreferences(profile!.token, {  current_region: currentRegion.name });
-          }
-        }
+        persistUserPreferences(profile!.token, { current_region: currentRegion.name });
       }
     }
   }
