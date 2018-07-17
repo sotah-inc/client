@@ -87,6 +87,7 @@ export class App extends React.Component<Props> {
     if (currentRegion !== null) {
       switch (fetchRealmLevel) {
         case FetchRealmLevel.initial:
+        case FetchRealmLevel.prompted:
           refreshRealms(currentRegion);
 
           break;
@@ -164,7 +165,7 @@ export class App extends React.Component<Props> {
 
     if (currentRegion !== null) {
       switch (fetchRealmLevel) {
-        case FetchRealmLevel.initial:
+        case FetchRealmLevel.prompted:
           refreshRealms(currentRegion);
 
           break;

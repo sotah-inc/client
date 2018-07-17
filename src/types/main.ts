@@ -22,7 +22,7 @@ export enum FetchPingLevel { initial, fetching, success, failure }
 
 export enum FetchRegionLevel { initial, fetching, success, failure }
 
-export enum FetchRealmLevel { initial, fetching, success, failure }
+export enum FetchRealmLevel { initial, prompted, fetching, success, failure }
 
 export enum FetchUserPreferencesLevel { initial, fetching, success, failure }
 

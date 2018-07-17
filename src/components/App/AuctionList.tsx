@@ -7,7 +7,7 @@ import CountToggle from '@app/containers/App/AuctionList/CountToggle';
 import QueryAuctionsFilter from '@app/containers/App/AuctionList/QueryAuctionsFilter';
 import AuctionTable from '@app/containers/App/AuctionList/AuctionTable';
 import { Auction, Region, Realm, OwnerName, ItemId, UserPreferences } from '@app/types/global';
-import { AuthLevel, FetchUserPreferencesLevel, FetchRealmLevel } from '@app/types/main';
+import { AuthLevel, FetchUserPreferencesLevel } from '@app/types/main';
 import {
   FetchAuctionsLevel,
   SortKind,
@@ -38,7 +38,6 @@ export type StateProps = {
   authLevel: AuthLevel
   fetchUserPreferencesLevel: FetchUserPreferencesLevel
   userPreferences: UserPreferences | null
-  fetchRealmLevel: FetchRealmLevel
 };
 
 export type DispatchProps = {
@@ -112,8 +111,7 @@ export class AuctionList extends React.Component<Props> {
       fetchItemClassesLevel,
       refreshAuctionsQuery,
       authLevel,
-      fetchUserPreferencesLevel,
-      fetchRealmLevel
+      fetchUserPreferencesLevel
     } = this.props;
 
     if (fetchItemClassesLevel === FetchItemClassesLevel.initial) {
@@ -141,7 +139,6 @@ export class AuctionList extends React.Component<Props> {
           this.refreshAuctions();
         } else if (authLevel === AuthLevel.authenticated) {
           if (fetchUserPreferencesLevel === FetchUserPreferencesLevel.success) {
-            console.log('FetchRealmLevel', FetchRealmLevel[fetchRealmLevel]);
             this.refreshAuctions();
           }
         }

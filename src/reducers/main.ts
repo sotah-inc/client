@@ -75,7 +75,7 @@ export const main = (state: State, action: MainActions): State => {
 
       return { ...state, fetchRegionLevel: FetchRegionLevel.success, regions, currentRegion };
     case REGION_CHANGE:
-      return { ...state, currentRegion: action.payload };
+      return { ...state, currentRegion: action.payload, fetchRealmLevel: FetchRealmLevel.prompted };
     case REQUEST_REALMS:
       return { ...state, fetchRealmLevel: FetchRealmLevel.fetching };
     case RECEIVE_REALMS:
