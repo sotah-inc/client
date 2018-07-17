@@ -85,11 +85,19 @@ export class App extends React.Component<Props> {
     }
 
     if (currentRegion !== null) {
-      const shouldRefreshRealms = fetchRealmLevel === FetchRealmLevel.initial
-        || fetchRealmLevel === FetchRealmLevel.success
-        && didRegionChange(prevProps.currentRegion, currentRegion);
-      if (shouldRefreshRealms) {
-        refreshRealms(currentRegion);
+      switch (fetchRealmLevel) {
+        case FetchRealmLevel.initial:
+          refreshRealms(currentRegion);
+
+          break;
+        case FetchRealmLevel.success:
+          if (didRegionChange(prevProps.currentRegion, currentRegion)) {
+            refreshRealms(currentRegion);
+          }
+
+          break;
+        default:
+          break;
       }
     }
   }
