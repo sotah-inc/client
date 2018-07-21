@@ -7,7 +7,7 @@ import {
   FetchUserPreferencesLevel,
   defaultMainState
 } from '@app/types/main';
-import { Regions, Realms, Realm } from '@app/types/global';
+import { Regions, Realms, Realm, Region } from '@app/types/global';
 import {
   MainActions,
   REQUEST_PING, RECEIVE_PING,
@@ -68,7 +68,25 @@ export const main = (state: State, action: MainActions): State => {
         return { ...state, fetchRegionLevel: FetchRegionLevel.failure };
       }
 
-      const currentRegion = action.payload[0];
+      let currentRegion: Region | null = action.payload[0];
+      if (state.userPreferences !== null) {
+        const { current_region: preferredRegionName } = state.userPreferences;
+        currentRegion = action.payload.reduce(
+          (result, v) => {
+            if (result !== null) {
+              return result;
+            }
+
+            if (v.name === preferredRegionName) {
+              return v;
+            }
+
+            return null;
+          },
+          null
+        );
+      }
+
       const regions: Regions = action.payload.reduce(
         (result, region) => { return { ...result, [region.name]: region }; },
         {}
@@ -92,20 +110,26 @@ export const main = (state: State, action: MainActions): State => {
 
       let currentRealm: Realm | null = action.payload[0];
       if (state.userPreferences !== null) {
-        currentRealm = action.payload.reduce(
-          (result, v) => {
-            if (result !== null) {
-              return result;
-            }
-
-            if (v.slug === state.userPreferences!.current_realm) {
-              return v;
-            }
-
-            return null;
-          },
-          null
-        );
+        const {
+          current_region: preferredRegionName,
+          current_realm: preferredRealmSlug
+        } = state.userPreferences;
+        if (state.currentRegion!.name === preferredRegionName) {
+          currentRealm = action.payload.reduce(
+            (result, v) => {
+              if (result !== null) {
+                return result;
+              }
+  
+              if (v.slug === preferredRealmSlug) {
+                return v;
+              }
+  
+              return null;
+            },
+            null
+          );
+        }
       }
 
       const realms: Realms = action.payload.reduce(
