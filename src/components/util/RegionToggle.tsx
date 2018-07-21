@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Spinner, Button, Popover, Position, Menu, MenuItem, Intent } from '@blueprintjs/core';
 
 import { Region, Regions, UserPreferences, Profile } from '@app/types/global';
-import { FetchRegionLevel, AuthLevel } from '@app/types/main';
+import { FetchRegionLevel, AuthLevel, FetchRealmLevel } from '@app/types/main';
 import { CreatePreferencesRequestBody, UpdatePreferencesRequestBody } from '@app/api/user';
 import { didRegionChange } from '@app/util';
 
@@ -13,6 +13,7 @@ export type StateProps = {
   userPreferences: UserPreferences | null
   authLevel: AuthLevel
   profile: Profile | null
+  fetchRealmLevel: FetchRealmLevel
 };
 
 export type DispatchProps = {
@@ -33,7 +34,9 @@ export class RegionToggle extends React.Component<Props> {
       userPreferences,
       profile,
       createUserPreferences,
-      updateUserPreferences
+      updateUserPreferences,
+      fetchRegionLevel,
+      fetchRealmLevel
     } = this.props;
 
     if (authLevel === AuthLevel.authenticated && currentRegion !== null) {
@@ -43,7 +46,9 @@ export class RegionToggle extends React.Component<Props> {
       }
 
       if (didRegionChange(prevProps.currentRegion, currentRegion)) {
-        persistUserPreferences(profile!.token, { current_region: currentRegion.name });
+        if (fetchRegionLevel === FetchRegionLevel.success && fetchRealmLevel === FetchRealmLevel.success) {
+          persistUserPreferences(profile!.token, { current_region: currentRegion.name });
+        }
       }
     }
   }

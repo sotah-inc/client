@@ -58,6 +58,7 @@ export const main = (state: State, action: MainActions): State => {
       return {
         ...state,
         fetchUserPreferencesLevel: FetchUserPreferencesLevel.success,
+        fetchRegionLevel: FetchRegionLevel.prompted,
         userPreferences: action.payload.preference
       };
     case REQUEST_REGIONS:
@@ -73,7 +74,13 @@ export const main = (state: State, action: MainActions): State => {
         {}
       );
 
-      return { ...state, fetchRegionLevel: FetchRegionLevel.success, regions, currentRegion };
+      return {
+        ...state,
+        fetchRegionLevel: FetchRegionLevel.success,
+        fetchRealmLevel: FetchRealmLevel.prompted,
+        regions,
+        currentRegion
+      };
     case REGION_CHANGE:
       return { ...state, currentRegion: action.payload, fetchRealmLevel: FetchRealmLevel.prompted };
     case REQUEST_REALMS:
