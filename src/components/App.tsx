@@ -114,7 +114,8 @@ export class App extends React.Component<Props> {
       currentRegion,
       fetchRealmLevel,
       refreshRealms,
-      authLevel
+      authLevel,
+      fetchRegionLevel
     } = this.props;
 
     if (prevProps.authLevel !== authLevel) {
@@ -152,7 +153,7 @@ export class App extends React.Component<Props> {
   
             break;
           } else {
-            if (userPreferences.current_region !== null) {
+            if (fetchRegionLevel === FetchRegionLevel.success && userPreferences.current_region !== null) {
               onRegionChange(regions[userPreferences.current_region]);
             }
           }
@@ -205,7 +206,7 @@ export class App extends React.Component<Props> {
     switch (fetchPingLevel) {
       case FetchPingLevel.success:
         switch (fetchRegionLevel) {
-          case FetchRegionLevel.initial:
+          case FetchRegionLevel.prompted:
             refreshRegions();
 
             break;

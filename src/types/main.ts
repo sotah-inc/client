@@ -20,7 +20,7 @@ export type MainState = {
 
 export enum FetchPingLevel { initial, fetching, success, failure }
 
-export enum FetchRegionLevel { initial, fetching, success, failure }
+export enum FetchRegionLevel { initial, prompted, fetching, success, failure }
 
 export enum FetchRealmLevel { initial, prompted, fetching, success, failure }
 
