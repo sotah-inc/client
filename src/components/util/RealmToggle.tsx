@@ -9,7 +9,7 @@ import {
   IItemRendererProps
 } from '@blueprintjs/select';
 
-import { Realms, Realm, UserPreferences, Profile } from '@app/types/global';
+import { Region, Realms, Realm, UserPreferences, Profile } from '@app/types/global';
 import { FetchRealmLevel, AuthLevel } from '@app/types/main';
 import { CreatePreferencesRequestBody, UpdatePreferencesRequestBody } from '@app/api/user';
 import { didRealmChange } from '@app/util';
@@ -23,6 +23,7 @@ export type StateProps = {
   userPreferences: UserPreferences | null
   authLevel: AuthLevel
   profile: Profile | null
+  currentRegion: Region | null
 };
 
 export type DispatchProps = {
@@ -43,18 +44,21 @@ export class RealmToggle extends React.Component<Props> {
       userPreferences,
       profile,
       createUserPreferences,
-      updateUserPreferences
+      updateUserPreferences,
+      currentRegion
     } = this.props;
 
-    if (authLevel === AuthLevel.authenticated && currentRealm !== null) {
+    if (authLevel === AuthLevel.authenticated && currentRealm !== null && currentRegion !== null) {
       let persistUserPreferences = createUserPreferences;
       if (userPreferences !== null) {
         persistUserPreferences = updateUserPreferences;
       }
 
       if (didRealmChange(prevProps.currentRealm, currentRealm)) {
-        console.log(currentRealm.regionName, currentRealm.slug, !![persistUserPreferences, profile]);
-        // persistUserPreferences(profile!.token, { current_realm: currentRealm.slug });
+        persistUserPreferences(profile!.token, {
+          current_region: currentRegion.name,
+          current_realm: currentRealm.slug
+        });
       }
     }
   }

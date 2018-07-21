@@ -1,19 +1,14 @@
 import * as React from 'react';
 import { Spinner, Button, Popover, Position, Menu, MenuItem, Intent } from '@blueprintjs/core';
 
-import { Region, Regions, UserPreferences, Profile } from '@app/types/global';
-import { FetchRegionLevel, AuthLevel, FetchRealmLevel } from '@app/types/main';
+import { Region, Regions } from '@app/types/global';
+import { FetchRegionLevel } from '@app/types/main';
 import { CreatePreferencesRequestBody, UpdatePreferencesRequestBody } from '@app/api/user';
-import { didRegionChange } from '@app/util';
 
 export type StateProps = {
   currentRegion: Region | null
   regions: Regions
   fetchRegionLevel: FetchRegionLevel
-  userPreferences: UserPreferences | null
-  authLevel: AuthLevel
-  profile: Profile | null
-  fetchRealmLevel: FetchRealmLevel
 };
 
 export type DispatchProps = {
@@ -27,32 +22,6 @@ export type OwnProps = {};
 type Props = Readonly<StateProps & DispatchProps & OwnProps>;
 
 export class RegionToggle extends React.Component<Props> {
-  componentDidUpdate(prevProps: Props) {
-    const {
-      currentRegion,
-      authLevel,
-      userPreferences,
-      profile,
-      createUserPreferences,
-      updateUserPreferences,
-      fetchRegionLevel,
-      fetchRealmLevel
-    } = this.props;
-
-    if (authLevel === AuthLevel.authenticated && currentRegion !== null) {
-      let persistUserPreferences = createUserPreferences;
-      if (userPreferences !== null) {
-        persistUserPreferences = updateUserPreferences;
-      }
-
-      if (didRegionChange(prevProps.currentRegion, currentRegion)) {
-        if (fetchRegionLevel === FetchRegionLevel.success && fetchRealmLevel === FetchRealmLevel.success) {
-          persistUserPreferences(profile!.token, { current_region: currentRegion.name });
-        }
-      }
-    }
-  }
-
   renderMenuItem(region: Region, index: number) {
     let className = '';
     if (this.props.currentRegion !== null && region.name === this.props.currentRegion.name) {

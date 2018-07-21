@@ -11,20 +11,12 @@ const mapStateToProps = (state: StoreState): StateProps => {
   const {
     regions,
     currentRegion,
-    fetchRegionLevel,
-    userPreferences,
-    authLevel,
-    profile,
-    fetchRealmLevel
+    fetchRegionLevel
   } = state.Main;
   return {
     regions,
     currentRegion,
-    fetchRegionLevel,
-    userPreferences,
-    authLevel,
-    profile,
-    fetchRealmLevel
+    fetchRegionLevel
   };
 };
 

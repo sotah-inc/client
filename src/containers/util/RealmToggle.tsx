@@ -14,7 +14,8 @@ const mapStateToProps = (state: StoreState): StateProps => {
     fetchRealmLevel,
     userPreferences,
     authLevel,
-    profile
+    profile,
+    currentRegion
   } = state.Main;
   return {
     realms,
@@ -22,7 +23,8 @@ const mapStateToProps = (state: StoreState): StateProps => {
     fetchRealmLevel,
     userPreferences,
     authLevel,
-    profile
+    profile,
+    currentRegion
   };
 };
 
