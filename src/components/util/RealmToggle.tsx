@@ -9,8 +9,10 @@ import {
   IItemRendererProps
 } from '@blueprintjs/select';
 
-import { Realms, Realm } from '@app/types/global';
-import { FetchRealmLevel } from '@app/types/main';
+import { Realms, Realm, UserPreferences, Profile } from '@app/types/global';
+import { FetchRealmLevel, AuthLevel } from '@app/types/main';
+import { CreatePreferencesRequestBody, UpdatePreferencesRequestBody } from '@app/api/user';
+import { didRealmChange } from '@app/util';
 
 const RealmToggleSelect = Select.ofType<Realm>();
 
@@ -18,10 +20,15 @@ export type StateProps = {
   realms: Realms
   currentRealm: Realm | null
   fetchRealmLevel: FetchRealmLevel
+  userPreferences: UserPreferences | null
+  authLevel: AuthLevel
+  profile: Profile | null
 };
 
 export type DispatchProps = {
-  onRealmChange: (realm: Realm) => void;
+  onRealmChange: (realm: Realm) => void
+  createUserPreferences: (token: string, body: CreatePreferencesRequestBody) => void
+  updateUserPreferences: (token: string, body: UpdatePreferencesRequestBody) => void
 };
 
 export type OwnProps = {};
@@ -29,6 +36,29 @@ export type OwnProps = {};
 type Props = Readonly<StateProps & DispatchProps & OwnProps>;
 
 export class RealmToggle extends React.Component<Props> {
+  componentDidUpdate(prevProps: Props) {
+    const {
+      currentRealm,
+      authLevel,
+      userPreferences,
+      profile,
+      createUserPreferences,
+      updateUserPreferences
+    } = this.props;
+
+    if (authLevel === AuthLevel.authenticated && currentRealm !== null) {
+      let persistUserPreferences = createUserPreferences;
+      if (userPreferences !== null) {
+        persistUserPreferences = updateUserPreferences;
+      }
+
+      if (didRealmChange(prevProps.currentRealm, currentRealm)) {
+        console.log(currentRealm.regionName, currentRealm.slug, !![persistUserPreferences, profile]);
+        // persistUserPreferences(profile!.token, { current_realm: currentRealm.slug });
+      }
+    }
+  }
+
   itemPredicate: ItemPredicate<Realm> = (query: string, item: Realm) => {
     query = query.toLowerCase();
     return item.name.toLowerCase().indexOf(query) >= 0
