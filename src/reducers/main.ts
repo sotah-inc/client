@@ -7,7 +7,7 @@ import {
   FetchUserPreferencesLevel,
   defaultMainState
 } from '@app/types/main';
-import { Regions, Realms } from '@app/types/global';
+import { Regions, Realms, Realm } from '@app/types/global';
 import {
   MainActions,
   REQUEST_PING, RECEIVE_PING,
@@ -90,7 +90,24 @@ export const main = (state: State, action: MainActions): State => {
         return { ...state, fetchRealmLevel: FetchRealmLevel.failure };
       }
 
-      const currentRealm = action.payload[0];
+      let currentRealm: Realm | null = action.payload[0];
+      if (state.userPreferences !== null) {
+        currentRealm = action.payload.reduce(
+          (result, v) => {
+            if (result !== null) {
+              return result;
+            }
+
+            if (v.slug === state.userPreferences!.current_realm) {
+              return v;
+            }
+
+            return null;
+          },
+          null
+        );
+      }
+
       const realms: Realms = action.payload.reduce(
         (result, realm) => { return { ...result, [realm.slug]: realm }; },
         {}
