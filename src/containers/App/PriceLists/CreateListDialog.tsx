@@ -8,9 +8,16 @@ import { CreatePricelistRequest } from '@app/api/price-lists';
 
 const mapStateToProps = (state: StoreState): StateProps => {
   const { currentRegion, currentRealm } = state.Main;
-  const { isAddListDialogOpen } = state.PriceLists;
+  const { isAddListDialogOpen, createPricelistLevel } = state.PriceLists;
   const { itemClasses } = state.Auction;
-  return { isAddListDialogOpen, itemClasses, currentRegion, currentRealm };
+
+  return {
+    isAddListDialogOpen,
+    itemClasses,
+    currentRegion,
+    currentRealm,
+    createPricelistLevel
+  };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<Actions>): DispatchProps => {

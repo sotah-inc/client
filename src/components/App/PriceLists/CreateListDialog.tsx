@@ -5,7 +5,7 @@ import CreateListForm from '@app/containers/App/PriceLists/CreateListDialog/Crea
 import CreateEntryForm from '@app/containers/App/PriceLists/CreateEntryForm';
 import { DialogBody, DialogActions } from '@app/components/util';
 import { ItemClasses, Region, Realm } from '@app/types/global';
-import { CreateListStep, PricelistEntry, CreateListCompletion } from '@app/types/price-lists';
+import { CreateListStep, PricelistEntry, CreateListCompletion, CreatePricelistLevel } from '@app/types/price-lists';
 import { CreatePricelistRequest } from '@app/api/price-lists';
 
 export type StateProps = {
@@ -13,6 +13,7 @@ export type StateProps = {
   itemClasses: ItemClasses
   currentRegion: Region | null
   currentRealm: Realm | null
+  createPricelistLevel: CreatePricelistLevel
 };
 
 export type DispatchProps = {
@@ -38,6 +39,29 @@ export class CreateListDialog extends React.Component<Props, State> {
     createListCompletion: CreateListCompletion.initial,
     entries: []
   };
+
+  componentDidUpdate(prevProps: Props) {
+    const { createPricelistLevel } = this.props;
+
+    if (prevProps.createPricelistLevel !== createPricelistLevel) {
+      switch (createPricelistLevel) {
+        case CreatePricelistLevel.fetching:
+          console.log('Creating pricelist');
+
+          break;
+        case CreatePricelistLevel.failure:
+          console.log('Error creating pricelist');
+
+          break;
+        case CreatePricelistLevel.success:
+          console.log('Success!');
+
+          break;
+        default:
+          break;
+      }
+    }
+  }
 
   toggleListDialog() {
     this.props.changeIsAddListDialogOpen(!this.props.isAddListDialogOpen);
