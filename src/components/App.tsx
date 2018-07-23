@@ -197,6 +197,12 @@ export class App extends React.Component<Props> {
     switch (fetchPingLevel) {
       case FetchPingLevel.success:
         switch (fetchRegionLevel) {
+          case FetchRegionLevel.initial:
+            if (authLevel === AuthLevel.unauthenticated) {
+              refreshRegions();
+            }
+
+            break;
           case FetchRegionLevel.prompted:
             refreshRegions();
 
