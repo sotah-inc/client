@@ -30,7 +30,7 @@ export const priceLists = (state: State, action: PriceListsActions): State => {
         };
       }
 
-      return { ...state, createPricelistLevel: CreatePricelistLevel.success };
+      return { ...state, createPricelistLevel: CreatePricelistLevel.success, createPricelistErrors: {} };
     case CHANGE_ENTRY_CREATELEVEL:
       return { ...state, entryCreateLevel: action.payload };
     case CHANGE_SELECTED_LIST:
