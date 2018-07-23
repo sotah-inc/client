@@ -8,7 +8,7 @@ import { CreatePricelistRequest } from '@app/api/price-lists';
 
 const mapStateToProps = (state: StoreState): StateProps => {
   const { currentRegion, currentRealm } = state.Main;
-  const { isAddListDialogOpen, createPricelistLevel } = state.PriceLists;
+  const { isAddListDialogOpen, createPricelistLevel, createPricelistErrors } = state.PriceLists;
   const { itemClasses } = state.Auction;
 
   return {
@@ -16,7 +16,8 @@ const mapStateToProps = (state: StoreState): StateProps => {
     itemClasses,
     currentRegion,
     currentRealm,
-    createPricelistLevel
+    createPricelistLevel,
+    createPricelistErrors
   };
 };
 

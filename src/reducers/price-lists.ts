@@ -23,7 +23,11 @@ export const priceLists = (state: State, action: PriceListsActions): State => {
       return { ...state, createPricelistLevel: CreatePricelistLevel.fetching };
     case RECEIVE_CREATE_PRICELIST:
       if (action.payload.errors !== null) {
-        return { ...state, createPricelistLevel: CreatePricelistLevel.failure };
+        return {
+          ...state,
+          createPricelistLevel: CreatePricelistLevel.failure,
+          createPricelistErrors: action.payload.errors
+        };
       }
 
       return { ...state, createPricelistLevel: CreatePricelistLevel.success };

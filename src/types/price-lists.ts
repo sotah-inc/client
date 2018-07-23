@@ -1,9 +1,10 @@
-import { RegionName, RealmSlug, ItemId } from './global';
+import { RegionName, RealmSlug, ItemId, Errors } from './global';
 
 export type PriceListsState = {
   lists: Pricelist[]
   createPricelistLevel: CreatePricelistLevel
   entryCreateLevel: EntryCreateLevel
+  createPricelistErrors: Errors
   selectedList: Pricelist | null
   isAddListDialogOpen: boolean
   isAddEntryDialogOpen: boolean
@@ -39,6 +40,7 @@ export const defaultPriceListsState: PriceListsState = {
   lists: [],
   createPricelistLevel: CreatePricelistLevel.initial,
   entryCreateLevel: EntryCreateLevel.initial,
+  createPricelistErrors: {},
   selectedList: null,
   isAddListDialogOpen: false,
   isAddEntryDialogOpen: false

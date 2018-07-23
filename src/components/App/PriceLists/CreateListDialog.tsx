@@ -3,8 +3,8 @@ import { Dialog, Breadcrumb, Button, Intent } from '@blueprintjs/core';
 
 import CreateListForm from '@app/containers/App/PriceLists/CreateListDialog/CreateListForm';
 import CreateEntryForm from '@app/containers/App/PriceLists/CreateEntryForm';
-import { DialogBody, DialogActions } from '@app/components/util';
-import { ItemClasses, Region, Realm } from '@app/types/global';
+import { DialogBody, DialogActions, ErrorList } from '@app/components/util';
+import { ItemClasses, Region, Realm, Errors } from '@app/types/global';
 import { CreateListStep, PricelistEntry, CreateListCompletion, CreatePricelistLevel } from '@app/types/price-lists';
 import { CreatePricelistRequest } from '@app/api/price-lists';
 
@@ -14,6 +14,7 @@ export type StateProps = {
   currentRegion: Region | null
   currentRealm: Realm | null
   createPricelistLevel: CreatePricelistLevel
+  createPricelistErrors: Errors
 };
 
 export type DispatchProps = {
@@ -167,7 +168,7 @@ export class CreateListDialog extends React.Component<Props, State> {
 
   renderFinish() {
     const { createListStep, listName, entries } = this.state;
-    const { createPricelist, currentRegion, currentRealm } = this.props;
+    const { createPricelist, currentRegion, currentRealm, createPricelistLevel, createPricelistErrors } = this.props;
 
     if (createListStep !== CreateListStep.finish) {
       return;
@@ -188,6 +189,7 @@ export class CreateListDialog extends React.Component<Props, State> {
               {entries.map((v, i) => this.renderEntry(i, v))}
             </tbody>
           </table>
+          <ErrorList errors={createPricelistErrors} />
         </DialogBody>
         <DialogActions>
           <Button
@@ -199,6 +201,7 @@ export class CreateListDialog extends React.Component<Props, State> {
           <Button
             text={`Finish "${listName}"`}
             intent={Intent.PRIMARY}
+            disabled={createPricelistLevel === CreatePricelistLevel.fetching}
             onClick={() => {
               createPricelist({
                 entries: entries,
