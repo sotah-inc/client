@@ -30,9 +30,13 @@ export const createPriceList = async (request: CreatePricelistRequest): Promise<
     body: JSON.stringify(request),
     headers: new Headers({ 'content-type': 'application/json' })
   });
-  if (res.status !== HTTPStatus.OK) {
-    return { errors: await res.json(), data: null };
+  switch (res.status) {
+    case HTTPStatus.OK:
+      return { errors: null, data: await res.json() };
+    case HTTPStatus.UNAUTHORIZED:
+      return { errors: { error: 'Unauthorized' }, data: null };
+    case HTTPStatus.BAD_REQUEST:
+    default:
+      return { errors: await res.json(), data: null };
   }
-
-  return { errors: null, data: await res.json() };
 };
