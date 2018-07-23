@@ -1,7 +1,7 @@
 import * as HTTPStatus from 'http-status';
 
 import { apiEndpoint } from './index';
-import { RegionName, RealmSlug, ItemId } from '@app/types/global';
+import { RegionName, RealmSlug, ItemId, Errors } from '@app/types/global';
 
 export type Pricelist = {
   id: number
@@ -31,8 +31,11 @@ export type CreatePricelistRequest = {
 };
 
 export type CreatePricelistResponse = {
-  pricelist: Pricelist
-  entries: PricelistEntry[]
+  errors: Errors | null
+  data: {
+    pricelist: Pricelist
+    entries: PricelistEntry[]
+  } | null
 };
 
 export const createPriceList = async (request: CreatePricelistRequest): Promise<CreatePricelistResponse | null> => {
@@ -42,8 +45,8 @@ export const createPriceList = async (request: CreatePricelistRequest): Promise<
     headers: new Headers({ 'content-type': 'application/json' })
   });
   if (res.status !== HTTPStatus.OK) {
-    return null;
+    return { errors: await res.json(), data: null };
   }
 
-  return await res.json();
+  return { errors: null, data: await res.json() };
 };
