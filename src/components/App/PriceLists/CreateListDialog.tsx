@@ -5,7 +5,7 @@ import CreateListForm from '@app/containers/App/PriceLists/CreateListDialog/Crea
 import CreateEntryForm from '@app/containers/App/PriceLists/CreateEntryForm';
 import { DialogBody, DialogActions, ItemPopover } from '@app/components/util';
 import { ItemClasses, Region, Realm } from '@app/types/global';
-import { CreateListStep, PriceListEntry, CreateListCompletion, PriceListOptions } from '@app/types/price-lists';
+import { CreateListStep, PriceListEntry, CreateListCompletion } from '@app/types/price-lists';
 
 export type StateProps = {
   isAddListDialogOpen: boolean
@@ -16,7 +16,6 @@ export type StateProps = {
 
 export type DispatchProps = {
   changeIsAddListDialogOpen: (isDialogOpen: boolean) => void
-  createList: (opts: PriceListOptions) => void
 };
 
 export type OwnProps = {};
@@ -146,7 +145,6 @@ export class CreateListDialog extends React.Component<Props, State> {
   }
 
   renderFinish() {
-    const { createList, currentRegion, currentRealm } = this.props;
     const { createListStep, listName, entries } = this.state;
 
     if (createListStep !== CreateListStep.finish) {
@@ -180,12 +178,7 @@ export class CreateListDialog extends React.Component<Props, State> {
             text={`Finish "${listName}"`}
             intent={Intent.PRIMARY}
             onClick={() => {
-              createList({
-                name: listName,
-                entries,
-                region: currentRegion!,
-                realm: currentRealm!
-              });
+              console.log('creating list!');
             }}
             icon="edit"
           />

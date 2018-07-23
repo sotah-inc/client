@@ -1,9 +1,25 @@
-import { PriceList, PriceListEntry, ListCreateLevel, EntryCreateLevel, PriceListOptions } from '@app/types/price-lists';
+import { Dispatch } from 'redux';
+
+import { PriceList, PriceListEntry, ListCreateLevel, EntryCreateLevel } from '@app/types/price-lists';
+import {
+  CreatePricelistRequest, CreatePricelistResponse, createPriceList
+} from '@app/api/price-lists';
 
 import { createAction, ActionsUnion } from './helpers';
 
-export const CREATE_PRICELIST = 'CREATE_PRICELIST';
-export const CreateList = (payload: PriceListOptions) => createAction(CREATE_PRICELIST, payload);
+export const REQUEST_CREATE_PRICELIST = 'REQUEST_CREATE_PRICELIST';
+export const RequestCreatePricelist = () => createAction(REQUEST_CREATE_PRICELIST);
+export const RECEIVE_CREATE_PRICELIST = 'RECEIVE_CREATE_PRICELIST';
+export const ReceiveCreatePricelist = (
+  payload: CreatePricelistResponse | null
+) => createAction(RECEIVE_CREATE_PRICELIST, payload);
+type FetchCreatePricelistType = ReturnType<typeof RequestCreatePricelist | typeof ReceiveCreatePricelist>;
+export const FetchCreatePricelist = (request: CreatePricelistRequest) => {
+  return async (dispatch: Dispatch<FetchCreatePricelistType>) => {
+    dispatch(RequestCreatePricelist());
+    dispatch(ReceiveCreatePricelist(await createPriceList(request)));
+  };
+};
 
 export const CHANGE_LIST_CREATELEVEL = 'CHANGE_LIST_CREATELEVEL';
 export const ChangeListCreateLevel = (payload: ListCreateLevel) => createAction(CHANGE_LIST_CREATELEVEL, payload);
@@ -24,7 +40,7 @@ export const CHANGE_IS_ADD_ENTRY_DIALOG_OPEN = 'CHANGE_IS_ADD_ENTRY_DIALOG_OPEN'
 export const ChangeIsAddEntryDialogOpen = (payload: boolean) => createAction(CHANGE_IS_ADD_ENTRY_DIALOG_OPEN, payload);
 
 export const PriceListsActions = {
-  CreateList, ChangeListCreateLevel,
+  RequestCreatePricelist, ChangeListCreateLevel,
   CreateEntry, ChangeEntryCreateLevel,
   ChangeSelectedList,
   ChangeIsAddListDialogOpen, ChangeIsAddEntryDialogOpen
