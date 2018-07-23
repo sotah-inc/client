@@ -7,7 +7,7 @@ import { ChangeIsAddListDialogOpen, FetchCreatePricelist } from '@app/actions/pr
 import { CreatePricelistRequest } from '@app/api/price-lists';
 
 const mapStateToProps = (state: StoreState): StateProps => {
-  const { currentRegion, currentRealm } = state.Main;
+  const { currentRegion, currentRealm, profile } = state.Main;
   const { isAddListDialogOpen, createPricelistLevel, createPricelistErrors } = state.PriceLists;
   const { itemClasses } = state.Auction;
 
@@ -17,14 +17,15 @@ const mapStateToProps = (state: StoreState): StateProps => {
     currentRegion,
     currentRealm,
     createPricelistLevel,
-    createPricelistErrors
+    createPricelistErrors,
+    profile
   };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<Actions>): DispatchProps => {
   return {
     changeIsAddListDialogOpen: (isDialogOpen: boolean) => dispatch(ChangeIsAddListDialogOpen(isDialogOpen)),
-    createPricelist: (request: CreatePricelistRequest) => dispatch(FetchCreatePricelist(request))
+    createPricelist: (token: string, request: CreatePricelistRequest) => dispatch(FetchCreatePricelist(token, request))
   };
 };
 

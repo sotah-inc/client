@@ -24,11 +24,17 @@ export type CreatePricelistResponse = {
   } | null
 };
 
-export const createPriceList = async (request: CreatePricelistRequest): Promise<CreatePricelistResponse> => {
+export const createPriceList = async (
+  token: string,
+  request: CreatePricelistRequest
+): Promise<CreatePricelistResponse> => {
   const res = await fetch(`${apiEndpoint}/user/pricelists`, {
     method: 'POST',
     body: JSON.stringify(request),
-    headers: new Headers({ 'content-type': 'application/json' })
+    headers: new Headers({
+      'content-type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    })
   });
   switch (res.status) {
     case HTTPStatus.OK:

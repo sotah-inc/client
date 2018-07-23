@@ -4,7 +4,7 @@ import { Dialog, Breadcrumb, Button, Intent } from '@blueprintjs/core';
 import CreateListForm from '@app/containers/App/PriceLists/CreateListDialog/CreateListForm';
 import CreateEntryForm from '@app/containers/App/PriceLists/CreateEntryForm';
 import { DialogBody, DialogActions, ErrorList } from '@app/components/util';
-import { ItemClasses, Region, Realm, Errors } from '@app/types/global';
+import { ItemClasses, Region, Realm, Errors, Profile } from '@app/types/global';
 import { CreateListStep, PricelistEntry, CreateListCompletion, CreatePricelistLevel } from '@app/types/price-lists';
 import { CreatePricelistRequest } from '@app/api/price-lists';
 
@@ -15,11 +15,12 @@ export type StateProps = {
   currentRealm: Realm | null
   createPricelistLevel: CreatePricelistLevel
   createPricelistErrors: Errors
+  profile: Profile | null
 };
 
 export type DispatchProps = {
   changeIsAddListDialogOpen: (isDialogOpen: boolean) => void
-  createPricelist: (request: CreatePricelistRequest) => void
+  createPricelist: (token: string, request: CreatePricelistRequest) => void
 };
 
 export type OwnProps = {};
@@ -168,7 +169,14 @@ export class CreateListDialog extends React.Component<Props, State> {
 
   renderFinish() {
     const { createListStep, listName, entries } = this.state;
-    const { createPricelist, currentRegion, currentRealm, createPricelistLevel, createPricelistErrors } = this.props;
+    const {
+      createPricelist,
+      currentRegion,
+      currentRealm,
+      createPricelistLevel,
+      createPricelistErrors,
+      profile
+    } = this.props;
 
     if (createListStep !== CreateListStep.finish) {
       return;
@@ -203,7 +211,7 @@ export class CreateListDialog extends React.Component<Props, State> {
             intent={Intent.PRIMARY}
             disabled={createPricelistLevel === CreatePricelistLevel.fetching}
             onClick={() => {
-              createPricelist({
+              createPricelist(profile!.token, {
                 entries: entries,
                 pricelist: { name: listName, region: currentRegion!.name, realm: currentRealm!.slug }
               });

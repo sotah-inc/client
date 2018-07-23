@@ -14,10 +14,10 @@ export const ReceiveCreatePricelist = (
   payload: CreatePricelistResponse
 ) => createAction(RECEIVE_CREATE_PRICELIST, payload);
 type FetchCreatePricelistType = ReturnType<typeof RequestCreatePricelist | typeof ReceiveCreatePricelist>;
-export const FetchCreatePricelist = (request: CreatePricelistRequest) => {
+export const FetchCreatePricelist = (token: string, request: CreatePricelistRequest) => {
   return async (dispatch: Dispatch<FetchCreatePricelistType>) => {
     dispatch(RequestCreatePricelist());
-    dispatch(ReceiveCreatePricelist(await createPriceList(request)));
+    dispatch(ReceiveCreatePricelist(await createPriceList(token, request)));
   };
 };
 
