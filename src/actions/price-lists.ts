@@ -11,7 +11,7 @@ export const REQUEST_CREATE_PRICELIST = 'REQUEST_CREATE_PRICELIST';
 export const RequestCreatePricelist = () => createAction(REQUEST_CREATE_PRICELIST);
 export const RECEIVE_CREATE_PRICELIST = 'RECEIVE_CREATE_PRICELIST';
 export const ReceiveCreatePricelist = (
-  payload: CreatePricelistResponse | null
+  payload: CreatePricelistResponse
 ) => createAction(RECEIVE_CREATE_PRICELIST, payload);
 type FetchCreatePricelistType = ReturnType<typeof RequestCreatePricelist | typeof ReceiveCreatePricelist>;
 export const FetchCreatePricelist = (request: CreatePricelistRequest) => {

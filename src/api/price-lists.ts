@@ -24,7 +24,7 @@ export type CreatePricelistResponse = {
   } | null
 };
 
-export const createPriceList = async (request: CreatePricelistRequest): Promise<CreatePricelistResponse | null> => {
+export const createPriceList = async (request: CreatePricelistRequest): Promise<CreatePricelistResponse> => {
   const res = await fetch(`${apiEndpoint}/user/pricelists`, {
     method: 'POST',
     body: JSON.stringify(request),

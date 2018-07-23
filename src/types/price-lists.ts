@@ -15,7 +15,7 @@ export enum CreateListCompletion { initial, list, entry }
 
 export enum EntryCreateLevel { initial, success, failure }
 
-export enum CreatePricelistLevel { initial, success, failure }
+export enum CreatePricelistLevel { initial, fetching, success, failure }
 
 export enum GetPriceListLevel { initial, success, failure }
 
