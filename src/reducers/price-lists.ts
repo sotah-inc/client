@@ -3,7 +3,7 @@ import {
   defaultPriceListsState
 } from '@app/types/price-lists';
 import {
-  CHANGE_LIST_CREATELEVEL,
+  RECEIVE_CREATE_PRICELIST,
   CHANGE_ENTRY_CREATELEVEL,
   CHANGE_SELECTED_LIST,
   CHANGE_IS_ADD_LIST_DIALOG_OPEN, CHANGE_IS_ADD_ENTRY_DIALOG_OPEN,
@@ -18,8 +18,8 @@ export const priceLists = (state: State, action: PriceListsActions): State => {
   }
 
   switch (action.type) {
-    case CHANGE_LIST_CREATELEVEL:
-      return { ...state, listCreateLevel: action.payload };
+    case RECEIVE_CREATE_PRICELIST:
+      return { ...state };
     case CHANGE_ENTRY_CREATELEVEL:
       return { ...state, entryCreateLevel: action.payload };
     case CHANGE_SELECTED_LIST:

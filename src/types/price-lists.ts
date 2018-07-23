@@ -2,7 +2,7 @@ import { RegionName, RealmSlug, ItemId } from './global';
 
 export type PriceListsState = {
   lists: Pricelist[]
-  listCreateLevel: ListCreateLevel
+  createPricelistLevel: CreatePricelistLevel
   entryCreateLevel: EntryCreateLevel
   selectedList: Pricelist | null
   isAddListDialogOpen: boolean
@@ -15,7 +15,7 @@ export enum CreateListCompletion { initial, list, entry }
 
 export enum EntryCreateLevel { initial, success, failure }
 
-export enum ListCreateLevel { initial, success, failure }
+export enum CreatePricelistLevel { initial, success, failure }
 
 export enum GetPriceListLevel { initial, success, failure }
 
@@ -37,7 +37,7 @@ export type PricelistEntry = {
 
 export const defaultPriceListsState: PriceListsState = {
   lists: [],
-  listCreateLevel: ListCreateLevel.initial,
+  createPricelistLevel: CreatePricelistLevel.initial,
   entryCreateLevel: EntryCreateLevel.initial,
   selectedList: null,
   isAddListDialogOpen: false,
