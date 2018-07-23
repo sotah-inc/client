@@ -2,7 +2,7 @@ import { connect, Dispatch } from 'react-redux';
 
 import { Listing, StateProps, DispatchProps, OwnProps } from '@app/components/App/PriceLists/Listing';
 import { StoreState } from '@app/types';
-import { PriceList } from '@app/types/price-lists';
+import { Pricelist } from '@app/types/price-lists';
 import { Actions } from '@app/actions';
 import { ChangeSelectedList, ChangeIsAddListDialogOpen } from '@app/actions/price-lists';
 
@@ -14,7 +14,7 @@ const mapStateToProps = (state: StoreState): StateProps => {
 
 const mapDispatchToProps = (dispatch: Dispatch<Actions>): DispatchProps => {
   return {
-    changeSelectedList: (selectedList: PriceList) => dispatch(ChangeSelectedList(selectedList)),
+    changeSelectedList: (selectedList: Pricelist) => dispatch(ChangeSelectedList(selectedList)),
     changeIsAddListDialogOpen: (isDialogOpen: boolean) => dispatch(ChangeIsAddListDialogOpen(isDialogOpen))
   };
 };

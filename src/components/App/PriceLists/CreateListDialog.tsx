@@ -3,9 +3,10 @@ import { Dialog, Breadcrumb, Button, Intent } from '@blueprintjs/core';
 
 import CreateListForm from '@app/containers/App/PriceLists/CreateListDialog/CreateListForm';
 import CreateEntryForm from '@app/containers/App/PriceLists/CreateEntryForm';
-import { DialogBody, DialogActions, ItemPopover } from '@app/components/util';
+import { DialogBody, DialogActions } from '@app/components/util';
 import { ItemClasses, Region, Realm } from '@app/types/global';
-import { CreateListStep, PriceListEntry, CreateListCompletion } from '@app/types/price-lists';
+import { CreateListStep, PricelistEntry, CreateListCompletion } from '@app/types/price-lists';
+import { CreatePricelistRequest } from '@app/api/price-lists';
 
 export type StateProps = {
   isAddListDialogOpen: boolean
@@ -16,6 +17,7 @@ export type StateProps = {
 
 export type DispatchProps = {
   changeIsAddListDialogOpen: (isDialogOpen: boolean) => void
+  createPricelist: (request: CreatePricelistRequest) => void
 };
 
 export type OwnProps = {};
@@ -26,7 +28,7 @@ type State = Readonly<{
   createListStep: CreateListStep
   listName: string
   createListCompletion: CreateListCompletion
-  entries: PriceListEntry[]
+  entries: PricelistEntry[]
 }>;
 
 export class CreateListDialog extends React.Component<Props, State> {
@@ -106,7 +108,7 @@ export class CreateListDialog extends React.Component<Props, State> {
     );
   }
 
-  onCreateEntryFormComplete(entry: PriceListEntry) {
+  onCreateEntryFormComplete(entry: PricelistEntry) {
     this.setState({
       entries: [...this.state.entries, entry],
       createListStep: CreateListStep.finish,
@@ -122,30 +124,26 @@ export class CreateListDialog extends React.Component<Props, State> {
     }
 
     return (
-      <CreateEntryForm onComplete={(v: PriceListEntry) => this.onCreateEntryFormComplete(v)}>
+      <CreateEntryForm onComplete={(v: PricelistEntry) => this.onCreateEntryFormComplete(v)}>
         {this.renderNav()}
       </CreateEntryForm>
     );
   }
 
-  renderEntry(index: number, entry: PriceListEntry) {
-    const { itemClasses } = this.props;
-
+  renderEntry(index: number, entry: PricelistEntry) {
     return (
       <tr key={index}>
         <td>
-          <ItemPopover
-            item={entry.item}
-            itemClasses={itemClasses}
-          />
+          <p>{entry.item_id}</p>
         </td>
-        <td>x{entry.quantity}</td>
+        <td>x{entry.quantity_modifier}</td>
       </tr>
     );
   }
 
   renderFinish() {
     const { createListStep, listName, entries } = this.state;
+    const { createPricelist, currentRegion, currentRealm } = this.props;
 
     if (createListStep !== CreateListStep.finish) {
       return;
@@ -178,7 +176,10 @@ export class CreateListDialog extends React.Component<Props, State> {
             text={`Finish "${listName}"`}
             intent={Intent.PRIMARY}
             onClick={() => {
-              console.log('creating list!');
+              createPricelist({
+                entries: entries,
+                pricelist: { name: listName, region: currentRegion!.name, realm: currentRealm!.slug }
+              });
             }}
             icon="edit"
           />

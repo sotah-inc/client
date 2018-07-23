@@ -3,10 +3,10 @@ import * as Yup from 'yup';
 
 import { FormValues, CreateEntryForm } from '@app/components/App/PriceLists/CreateEntryForm';
 import { PriceListRules } from '@app/validator-rules';
-import { PriceListEntry } from '@app/types/price-lists';
+import { PricelistEntry } from '@app/types/price-lists';
 
 interface FormProps {
-  onComplete: (entry: PriceListEntry) => void;
+  onComplete: (entry: PricelistEntry) => void;
 }
 
 const config: WithFormikConfig<FormProps, FormValues> = {
@@ -24,8 +24,8 @@ const config: WithFormikConfig<FormProps, FormValues> = {
     setSubmitting(false);
     resetForm();
     props.onComplete({
-      item: values.item!,
-      quantity: values.quantity
+      item_id: values.item!.id,
+      quantity_modifier: values.quantity
     });
   }
 };

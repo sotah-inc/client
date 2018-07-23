@@ -1,22 +1,8 @@
 import * as HTTPStatus from 'http-status';
 
 import { apiEndpoint } from './index';
-import { RegionName, RealmSlug, ItemId, Errors } from '@app/types/global';
-
-export type Pricelist = {
-  id: number
-  user_id: number
-  name: string
-  region: RegionName
-  realm: RealmSlug
-};
-
-export type PricelistEntry = {
-  id?: number
-  pricelist_id: number
-  item_id: ItemId
-  quantity_modifier: number
-};
+import { RegionName, RealmSlug, Errors } from '@app/types/global';
+import { Pricelist, PricelistEntry } from '@app/types/price-lists';
 
 export type CreatePricelistRequest = {
   pricelist: {

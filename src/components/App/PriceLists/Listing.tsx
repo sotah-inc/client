@@ -9,20 +9,20 @@ import {
 } from '@blueprintjs/core';
 
 import { Region, Realm } from '@app/types/global';
-import { PriceList } from '@app/types/price-lists';
+import { Pricelist } from '@app/types/price-lists';
 import PriceListPanel from '@app/containers/App/PriceLists/PriceListPanel';
 import { priceListEntryTabId } from '@app/util';
 
 export type StateProps = {
-  lists: PriceList[]
-  selectedList: PriceList | null
+  lists: Pricelist[]
+  selectedList: Pricelist | null
   currentRegion: Region | null
   currentRealm: Realm | null
   isAddListDialogOpen: boolean
 };
 
 export type DispatchProps = {
-  changeSelectedList: (list: PriceList) => void
+  changeSelectedList: (list: Pricelist) => void
   changeIsAddListDialogOpen: (isDialogOpen: boolean) => void
 };
 
@@ -35,7 +35,7 @@ export class Listing extends React.Component<Props> {
     this.props.changeIsAddListDialogOpen(!this.props.isAddListDialogOpen);
   }
 
-  renderTab(list: PriceList, index: number) {
+  renderTab(list: Pricelist, index: number) {
     return (
       <Tab
         key={index}

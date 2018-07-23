@@ -1,7 +1,7 @@
 import { apiEndpoint } from '@app/api';
 import { ItemQuality, Item, InventoryType, ItemStat, Region, Realm } from '@app/types/global';
 import { QueryAuctionResult } from '@app/types/auction';
-import { PriceList } from '@app/types/price-lists';
+import { Pricelist } from '@app/types/price-lists';
 
 export const qualityToColorClass = (quality: ItemQuality): string => {
   switch (quality) {
@@ -121,7 +121,7 @@ export const getSelectedResultIndex = (result: QueryAuctionResult, selectedItems
   return -1;
 };
 
-export const priceListEntryTabId = (list: PriceList): string => `tab-${list.id}`;
+export const priceListEntryTabId = (list: Pricelist): string => `tab-${list.id}`;
 
 export const didRegionChange = (prevRegion: Region | null, currentRegion: Region): boolean => {
   if (prevRegion === null) {

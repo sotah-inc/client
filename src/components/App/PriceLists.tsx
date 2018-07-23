@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Dialog } from '@blueprintjs/core';
 
-import { PriceListEntry } from '@app/types/price-lists';
+import { PricelistEntry } from '@app/types/price-lists';
 import CreateListDialog from '@app/containers/App/PriceLists/CreateListDialog';
 import CreateEntryForm from '@app/containers/App/PriceLists/CreateEntryForm';
 import ActionBar from '@app/containers/App/PriceLists/ActionBar';
@@ -15,7 +15,7 @@ export type StateProps = {
 
 export type DispatchProps = {
   changeIsAddEntryDialogOpen: (isDialogOpen: boolean) => void
-  createEntry: (entry: PriceListEntry) => void
+  createEntry: (entry: PricelistEntry) => void
 };
 
 export type OwnProps = {};
@@ -27,7 +27,7 @@ export class PriceLists extends React.Component<Props> {
     this.props.changeIsAddEntryDialogOpen(!this.props.isAddEntryDialogOpen);
   }
 
-  onCreateEntryFormComplete(entry: PriceListEntry) {
+  onCreateEntryFormComplete(entry: PricelistEntry) {
     this.props.createEntry(entry);
   }
 
@@ -44,7 +44,7 @@ export class PriceLists extends React.Component<Props> {
           icon="manually-entered-data"
           canOutsideClickClose={false}
         >
-          <CreateEntryForm onComplete={(v: PriceListEntry) => this.onCreateEntryFormComplete(v)} />
+          <CreateEntryForm onComplete={(v: PricelistEntry) => this.onCreateEntryFormComplete(v)} />
         </Dialog>
         <ActionBar />
         <Listing />

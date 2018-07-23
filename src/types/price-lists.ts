@@ -1,10 +1,10 @@
-import { Item, Region, Realm } from './global';
+import { RegionName, RealmSlug, ItemId } from './global';
 
 export type PriceListsState = {
-  lists: PriceList[]
+  lists: Pricelist[]
   listCreateLevel: ListCreateLevel
   entryCreateLevel: EntryCreateLevel
-  selectedList: PriceList | null
+  selectedList: Pricelist | null
   isAddListDialogOpen: boolean
   isAddEntryDialogOpen: boolean
 };
@@ -15,29 +15,25 @@ export enum CreateListCompletion { initial, list, entry }
 
 export enum EntryCreateLevel { initial, success, failure }
 
-export type PriceListEntry = {
-  item: Item
-  quantity: number
-};
-
-export type PriceListOptions = {
-  name: string
-  entries: PriceListEntry[]
-  region: Region
-  realm: Realm
-};
-
 export enum ListCreateLevel { initial, success, failure }
 
-export type PriceList = {
+export enum GetPriceListLevel { initial, success, failure }
+
+export type Pricelist = {
   id: number
+  user_id: number
   name: string
-  entries: PriceListEntry[]
-  region: Region
-  realm: Realm
+  region: RegionName
+  realm: RealmSlug
+  pricelist_entries?: PricelistEntry[]
 };
 
-export enum GetPriceListLevel { initial, success, failure }
+export type PricelistEntry = {
+  id?: number
+  pricelist_id?: number
+  item_id: ItemId
+  quantity_modifier: number
+};
 
 export const defaultPriceListsState: PriceListsState = {
   lists: [],

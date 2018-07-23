@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Button, NonIdealState } from '@blueprintjs/core';
 
 import { Item, Region, Realm } from '@app/types/global';
-import { PriceList } from '@app/types/price-lists';
+import { Pricelist } from '@app/types/price-lists';
 import { PriceListTable } from '@app/components/App/PriceLists/PriceListPanel/PriceListTable';
 
 export type StateProps = {
@@ -16,7 +16,7 @@ export type DispatchProps = {
 };
 
 export type OwnProps = {
-  list: PriceList
+  list: Pricelist
 };
 
 export type FormValues = {
@@ -34,7 +34,7 @@ export class PriceListPanel extends React.Component<Props> {
   render() {
     const { list, currentRegion, currentRealm } = this.props;
 
-    if (list.entries.length === 0) {
+    if (list.pricelist_entries!.length === 0) {
       return (
         <NonIdealState
           title="No entries"

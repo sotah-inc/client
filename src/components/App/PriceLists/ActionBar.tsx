@@ -10,7 +10,7 @@ import {
 } from '@blueprintjs/core';
 
 import { Region, Realm } from '@app/types/global';
-import { PriceList } from '@app/types/price-lists';
+import { Pricelist } from '@app/types/price-lists';
 import RegionToggle from '@app/containers/util/RegionToggle';
 import RealmToggle from '@app/containers/util/RealmToggle';
 
@@ -19,7 +19,7 @@ export type StateProps = {
   currentRealm: Realm | null
   isAddListDialogOpen: boolean
   isAddEntryDialogOpen: boolean
-  selectedList: PriceList | null
+  selectedList: Pricelist | null
 };
 
 export type DispatchProps = {

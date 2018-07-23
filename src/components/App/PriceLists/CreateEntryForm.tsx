@@ -3,7 +3,7 @@ import { Button, Intent, FormGroup } from '@blueprintjs/core';
 import { FormikProps } from 'formik';
 
 import { Item } from '@app/types/global';
-import { PriceListEntry } from '@app/types/price-lists';
+import { PricelistEntry } from '@app/types/price-lists';
 import { DialogBody, DialogActions, ItemInput } from '@app/components/util';
 import { Generator as FormFieldGenerator } from '@app/components/util/FormField';
 import { getItemIconUrl, getItemTextValue, qualityToColorClass } from '@app/util';
@@ -15,7 +15,7 @@ export type StateProps = {};
 export type DispatchProps = {};
 
 export type OwnProps = {
-  onComplete: (entry: PriceListEntry) => void
+  onComplete: (entry: PricelistEntry) => void
 };
 
 export type FormValues = {

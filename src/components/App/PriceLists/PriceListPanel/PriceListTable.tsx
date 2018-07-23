@@ -1,11 +1,9 @@
 import * as React from 'react';
 import { NonIdealState, Spinner, Intent } from '@blueprintjs/core';
 
-import { PriceList, PriceListEntry, GetPriceListLevel } from '@app/types/price-lists';
+import { Pricelist, PricelistEntry, GetPriceListLevel } from '@app/types/price-lists';
 import { Region, Realm } from '@app/types/global';
-import ItemPopover from '@app/containers/util/ItemPopover';
 import { Currency } from '@app/components/util';
-import { qualityToColorClass } from '@app/util';
 import { getPriceList, PriceListMap } from '@app/api/data';
 
 export type StateProps = {};
@@ -13,7 +11,7 @@ export type StateProps = {};
 export type DispatchProps = {};
 
 export type OwnProps = {
-  list: PriceList
+  list: Pricelist
   region: Region
   realm: Realm
 };
@@ -34,7 +32,7 @@ export class PriceListTable extends React.Component<Props, State> {
   async reloadPricelistData() {
     const { list, region, realm } = this.props;
 
-    const itemIds = list.entries.map((v) => v.item.id);
+    const itemIds = list.pricelist_entries!.map((v) => v.item_id);
     const plMap = await getPriceList({
       regionName: region.name,
       realmSlug: realm.slug,
@@ -57,16 +55,16 @@ export class PriceListTable extends React.Component<Props, State> {
   }
 
   componentDidUpdate(prevProps: Props) {
-    if (this.props.list.entries.length !== prevProps.list.entries.length) {
+    if (this.props.list.pricelist_entries!.length !== prevProps.list.pricelist_entries!.length) {
       this.reloadPricelistData();
     }
   }
 
-  renderEntry(index: number, entry: PriceListEntry) {
-    const { item, quantity } = entry;
+  renderEntry(index: number, entry: PricelistEntry) {
+    const { item_id, quantity_modifier } = entry;
     const { priceListMap } = this.state;
 
-    if (!(item.id in priceListMap)) {
+    if (!(item_id in priceListMap)) {
       return (
         <tr key={index}>
           <td colSpan={3}>
@@ -76,21 +74,18 @@ export class PriceListTable extends React.Component<Props, State> {
       );
     }
 
-    const { bid, buyout } = priceListMap[item.id];
+    const { bid, buyout } = priceListMap[item_id];
 
     return (
       <tr key={index}>
-        <td className={qualityToColorClass(item.quality)}>
-          <ItemPopover
-            item={item}
-            itemTextFormatter={(itemText) => `${itemText} x${quantity}`}
-          />
+        <td>
+          <p>{item_id} x ${quantity_modifier}</p>
         </td>
         <td>
-          <Currency amount={bid * quantity} />
+          <Currency amount={bid * quantity_modifier} />
         </td>
         <td>
-          <Currency amount={buyout * quantity} />
+          <Currency amount={buyout * quantity_modifier} />
         </td>
       </tr>
     );
@@ -109,7 +104,7 @@ export class PriceListTable extends React.Component<Props, State> {
           </tr>
         </thead>
         <tbody>
-          {list.entries.map((v, i) => this.renderEntry(i, v))}
+          {list.pricelist_entries!.map((v, i) => this.renderEntry(i, v))}
         </tbody>
       </table>
     );
