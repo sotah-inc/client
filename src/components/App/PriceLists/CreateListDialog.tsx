@@ -7,6 +7,7 @@ import { DialogBody, DialogActions, ErrorList } from '@app/components/util';
 import { ItemClasses, Region, Realm, Errors, Profile } from '@app/types/global';
 import { CreateListStep, PricelistEntry, CreateListCompletion, CreatePricelistLevel } from '@app/types/price-lists';
 import { CreatePricelistRequest } from '@app/api/price-lists';
+import { AppToaster } from '@app/util/toasters';
 
 export type StateProps = {
   isAddListDialogOpen: boolean
@@ -43,20 +44,17 @@ export class CreateListDialog extends React.Component<Props, State> {
   };
 
   componentDidUpdate(prevProps: Props) {
-    const { createPricelistLevel } = this.props;
+    const { createPricelistLevel, changeIsAddListDialogOpen } = this.props;
 
     if (prevProps.createPricelistLevel !== createPricelistLevel) {
       switch (createPricelistLevel) {
-        case CreatePricelistLevel.fetching:
-          console.log('Creating pricelist');
-
-          break;
-        case CreatePricelistLevel.failure:
-          console.log('Error creating pricelist');
-
-          break;
         case CreatePricelistLevel.success:
-          console.log('Success!');
+          changeIsAddListDialogOpen(false);
+          AppToaster.show({
+            message: 'Your pricelist has been created.',
+            intent: Intent.SUCCESS,
+            icon: 'info-sign'
+          });
 
           break;
         default:
