@@ -43,7 +43,12 @@ export class PriceLists extends React.Component<Props> {
           title="Unauthenticated"
           description="Please log in to use price-lists."
           visual="list"
-          action={<Button onClick={() => changeIsLoginDialogOpen(true)} type="button" icon="log-in" text="Login" />}
+          action={<Button
+            onClick={() => changeIsLoginDialogOpen(true)}
+            type="button"
+            icon="log-in"
+            text="Login"
+          />}
         />
       );
     }
