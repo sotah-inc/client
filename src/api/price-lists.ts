@@ -24,7 +24,7 @@ export type CreatePricelistResponse = {
   } | null
 };
 
-export const createPriceList = async (
+export const createPricelist = async (
   token: string,
   request: CreatePricelistRequest
 ): Promise<CreatePricelistResponse> => {

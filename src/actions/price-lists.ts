@@ -2,7 +2,7 @@ import { Dispatch } from 'redux';
 
 import { Pricelist, PricelistEntry, EntryCreateLevel } from '@app/types/price-lists';
 import {
-  CreatePricelistRequest, CreatePricelistResponse, createPriceList
+  CreatePricelistRequest, CreatePricelistResponse, createPricelist
 } from '@app/api/price-lists';
 
 import { createAction, ActionsUnion } from './helpers';
@@ -17,7 +17,7 @@ type FetchCreatePricelistType = ReturnType<typeof RequestCreatePricelist | typeo
 export const FetchCreatePricelist = (token: string, request: CreatePricelistRequest) => {
   return async (dispatch: Dispatch<FetchCreatePricelistType>) => {
     dispatch(RequestCreatePricelist());
-    dispatch(ReceiveCreatePricelist(await createPriceList(token, request)));
+    dispatch(ReceiveCreatePricelist(await createPricelist(token, request)));
   };
 };
 
