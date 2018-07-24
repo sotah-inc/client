@@ -44,16 +44,21 @@ export class CreateListDialog extends React.Component<Props, State> {
   };
 
   componentDidUpdate(prevProps: Props) {
-    const { createPricelistLevel, changeIsAddListDialogOpen } = this.props;
+    const { createPricelistLevel } = this.props;
 
     if (prevProps.createPricelistLevel !== createPricelistLevel) {
       switch (createPricelistLevel) {
         case CreatePricelistLevel.success:
-          changeIsAddListDialogOpen(false);
           AppToaster.show({
             message: 'Your pricelist has been created.',
             intent: Intent.SUCCESS,
             icon: 'info-sign'
+          });
+          this.setState({
+            createListStep: CreateListStep.list,
+            createListCompletion: CreateListCompletion.initial,
+            entries: [],
+            listName: ''
           });
 
           break;
