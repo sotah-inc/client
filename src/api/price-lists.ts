@@ -46,3 +46,25 @@ export const createPricelist = async (
       return { errors: await res.json(), data: null };
   }
 };
+
+export type GetPricelistsOptions = {
+  token: string
+  regionName: RegionName
+  realmSlug: RealmSlug
+};
+
+export type GetPricelistsResponse = {
+  pricelists: Pricelist[]
+};
+
+export const getPricelists = async(opts: GetPricelistsOptions): Promise<GetPricelistsResponse> => {
+  const res = await fetch(`${apiEndpoint}/user/pricelists/region/${opts.regionName}/realm/${opts.realmSlug}`, {
+    method: 'GET',
+    headers: new Headers({
+      'content-type': 'application/json',
+      'Authorization': `Bearer ${opts.token}`
+    })
+  });
+
+  return await res.json();
+};
