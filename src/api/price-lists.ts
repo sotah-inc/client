@@ -37,7 +37,7 @@ export const createPriceList = async (
     })
   });
   switch (res.status) {
-    case HTTPStatus.OK:
+    case HTTPStatus.CREATED:
       return { errors: null, data: await res.json() };
     case HTTPStatus.UNAUTHORIZED:
       return { errors: { error: 'Unauthorized' }, data: null };
