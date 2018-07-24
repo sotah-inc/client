@@ -1,6 +1,7 @@
 import * as React from 'react';
-import { Dialog } from '@blueprintjs/core';
+import { Dialog, NonIdealState, Button } from '@blueprintjs/core';
 
+import { AuthLevel } from '@app/types/main';
 import { PricelistEntry } from '@app/types/price-lists';
 import CreateListDialog from '@app/containers/App/PriceLists/CreateListDialog';
 import CreateEntryForm from '@app/containers/App/PriceLists/CreateEntryForm';
@@ -11,11 +12,13 @@ import './PriceLists.scss';
 
 export type StateProps = {
   isAddEntryDialogOpen: boolean
+  authLevel: AuthLevel
 };
 
 export type DispatchProps = {
   changeIsAddEntryDialogOpen: (isDialogOpen: boolean) => void
   createEntry: (entry: PricelistEntry) => void
+  changeIsLoginDialogOpen: (isLoginDialogOpen: boolean) => void
 };
 
 export type OwnProps = {};
@@ -32,7 +35,18 @@ export class PriceLists extends React.Component<Props> {
   }
 
   render() {
-    const { isAddEntryDialogOpen } = this.props;
+    const { isAddEntryDialogOpen, authLevel, changeIsLoginDialogOpen } = this.props;
+
+    if (authLevel !== AuthLevel.authenticated) {
+      return (
+        <NonIdealState
+          title="Unauthenticated"
+          description="Please log in to use price-lists."
+          visual="list"
+          action={<Button onClick={() => changeIsLoginDialogOpen(true)} type="button" icon="log-in" text="Login" />}
+        />
+      );
+    }
 
     return (
       <>

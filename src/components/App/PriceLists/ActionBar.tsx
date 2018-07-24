@@ -10,7 +10,6 @@ import {
 } from '@blueprintjs/core';
 
 import { Region, Realm } from '@app/types/global';
-import { AuthLevel } from '@app/types/main';
 import { Pricelist } from '@app/types/price-lists';
 import RegionToggle from '@app/containers/util/RegionToggle';
 import RealmToggle from '@app/containers/util/RealmToggle';
@@ -21,14 +20,11 @@ export type StateProps = {
   isAddListDialogOpen: boolean
   isAddEntryDialogOpen: boolean
   selectedList: Pricelist | null
-  authLevel: AuthLevel
-  isLoginDialogOpen: boolean
 };
 
 export type DispatchProps = {
   changeIsAddListDialogOpen: (isDialogOpen: boolean) => void
   changeIsAddEntryDialogOpen: (isDialogOpen: boolean) => void
-  changeIsLoginDialogOpen: (isLoginDialogOpen: boolean) => void
 };
 
 export type OwnProps = {};
@@ -48,10 +44,7 @@ export class ActionBar extends React.Component<Props> {
     const {
       currentRegion,
       currentRealm,
-      selectedList,
-      authLevel,
-      changeIsLoginDialogOpen,
-      isLoginDialogOpen
+      selectedList
     } = this.props;
 
     if (currentRegion === null || currentRealm === null) {
@@ -64,15 +57,7 @@ export class ActionBar extends React.Component<Props> {
       <>
         <Button
           icon="plus"
-          onClick={() => {
-            if (authLevel !== AuthLevel.authenticated) {
-              changeIsLoginDialogOpen(!isLoginDialogOpen);
-
-              return;
-            }
-
-            this.toggleListDialog();
-          }}
+          onClick={() => this.toggleListDialog()}
           text="List"
         />
         <Navbar.Divider />
