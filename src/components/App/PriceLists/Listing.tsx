@@ -10,7 +10,7 @@ import {
 
 import { Region, Realm, Profile } from '@app/types/global';
 import { AuthLevel, FetchUserPreferencesLevel } from '@app/types/main';
-import { Pricelist, GetPricelistsLevel } from '@app/types/price-lists';
+import { Pricelist, GetPricelistsLevel, CreatePricelistLevel } from '@app/types/price-lists';
 import PriceListPanel from '@app/containers/App/PriceLists/PriceListPanel';
 import { priceListEntryTabId, didRealmChange } from '@app/util';
 import { GetPricelistsOptions } from '@app/api/price-lists';
@@ -25,6 +25,7 @@ export type StateProps = {
   profile: Profile | null
   authLevel: AuthLevel
   fetchUserPreferencesLevel: FetchUserPreferencesLevel
+  createPricelistLevel: CreatePricelistLevel
 };
 
 export type DispatchProps = {
@@ -45,7 +46,8 @@ export class Listing extends React.Component<Props> {
       currentRealm,
       profile,
       authLevel,
-      fetchUserPreferencesLevel
+      fetchUserPreferencesLevel,
+      createPricelistLevel
     } = this.props;
 
     if (currentRealm === null || currentRegion === null) {
@@ -53,7 +55,10 @@ export class Listing extends React.Component<Props> {
     }
     
     if (authLevel === AuthLevel.authenticated && fetchUserPreferencesLevel === FetchUserPreferencesLevel.success) {
-      const shouldRefreshPricelists = didRealmChange(prevProps.currentRealm, currentRealm);
+      const shouldRefreshPricelists = didRealmChange(prevProps.currentRealm, currentRealm)
+        || (prevProps.createPricelistLevel === CreatePricelistLevel.fetching
+          && createPricelistLevel === CreatePricelistLevel.success
+        );
       if (shouldRefreshPricelists) {
         refreshPricelists({
           token: profile!.token,

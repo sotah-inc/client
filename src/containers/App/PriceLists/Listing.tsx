@@ -9,7 +9,7 @@ import { GetPricelistsOptions } from '@app/api/price-lists';
 
 const mapStateToProps = (state: StoreState): StateProps => {
   const { currentRegion, currentRealm, profile, authLevel, fetchUserPreferencesLevel } = state.Main;
-  const { pricelists, selectedList, isAddListDialogOpen, getPricelistsLevel } = state.PriceLists;
+  const { pricelists, selectedList, isAddListDialogOpen, getPricelistsLevel, createPricelistLevel } = state.PriceLists;
   return {
     pricelists,
     selectedList,
@@ -19,7 +19,8 @@ const mapStateToProps = (state: StoreState): StateProps => {
     getPricelistsLevel,
     profile,
     authLevel,
-    fetchUserPreferencesLevel
+    fetchUserPreferencesLevel,
+    createPricelistLevel
   };
 };
 
