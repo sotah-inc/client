@@ -8,8 +8,8 @@ import { ChangeSelectedList, ChangeIsAddListDialogOpen } from '@app/actions/pric
 
 const mapStateToProps = (state: StoreState): StateProps => {
   const { currentRegion, currentRealm } = state.Main;
-  const { lists, selectedList, isAddListDialogOpen } = state.PriceLists;
-  return { lists, selectedList, currentRegion, currentRealm, isAddListDialogOpen };
+  const { pricelists, selectedList, isAddListDialogOpen } = state.PriceLists;
+  return { pricelists, selectedList, currentRegion, currentRealm, isAddListDialogOpen };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<Actions>): DispatchProps => {

@@ -14,7 +14,7 @@ import PriceListPanel from '@app/containers/App/PriceLists/PriceListPanel';
 import { priceListEntryTabId } from '@app/util';
 
 export type StateProps = {
-  lists: Pricelist[]
+  pricelists: Pricelist[]
   selectedList: Pricelist | null
   currentRegion: Region | null
   currentRealm: Realm | null
@@ -47,7 +47,7 @@ export class Listing extends React.Component<Props> {
   }
 
   onTabChange(id: React.ReactText) {
-    const list = this.props.lists.reduce(
+    const list = this.props.pricelists.reduce(
       (result, v) => {
         if (result !== null) {
           return result;
@@ -70,7 +70,7 @@ export class Listing extends React.Component<Props> {
   }
 
   renderContent() {
-    const { lists, selectedList, currentRegion, currentRealm } = this.props;
+    const { pricelists, selectedList, currentRegion, currentRealm } = this.props;
 
     if (currentRegion === null || currentRealm === null) {
       return (
@@ -81,7 +81,7 @@ export class Listing extends React.Component<Props> {
       );
     }
 
-    if (lists.length === 0) {
+    if (pricelists.length === 0) {
       return (
         <NonIdealState
           title="No price lists"
@@ -107,7 +107,7 @@ export class Listing extends React.Component<Props> {
         vertical={true}
         renderActiveTabPanelOnly={true}
       >
-        {lists.map((v, i) => this.renderTab(v, i))}
+        {pricelists.map((v, i) => this.renderTab(v, i))}
       </Tabs>
     );
   }

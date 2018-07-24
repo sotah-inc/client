@@ -1,10 +1,12 @@
 import {
   PriceListsState,
   CreatePricelistLevel,
+  GetPricelistsLevel,
   defaultPriceListsState
 } from '@app/types/price-lists';
 import {
   REQUEST_CREATE_PRICELIST, RECEIVE_CREATE_PRICELIST,
+  REQUEST_GET_PRICELISTS, RECEIVE_GET_PRICELISTS,
   CHANGE_ENTRY_CREATELEVEL,
   CHANGE_SELECTED_LIST,
   CHANGE_IS_ADD_LIST_DIALOG_OPEN, CHANGE_IS_ADD_ENTRY_DIALOG_OPEN,
@@ -35,6 +37,16 @@ export const priceLists = (state: State, action: PriceListsActions): State => {
         createPricelistLevel: CreatePricelistLevel.success,
         createPricelistErrors: {},
         isAddListDialogOpen: false
+      };
+    case REQUEST_GET_PRICELISTS:
+      return {
+        ...state,
+        getPricelistsLevel: GetPricelistsLevel.fetching
+      };
+    case RECEIVE_GET_PRICELISTS:
+      return {
+        ...state,
+        pricelists: action.payload.pricelists
       };
     case CHANGE_ENTRY_CREATELEVEL:
       return { ...state, entryCreateLevel: action.payload };
