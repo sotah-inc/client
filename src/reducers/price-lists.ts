@@ -46,7 +46,8 @@ export const priceLists = (state: State, action: PriceListsActions): State => {
     case RECEIVE_GET_PRICELISTS:
       return {
         ...state,
-        pricelists: action.payload.pricelists
+        pricelists: action.payload.pricelists,
+        getPricelistsLevel: GetPricelistsLevel.success
       };
     case CHANGE_ENTRY_CREATELEVEL:
       return { ...state, entryCreateLevel: action.payload };

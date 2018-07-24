@@ -8,10 +8,12 @@ import {
   Intent
 } from '@blueprintjs/core';
 
-import { Region, Realm } from '@app/types/global';
-import { Pricelist } from '@app/types/price-lists';
+import { Region, Realm, Profile } from '@app/types/global';
+import { AuthLevel, FetchUserPreferencesLevel } from '@app/types/main';
+import { Pricelist, GetPricelistsLevel } from '@app/types/price-lists';
 import PriceListPanel from '@app/containers/App/PriceLists/PriceListPanel';
-import { priceListEntryTabId } from '@app/util';
+import { priceListEntryTabId, didRealmChange } from '@app/util';
+import { GetPricelistsOptions } from '@app/api/price-lists';
 
 export type StateProps = {
   pricelists: Pricelist[]
@@ -19,11 +21,16 @@ export type StateProps = {
   currentRegion: Region | null
   currentRealm: Realm | null
   isAddListDialogOpen: boolean
+  getPricelistsLevel: GetPricelistsLevel
+  profile: Profile | null
+  authLevel: AuthLevel
+  fetchUserPreferencesLevel: FetchUserPreferencesLevel
 };
 
 export type DispatchProps = {
   changeSelectedList: (list: Pricelist) => void
   changeIsAddListDialogOpen: (isDialogOpen: boolean) => void
+  refreshPricelists: (opts: GetPricelistsOptions) => void
 };
 
 export type OwnProps = {};
@@ -31,6 +38,32 @@ export type OwnProps = {};
 export type Props = Readonly<StateProps & DispatchProps & OwnProps>;
 
 export class Listing extends React.Component<Props> {
+  componentDidUpdate(prevProps: Props) {
+    const {
+      refreshPricelists,
+      currentRegion,
+      currentRealm,
+      profile,
+      authLevel,
+      fetchUserPreferencesLevel
+    } = this.props;
+
+    if (currentRealm === null || currentRegion === null) {
+      return;
+    }
+    
+    if (authLevel === AuthLevel.authenticated && fetchUserPreferencesLevel === FetchUserPreferencesLevel.success) {
+      const shouldRefreshPricelists = didRealmChange(prevProps.currentRealm, currentRealm);
+      if (shouldRefreshPricelists) {
+        refreshPricelists({
+          token: profile!.token,
+          realmSlug: currentRealm.slug,
+          regionName: currentRegion.name
+        });
+      }
+    }
+  }
+
   toggleDialog() {
     this.props.changeIsAddListDialogOpen(!this.props.isAddListDialogOpen);
   }
@@ -69,30 +102,21 @@ export class Listing extends React.Component<Props> {
     this.props.changeSelectedList(list);
   }
 
-  renderContent() {
-    const { pricelists, selectedList, currentRegion, currentRealm } = this.props;
-
-    if (currentRegion === null || currentRealm === null) {
-      return (
-        <NonIdealState
-          title="Loading"
-          visual={<Spinner className="pt-large" intent={Intent.PRIMARY} />}
-        />
-      );
-    }
+  renderPricelists() {
+    const { pricelists, selectedList, currentRealm } = this.props;
 
     if (pricelists.length === 0) {
       return (
         <NonIdealState
           title="No price lists"
-          description={`You have no price lists in ${currentRealm.name}.`}
+          description={`You have no price lists in ${currentRealm!.name}.`}
           visual="list"
           action={<Button
             className="pt-fill"
             icon="plus"
             onClick={() => this.toggleDialog()}
           >
-            Add List to {currentRealm.name}
+            Add List to {currentRealm!.name}
           </Button>}
         />
       );
@@ -110,6 +134,27 @@ export class Listing extends React.Component<Props> {
         {pricelists.map((v, i) => this.renderTab(v, i))}
       </Tabs>
     );
+  }
+
+  renderContent() {
+    const { getPricelistsLevel } = this.props;
+
+    switch (getPricelistsLevel) {
+      case GetPricelistsLevel.initial:
+      case GetPricelistsLevel.fetching:
+        return (
+          <NonIdealState
+            title="Loading"
+            visual={<Spinner className="pt-large" intent={Intent.PRIMARY} />}
+          />
+        );
+      case GetPricelistsLevel.success:
+        return this.renderPricelists();
+      default:
+        break;
+    }
+
+    return;
   }
 
   render() {
