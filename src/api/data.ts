@@ -8,7 +8,8 @@ import {
   Owner,
   OwnerName,
   ItemId,
-  QueryItemResult
+  QueryItemResult,
+  ItemsMap
 } from '../types/global';
 import { SortDirection, SortKind, QueryAuctionResult } from '../types/auction';
 
@@ -165,6 +166,7 @@ export type PriceListMap = {
 
 export type GetPriceListResponse = {
   price_list: PriceListMap
+  items: ItemsMap
 };
 
 export const getPriceList = async (opts: GetPriceListOptions): Promise<GetPriceListResponse | null> => {
