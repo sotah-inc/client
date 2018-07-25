@@ -1,7 +1,7 @@
 import * as HTTPStatus from 'http-status';
 
 import { apiEndpoint } from './index';
-import { RegionName, RealmSlug, Errors } from '@app/types/global';
+import { RegionName, RealmSlug, Errors, ItemsMap } from '@app/types/global';
 import { Pricelist, PricelistEntry } from '@app/types/price-lists';
 
 export type CreatePricelistRequest = {
@@ -55,6 +55,7 @@ export type GetPricelistsOptions = {
 
 export type GetPricelistsResponse = {
   pricelists: Pricelist[]
+  items: ItemsMap
 };
 
 export const getPricelists = async(opts: GetPricelistsOptions): Promise<GetPricelistsResponse> => {

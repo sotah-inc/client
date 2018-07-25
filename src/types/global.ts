@@ -175,6 +175,10 @@ export type Item = {
   description: string
 };
 
+export type ItemsMap = {
+  [key: number]: Item
+};
+
 // owner types
 export type OwnerName = string;
 
