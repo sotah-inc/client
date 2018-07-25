@@ -146,6 +146,12 @@ export class Listing extends React.Component<Props> {
 
     switch (getPricelistsLevel) {
       case GetPricelistsLevel.initial:
+      return (
+        <NonIdealState
+          title="Loading"
+          visual={<Spinner className="pt-large" intent={Intent.NONE} value={0} />}
+        />
+      );
       case GetPricelistsLevel.fetching:
         return (
           <NonIdealState
