@@ -47,6 +47,49 @@ export const createPricelist = async (
   }
 };
 
+export type UpdatePricelistRequest = {
+  pricelist: {
+    name: string
+    region: RegionName
+    realm: RealmSlug
+  }
+  entries: {
+    item_id: number
+    quantity_modifier: number
+  }[]
+};
+
+export type UpdatePricelistResponse = {
+  errors: Errors | null
+  data: {
+    pricelist: Pricelist
+    entries: PricelistEntry[]
+  } | null
+};
+
+export const updatePricelist = async (
+  token: string,
+  request: UpdatePricelistRequest
+): Promise<UpdatePricelistResponse> => {
+  const res = await fetch(`${apiEndpoint}/user/pricelists`, {
+    method: 'PUT',
+    body: JSON.stringify(request),
+    headers: new Headers({
+      'content-type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    })
+  });
+  switch (res.status) {
+    case HTTPStatus.CREATED:
+      return { errors: null, data: await res.json() };
+    case HTTPStatus.UNAUTHORIZED:
+      return { errors: { error: 'Unauthorized' }, data: null };
+    case HTTPStatus.BAD_REQUEST:
+    default:
+      return { errors: await res.json(), data: null };
+  }
+};
+
 export type GetPricelistsOptions = {
   token: string
   regionName: RegionName

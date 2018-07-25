@@ -3,6 +3,7 @@ import { Dispatch } from 'redux';
 import { Pricelist, PricelistEntry, EntryCreateLevel } from '@app/types/price-lists';
 import {
   CreatePricelistRequest, CreatePricelistResponse, createPricelist,
+  UpdatePricelistRequest, UpdatePricelistResponse, updatePricelist,
   GetPricelistsOptions, GetPricelistsResponse, getPricelists
 } from '@app/api/price-lists';
 
@@ -19,6 +20,20 @@ export const FetchCreatePricelist = (token: string, request: CreatePricelistRequ
   return async (dispatch: Dispatch<FetchCreatePricelistType>) => {
     dispatch(RequestCreatePricelist());
     dispatch(ReceiveCreatePricelist(await createPricelist(token, request)));
+  };
+};
+
+export const REQUEST_UPDATE_PRICELIST = 'REQUEST_UPDATE_PRICELIST';
+export const RequestUpdatePricelist = () => createAction(REQUEST_UPDATE_PRICELIST);
+export const RECEIVE_UPDATE_PRICELIST = 'RECEIVE_UPDATE_PRICELIST';
+export const ReceiveUpdatePricelist = (
+  payload: UpdatePricelistResponse
+) => createAction(RECEIVE_UPDATE_PRICELIST, payload);
+type FetchUpdatePricelistType = ReturnType<typeof RequestUpdatePricelist | typeof ReceiveUpdatePricelist>;
+export const FetchUpdatePricelist = (token: string, request: UpdatePricelistRequest) => {
+  return async (dispatch: Dispatch<FetchUpdatePricelistType>) => {
+    dispatch(RequestUpdatePricelist());
+    dispatch(ReceiveUpdatePricelist(await updatePricelist(token, request)));
   };
 };
 
@@ -53,6 +68,7 @@ export const ChangeIsAddEntryDialogOpen = (payload: boolean) => createAction(CHA
 
 export const PriceListsActions = {
   RequestCreatePricelist, ReceiveCreatePricelist,
+  RequestUpdatePricelist, ReceiveUpdatePricelist,
   RequestGetPricelists, ReceiveGetPricelists,
   CreateEntry, ChangeEntryCreateLevel,
   ChangeSelectedList,
