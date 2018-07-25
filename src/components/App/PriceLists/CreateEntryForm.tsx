@@ -15,7 +15,7 @@ export type StateProps = {};
 export type DispatchProps = {};
 
 export type OwnProps = {
-  onComplete: (entry: PricelistEntry) => void
+  onComplete: (entry: PricelistEntry, item: Item) => void
 };
 
 export type FormValues = {

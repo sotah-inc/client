@@ -3,8 +3,9 @@ import { Dialog, Breadcrumb, Button, Intent } from '@blueprintjs/core';
 
 import CreateListForm from '@app/containers/App/PriceLists/CreateListDialog/CreateListForm';
 import CreateEntryForm from '@app/containers/App/PriceLists/CreateEntryForm';
+import ItemPopover from '@app/containers/util/ItemPopover';
 import { DialogBody, DialogActions, ErrorList } from '@app/components/util';
-import { ItemClasses, Region, Realm, Errors, Profile } from '@app/types/global';
+import { ItemClasses, Region, Realm, Errors, Profile, ItemsMap, Item } from '@app/types/global';
 import { CreateListStep, PricelistEntry, CreateListCompletion, CreatePricelistLevel } from '@app/types/price-lists';
 import { CreatePricelistRequest } from '@app/api/price-lists';
 import { AppToaster } from '@app/util/toasters';
@@ -33,6 +34,7 @@ type State = Readonly<{
   listName: string
   createListCompletion: CreateListCompletion
   entries: PricelistEntry[]
+  entriesItems: ItemsMap
 }>;
 
 export class CreateListDialog extends React.Component<Props, State> {
@@ -40,7 +42,8 @@ export class CreateListDialog extends React.Component<Props, State> {
     createListStep: CreateListStep.list,
     listName: '',
     createListCompletion: CreateListCompletion.initial,
-    entries: []
+    entries: [],
+    entriesItems: {}
   };
 
   componentDidUpdate(prevProps: Props) {
@@ -153,17 +156,26 @@ export class CreateListDialog extends React.Component<Props, State> {
     }
 
     return (
-      <CreateEntryForm onComplete={(v: PricelistEntry) => this.onCreateEntryFormComplete(v)}>
+      <CreateEntryForm
+        onComplete={(v: PricelistEntry, item: Item) => {
+          const entriesItems = this.state.entriesItems;
+          entriesItems[item.id] = item;
+          this.setState({ entriesItems: { ...entriesItems } });
+          this.onCreateEntryFormComplete(v);
+        }}
+      >
         {this.renderNav()}
       </CreateEntryForm>
     );
   }
 
   renderEntry(index: number, entry: PricelistEntry) {
+    const { entriesItems } = this.state;
+
     return (
       <tr key={index}>
         <td>
-          <p>{entry.item_id}</p>
+          <ItemPopover item={entriesItems[entry.item_id]} />
         </td>
         <td>x{entry.quantity_modifier}</td>
       </tr>
