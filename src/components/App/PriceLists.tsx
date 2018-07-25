@@ -37,11 +37,13 @@ export class PriceLists extends React.Component<Props> {
 
   onCreateEntryFormComplete(entry: PricelistEntry) {
     const { selectedList, updatePricelist, profile } = this.props;
-    selectedList!.pricelist_entries!.push(entry);
     updatePricelist({
       token: profile!.token,
       pricelist: selectedList!,
-      entries: selectedList!.pricelist_entries!
+      entries: [
+        ...selectedList!.pricelist_entries!,
+        entry
+      ]
     });
   }
 
