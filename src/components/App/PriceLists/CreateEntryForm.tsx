@@ -16,6 +16,7 @@ export type DispatchProps = {};
 
 export type OwnProps = {
   onComplete: (entry: PricelistEntry, item: Item) => void
+  isSubmitDisabled?: boolean
 };
 
 export type FormValues = {
@@ -64,6 +65,7 @@ export class CreateEntryForm extends React.Component<Props> {
     const createFormField = FormFieldGenerator({ setFieldValue });
 
     const itemIntent = errors.item && touched.item ? Intent.DANGER : Intent.NONE;
+    const isSubmitDisabled = isSubmitting || this.props.isSubmitDisabled;
 
     return (
       <form onSubmit={handleSubmit}>
@@ -117,7 +119,7 @@ export class CreateEntryForm extends React.Component<Props> {
             text="Add Entry"
             intent={Intent.PRIMARY}
             icon="edit"
-            disabled={isSubmitting}
+            disabled={isSubmitDisabled}
           />
         </DialogActions>
       </form>
