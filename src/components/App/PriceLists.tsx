@@ -1,23 +1,28 @@
 import * as React from 'react';
 import { Dialog, NonIdealState, Button } from '@blueprintjs/core';
 
+import { Profile } from '@app/types/global';
 import { AuthLevel } from '@app/types/main';
-import { PricelistEntry } from '@app/types/price-lists';
+import { PricelistEntry, UpdatePricelistLevel, Pricelist } from '@app/types/price-lists';
 import CreateListDialog from '@app/containers/App/PriceLists/CreateListDialog';
 import CreateEntryForm from '@app/containers/App/PriceLists/CreateEntryForm';
 import ActionBar from '@app/containers/App/PriceLists/ActionBar';
 import Listing from '@app/containers/App/PriceLists/Listing';
+import { UpdatePricelistRequest } from '@app/api/price-lists';
 
 import './PriceLists.scss';
 
 export type StateProps = {
   isAddEntryDialogOpen: boolean
   authLevel: AuthLevel
+  updatePricelistLevel: UpdatePricelistLevel
+  selectedList: Pricelist | null
+  profile: Profile | null
 };
 
 export type DispatchProps = {
   changeIsAddEntryDialogOpen: (isDialogOpen: boolean) => void
-  createEntry: (entry: PricelistEntry) => void
+  updatePricelist: (request: UpdatePricelistRequest) => void
   changeIsLoginDialogOpen: (isLoginDialogOpen: boolean) => void
 };
 
@@ -31,11 +36,22 @@ export class PriceLists extends React.Component<Props> {
   }
 
   onCreateEntryFormComplete(entry: PricelistEntry) {
-    this.props.createEntry(entry);
+    const { selectedList, updatePricelist, profile } = this.props;
+    selectedList!.pricelist_entries!.push(entry);
+    updatePricelist({
+      token: profile!.token,
+      pricelist: selectedList!,
+      entries: selectedList!.pricelist_entries!
+    });
   }
 
   render() {
-    const { isAddEntryDialogOpen, authLevel, changeIsLoginDialogOpen } = this.props;
+    const {
+      isAddEntryDialogOpen,
+      authLevel,
+      changeIsLoginDialogOpen,
+      updatePricelistLevel
+    } = this.props;
 
     if (authLevel !== AuthLevel.authenticated) {
       return (
@@ -63,7 +79,10 @@ export class PriceLists extends React.Component<Props> {
           icon="manually-entered-data"
           canOutsideClickClose={false}
         >
-          <CreateEntryForm onComplete={(v: PricelistEntry) => this.onCreateEntryFormComplete(v)} />
+          <CreateEntryForm
+            onComplete={(v: PricelistEntry) => this.onCreateEntryFormComplete(v)}
+            isSubmitDisabled={updatePricelistLevel === UpdatePricelistLevel.fetching}
+          />
         </Dialog>
         <ActionBar />
         <Listing />
