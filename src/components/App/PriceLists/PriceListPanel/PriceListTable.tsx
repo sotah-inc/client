@@ -2,7 +2,8 @@ import * as React from 'react';
 import { NonIdealState, Spinner, Intent } from '@blueprintjs/core';
 
 import { Pricelist, PricelistEntry, GetPriceListLevel } from '@app/types/price-lists';
-import { Region, Realm } from '@app/types/global';
+import { Region, Realm, ItemsMap } from '@app/types/global';
+import ItemPopover from '@app/containers/util/ItemPopover';
 import { Currency } from '@app/components/util';
 import { getPriceList, PriceListMap } from '@app/api/data';
 
@@ -20,25 +21,27 @@ type Props = Readonly<StateProps & DispatchProps & OwnProps>;
 
 type State = Readonly<{
   getPriceListLevel: GetPriceListLevel
-  priceListMap: PriceListMap
+  pricelistMap: PriceListMap
+  itemsMap: ItemsMap
 }>;
 
 export class PriceListTable extends React.Component<Props, State> {
   state: State = {
     getPriceListLevel: GetPriceListLevel.initial,
-    priceListMap: {}
+    pricelistMap: {},
+    itemsMap: {}
   };
 
   async reloadPricelistData() {
     const { list, region, realm } = this.props;
 
     const itemIds = list.pricelist_entries!.map((v) => v.item_id);
-    const plMap = await getPriceList({
+    const data = await getPriceList({
       regionName: region.name,
       realmSlug: realm.slug,
       itemIds
     });
-    if (plMap === null) {
+    if (data === null) {
       this.setState({ getPriceListLevel: GetPriceListLevel.failure });
 
       return;
@@ -46,7 +49,8 @@ export class PriceListTable extends React.Component<Props, State> {
 
     this.setState({
       getPriceListLevel: GetPriceListLevel.success,
-      priceListMap: plMap.price_list
+      pricelistMap: data.price_list,
+      itemsMap: data.items
     });
   }
 
@@ -62,9 +66,9 @@ export class PriceListTable extends React.Component<Props, State> {
 
   renderEntry(index: number, entry: PricelistEntry) {
     const { item_id, quantity_modifier } = entry;
-    const { priceListMap } = this.state;
+    const { pricelistMap, itemsMap } = this.state;
 
-    if (!(item_id in priceListMap)) {
+    if (!(item_id in pricelistMap)) {
       return (
         <tr key={index}>
           <td colSpan={3}>
@@ -74,12 +78,15 @@ export class PriceListTable extends React.Component<Props, State> {
       );
     }
 
-    const { bid, buyout } = priceListMap[item_id];
+    const { bid, buyout } = pricelistMap[item_id];
 
     return (
       <tr key={index}>
         <td>
-          <p>{item_id} x ${quantity_modifier}</p>
+          <ItemPopover
+            item={itemsMap[item_id]}
+            itemTextFormatter={(itemText) => `${itemText} x${quantity_modifier}`}
+          />
         </td>
         <td>
           <Currency amount={bid * quantity_modifier} />
