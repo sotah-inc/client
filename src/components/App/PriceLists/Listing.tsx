@@ -39,6 +39,29 @@ export type OwnProps = {};
 export type Props = Readonly<StateProps & DispatchProps & OwnProps>;
 
 export class Listing extends React.Component<Props> {
+  componentDidMount() {
+    const {
+      refreshPricelists,
+      currentRegion,
+      currentRealm,
+      profile,
+      authLevel,
+      fetchUserPreferencesLevel
+    } = this.props;
+
+    if (currentRealm === null || currentRegion === null) {
+      return;
+    }
+    
+    if (authLevel === AuthLevel.authenticated && fetchUserPreferencesLevel === FetchUserPreferencesLevel.success) {
+      refreshPricelists({
+        token: profile!.token,
+        realmSlug: currentRealm.slug,
+        regionName: currentRegion.name
+      });
+    }
+  }
+
   componentDidUpdate(prevProps: Props) {
     const {
       refreshPricelists,
