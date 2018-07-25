@@ -54,7 +54,8 @@ export const priceLists = (state: State, action: PriceListsActions): State => {
       return {
         ...state,
         updatePricelistLevel: UpdatePricelistLevel.success,
-        updatePricelistErrors: {}
+        updatePricelistErrors: {},
+        isAddEntryDialogOpen: false
       };
     case REQUEST_GET_PRICELISTS:
       return {
