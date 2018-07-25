@@ -1,6 +1,6 @@
 import { Dispatch } from 'redux';
 
-import { Pricelist, PricelistEntry, EntryCreateLevel } from '@app/types/price-lists';
+import { Pricelist, EntryCreateLevel } from '@app/types/price-lists';
 import {
   CreatePricelistRequest, CreatePricelistResponse, createPricelist,
   UpdatePricelistRequest, UpdatePricelistResponse, updatePricelist,
@@ -30,10 +30,10 @@ export const ReceiveUpdatePricelist = (
   payload: UpdatePricelistResponse
 ) => createAction(RECEIVE_UPDATE_PRICELIST, payload);
 type FetchUpdatePricelistType = ReturnType<typeof RequestUpdatePricelist | typeof ReceiveUpdatePricelist>;
-export const FetchUpdatePricelist = (token: string, request: UpdatePricelistRequest) => {
+export const FetchUpdatePricelist = (request: UpdatePricelistRequest) => {
   return async (dispatch: Dispatch<FetchUpdatePricelistType>) => {
     dispatch(RequestUpdatePricelist());
-    dispatch(ReceiveUpdatePricelist(await updatePricelist(token, request)));
+    dispatch(ReceiveUpdatePricelist(await updatePricelist(request)));
   };
 };
 
@@ -51,9 +51,6 @@ export const FetchGetPricelists = (opts: GetPricelistsOptions) => {
   };
 };
 
-export const CREATE_PRICELIST_ENTRY = 'CREATE_PRICELIST_ENTRY';
-export const CreateEntry = (payload: PricelistEntry) => createAction(CREATE_PRICELIST_ENTRY, payload);
-
 export const CHANGE_ENTRY_CREATELEVEL = 'CHANGE_ENTRY_CREATELEVEL';
 export const ChangeEntryCreateLevel = (payload: EntryCreateLevel) => createAction(CHANGE_ENTRY_CREATELEVEL, payload);
 
@@ -70,7 +67,7 @@ export const PriceListsActions = {
   RequestCreatePricelist, ReceiveCreatePricelist,
   RequestUpdatePricelist, ReceiveUpdatePricelist,
   RequestGetPricelists, ReceiveGetPricelists,
-  CreateEntry, ChangeEntryCreateLevel,
+  ChangeEntryCreateLevel,
   ChangeSelectedList,
   ChangeIsAddListDialogOpen, ChangeIsAddEntryDialogOpen
 };
