@@ -48,15 +48,9 @@ export const createPricelist = async (
 };
 
 export type UpdatePricelistRequest = {
-  pricelist: {
-    name: string
-    region: RegionName
-    realm: RealmSlug
-  }
-  entries: {
-    item_id: number
-    quantity_modifier: number
-  }[]
+  token: string
+  pricelist: Pricelist
+  entries: PricelistEntry[]
 };
 
 export type UpdatePricelistResponse = {
@@ -67,16 +61,13 @@ export type UpdatePricelistResponse = {
   } | null
 };
 
-export const updatePricelist = async (
-  token: string,
-  request: UpdatePricelistRequest
-): Promise<UpdatePricelistResponse> => {
-  const res = await fetch(`${apiEndpoint}/user/pricelists`, {
+export const updatePricelist = async (request: UpdatePricelistRequest): Promise<UpdatePricelistResponse> => {
+  const res = await fetch(`${apiEndpoint}/user/pricelists/${request.pricelist.id}`, {
     method: 'PUT',
     body: JSON.stringify(request),
     headers: new Headers({
       'content-type': 'application/json',
-      'Authorization': `Bearer ${token}`
+      'Authorization': `Bearer ${request.token}`
     })
   });
   switch (res.status) {
