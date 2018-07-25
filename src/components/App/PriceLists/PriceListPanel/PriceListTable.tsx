@@ -75,6 +75,16 @@ export class PriceListTable extends React.Component<Props, State> {
       buyout = pricelistMap[item_id].buyout;
     }
 
+    if (!(item_id in itemsMap)) {
+      return (
+        <tr key={index}>
+          <td colSpan={3}>
+            <Spinner intent={Intent.WARNING} />
+          </td>
+        </tr>
+      );
+    }
+
     return (
       <tr key={index}>
         <td>
