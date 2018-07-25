@@ -68,17 +68,12 @@ export class PriceListTable extends React.Component<Props, State> {
     const { item_id, quantity_modifier } = entry;
     const { pricelistMap, itemsMap } = this.state;
 
-    if (!(item_id in pricelistMap)) {
-      return (
-        <tr key={index}>
-          <td colSpan={3}>
-            <Spinner className="pt-small" intent={Intent.WARNING} />
-          </td>
-        </tr>
-      );
+    let bid: number = 0;
+    let buyout: number = 0;
+    if (item_id in pricelistMap) {
+      bid = pricelistMap[item_id].bid;
+      buyout = pricelistMap[item_id].buyout;
     }
-
-    const { bid, buyout } = pricelistMap[item_id];
 
     return (
       <tr key={index}>
