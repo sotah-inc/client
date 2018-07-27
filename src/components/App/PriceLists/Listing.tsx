@@ -46,14 +46,19 @@ export class Listing extends React.Component<Props> {
       currentRealm,
       profile,
       authLevel,
-      fetchUserPreferencesLevel
+      fetchUserPreferencesLevel,
+      pricelists
     } = this.props;
 
     if (currentRealm === null || currentRegion === null) {
       return;
     }
+
+    const shouldRefreshPricelists = authLevel === AuthLevel.authenticated
+      && fetchUserPreferencesLevel === FetchUserPreferencesLevel.success
+      && pricelists.length === 0;
     
-    if (authLevel === AuthLevel.authenticated && fetchUserPreferencesLevel === FetchUserPreferencesLevel.success) {
+    if (shouldRefreshPricelists) {
       refreshPricelists({
         token: profile!.token,
         realmSlug: currentRealm.slug,
