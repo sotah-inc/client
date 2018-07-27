@@ -10,6 +10,7 @@ export type PriceListsState = {
   selectedList: Pricelist | null
   isAddListDialogOpen: boolean
   isAddEntryDialogOpen: boolean,
+  isEditListDialogOpen: boolean,
   getPricelistsLevel: GetPricelistsLevel
 };
 
@@ -47,5 +48,6 @@ export const defaultPriceListsState: PriceListsState = {
   selectedList: null,
   isAddListDialogOpen: false,
   isAddEntryDialogOpen: false,
+  isEditListDialogOpen: false,
   getPricelistsLevel: GetPricelistsLevel.initial
 };

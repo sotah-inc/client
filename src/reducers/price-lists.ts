@@ -11,7 +11,7 @@ import {
   REQUEST_GET_PRICELISTS, RECEIVE_GET_PRICELISTS,
   CHANGE_ENTRY_CREATELEVEL,
   CHANGE_SELECTED_LIST,
-  CHANGE_IS_ADD_LIST_DIALOG_OPEN, CHANGE_IS_ADD_ENTRY_DIALOG_OPEN,
+  CHANGE_IS_ADD_LIST_DIALOG_OPEN, CHANGE_IS_ADD_ENTRY_DIALOG_OPEN, CHANGE_IS_EDIT_LIST_DIALOG_OPEN,
   PriceListsActions
 } from '@app/actions/price-lists';
 
@@ -94,6 +94,8 @@ export const priceLists = (state: State, action: PriceListsActions): State => {
       return { ...state, selectedList: action.payload };
     case CHANGE_IS_ADD_LIST_DIALOG_OPEN:
       return { ...state, isAddListDialogOpen: action.payload };
+    case CHANGE_IS_EDIT_LIST_DIALOG_OPEN:
+      return { ...state, isEditListDialogOpen: action.payload };
     case CHANGE_IS_ADD_ENTRY_DIALOG_OPEN:
       return { ...state, isAddEntryDialogOpen: action.payload };
     default:
