@@ -46,26 +46,26 @@ export class ActionBar extends React.Component<Props> {
     return (
       <>
         <Navbar.Divider />
+        <Button
+          icon="plus"
+          onClick={() => this.toggleEntryDialog()}
+          text="Entry"
+          disabled={selectedList === null}
+        />
+        <Navbar.Divider />
         <ButtonGroup>
-          <Button
-            icon="plus"
-            onClick={() => this.toggleEntryDialog()}
-            text="Entry"
-            disabled={selectedList === null}
-          />
           <Button
             icon="edit"
             onClick={() => console.log('wew lad')}
             disabled={selectedList === null}
           />
+          <Button
+            icon="delete"
+            onClick={() => console.log('wew lad')}
+            text="Delete"
+            disabled={selectedList === null}
+          />
         </ButtonGroup>
-        <Navbar.Divider />
-        <Button
-          icon="delete"
-          onClick={() => console.log('wew lad')}
-          text="Delete"
-          disabled={selectedList === null}
-        />
       </>
     );
   }
@@ -96,17 +96,17 @@ export class ActionBar extends React.Component<Props> {
 
   render() {
     return (
-    <Navbar>
+      <Navbar>
         <NavbarGroup align={Alignment.LEFT}>
           {this.renderButtons()}
         </NavbarGroup>
         <NavbarGroup align={Alignment.RIGHT}>
-        <ButtonGroup>
+          <ButtonGroup>
             <RealmToggle />
             <RegionToggle />
-        </ButtonGroup>
+          </ButtonGroup>
         </NavbarGroup>
-    </Navbar>
+      </Navbar>
     );
   }
 }
