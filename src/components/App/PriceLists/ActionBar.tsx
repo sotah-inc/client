@@ -25,6 +25,7 @@ export type StateProps = {
 export type DispatchProps = {
   changeIsAddListDialogOpen: (isDialogOpen: boolean) => void
   changeIsAddEntryDialogOpen: (isDialogOpen: boolean) => void
+  changeIsEditListDialogOpen: (isDialogOpen: boolean) => void
 };
 
 export type OwnProps = {};
@@ -41,7 +42,7 @@ export class ActionBar extends React.Component<Props> {
   }
 
   renderListButtons() {
-    const { selectedList } = this.props;
+    const { selectedList, changeIsEditListDialogOpen } = this.props;
 
     return (
       <>
@@ -56,7 +57,7 @@ export class ActionBar extends React.Component<Props> {
         <ButtonGroup>
           <Button
             icon="edit"
-            onClick={() => console.log('wew lad')}
+            onClick={() => changeIsEditListDialogOpen(true)}
             disabled={selectedList === null}
           />
           <Button

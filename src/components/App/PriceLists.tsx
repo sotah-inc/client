@@ -5,6 +5,7 @@ import { Profile } from '@app/types/global';
 import { AuthLevel } from '@app/types/main';
 import { PricelistEntry, UpdatePricelistLevel, Pricelist } from '@app/types/price-lists';
 import CreateListDialog from '@app/containers/App/PriceLists/CreateListDialog';
+import CreateListForm from '@app/containers/App/PriceLists/util/CreateListForm';
 import CreateEntryForm from '@app/containers/App/PriceLists/util/CreateEntryForm';
 import ActionBar from '@app/containers/App/PriceLists/ActionBar';
 import Listing from '@app/containers/App/PriceLists/Listing';
@@ -18,12 +19,14 @@ export type StateProps = {
   updatePricelistLevel: UpdatePricelistLevel
   selectedList: Pricelist | null
   profile: Profile | null
+  isEditListDialogOpen: boolean
 };
 
 export type DispatchProps = {
   changeIsAddEntryDialogOpen: (isDialogOpen: boolean) => void
   updatePricelist: (request: UpdatePricelistRequest) => void
   changeIsLoginDialogOpen: (isLoginDialogOpen: boolean) => void
+  changeIsEditListDialogOpen: (isDialogOpen: boolean) => void
 };
 
 export type OwnProps = {};
@@ -33,6 +36,10 @@ export type Props = Readonly<StateProps & DispatchProps & OwnProps>;
 export class PriceLists extends React.Component<Props> {
   toggleEntryDialog() {
     this.props.changeIsAddEntryDialogOpen(!this.props.isAddEntryDialogOpen);
+  }
+
+  toggleEditListDialog() {
+    this.props.changeIsEditListDialogOpen(!this.props.isEditListDialogOpen);
   }
 
   onCreateEntryFormComplete(entry: PricelistEntry) {
@@ -52,7 +59,8 @@ export class PriceLists extends React.Component<Props> {
       isAddEntryDialogOpen,
       authLevel,
       changeIsLoginDialogOpen,
-      updatePricelistLevel
+      updatePricelistLevel,
+      isEditListDialogOpen
     } = this.props;
 
     if (authLevel !== AuthLevel.authenticated) {
@@ -85,6 +93,14 @@ export class PriceLists extends React.Component<Props> {
             onComplete={(v: PricelistEntry) => this.onCreateEntryFormComplete(v)}
             isSubmitDisabled={updatePricelistLevel === UpdatePricelistLevel.fetching}
           />
+        </Dialog>
+        <Dialog
+          isOpen={isEditListDialogOpen}
+          onClose={() => this.toggleEditListDialog()}
+          title="Edit List"
+          icon="manually-entered-data"
+        >
+          <CreateListForm onComplete={() => console.log('wew')} />
         </Dialog>
         <ActionBar />
         <Listing />
