@@ -43,10 +43,6 @@ export class ActionBar extends React.Component<Props> {
   renderListButtons() {
     const { selectedList } = this.props;
 
-    if (selectedList === null) {
-      return;
-    }
-
     return (
       <>
         <Navbar.Divider />
@@ -57,7 +53,19 @@ export class ActionBar extends React.Component<Props> {
             text="Entry"
             disabled={selectedList === null}
           />
+          <Button
+            icon="edit"
+            onClick={() => console.log('wew lad')}
+            disabled={selectedList === null}
+          />
         </ButtonGroup>
+        <Navbar.Divider />
+        <Button
+          icon="delete"
+          onClick={() => console.log('wew lad')}
+          text="Delete"
+          disabled={selectedList === null}
+        />
       </>
     );
   }
