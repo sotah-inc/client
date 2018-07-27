@@ -40,11 +40,32 @@ export class ActionBar extends React.Component<Props> {
     this.props.changeIsAddEntryDialogOpen(!this.props.isAddEntryDialogOpen);
   }
 
+  renderListButtons() {
+    const { selectedList } = this.props;
+
+    if (selectedList === null) {
+      return;
+    }
+
+    return (
+      <>
+        <Navbar.Divider />
+        <ButtonGroup>
+          <Button
+            icon="plus"
+            onClick={() => this.toggleEntryDialog()}
+            text="Entry"
+            disabled={selectedList === null}
+          />
+        </ButtonGroup>
+      </>
+    );
+  }
+
   renderButtons() {
     const {
       currentRegion,
-      currentRealm,
-      selectedList
+      currentRealm
     } = this.props;
 
     if (currentRegion === null || currentRealm === null) {
@@ -60,13 +81,7 @@ export class ActionBar extends React.Component<Props> {
           onClick={() => this.toggleListDialog()}
           text="List"
         />
-        <Navbar.Divider />
-        <Button
-          icon="plus"
-          onClick={() => this.toggleEntryDialog()}
-          text="Entry"
-          disabled={selectedList === null}
-        />
+        {this.renderListButtons()}
       </>
     );
   }
