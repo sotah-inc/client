@@ -1,7 +1,7 @@
 import { connect, Dispatch } from 'react-redux';
 
-import { StateProps, DispatchProps, OwnProps } from '@app/components/App/PriceLists/CreateListDialog/CreateListForm';
-import CreateListForm from '@app/form-containers/App/PriceLists/CreateListDialog/CreateListForm';
+import { StateProps, DispatchProps, OwnProps } from '@app/components/App/PriceLists/util/CreateEntryForm';
+import CreateEntryForm from '@app/form-containers/App/PriceLists/util/CreateEntryForm';
 import { StoreState } from '@app/types';
 import { Actions } from '@app/actions';
 
@@ -16,4 +16,4 @@ const mapDispatchToProps = (dispatch: Dispatch<Actions>): DispatchProps => {
 export default connect<StateProps, DispatchProps, OwnProps>(
   mapStateToProps,
   mapDispatchToProps
-)(CreateListForm);
+)(CreateEntryForm);

@@ -5,7 +5,7 @@ import { Profile } from '@app/types/global';
 import { AuthLevel } from '@app/types/main';
 import { PricelistEntry, UpdatePricelistLevel, Pricelist } from '@app/types/price-lists';
 import CreateListDialog from '@app/containers/App/PriceLists/CreateListDialog';
-import CreateEntryForm from '@app/containers/App/PriceLists/CreateEntryForm';
+import CreateEntryForm from '@app/containers/App/PriceLists/util/CreateEntryForm';
 import ActionBar from '@app/containers/App/PriceLists/ActionBar';
 import Listing from '@app/containers/App/PriceLists/Listing';
 import { UpdatePricelistRequest } from '@app/api/price-lists';

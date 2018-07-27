@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { Dialog, Breadcrumb, Button, Intent } from '@blueprintjs/core';
 
-import CreateListForm from '@app/containers/App/PriceLists/CreateListDialog/CreateListForm';
-import CreateEntryForm from '@app/containers/App/PriceLists/CreateEntryForm';
+import CreateListForm from '@app/containers/App/PriceLists/util/CreateListForm';
+import CreateEntryForm from '@app/containers/App/PriceLists/util/CreateEntryForm';
 import ItemPopover from '@app/containers/util/ItemPopover';
 import { DialogBody, DialogActions, ErrorList } from '@app/components/util';
 import { ItemClasses, Region, Realm, Errors, Profile, ItemsMap, Item } from '@app/types/global';

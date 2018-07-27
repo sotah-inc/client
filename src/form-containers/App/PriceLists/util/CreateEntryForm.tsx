@@ -1,7 +1,7 @@
 import { withFormik, WithFormikConfig } from 'formik';
 import * as Yup from 'yup';
 
-import { FormValues, CreateEntryForm } from '@app/components/App/PriceLists/CreateEntryForm';
+import { FormValues, CreateEntryForm } from '@app/components/App/PriceLists/util/CreateEntryForm';
 import { PriceListRules } from '@app/validator-rules';
 import { Item } from '@app/types/global';
 import { PricelistEntry } from '@app/types/price-lists';
