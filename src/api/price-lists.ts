@@ -92,7 +92,7 @@ export type GetPricelistsResponse = {
   items: ItemsMap
 };
 
-export const getPricelists = async(opts: GetPricelistsOptions): Promise<GetPricelistsResponse> => {
+export const getPricelists = async (opts: GetPricelistsOptions): Promise<GetPricelistsResponse> => {
   const res = await fetch(`${apiEndpoint}/user/pricelists/region/${opts.regionName}/realm/${opts.realmSlug}`, {
     method: 'GET',
     headers: new Headers({
@@ -102,4 +102,25 @@ export const getPricelists = async(opts: GetPricelistsOptions): Promise<GetPrice
   });
 
   return await res.json();
+};
+
+export type DeletePricelistRequestOptions = {
+  token: string
+  id: number
+};
+
+export const deletePricelist = async (opts: DeletePricelistRequestOptions): Promise<boolean> => {
+  const res = await fetch(`${apiEndpoint}/user/pricelists/${opts.id}`, {
+    method: 'DELETE',
+    headers: new Headers({
+      'content-type': 'application/json',
+      'Authorization': `Bearer ${opts.token}`
+    })
+  });
+  switch (res.status) {
+    case HTTPStatus.OK:
+      return true;
+    default:
+      return false;
+  }
 };

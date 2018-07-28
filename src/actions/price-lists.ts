@@ -8,6 +8,7 @@ import {
 import {
   CreatePricelistRequest, CreatePricelistResponse, createPricelist,
   updatePricelist,
+  DeletePricelistRequestOptions, deletePricelist,
   GetPricelistsOptions, GetPricelistsResponse, getPricelists
 } from '@app/api/price-lists';
 
@@ -44,6 +45,20 @@ export const FetchUpdatePricelist = (opts: UpdatePricelistRequestOptions) => {
   };
 };
 
+export const REQUEST_DELETE_PRICELIST = 'REQUEST_DELETE_PRICELIST';
+export const RequestDeletePricelist = () => createAction(REQUEST_DELETE_PRICELIST);
+export const RECEIVE_DELETE_PRICELIST = 'RECEIVE_DELETE_PRICELIST';
+export const ReceiveDeletePricelist = (
+  payload: boolean
+) => createAction(RECEIVE_DELETE_PRICELIST, payload);
+type FetchDeletePricelistType = ReturnType<typeof RequestDeletePricelist | typeof ReceiveDeletePricelist>;
+export const FetchDeletePricelist = (opts: DeletePricelistRequestOptions) => {
+  return async (dispatch: Dispatch<FetchDeletePricelistType>) => {
+    dispatch(RequestDeletePricelist());
+    dispatch(ReceiveDeletePricelist(await deletePricelist(opts)));
+  };
+};
+
 export const REQUEST_GET_PRICELISTS = 'REQUEST_GET_PRICELISTS';
 export const RequestGetPricelists = () => createAction(REQUEST_GET_PRICELISTS);
 export const RECEIVE_GET_PRICELISTS = 'RECEIVE_GET_PRICELISTS';
@@ -76,6 +91,7 @@ export const ChangeIsAddEntryDialogOpen = (payload: boolean) => createAction(CHA
 export const PriceListsActions = {
   RequestCreatePricelist, ReceiveCreatePricelist,
   RequestUpdatePricelist, ReceiveUpdatePricelist,
+  RequestDeletePricelist, ReceiveDeletePricelist,
   RequestGetPricelists, ReceiveGetPricelists,
   ChangeEntryCreateLevel,
   ChangeSelectedList,
