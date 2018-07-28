@@ -1,7 +1,7 @@
 import { withFormik, WithFormikConfig } from 'formik';
 import * as Yup from 'yup';
 
-import { FormValues, CreateListForm } from '@app/components/App/PriceLists/util/CreateListForm';
+import { FormValues, ListForm } from '@app/components/App/PriceLists/util/ListForm';
 import { PriceListRules } from '@app/validator-rules';
 
 interface FormProps {
@@ -24,4 +24,4 @@ const config: WithFormikConfig<FormProps, FormValues> = {
   }
 };
 
-export default withFormik(config)(CreateListForm);
+export default withFormik(config)(ListForm);

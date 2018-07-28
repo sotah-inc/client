@@ -19,7 +19,7 @@ export type FormValues = {
 
 export type Props = Readonly<StateProps & DispatchProps & OwnProps & FormikProps<FormValues>>;
 
-export class CreateListForm extends React.Component<Props> {
+export class ListForm extends React.Component<Props> {
   render() {
     const {
       values,

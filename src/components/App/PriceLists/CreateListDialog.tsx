@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Dialog, Breadcrumb, Button, Intent } from '@blueprintjs/core';
 
-import CreateListForm from '@app/containers/App/PriceLists/util/CreateListForm';
+import ListForm from '@app/containers/App/PriceLists/util/ListForm';
 import CreateEntryForm from '@app/containers/App/PriceLists/util/CreateEntryForm';
 import ItemPopover from '@app/containers/util/ItemPopover';
 import { DialogBody, DialogActions, ErrorList } from '@app/components/util';
@@ -133,11 +133,11 @@ export class CreateListDialog extends React.Component<Props, State> {
     }
 
     return (
-      <CreateListForm
+      <ListForm
         onComplete={(v: string) => this.onCreateListFormComplete(v)}
       >
         {this.renderNav()}
-      </CreateListForm>
+      </ListForm>
     );
   }
 

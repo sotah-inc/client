@@ -5,7 +5,7 @@ import { Profile } from '@app/types/global';
 import { AuthLevel } from '@app/types/main';
 import { PricelistEntry, UpdatePricelistLevel, Pricelist } from '@app/types/price-lists';
 import CreateListDialog from '@app/containers/App/PriceLists/CreateListDialog';
-import CreateListForm from '@app/containers/App/PriceLists/util/CreateListForm';
+import ListForm from '@app/containers/App/PriceLists/util/ListForm';
 import CreateEntryForm from '@app/containers/App/PriceLists/util/CreateEntryForm';
 import ActionBar from '@app/containers/App/PriceLists/ActionBar';
 import Listing from '@app/containers/App/PriceLists/Listing';
@@ -100,7 +100,7 @@ export class PriceLists extends React.Component<Props> {
           title="Edit List"
           icon="manually-entered-data"
         >
-          <CreateListForm onComplete={() => console.log('wew')} />
+          <ListForm onComplete={() => console.log('wew')} />
         </Dialog>
         <ActionBar />
         <Listing />
