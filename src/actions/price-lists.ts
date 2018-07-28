@@ -49,7 +49,7 @@ export const REQUEST_DELETE_PRICELIST = 'REQUEST_DELETE_PRICELIST';
 export const RequestDeletePricelist = () => createAction(REQUEST_DELETE_PRICELIST);
 export const RECEIVE_DELETE_PRICELIST = 'RECEIVE_DELETE_PRICELIST';
 export const ReceiveDeletePricelist = (
-  payload: boolean
+  payload: number | null
 ) => createAction(RECEIVE_DELETE_PRICELIST, payload);
 type FetchDeletePricelistType = ReturnType<typeof RequestDeletePricelist | typeof ReceiveDeletePricelist>;
 export const FetchDeletePricelist = (opts: DeletePricelistRequestOptions) => {

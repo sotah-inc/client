@@ -109,7 +109,7 @@ export type DeletePricelistRequestOptions = {
   id: number
 };
 
-export const deletePricelist = async (opts: DeletePricelistRequestOptions): Promise<boolean> => {
+export const deletePricelist = async (opts: DeletePricelistRequestOptions): Promise<number | null> => {
   const res = await fetch(`${apiEndpoint}/user/pricelists/${opts.id}`, {
     method: 'DELETE',
     headers: new Headers({
@@ -119,8 +119,8 @@ export const deletePricelist = async (opts: DeletePricelistRequestOptions): Prom
   });
   switch (res.status) {
     case HTTPStatus.OK:
-      return true;
+      return opts.id;
     default:
-      return false;
+      return null;
   }
 };
