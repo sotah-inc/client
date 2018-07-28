@@ -123,6 +123,8 @@ export class PriceLists extends React.Component<Props> {
           <ListForm
             onComplete={(name: string) => this.onEditListFormComplete(name)}
             defaultName={selectedList !== null ? selectedList.name : ''}
+            submitIcon="edit"
+            submitText="Save List"
           />
         </Dialog>
         <ActionBar />

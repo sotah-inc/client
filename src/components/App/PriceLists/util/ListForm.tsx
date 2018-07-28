@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Button, Intent } from '@blueprintjs/core';
+import { IconName } from '@blueprintjs/icons';
 import { FormikProps } from 'formik';
 
 import { DialogActions, DialogBody } from '@app/components/util';
@@ -12,6 +13,8 @@ export type DispatchProps = {};
 export type OwnProps = {
   onComplete: (name: string) => void
   defaultName?: string
+  submitIcon: IconName
+  submitText: string
 };
 
 export type FormValues = {
@@ -23,15 +26,9 @@ export type Props = Readonly<StateProps & DispatchProps & OwnProps & FormikProps
 export class ListForm extends React.Component<Props> {
   render() {
     const {
-      values,
-      setFieldValue,
-      isSubmitting,
-      handleReset,
-      handleSubmit,
-      dirty,
-      errors,
-      touched,
-      children
+      values, setFieldValue, isSubmitting, handleReset, handleSubmit, dirty, errors, touched,
+      children,
+      submitIcon, submitText
     } = this.props;
     const createFormField = FormFieldGenerator({ setFieldValue });
 
@@ -58,9 +55,9 @@ export class ListForm extends React.Component<Props> {
           />
           <Button
             type="submit"
-            text="Next"
+            text={submitText}
             intent={Intent.PRIMARY}
-            icon="caret-right"
+            icon={submitIcon}
             disabled={isSubmitting}
           />
         </DialogActions>

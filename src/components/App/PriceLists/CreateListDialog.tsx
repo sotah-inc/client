@@ -135,6 +135,8 @@ export class CreateListDialog extends React.Component<Props, State> {
     return (
       <ListForm
         onComplete={(v: string) => this.onCreateListFormComplete(v)}
+        submitIcon="caret-right"
+        submitText="Next"
       >
         {this.renderNav()}
       </ListForm>

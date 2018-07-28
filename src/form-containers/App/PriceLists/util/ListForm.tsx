@@ -1,5 +1,6 @@
 import { withFormik, WithFormikConfig } from 'formik';
 import * as Yup from 'yup';
+import { IconName } from '@blueprintjs/icons';
 
 import { FormValues, ListForm } from '@app/components/App/PriceLists/util/ListForm';
 import { PriceListRules } from '@app/validator-rules';
@@ -7,6 +8,8 @@ import { PriceListRules } from '@app/validator-rules';
 interface FormProps {
   defaultName?: string;
   onComplete: (name: string) => void;
+  submitIcon: IconName;
+  submitText: string;
 }
 
 const config: WithFormikConfig<FormProps, FormValues> = {
