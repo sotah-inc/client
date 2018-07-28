@@ -5,13 +5,14 @@ import { FormValues, ListForm } from '@app/components/App/PriceLists/util/ListFo
 import { PriceListRules } from '@app/validator-rules';
 
 interface FormProps {
+  defaultName?: string;
   onComplete: (name: string) => void;
 }
 
 const config: WithFormikConfig<FormProps, FormValues> = {
-  mapPropsToValues: (_: FormProps) => {
+  mapPropsToValues: (props: FormProps) => {
     return {
-      name: ''
+      name: props.defaultName ? props.defaultName : ''
     };
   },
   validationSchema: Yup.object().shape({

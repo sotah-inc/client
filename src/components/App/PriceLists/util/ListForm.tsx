@@ -11,6 +11,7 @@ export type DispatchProps = {};
 
 export type OwnProps = {
   onComplete: (name: string) => void
+  defaultName?: string
 };
 
 export type FormValues = {
