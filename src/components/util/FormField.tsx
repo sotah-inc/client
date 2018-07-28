@@ -71,7 +71,17 @@ interface GeneratorFunc {
 export const Generator: GeneratorInterface = (opts: GeneratorOptions) => {
   const { setFieldValue } = opts;
   return (propsOpts: PropsOptions) => {
-    const { fieldName, helperText, label, type, placeholder, getError, getTouched, getValue, autofocus } = propsOpts;
+    const {
+      fieldName,
+      helperText,
+      label,
+      type,
+      placeholder,
+      getError,
+      getTouched,
+      getValue,
+      autofocus
+    } = propsOpts;
     return (
       <FormField
         setFieldValue={setFieldValue}
