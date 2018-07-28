@@ -10,8 +10,9 @@ export type PriceListsState = {
   entryCreateLevel: EntryCreateLevel
   selectedList: Pricelist | null
   isAddListDialogOpen: boolean
-  isAddEntryDialogOpen: boolean,
-  isEditListDialogOpen: boolean,
+  isEditListDialogOpen: boolean
+  isDeleteListDialogOpen: boolean
+  isAddEntryDialogOpen: boolean
   getPricelistsLevel: GetPricelistsLevel
 };
 
@@ -63,7 +64,8 @@ export const defaultPriceListsState: PriceListsState = {
   entryCreateLevel: EntryCreateLevel.initial,
   selectedList: null,
   isAddListDialogOpen: false,
-  isAddEntryDialogOpen: false,
   isEditListDialogOpen: false,
+  isDeleteListDialogOpen: false,
+  isAddEntryDialogOpen: false,
   getPricelistsLevel: GetPricelistsLevel.initial
 };

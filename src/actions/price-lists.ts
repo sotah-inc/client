@@ -85,6 +85,11 @@ export const ChangeIsAddListDialogOpen = (payload: boolean) => createAction(CHAN
 export const CHANGE_IS_EDIT_LIST_DIALOG_OPEN = 'CHANGE_IS_EDIT_LIST_DIALOG_OPEN';
 export const ChangeIsEditListDialogOpen = (payload: boolean) => createAction(CHANGE_IS_EDIT_LIST_DIALOG_OPEN, payload);
 
+export const CHANGE_IS_DELETE_LIST_DIALOG_OPEN = 'CHANGE_IS_DELETE_LIST_DIALOG_OPEN';
+export const ChangeIsDeleteListDialogOpen = (
+  payload: boolean
+) => createAction(CHANGE_IS_DELETE_LIST_DIALOG_OPEN, payload);
+
 export const CHANGE_IS_ADD_ENTRY_DIALOG_OPEN = 'CHANGE_IS_ADD_ENTRY_DIALOG_OPEN';
 export const ChangeIsAddEntryDialogOpen = (payload: boolean) => createAction(CHANGE_IS_ADD_ENTRY_DIALOG_OPEN, payload);
 
@@ -95,7 +100,8 @@ export const PriceListsActions = {
   RequestGetPricelists, ReceiveGetPricelists,
   ChangeEntryCreateLevel,
   ChangeSelectedList,
-  ChangeIsAddListDialogOpen, ChangeIsEditListDialogOpen, ChangeIsAddEntryDialogOpen
+  ChangeIsAddListDialogOpen, ChangeIsEditListDialogOpen, ChangeIsDeleteListDialogOpen,
+  ChangeIsAddEntryDialogOpen
 };
 
 export type PriceListsActions = ActionsUnion<typeof PriceListsActions>;
