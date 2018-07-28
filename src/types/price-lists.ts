@@ -1,3 +1,4 @@
+import { UpdatePricelistRequest, UpdatePricelistResponse } from '@app/api/price-lists';
 import { RegionName, RealmSlug, ItemId, Errors } from './global';
 
 export type PriceListsState = {
@@ -36,6 +37,21 @@ export type PricelistEntry = {
   pricelist_id?: number
   item_id: ItemId
   quantity_modifier: number
+};
+
+type UpdatePricelistMeta = {
+  isAddEntryDialogOpen?: boolean
+  isEditListDialogOpen?: boolean
+};
+
+export type UpdatePricelistRequestOptions = {
+  request: UpdatePricelistRequest
+  meta: UpdatePricelistMeta
+};
+
+export type UpdatePricelistResponseOptions = {
+  response: UpdatePricelistResponse
+  meta: UpdatePricelistMeta
 };
 
 export const defaultPriceListsState: PriceListsState = {

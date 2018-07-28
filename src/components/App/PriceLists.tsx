@@ -3,13 +3,17 @@ import { Dialog, NonIdealState, Button } from '@blueprintjs/core';
 
 import { Profile } from '@app/types/global';
 import { AuthLevel } from '@app/types/main';
-import { PricelistEntry, UpdatePricelistLevel, Pricelist } from '@app/types/price-lists';
+import {
+  PricelistEntry,
+  UpdatePricelistLevel,
+  Pricelist,
+  UpdatePricelistRequestOptions
+} from '@app/types/price-lists';
 import CreateListDialog from '@app/containers/App/PriceLists/CreateListDialog';
 import ListForm from '@app/containers/App/PriceLists/util/ListForm';
 import CreateEntryForm from '@app/containers/App/PriceLists/util/CreateEntryForm';
 import ActionBar from '@app/containers/App/PriceLists/ActionBar';
 import Listing from '@app/containers/App/PriceLists/Listing';
-import { UpdatePricelistRequest } from '@app/api/price-lists';
 
 import './PriceLists.scss';
 
@@ -24,7 +28,7 @@ export type StateProps = {
 
 export type DispatchProps = {
   changeIsAddEntryDialogOpen: (isDialogOpen: boolean) => void
-  updatePricelist: (request: UpdatePricelistRequest) => void
+  updatePricelist: (opts: UpdatePricelistRequestOptions) => void
   changeIsLoginDialogOpen: (isLoginDialogOpen: boolean) => void
   changeIsEditListDialogOpen: (isDialogOpen: boolean) => void
 };
@@ -45,21 +49,27 @@ export class PriceLists extends React.Component<Props> {
   onCreateEntryFormComplete(entry: PricelistEntry) {
     const { selectedList, updatePricelist, profile } = this.props;
     updatePricelist({
-      token: profile!.token,
-      pricelist: selectedList!,
-      entries: [
-        ...selectedList!.pricelist_entries!,
-        entry
-      ]
+      request: {
+        token: profile!.token,
+        pricelist: selectedList!,
+        entries: [
+          ...selectedList!.pricelist_entries!,
+          entry
+        ]
+      },
+      meta: { isAddEntryDialogOpen: false }
     });
   }
 
   onEditListFormComplete(name: string) {
     const { selectedList, updatePricelist, profile } = this.props;
     updatePricelist({
-      token: profile!.token,
-      pricelist: { ...selectedList!, name },
-      entries: selectedList!.pricelist_entries!
+      request: {
+        token: profile!.token,
+        pricelist: { ...selectedList!, name },
+        entries: selectedList!.pricelist_entries!
+      },
+      meta: { isEditListDialogOpen: false }
     });
   }
 

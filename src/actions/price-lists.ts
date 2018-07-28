@@ -1,9 +1,13 @@
 import { Dispatch } from 'redux';
 
-import { Pricelist, EntryCreateLevel } from '@app/types/price-lists';
+import {
+  Pricelist,
+  EntryCreateLevel,
+  UpdatePricelistRequestOptions, UpdatePricelistResponseOptions
+} from '@app/types/price-lists';
 import {
   CreatePricelistRequest, CreatePricelistResponse, createPricelist,
-  UpdatePricelistRequest, UpdatePricelistResponse, updatePricelist,
+  updatePricelist,
   GetPricelistsOptions, GetPricelistsResponse, getPricelists
 } from '@app/api/price-lists';
 
@@ -27,13 +31,16 @@ export const REQUEST_UPDATE_PRICELIST = 'REQUEST_UPDATE_PRICELIST';
 export const RequestUpdatePricelist = () => createAction(REQUEST_UPDATE_PRICELIST);
 export const RECEIVE_UPDATE_PRICELIST = 'RECEIVE_UPDATE_PRICELIST';
 export const ReceiveUpdatePricelist = (
-  payload: UpdatePricelistResponse
+  payload: UpdatePricelistResponseOptions
 ) => createAction(RECEIVE_UPDATE_PRICELIST, payload);
 type FetchUpdatePricelistType = ReturnType<typeof RequestUpdatePricelist | typeof ReceiveUpdatePricelist>;
-export const FetchUpdatePricelist = (request: UpdatePricelistRequest) => {
+export const FetchUpdatePricelist = (opts: UpdatePricelistRequestOptions) => {
   return async (dispatch: Dispatch<FetchUpdatePricelistType>) => {
     dispatch(RequestUpdatePricelist());
-    dispatch(ReceiveUpdatePricelist(await updatePricelist(request)));
+    dispatch(ReceiveUpdatePricelist({
+      response: await updatePricelist(opts.request),
+      meta: opts.meta
+    }));
   };
 };
 

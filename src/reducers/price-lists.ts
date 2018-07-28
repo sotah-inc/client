@@ -43,11 +43,11 @@ export const priceLists = (state: State, action: PriceListsActions): State => {
     case REQUEST_UPDATE_PRICELIST:
       return { ...state, updatePricelistLevel: UpdatePricelistLevel.fetching };
     case RECEIVE_UPDATE_PRICELIST:
-      if (action.payload.errors !== null) {
+      if (action.payload.response.errors !== null) {
         return {
           ...state,
           updatePricelistLevel: UpdatePricelistLevel.failure,
-          updatePricelistErrors: action.payload.errors
+          updatePricelistErrors: action.payload.response.errors
         };
       }
 
@@ -55,21 +55,21 @@ export const priceLists = (state: State, action: PriceListsActions): State => {
       let replacedIndex = -1;
       for (let i = 0; i < receiveUpdatePricelists.length; i++) {
         const pricelist = receiveUpdatePricelists[i];
-        if (pricelist.id === action.payload.data!.pricelist.id) {
+        if (pricelist.id === action.payload.response.data!.pricelist.id) {
           replacedIndex = i;
 
           break;
         }
       }
 
-      const replacedPricelist = action.payload.data!.pricelist;
-      replacedPricelist.pricelist_entries = action.payload.data!.entries;
+      const replacedPricelist = action.payload.response.data!.pricelist;
+      replacedPricelist.pricelist_entries = action.payload.response.data!.entries;
 
       return {
         ...state,
+        ...action.payload.meta,
         updatePricelistLevel: UpdatePricelistLevel.success,
         updatePricelistErrors: {},
-        isAddEntryDialogOpen: false,
         pricelists: [
           ...receiveUpdatePricelists.splice(0, replacedIndex),
           replacedPricelist,
