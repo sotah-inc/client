@@ -13,7 +13,6 @@ import { Region, Realm } from '@app/types/global';
 import { Pricelist } from '@app/types/price-lists';
 import RegionToggle from '@app/containers/util/RegionToggle';
 import RealmToggle from '@app/containers/util/RealmToggle';
-import { DeletePricelistRequestOptions } from '@app/api/price-lists';
 
 export type StateProps = {
   currentRegion: Region | null
@@ -27,7 +26,7 @@ export type DispatchProps = {
   changeIsAddListDialogOpen: (isDialogOpen: boolean) => void
   changeIsAddEntryDialogOpen: (isDialogOpen: boolean) => void
   changeIsEditListDialogOpen: (isDialogOpen: boolean) => void
-  deletePricelist: (opts: DeletePricelistRequestOptions) => void
+  changeIsDeleteListDialogOpen: (isDialogOpen: boolean) => void
 };
 
 export type OwnProps = {};
@@ -44,7 +43,7 @@ export class ActionBar extends React.Component<Props> {
   }
 
   renderListButtons() {
-    const { selectedList, changeIsEditListDialogOpen } = this.props;
+    const { selectedList, changeIsEditListDialogOpen, changeIsDeleteListDialogOpen } = this.props;
 
     return (
       <>
@@ -64,7 +63,7 @@ export class ActionBar extends React.Component<Props> {
           />
           <Button
             icon="delete"
-            onClick={() => console.log('wew lad')}
+            onClick={() => changeIsDeleteListDialogOpen(true)}
             text="Delete"
             disabled={selectedList === null}
           />

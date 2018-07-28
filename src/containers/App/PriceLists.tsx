@@ -8,13 +8,30 @@ import { ChangeIsLoginDialogOpen } from '@app/actions/main';
 import {
   ChangeIsAddEntryDialogOpen,
   ChangeIsEditListDialogOpen,
-  FetchUpdatePricelist
+  ChangeIsDeleteListDialogOpen,
+  FetchUpdatePricelist,
+  FetchDeletePricelist
 } from '@app/actions/price-lists';
+import { DeletePricelistRequestOptions } from '@app/api/price-lists';
 
 const mapStateToProps = (state: StoreState): StateProps => {
   const { authLevel, profile } = state.Main;
-  const { isAddEntryDialogOpen, updatePricelistLevel, selectedList, isEditListDialogOpen } = state.PriceLists;
-  return { isAddEntryDialogOpen, authLevel, updatePricelistLevel, selectedList, profile, isEditListDialogOpen };
+  const {
+    isAddEntryDialogOpen,
+    updatePricelistLevel,
+    selectedList,
+    isEditListDialogOpen,
+    isDeleteListDialogOpen
+  } = state.PriceLists;
+  return {
+    isAddEntryDialogOpen,
+    authLevel,
+    updatePricelistLevel,
+    selectedList,
+    profile,
+    isEditListDialogOpen,
+    isDeleteListDialogOpen
+  };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<Actions>): DispatchProps => {
@@ -22,7 +39,9 @@ const mapDispatchToProps = (dispatch: Dispatch<Actions>): DispatchProps => {
     changeIsAddEntryDialogOpen: (isDialogOpen: boolean) => dispatch(ChangeIsAddEntryDialogOpen(isDialogOpen)),
     updatePricelist: (opts: UpdatePricelistRequestOptions) => dispatch(FetchUpdatePricelist(opts)),
     changeIsLoginDialogOpen: (isLoginDialogOpen: boolean) => dispatch(ChangeIsLoginDialogOpen(isLoginDialogOpen)),
-    changeIsEditListDialogOpen: (isDialogOpen: boolean) => dispatch(ChangeIsEditListDialogOpen(isDialogOpen))
+    changeIsEditListDialogOpen: (isDialogOpen: boolean) => dispatch(ChangeIsEditListDialogOpen(isDialogOpen)),
+    changeIsDeleteListDialogOpen: (isDialogOpen: boolean) => dispatch(ChangeIsDeleteListDialogOpen(isDialogOpen)),
+    deletePricelist: (opts: DeletePricelistRequestOptions) => dispatch(FetchDeletePricelist(opts))
   };
 };
 

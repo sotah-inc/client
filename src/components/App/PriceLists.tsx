@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Dialog, NonIdealState, Button } from '@blueprintjs/core';
+import { Dialog, NonIdealState, Button, Intent } from '@blueprintjs/core';
 
 import { Profile } from '@app/types/global';
 import { AuthLevel } from '@app/types/main';
@@ -14,6 +14,8 @@ import ListForm from '@app/containers/App/PriceLists/util/ListForm';
 import CreateEntryForm from '@app/containers/App/PriceLists/util/CreateEntryForm';
 import ActionBar from '@app/containers/App/PriceLists/ActionBar';
 import Listing from '@app/containers/App/PriceLists/Listing';
+import { DialogBody, DialogActions } from '@app/components/util';
+import { DeletePricelistRequestOptions } from '@app/api/price-lists';
 
 import './PriceLists.scss';
 
@@ -24,6 +26,7 @@ export type StateProps = {
   selectedList: Pricelist | null
   profile: Profile | null
   isEditListDialogOpen: boolean
+  isDeleteListDialogOpen: boolean
 };
 
 export type DispatchProps = {
@@ -31,6 +34,8 @@ export type DispatchProps = {
   updatePricelist: (opts: UpdatePricelistRequestOptions) => void
   changeIsLoginDialogOpen: (isLoginDialogOpen: boolean) => void
   changeIsEditListDialogOpen: (isDialogOpen: boolean) => void
+  changeIsDeleteListDialogOpen: (isDialogOpen: boolean) => void
+  deletePricelist: (opts: DeletePricelistRequestOptions) => void
 };
 
 export type OwnProps = {};
@@ -44,6 +49,10 @@ export class PriceLists extends React.Component<Props> {
 
   toggleEditListDialog() {
     this.props.changeIsEditListDialogOpen(!this.props.isEditListDialogOpen);
+  }
+
+  toggleDeleteListDialog() {
+    this.props.changeIsDeleteListDialogOpen(!this.props.isDeleteListDialogOpen);
   }
 
   onCreateEntryFormComplete(entry: PricelistEntry) {
@@ -71,6 +80,52 @@ export class PriceLists extends React.Component<Props> {
       },
       meta: { isEditListDialogOpen: false }
     });
+  }
+
+  renderDeleteListDialog() {
+    const {
+      isDeleteListDialogOpen,
+      selectedList,
+      changeIsDeleteListDialogOpen,
+      deletePricelist,
+      profile
+    } = this.props;
+
+    if (selectedList === null) {
+      return;
+    }
+
+    return (
+      <Dialog
+        isOpen={isDeleteListDialogOpen}
+        onClose={() => this.toggleDeleteListDialog()}
+        title="Delete List"
+        icon="delete"
+      >
+        <DialogBody>
+          <p>Hello, world!</p>
+        </DialogBody>
+        <DialogActions>
+          <Button
+            text="Cancel"
+            intent={Intent.NONE}
+            onClick={() => changeIsDeleteListDialogOpen(false)}
+          />
+          <Button
+            type="submit"
+            intent={Intent.DANGER}
+            icon="delete"
+            text={`Delete "${selectedList.name}"`}
+            onClick={() => {
+              deletePricelist({
+                token: profile!.token,
+                id: selectedList.id
+              });
+            }}
+          />
+        </DialogActions>
+      </Dialog>
+    );
   }
 
   render() {
@@ -127,6 +182,7 @@ export class PriceLists extends React.Component<Props> {
             submitText="Save List"
           />
         </Dialog>
+        {this.renderDeleteListDialog()}
         <ActionBar />
         <Listing />
       </>

@@ -7,9 +7,8 @@ import {
   ChangeIsAddListDialogOpen,
   ChangeIsAddEntryDialogOpen,
   ChangeIsEditListDialogOpen,
-  FetchDeletePricelist
+  ChangeIsDeleteListDialogOpen
 } from '@app/actions/price-lists';
-import { DeletePricelistRequestOptions } from '@app/api/price-lists';
 
 const mapStateToProps = (state: StoreState): StateProps => {
   const { currentRegion, currentRealm } = state.Main;
@@ -28,7 +27,7 @@ const mapDispatchToProps = (dispatch: Dispatch<Actions>): DispatchProps => {
     changeIsAddListDialogOpen: (isDialogOpen: boolean) => dispatch(ChangeIsAddListDialogOpen(isDialogOpen)),
     changeIsAddEntryDialogOpen: (isDialogOpen: boolean) => dispatch(ChangeIsAddEntryDialogOpen(isDialogOpen)),
     changeIsEditListDialogOpen: (isDialogOpen: boolean) => dispatch(ChangeIsEditListDialogOpen(isDialogOpen)),
-    deletePricelist: (opts: DeletePricelistRequestOptions) => dispatch(FetchDeletePricelist(opts))
+    changeIsDeleteListDialogOpen: (isDialogOpen: boolean) => dispatch(ChangeIsDeleteListDialogOpen(isDialogOpen))
   };
 };
 

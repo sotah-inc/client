@@ -17,6 +17,7 @@ import {
   REQUEST_DELETE_PRICELIST, RECEIVE_DELETE_PRICELIST,
   PriceListsActions
 } from '@app/actions/price-lists';
+import { getPricelistIndex } from './helper';
 
 type State = Readonly<PriceListsState> | undefined;
 
@@ -83,7 +84,22 @@ export const priceLists = (state: State, action: PriceListsActions): State => {
     case REQUEST_DELETE_PRICELIST:
       return { ...state };
     case RECEIVE_DELETE_PRICELIST:
-      return { ...state };
+      const deletedIndex = getPricelistIndex(state.pricelists, action.payload!);
+      const onDeletePricelists = [
+        ...state.pricelists.splice(0, deletedIndex),
+        ...state.pricelists.splice(deletedIndex + 1)
+      ];
+      let onDeleteSelectedList: Pricelist | null = null;
+      if (onDeletePricelists.length > 0) {
+        onDeleteSelectedList = onDeletePricelists[deletedIndex];
+      }
+
+      return {
+        ...state,
+        isDeleteListDialogOpen: false,
+        selectedList: onDeleteSelectedList,
+        pricelists: onDeletePricelists
+      };
     case REQUEST_GET_PRICELISTS:
       return {
         ...state,
