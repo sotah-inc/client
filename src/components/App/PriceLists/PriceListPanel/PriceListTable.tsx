@@ -90,7 +90,7 @@ export class PriceListTable extends React.Component<Props, State> {
         <td>
           <ItemPopover
             item={itemsMap[item_id]}
-            itemTextFormatter={(itemText) => `${itemText} x${quantity_modifier}`}
+            itemTextFormatter={(itemText) => `${itemText} \u00D7${quantity_modifier}`}
           />
         </td>
         <td>
