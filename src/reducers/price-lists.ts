@@ -3,6 +3,7 @@ import {
   CreatePricelistLevel,
   UpdatePricelistLevel,
   GetPricelistsLevel,
+  Pricelist,
   defaultPriceListsState
 } from '@app/types/price-lists';
 import {
@@ -88,10 +89,16 @@ export const priceLists = (state: State, action: PriceListsActions): State => {
         getPricelistsLevel: GetPricelistsLevel.fetching
       };
     case RECEIVE_GET_PRICELISTS:
+      let receivedSelectedList: Pricelist | null = null;
+      if (Object.keys(action.payload.pricelists).length > 0) {
+        receivedSelectedList = action.payload.pricelists[Object.keys(action.payload.pricelists)[0]];
+      }
+
       return {
         ...state,
         pricelists: action.payload.pricelists,
-        getPricelistsLevel: GetPricelistsLevel.success
+        getPricelistsLevel: GetPricelistsLevel.success,
+        selectedList: receivedSelectedList
       };
     case CHANGE_ENTRY_CREATELEVEL:
       return { ...state, entryCreateLevel: action.payload };
