@@ -219,6 +219,7 @@ export type Realm = {
   locale: string
   timezone: string
   connected_realms: RealmSlug[]
+  last_modified: number
 };
 
 export type Realms = {
