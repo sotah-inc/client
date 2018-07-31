@@ -12,6 +12,7 @@ import { Region, Realm, Profile } from '@app/types/global';
 import { AuthLevel, FetchUserPreferencesLevel } from '@app/types/main';
 import { Pricelist, GetPricelistsLevel, CreatePricelistLevel } from '@app/types/price-lists';
 import PriceListPanel from '@app/containers/App/PriceLists/PriceListPanel';
+import { LastModified } from '@app/components/util';
 import { priceListEntryTabId, didRealmChange } from '@app/util';
 import { GetPricelistsOptions } from '@app/api/price-lists';
 
@@ -156,16 +157,19 @@ export class Listing extends React.Component<Props> {
     }
 
     return (
-      <Tabs
-        id="price-lists"
-        className="price-lists"
-        selectedTabId={selectedList ? `tab-${selectedList.id}` : ''}
-        onChange={(id) => this.onTabChange(id)}
-        vertical={true}
-        renderActiveTabPanelOnly={true}
-      >
-        {pricelists.map((v, i) => this.renderTab(v, i))}
-      </Tabs>
+      <>
+        <Tabs
+          id="price-lists"
+          className="price-lists"
+          selectedTabId={selectedList ? `tab-${selectedList.id}` : ''}
+          onChange={(id) => this.onTabChange(id)}
+          vertical={true}
+          renderActiveTabPanelOnly={true}
+        >
+          {pricelists.map((v, i) => this.renderTab(v, i))}
+        </Tabs>
+        <LastModified targetDate={new Date(currentRealm!.last_modified * 1000)} />
+      </>
     );
   }
 
