@@ -5,3 +5,4 @@ export { Pagination } from './Pagination';
 export { ItemInput } from './ItemInput';
 export { ItemPopover } from './ItemPopover';
 export { ErrorList } from './ErrorList';
+export { LastModified } from './LastModified';

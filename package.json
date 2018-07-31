@@ -21,6 +21,7 @@
     "html-webpack-plugin": "2.29.0",
     "http-status": "^1.0.1",
     "jest": "22.1.4",
+    "moment": "^2.22.2",
     "node-sass": "^4.8.3",
     "object-assign": "4.1.1",
     "postcss-flexbugs-fixes": "3.2.0",
@@ -60,6 +61,7 @@
   "devDependencies": {
     "@types/http-status": "^0.2.30",
     "@types/jest": "^22.2.2",
+    "@types/moment": "^2.13.0",
     "@types/node": "^9.6.1",
     "@types/prop-types": "^15.5.2",
     "@types/react": "^16.1.0",
