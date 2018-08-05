@@ -1,1 +1,1 @@
-export const apiEndpoint = 'http://localhost:8080';
+export const apiEndpoint = `//${window.location.hostname}:8080`;

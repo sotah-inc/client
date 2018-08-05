@@ -58,7 +58,7 @@
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom",
-    "run": "serve -s build"
+    "serve": "serve -s build"
   },
   "devDependencies": {
     "@types/http-status": "^0.2.30",
