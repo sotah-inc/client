@@ -1,13 +1,14 @@
-import { FormGroup, InputGroup, Intent } from "@blueprintjs/core";
 import * as React from "react";
+
+import { FormGroup, InputGroup, Intent } from "@blueprintjs/core";
 
 const capitalize = (v: string) => `${v.charAt(0).toUpperCase()}${v.slice(1)}`;
 
-interface GeneratorOptions {
+interface IGeneratorOptions {
     setFieldValue: (key: string, value: string) => void;
 }
 
-interface PropsOptions {
+interface IPropsOptions {
     fieldName: string;
     helperText?: string;
     label?: string;
@@ -19,23 +20,19 @@ interface PropsOptions {
     getTouched: () => boolean;
 }
 
-type Props = Readonly<GeneratorOptions & PropsOptions>;
+type Props = Readonly<IGeneratorOptions & IPropsOptions>;
 
 type FormFieldType = React.SFC<Props>;
 
+const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    return (props: Props) => {
+        const { setFieldValue, fieldName } = props;
+        setFieldValue(fieldName, e.target.value);
+    };
+};
+
 export const FormField: FormFieldType = (props: Props) => {
-    const {
-        setFieldValue,
-        fieldName,
-        helperText,
-        label,
-        type,
-        placeholder,
-        getError,
-        getValue,
-        getTouched,
-        autofocus,
-    } = props;
+    const { fieldName, helperText, label, type, placeholder, getError, getValue, getTouched, autofocus } = props;
     const error = getError();
     const isTouched = getTouched();
     const intent = error && isTouched ? Intent.DANGER : Intent.NONE;
@@ -53,20 +50,20 @@ export const FormField: FormFieldType = (props: Props) => {
                 type={type}
                 placeholder={placeholder}
                 value={getValue()}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFieldValue(fieldName, e.target.value)}
+                onChange={onInputChange}
                 autoFocus={autofocus}
             />
         </FormGroup>
     );
 };
 
-type GeneratorInterface = (opts: GeneratorOptions) => GeneratorFunc;
+type GeneratorInterface = (opts: IGeneratorOptions) => GeneratorFunc;
 
-type GeneratorFunc = (propsOpts: PropsOptions) => React.ReactNode;
+type GeneratorFunc = (propsOpts: IPropsOptions) => React.ReactNode;
 
-export const Generator: GeneratorInterface = (opts: GeneratorOptions) => {
+export const Generator: GeneratorInterface = (opts: IGeneratorOptions) => {
     const { setFieldValue } = opts;
-    return (propsOpts: PropsOptions) => {
+    return (propsOpts: IPropsOptions) => {
         const {
             fieldName,
             helperText,

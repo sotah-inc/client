@@ -3,7 +3,7 @@ import * as React from "react";
 import { RouteComponentProps } from "react-router-dom";
 
 import { Content } from "@app/components/App/Content";
-import Topbar from "@app/route-containers/App/Topbar";
+import { TopbarRouteContainer } from "@app/route-containers/App/Topbar";
 import { IProfile, IRealm, IRegion, IUserPreferences } from "@app/types/global";
 import {
     AuthLevel,
@@ -265,7 +265,7 @@ export class App extends React.Component<Props, State> {
     public renderConnected() {
         return (
             <div id="app">
-                <Topbar />
+                <TopbarRouteContainer />
                 <Content />
             </div>
         );

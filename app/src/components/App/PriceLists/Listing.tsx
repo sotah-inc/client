@@ -1,15 +1,16 @@
-import { Button, Intent, NonIdealState, Spinner, Tab, Tabs } from "@blueprintjs/core";
 import * as React from "react";
+
+import { Button, Classes, Intent, NonIdealState, Spinner, Tab, Tabs } from "@blueprintjs/core";
 
 import { IGetPricelistsOptions } from "@app/api/price-lists";
 import { LastModified } from "@app/components/util";
-import PriceListPanel from "@app/containers/App/PriceLists/PriceListPanel";
+import { PriceListPanelContainer } from "@app/containers/App/PriceLists/PriceListPanel";
 import { IProfile, IRealm, IRegion } from "@app/types/global";
 import { AuthLevel, FetchUserPreferencesLevel } from "@app/types/main";
 import { CreatePricelistLevel, GetPricelistsLevel, IPricelist } from "@app/types/price-lists";
 import { didRealmChange, priceListEntryTabId } from "@app/util";
 
-export interface StateProps {
+export interface IStateProps {
     pricelists: IPricelist[];
     selectedList: IPricelist | null;
     currentRegion: IRegion | null;
@@ -22,15 +23,13 @@ export interface StateProps {
     createPricelistLevel: CreatePricelistLevel;
 }
 
-export interface DispatchProps {
+export interface IDispatchProps {
     changeSelectedList: (list: IPricelist) => void;
     changeIsAddListDialogOpen: (isDialogOpen: boolean) => void;
     refreshPricelists: (opts: IGetPricelistsOptions) => void;
 }
 
-export interface OwnProps {}
-
-export type Props = Readonly<StateProps & DispatchProps & OwnProps>;
+export type Props = Readonly<IStateProps & IDispatchProps>;
 
 export class Listing extends React.Component<Props> {
     public componentDidMount() {
@@ -55,9 +54,9 @@ export class Listing extends React.Component<Props> {
 
         if (shouldRefreshPricelists) {
             refreshPricelists({
-                token: profile!.token,
                 realmSlug: currentRealm.slug,
                 regionName: currentRegion.name,
+                token: profile!.token,
             });
         }
     }
@@ -84,9 +83,9 @@ export class Listing extends React.Component<Props> {
                     createPricelistLevel === CreatePricelistLevel.success);
             if (shouldRefreshPricelists) {
                 refreshPricelists({
-                    token: profile!.token,
                     realmSlug: currentRealm.slug,
                     regionName: currentRegion.name,
+                    token: profile!.token,
                 });
             }
         }
@@ -98,7 +97,12 @@ export class Listing extends React.Component<Props> {
 
     public renderTab(list: IPricelist, index: number) {
         return (
-            <Tab key={index} id={priceListEntryTabId(list)} title={list.name} panel={<PriceListPanel list={list} />} />
+            <Tab
+                key={index}
+                id={priceListEntryTabId(list)}
+                title={list.name}
+                panel={<PriceListPanelContainer list={list} />}
+            />
         );
     }
 
@@ -132,7 +136,7 @@ export class Listing extends React.Component<Props> {
                     description={`You have no price lists in ${currentRealm!.name}.`}
                     visual="list"
                     action={
-                        <Button className="pt-fill" icon="plus" onClick={() => this.toggleDialog()}>
+                        <Button className={Classes.FILL} icon="plus" onClick={this.toggleDialog}>
                             Add List to {currentRealm!.name}
                         </Button>
                     }
@@ -146,7 +150,7 @@ export class Listing extends React.Component<Props> {
                     id="price-lists"
                     className="price-lists"
                     selectedTabId={selectedList ? `tab-${selectedList.id}` : ""}
-                    onChange={id => this.onTabChange(id)}
+                    onChange={this.onTabChange}
                     vertical={true}
                     renderActiveTabPanelOnly={true}
                 >
@@ -165,12 +169,15 @@ export class Listing extends React.Component<Props> {
                 return (
                     <NonIdealState
                         title="Loading"
-                        visual={<Spinner className="pt-large" intent={Intent.NONE} value={0} />}
+                        visual={<Spinner className={Classes.LARGE} intent={Intent.NONE} value={0} />}
                     />
                 );
             case GetPricelistsLevel.fetching:
                 return (
-                    <NonIdealState title="Loading" visual={<Spinner className="pt-large" intent={Intent.PRIMARY} />} />
+                    <NonIdealState
+                        title="Loading"
+                        visual={<Spinner className={Classes.LARGE} intent={Intent.PRIMARY} />}
+                    />
                 );
             case GetPricelistsLevel.success:
                 return this.renderPricelists();

@@ -1,26 +1,27 @@
-import { Button } from "@blueprintjs/core";
-import { IconName, IconNames } from "@blueprintjs/icons";
 import * as React from "react";
+
+import { Button, Classes } from "@blueprintjs/core";
+import { IconName, IconNames } from "@blueprintjs/icons";
 
 import { ISortChangeOptions, SortDirection, SortKind } from "@app/types/auction";
 
-export interface StateProps {
+export interface IStateProps {
     currentSortDirection: SortDirection;
     currentSortKind: SortKind;
 }
 
 type OnChangeCb = (payload: ISortChangeOptions) => void;
 
-export interface DispatchProps {
+export interface IDispatchProps {
     onChange: OnChangeCb;
 }
 
-export interface OwnProps {
+export interface IOwnProps {
     label: string;
     sortKind: SortKind;
 }
 
-type Props = Readonly<StateProps & DispatchProps & OwnProps>;
+type Props = Readonly<IStateProps & IDispatchProps & IOwnProps>;
 
 export class SortToggle extends React.Component<Props> {
     public onToggle(sortKind: SortKind) {
@@ -40,15 +41,30 @@ export class SortToggle extends React.Component<Props> {
         return;
     }
 
+    public onSortClick(sortKind: SortKind) {
+        return () => this.onToggle(sortKind);
+    }
+
     public renderButton(icon: IconName | null) {
         const { label, sortKind } = this.props;
 
         if (icon === null) {
-            return <Button className="pt-small pt-minimal" text={label} onClick={() => this.onToggle(sortKind)} />;
+            return (
+                <Button
+                    className={`${Classes.SMALL} ${Classes.MINIMAL}`}
+                    text={label}
+                    onClick={this.onSortClick(sortKind)}
+                />
+            );
         }
 
         return (
-            <Button className="pt-small pt-minimal" text={label} icon={icon} onClick={() => this.onToggle(sortKind)} />
+            <Button
+                className={`${Classes.SMALL} ${Classes.MINIMAL}`}
+                text={label}
+                icon={icon}
+                onClick={this.onSortClick(sortKind)}
+            />
         );
     }
 

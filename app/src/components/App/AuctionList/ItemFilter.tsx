@@ -1,4 +1,6 @@
-import { Button, ControlGroup, Intent, Menu, MenuItem, Spinner } from "@blueprintjs/core";
+import * as React from "react";
+
+import { Button, Classes, ControlGroup, Intent, Menu, MenuItem, Spinner } from "@blueprintjs/core";
 import {
     IItemListRendererProps,
     IItemRendererProps,
@@ -7,14 +9,13 @@ import {
     ItemRenderer,
     Suggest,
 } from "@blueprintjs/select";
-import * as React from "react";
 
 import { FetchItemsLevel } from "@app/types/auction";
 import { IRealm, IRegion, Item } from "@app/types/global";
 
 const ItemFilterSuggest = Suggest.ofType<Item>();
 
-export interface StateProps {
+export interface IStateProps {
     fetchItemsLevel: FetchItemsLevel;
     items: Item[];
     itemFilter: Item | null;
@@ -22,14 +23,12 @@ export interface StateProps {
     currentRealm: IRealm | null;
 }
 
-export interface DispatchProps {
+export interface IDispatchProps {
     onItemFilterChange: (item: Item | null) => void;
     refreshItems: (query: string) => void;
 }
 
-export interface OwnProps {}
-
-type Props = Readonly<StateProps & DispatchProps & OwnProps>;
+type Props = Readonly<IStateProps & IDispatchProps>;
 
 type State = Readonly<{
     itemFilterValue: string;
@@ -58,7 +57,7 @@ export class ItemFilter extends React.Component<Props, State> {
             <MenuItem
                 key={index}
                 intent={intent}
-                className={modifiers.active ? "pt-active" : ""}
+                className={modifiers.active ? Classes.ACTIVE : ""}
                 onClick={handleClick}
                 text={item.name}
             />
@@ -96,8 +95,9 @@ export class ItemFilter extends React.Component<Props, State> {
         this.props.onItemFilterChange(item);
     }
 
-    public onFilterChange(itemFilterValue: string) {
+    public onFilterChange(e: React.ChangeEvent<HTMLInputElement>) {
         const { timerId } = this.state;
+        const itemFilterValue = e.target.value;
 
         if (timerId !== null) {
             clearTimeout(timerId);
@@ -113,6 +113,10 @@ export class ItemFilter extends React.Component<Props, State> {
         this.setState({ itemFilterValue: "" });
         this.props.onItemFilterChange(null);
         this.props.refreshItems("");
+    }
+
+    public inputValueRenderer(v: Item) {
+        return v.name;
     }
 
     public render() {
@@ -131,31 +135,25 @@ export class ItemFilter extends React.Component<Props, State> {
                             itemRenderer={this.itemRenderer}
                             itemListRenderer={this.itemListRenderer}
                             itemPredicate={this.itemPredicate}
-                            onItemSelect={(item: Item) => {
-                                this.onFilterSet(item);
-                            }}
-                            inputValueRenderer={v => v.name}
-                            inputProps={{
-                                value: itemFilterValue,
-                                onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
-                                    this.onFilterChange(e.target.value),
-                            }}
+                            onItemSelect={this.onFilterSet}
+                            inputValueRenderer={this.inputValueRenderer}
+                            inputProps={{ onChange: this.onFilterChange, value: itemFilterValue }}
                         />
                         <Button
                             icon="filter-remove"
                             disabled={!canClearFilter}
                             text="Clear"
-                            onClick={() => this.onFilterClear()}
+                            onClick={this.onFilterClear}
                         />
                     </ControlGroup>
                 );
             case FetchItemsLevel.failure:
-                return <Spinner className="pt-small" intent={Intent.DANGER} value={1} />;
+                return <Spinner className={Classes.SMALL} intent={Intent.DANGER} value={1} />;
             case FetchItemsLevel.initial:
-                return <Spinner className="pt-small" intent={Intent.NONE} value={1} />;
+                return <Spinner className={Classes.SMALL} intent={Intent.NONE} value={1} />;
             case FetchItemsLevel.fetching:
             default:
-                return <Spinner className="pt-small" intent={Intent.PRIMARY} />;
+                return <Spinner className={Classes.SMALL} intent={Intent.PRIMARY} />;
         }
     }
 }

@@ -2,26 +2,16 @@ import { withFormik, WithFormikConfig } from "formik";
 import * as Yup from "yup";
 
 import { registerUser } from "@app/api/user";
-import { FormValues, Register } from "@app/components/App/Register";
+import { IFormValues, Register } from "@app/components/App/Register";
 import { IProfile } from "@app/types/global";
 import { UserRules } from "@app/validator-rules";
 
-interface FormProps {
+interface IFormProps {
     onUserRegister: (payload: IProfile) => void;
     isRegistered: boolean;
 }
 
-const config: WithFormikConfig<FormProps, FormValues> = {
-    mapPropsToValues: (_: FormProps) => {
-        return {
-            email: "",
-            password: "",
-        };
-    },
-    validationSchema: Yup.object().shape({
-        email: UserRules.email,
-        password: UserRules.password,
-    }),
+const config: WithFormikConfig<IFormProps, IFormValues> = {
     handleSubmit: async (values, { setSubmitting, setErrors, props }) => {
         const { profile, errors } = await registerUser(values.email, values.password);
         if (errors !== null) {
@@ -34,6 +24,16 @@ const config: WithFormikConfig<FormProps, FormValues> = {
         setSubmitting(false);
         props.onUserRegister(profile!);
     },
+    mapPropsToValues: (_: IFormProps) => {
+        return {
+            email: "",
+            password: "",
+        };
+    },
+    validationSchema: Yup.object().shape({
+        email: UserRules.email,
+        password: UserRules.password,
+    }),
 };
 
-export default withFormik(config)(Register);
+export const RegisterFormContainer = withFormik(config)(Register);

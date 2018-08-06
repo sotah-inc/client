@@ -1,6 +1,7 @@
+import * as React from "react";
+
 import { Button, FormGroup, Intent } from "@blueprintjs/core";
 import { FormikProps } from "formik";
-import * as React from "react";
 
 import { DialogActions, DialogBody, ItemInput } from "@app/components/util";
 import { Generator as FormFieldGenerator } from "@app/components/util/FormField";
@@ -10,21 +11,17 @@ import { getItemIconUrl, getItemTextValue, qualityToColorClass } from "@app/util
 
 import "./CreateEntryForm.scss";
 
-export interface StateProps {}
-
-export interface DispatchProps {}
-
-export interface OwnProps {
+export interface IOwnProps {
     onComplete: (entry: IPricelistEntry, item: Item) => void;
     isSubmitDisabled?: boolean;
 }
 
-export interface FormValues {
+export interface IFormValues {
     quantity: number;
     item: Item | null;
 }
 
-export type Props = Readonly<StateProps & DispatchProps & OwnProps & FormikProps<FormValues>>;
+export type Props = Readonly<IOwnProps & FormikProps<IFormValues>>;
 
 export class CreateEntryForm extends React.Component<Props> {
     public renderSelectedItem(item: Item | null) {
@@ -48,6 +45,11 @@ export class CreateEntryForm extends React.Component<Props> {
                 <img src={itemIcon} /> {textValue}
             </h5>
         );
+    }
+
+    public onItemInputSelect(item: Item) {
+        const { setFieldValue } = this.props;
+        setFieldValue("item", item);
     }
 
     public render() {
@@ -80,7 +82,7 @@ export class CreateEntryForm extends React.Component<Props> {
                                     requiredLabel={true}
                                     intent={itemIntent}
                                 >
-                                    <ItemInput onSelect={item => setFieldValue("item", item)} autoFocus={true} />
+                                    <ItemInput onSelect={this.onItemInputSelect} autoFocus={true} />
                                 </FormGroup>
                             </div>
                         </div>
@@ -94,11 +96,11 @@ export class CreateEntryForm extends React.Component<Props> {
                     </div>
                     {createFormField({
                         fieldName: "quantity",
-                        type: "number",
-                        placeholder: "-1",
                         getError: () => errors.quantity,
                         getTouched: () => !!touched.quantity,
                         getValue: () => values.quantity.toString(),
+                        placeholder: "-1",
+                        type: "number",
                     })}
                 </DialogBody>
                 <DialogActions>

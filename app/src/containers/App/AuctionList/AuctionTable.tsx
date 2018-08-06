@@ -2,23 +2,23 @@ import { connect, Dispatch } from "react-redux";
 
 import { Actions } from "@app/actions";
 import { AddAuctionsQuery, RemoveAuctionsQuery } from "@app/actions/auction";
-import { AuctionTable, DispatchProps, OwnProps, StateProps } from "@app/components/App/AuctionList/AuctionTable";
+import { AuctionTable, IDispatchProps, IStateProps } from "@app/components/App/AuctionList/AuctionTable";
 import { IStoreState } from "@app/types";
 import { IQueryAuctionResult } from "@app/types/auction";
 
-const mapStateToProps = (state: IStoreState): StateProps => {
+const mapStateToProps = (state: IStoreState): IStateProps => {
     const { auctions, selectedQueryAuctionResults } = state.Auction;
     return { auctions, selectedItems: selectedQueryAuctionResults };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<Actions>): DispatchProps => {
+const mapDispatchToProps = (dispatch: Dispatch<Actions>): IDispatchProps => {
     return {
-        onAuctionsQuerySelect: (aqItem: IQueryAuctionResult) => dispatch(AddAuctionsQuery(aqItem)),
         onAuctionsQueryDeselect: (index: number) => dispatch(RemoveAuctionsQuery(index)),
+        onAuctionsQuerySelect: (aqItem: IQueryAuctionResult) => dispatch(AddAuctionsQuery(aqItem)),
     };
 };
 
-export default connect<StateProps, DispatchProps, OwnProps>(
+export const AuctionTableContainer = connect<IStateProps, IDispatchProps>(
     mapStateToProps,
     mapDispatchToProps,
 )(AuctionTable);

@@ -6,24 +6,22 @@ import { IProfile } from "@app/types/global";
 import { DialogActions, DialogBody } from "../util";
 import { Generator as FormFieldGenerator } from "../util/FormField";
 
-export interface StateProps {
+export interface IStateProps {
     isLoggedIn: boolean;
     isLoginDialogOpen: boolean;
 }
 
-export interface DispatchProps {
+export interface IDispatchProps {
     onUserLogin: (payload: IProfile) => void;
     changeIsLoginDialogOpen: (isLoginDialogOpen: boolean) => void;
 }
 
-export interface OwnProps {}
-
-export interface FormValues {
+export interface IFormValues {
     email: string;
     password: string;
 }
 
-export type Props = Readonly<StateProps & DispatchProps & OwnProps & FormikProps<FormValues>>;
+export type Props = Readonly<IStateProps & IDispatchProps & FormikProps<IFormValues>>;
 
 export class Login extends React.Component<Props> {
     public componentDidUpdate() {
@@ -42,20 +40,20 @@ export class Login extends React.Component<Props> {
             <form onSubmit={handleSubmit}>
                 <DialogBody>
                     {createFormField({
+                        autofocus: true,
                         fieldName: "email",
-                        type: "email",
-                        placeholder: "test@example.com",
                         getError: () => errors.email,
                         getTouched: () => !!touched.email,
                         getValue: () => values.email,
-                        autofocus: true,
+                        placeholder: "test@example.com",
+                        type: "email",
                     })}
                     {createFormField({
                         fieldName: "password",
-                        type: "password",
                         getError: () => errors.password,
                         getTouched: () => !!touched.password,
                         getValue: () => values.password,
+                        type: "password",
                     })}
                 </DialogBody>
                 <DialogActions>
@@ -75,10 +73,10 @@ export class Login extends React.Component<Props> {
 
         return (
             <>
-                <Button onClick={() => this.toggleDialog()} type="button" icon="log-in" text="Login" />
+                <Button onClick={this.toggleDialog} type="button" icon="log-in" text="Login" />
                 <Dialog
                     isOpen={isLoginDialogOpen}
-                    onClose={() => this.toggleDialog()}
+                    onClose={this.toggleDialog}
                     title="Login"
                     icon="manually-entered-data"
                 >

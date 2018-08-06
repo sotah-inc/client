@@ -3,26 +3,26 @@ import { connect, Dispatch } from "react-redux";
 import { Actions } from "@app/actions";
 import { ChangeIsAddListDialogOpen, FetchCreatePricelist } from "@app/actions/price-lists";
 import { ICreatePricelistRequest } from "@app/api/price-lists";
-import { CreateListDialog, DispatchProps, OwnProps, StateProps } from "@app/components/App/PriceLists/CreateListDialog";
+import { CreateListDialog, IDispatchProps, IStateProps } from "@app/components/App/PriceLists/CreateListDialog";
 import { IStoreState } from "@app/types";
 
-const mapStateToProps = (state: IStoreState): StateProps => {
+const mapStateToProps = (state: IStoreState): IStateProps => {
     const { currentRegion, currentRealm, profile } = state.Main;
     const { isAddListDialogOpen, createPricelistLevel, createPricelistErrors } = state.PriceLists;
     const { itemClasses } = state.Auction;
 
     return {
+        createPricelistErrors,
+        createPricelistLevel,
+        currentRealm,
+        currentRegion,
         isAddListDialogOpen,
         itemClasses,
-        currentRegion,
-        currentRealm,
-        createPricelistLevel,
-        createPricelistErrors,
         profile,
     };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<Actions>): DispatchProps => {
+const mapDispatchToProps = (dispatch: Dispatch<Actions>): IDispatchProps => {
     return {
         changeIsAddListDialogOpen: (isDialogOpen: boolean) => dispatch(ChangeIsAddListDialogOpen(isDialogOpen)),
         createPricelist: (token: string, request: ICreatePricelistRequest) =>
@@ -30,7 +30,7 @@ const mapDispatchToProps = (dispatch: Dispatch<Actions>): DispatchProps => {
     };
 };
 
-export default connect<StateProps, DispatchProps, OwnProps>(
+export const CreateListDialogContainer = connect<IStateProps, IDispatchProps>(
     mapStateToProps,
     mapDispatchToProps,
 )(CreateListDialog);

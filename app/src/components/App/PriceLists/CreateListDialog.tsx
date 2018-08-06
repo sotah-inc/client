@@ -1,16 +1,17 @@
-import { Breadcrumb, Button, Dialog, Intent } from "@blueprintjs/core";
 import * as React from "react";
+
+import { Breadcrumb, Button, Classes, Dialog, Intent } from "@blueprintjs/core";
 
 import { ICreatePricelistRequest } from "@app/api/price-lists";
 import { DialogActions, DialogBody, ErrorList } from "@app/components/util";
-import CreateEntryForm from "@app/containers/App/PriceLists/util/CreateEntryForm";
-import ListForm from "@app/containers/App/PriceLists/util/ListForm";
-import ItemPopover from "@app/containers/util/ItemPopover";
+import { ItemPopoverContainer } from "@app/containers/util/ItemPopover";
+import { CreateEntryFormFormContainer } from "@app/form-containers/App/PriceLists/util/CreateEntryForm";
+import { ListFormFormContainer } from "@app/form-containers/App/PriceLists/util/ListForm";
 import { IErrors, IProfile, IRealm, IRegion, Item, ItemClasses, ItemsMap } from "@app/types/global";
 import { CreateListCompletion, CreateListStep, CreatePricelistLevel, IPricelistEntry } from "@app/types/price-lists";
 import { AppToaster } from "@app/util/toasters";
 
-export interface StateProps {
+export interface IStateProps {
     isAddListDialogOpen: boolean;
     itemClasses: ItemClasses;
     currentRegion: IRegion | null;
@@ -20,14 +21,12 @@ export interface StateProps {
     profile: IProfile | null;
 }
 
-export interface DispatchProps {
+export interface IDispatchProps {
     changeIsAddListDialogOpen: (isDialogOpen: boolean) => void;
     createPricelist: (token: string, request: ICreatePricelistRequest) => void;
 }
 
-export interface OwnProps {}
-
-export type Props = Readonly<StateProps & DispatchProps & OwnProps>;
+export type Props = Readonly<IStateProps & IDispatchProps>;
 
 type State = Readonly<{
     createListStep: CreateListStep;
@@ -39,11 +38,11 @@ type State = Readonly<{
 
 export class CreateListDialog extends React.Component<Props, State> {
     public state: State = {
-        createListStep: CreateListStep.list,
-        listName: "",
         createListCompletion: CreateListCompletion.initial,
+        createListStep: CreateListStep.list,
         entries: [],
         entriesItems: {},
+        listName: "",
     };
 
     public componentDidUpdate(prevProps: Props) {
@@ -53,16 +52,16 @@ export class CreateListDialog extends React.Component<Props, State> {
             switch (createPricelistLevel) {
                 case CreatePricelistLevel.success:
                     AppToaster.show({
-                        message: "Your pricelist has been created.",
-                        intent: Intent.SUCCESS,
                         icon: "info-sign",
+                        intent: Intent.SUCCESS,
+                        message: "Your pricelist has been created.",
                     });
                     this.setState({
-                        createListStep: CreateListStep.list,
                         createListCompletion: CreateListCompletion.initial,
+                        createListStep: CreateListStep.list,
                         entries: [],
-                        listName: "",
                         entriesItems: {},
+                        listName: "",
                     });
 
                     break;
@@ -80,32 +79,48 @@ export class CreateListDialog extends React.Component<Props, State> {
         this.setState({ createListStep });
     }
 
+    public onListStepClick() {
+        this.onNavClick(CreateListStep.list);
+    }
+
+    public onEntryStepClick() {
+        this.onNavClick(CreateListStep.entry);
+    }
+
+    public onFinishStepClick() {
+        this.onNavClick(CreateListStep.finish);
+    }
+
     public renderNav() {
         const { createListCompletion } = this.state;
 
         return (
-            <ul className="pt-breadcrumbs">
+            <ul className={Classes.BREADCRUMBS}>
                 <li>
                     <Breadcrumb
                         text="List"
-                        onClick={() => this.onNavClick(CreateListStep.list)}
-                        className={createListCompletion === CreateListCompletion.initial ? "pt-breadcrumb-current" : ""}
+                        onClick={this.onListStepClick}
+                        className={
+                            createListCompletion === CreateListCompletion.initial ? Classes.BREADCRUMB_CURRENT : ""
+                        }
                     />
                 </li>
                 <li>
                     <Breadcrumb
                         text="Entry"
                         disabled={createListCompletion < CreateListCompletion.list}
-                        onClick={() => this.onNavClick(CreateListStep.entry)}
-                        className={createListCompletion === CreateListCompletion.list ? "pt-breadcrumb-current" : ""}
+                        onClick={this.onEntryStepClick}
+                        className={createListCompletion === CreateListCompletion.list ? Classes.BREADCRUMB_CURRENT : ""}
                     />
                 </li>
                 <li>
                     <Breadcrumb
                         text="Finish"
                         disabled={createListCompletion < CreateListCompletion.entry}
-                        onClick={() => this.onNavClick(CreateListStep.finish)}
-                        className={createListCompletion === CreateListCompletion.entry ? "pt-breadcrumb-current" : ""}
+                        onClick={this.onFinishStepClick}
+                        className={
+                            createListCompletion === CreateListCompletion.entry ? Classes.BREADCRUMB_CURRENT : ""
+                        }
                     />
                 </li>
             </ul>
@@ -119,9 +134,9 @@ export class CreateListDialog extends React.Component<Props, State> {
         }
 
         this.setState({
-            listName: name,
-            createListStep: CreateListStep.entry,
             createListCompletion,
+            createListStep: CreateListStep.entry,
+            listName: name,
         });
     }
 
@@ -133,21 +148,25 @@ export class CreateListDialog extends React.Component<Props, State> {
         }
 
         return (
-            <ListForm
-                onComplete={(v: string) => this.onCreateListFormComplete(v)}
+            <ListFormFormContainer
+                onComplete={this.onCreateListFormComplete}
                 submitIcon="caret-right"
                 submitText="Next"
             >
                 {this.renderNav()}
-            </ListForm>
+            </ListFormFormContainer>
         );
     }
 
-    public onCreateEntryFormComplete(entry: IPricelistEntry) {
+    public onCreateEntryFormComplete(v: IPricelistEntry, item: Item) {
+        const entriesItems = this.state.entriesItems;
+        entriesItems[item.id] = item;
+        this.setState({ entriesItems: { ...entriesItems } });
+
         this.setState({
-            entries: [...this.state.entries, entry],
-            createListStep: CreateListStep.finish,
             createListCompletion: CreateListCompletion.entry,
+            createListStep: CreateListStep.finish,
+            entries: [...this.state.entries, v],
         });
     }
 
@@ -159,16 +178,9 @@ export class CreateListDialog extends React.Component<Props, State> {
         }
 
         return (
-            <CreateEntryForm
-                onComplete={(v: IPricelistEntry, item: Item) => {
-                    const entriesItems = this.state.entriesItems;
-                    entriesItems[item.id] = item;
-                    this.setState({ entriesItems: { ...entriesItems } });
-                    this.onCreateEntryFormComplete(v);
-                }}
-            >
+            <CreateEntryFormFormContainer onComplete={this.onCreateEntryFormComplete}>
                 {this.renderNav()}
-            </CreateEntryForm>
+            </CreateEntryFormFormContainer>
         );
     }
 
@@ -178,23 +190,30 @@ export class CreateListDialog extends React.Component<Props, State> {
         return (
             <tr key={index}>
                 <td>
-                    <ItemPopover item={entriesItems[entry.item_id]} />
+                    <ItemPopoverContainer item={entriesItems[entry.item_id]} />
                 </td>
                 <td>x{entry.quantity_modifier}</td>
             </tr>
         );
     }
 
+    public onAddEntryClick() {
+        this.setState({ createListStep: CreateListStep.entry });
+    }
+
+    public onFinishClick() {
+        const { listName, entries } = this.state;
+        const { createPricelist, currentRegion, currentRealm, profile } = this.props;
+
+        createPricelist(profile!.token, {
+            entries,
+            pricelist: { name: listName, region: currentRegion!.name, realm: currentRealm!.slug },
+        });
+    }
+
     public renderFinish() {
         const { createListStep, listName, entries } = this.state;
-        const {
-            createPricelist,
-            currentRegion,
-            currentRealm,
-            createPricelistLevel,
-            createPricelistErrors,
-            profile,
-        } = this.props;
+        const { createPricelistLevel, createPricelistErrors } = this.props;
 
         if (createListStep !== CreateListStep.finish) {
             return;
@@ -204,7 +223,11 @@ export class CreateListDialog extends React.Component<Props, State> {
             <>
                 <DialogBody>
                     {this.renderNav()}
-                    <table className="pt-html-table pt-html-table-bordered pt-small create-list-dialog-table">
+                    <table
+                        className={`${Classes.HTML_TABLE} ${Classes.HTML_TABLE_BORDERED} ${
+                            Classes.SMALL
+                        } create-list-dialog-table`}
+                    >
                         <thead>
                             <tr>
                                 <th>Item</th>
@@ -219,19 +242,14 @@ export class CreateListDialog extends React.Component<Props, State> {
                     <Button
                         text="Add More Entries"
                         intent={Intent.NONE}
-                        onClick={() => this.setState({ createListStep: CreateListStep.entry })}
+                        onClick={this.onAddEntryClick}
                         icon="caret-left"
                     />
                     <Button
                         text={`Finish "${listName}"`}
                         intent={Intent.PRIMARY}
                         disabled={createPricelistLevel === CreatePricelistLevel.fetching}
-                        onClick={() => {
-                            createPricelist(profile!.token, {
-                                entries,
-                                pricelist: { name: listName, region: currentRegion!.name, realm: currentRealm!.slug },
-                            });
-                        }}
+                        onClick={this.onFinishClick}
                         icon="edit"
                     />
                 </DialogActions>
@@ -245,7 +263,7 @@ export class CreateListDialog extends React.Component<Props, State> {
         return (
             <Dialog
                 isOpen={isAddListDialogOpen}
-                onClose={() => this.toggleListDialog()}
+                onClose={this.toggleListDialog}
                 title="New Price List"
                 icon="manually-entered-data"
                 canOutsideClickClose={false}

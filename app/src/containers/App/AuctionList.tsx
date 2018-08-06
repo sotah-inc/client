@@ -3,10 +3,10 @@ import { connect, Dispatch } from "react-redux";
 import { Actions } from "@app/actions";
 import { FetchAuctions, FetchAuctionsQuery, FetchItemClasses, PageChange } from "@app/actions/auction";
 import { IGetAuctionsOptions, IQueryAuctionsOptions } from "@app/api/data";
-import { AuctionList, DispatchProps, OwnProps, StateProps } from "@app/components/App/AuctionList";
+import { AuctionList, IDispatchProps, IStateProps } from "@app/components/App/AuctionList";
 import { IStoreState } from "@app/types";
 
-const mapStateToProps = (state: IStoreState): StateProps => {
+const mapStateToProps = (state: IStoreState): IStateProps => {
     const { currentRegion, currentRealm, authLevel, fetchUserPreferencesLevel, userPreferences } = state.Main;
     const {
         fetchAuctionsLevel,
@@ -21,34 +21,34 @@ const mapStateToProps = (state: IStoreState): StateProps => {
         fetchItemClassesLevel,
     } = state.Auction;
     return {
+        auctions,
+        auctionsPerPage,
+        authLevel,
+        currentPage,
+        currentRealm,
         currentRegion,
         fetchAuctionsLevel,
-        currentRealm,
-        auctions,
-        currentPage,
-        auctionsPerPage,
-        totalResults,
-        sortDirection,
-        sortKind,
+        fetchItemClassesLevel,
+        fetchUserPreferencesLevel,
         queryAuctionsLevel,
         selectedQueryAuctionResults,
-        fetchItemClassesLevel,
-        authLevel,
-        fetchUserPreferencesLevel,
+        sortDirection,
+        sortKind,
+        totalResults,
         userPreferences,
     };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<Actions>): DispatchProps => {
+const mapDispatchToProps = (dispatch: Dispatch<Actions>): IDispatchProps => {
     return {
         refreshAuctions: (opts: IGetAuctionsOptions) => dispatch(FetchAuctions(opts)),
-        setCurrentPage: (page: number) => dispatch(PageChange(page)),
         refreshAuctionsQuery: (opts: IQueryAuctionsOptions) => dispatch(FetchAuctionsQuery(opts)),
         refreshItemClasses: () => dispatch(FetchItemClasses()),
+        setCurrentPage: (page: number) => dispatch(PageChange(page)),
     };
 };
 
-export default connect<StateProps, DispatchProps, OwnProps>(
+export const AuctionsListContainer = connect<IStateProps, IDispatchProps>(
     mapStateToProps,
     mapDispatchToProps,
 )(AuctionList);

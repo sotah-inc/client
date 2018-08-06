@@ -1,27 +1,24 @@
+import * as React from "react";
+
 import { Button, Intent } from "@blueprintjs/core";
 import { IconName } from "@blueprintjs/icons";
 import { FormikProps } from "formik";
-import * as React from "react";
 
 import { DialogActions, DialogBody } from "@app/components/util";
 import { Generator as FormFieldGenerator } from "@app/components/util/FormField";
 
-export interface StateProps {}
-
-export interface DispatchProps {}
-
-export interface OwnProps {
+export interface IOwnProps {
     onComplete: (name: string) => void;
     defaultName?: string;
     submitIcon: IconName;
     submitText: string;
 }
 
-export interface FormValues {
+export interface IFormValues {
     name: string;
 }
 
-export type Props = Readonly<StateProps & DispatchProps & OwnProps & FormikProps<FormValues>>;
+export type Props = Readonly<IOwnProps & FormikProps<IFormValues>>;
 
 export class ListForm extends React.Component<Props> {
     public render() {
@@ -45,13 +42,13 @@ export class ListForm extends React.Component<Props> {
                 <DialogBody>
                     {children}
                     {createFormField({
+                        autofocus: true,
                         fieldName: "name",
-                        type: "string",
-                        placeholder: "",
                         getError: () => errors.name,
                         getTouched: () => !!touched.name,
                         getValue: () => values.name,
-                        autofocus: true,
+                        placeholder: "",
+                        type: "string",
                     })}
                 </DialogBody>
                 <DialogActions>

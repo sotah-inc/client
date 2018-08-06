@@ -10,11 +10,11 @@ import {
     FetchUpdatePricelist,
 } from "@app/actions/price-lists";
 import { IDeletePricelistRequestOptions } from "@app/api/price-lists";
-import { DispatchProps, OwnProps, PriceLists, StateProps } from "@app/components/App/PriceLists";
+import { IDispatchProps, IStateProps, PriceLists } from "@app/components/App/PriceLists";
 import { IStoreState } from "@app/types";
 import { IUpdatePricelistRequestOptions } from "@app/types/price-lists";
 
-const mapStateToProps = (state: IStoreState): StateProps => {
+const mapStateToProps = (state: IStoreState): IStateProps => {
     const { authLevel, profile } = state.Main;
     const {
         isAddEntryDialogOpen,
@@ -24,28 +24,28 @@ const mapStateToProps = (state: IStoreState): StateProps => {
         isDeleteListDialogOpen,
     } = state.PriceLists;
     return {
-        isAddEntryDialogOpen,
         authLevel,
-        updatePricelistLevel,
-        selectedList,
-        profile,
-        isEditListDialogOpen,
+        isAddEntryDialogOpen,
         isDeleteListDialogOpen,
+        isEditListDialogOpen,
+        profile,
+        selectedList,
+        updatePricelistLevel,
     };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<Actions>): DispatchProps => {
+const mapDispatchToProps = (dispatch: Dispatch<Actions>): IDispatchProps => {
     return {
         changeIsAddEntryDialogOpen: (isDialogOpen: boolean) => dispatch(ChangeIsAddEntryDialogOpen(isDialogOpen)),
-        updatePricelist: (opts: IUpdatePricelistRequestOptions) => dispatch(FetchUpdatePricelist(opts)),
-        changeIsLoginDialogOpen: (isLoginDialogOpen: boolean) => dispatch(ChangeIsLoginDialogOpen(isLoginDialogOpen)),
-        changeIsEditListDialogOpen: (isDialogOpen: boolean) => dispatch(ChangeIsEditListDialogOpen(isDialogOpen)),
         changeIsDeleteListDialogOpen: (isDialogOpen: boolean) => dispatch(ChangeIsDeleteListDialogOpen(isDialogOpen)),
+        changeIsEditListDialogOpen: (isDialogOpen: boolean) => dispatch(ChangeIsEditListDialogOpen(isDialogOpen)),
+        changeIsLoginDialogOpen: (isLoginDialogOpen: boolean) => dispatch(ChangeIsLoginDialogOpen(isLoginDialogOpen)),
         deletePricelist: (opts: IDeletePricelistRequestOptions) => dispatch(FetchDeletePricelist(opts)),
+        updatePricelist: (opts: IUpdatePricelistRequestOptions) => dispatch(FetchUpdatePricelist(opts)),
     };
 };
 
-export default connect<StateProps, DispatchProps, OwnProps>(
+export const PriceListsContainer = connect<IStateProps, IDispatchProps>(
     mapStateToProps,
     mapDispatchToProps,
 )(PriceLists);

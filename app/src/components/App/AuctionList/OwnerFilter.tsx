@@ -1,4 +1,6 @@
-import { Button, ControlGroup, Intent, Menu, MenuItem, Spinner } from "@blueprintjs/core";
+import * as React from "react";
+
+import { Button, Classes, ControlGroup, Intent, Menu, MenuItem, Spinner } from "@blueprintjs/core";
 import {
     IItemListRendererProps,
     IItemRendererProps,
@@ -7,7 +9,6 @@ import {
     ItemRenderer,
     Suggest,
 } from "@blueprintjs/select";
-import * as React from "react";
 
 import { IGetOwnersOptions } from "@app/api/data";
 import { FetchOwnersLevel } from "@app/types/auction";
@@ -15,7 +16,7 @@ import { IOwner, IRealm, IRegion, OwnerName } from "@app/types/global";
 
 const OwnerFilterSuggest = Suggest.ofType<IOwner>();
 
-export interface StateProps {
+export interface IStateProps {
     fetchOwnersLevel: FetchOwnersLevel;
     owners: IOwner[];
     ownerFilter: OwnerName | null;
@@ -23,14 +24,12 @@ export interface StateProps {
     currentRealm: IRealm | null;
 }
 
-export interface DispatchProps {
+export interface IDispatchProps {
     onOwnerFilterChange: (ownerName: OwnerName | null) => void;
     refreshOwners: (opts: IGetOwnersOptions) => void;
 }
 
-export interface OwnProps {}
-
-type Props = Readonly<StateProps & DispatchProps & OwnProps>;
+type Props = Readonly<IStateProps & IDispatchProps>;
 
 type State = Readonly<{
     ownerFilterValue: string;
@@ -62,7 +61,7 @@ export class OwnerFilter extends React.Component<Props, State> {
             <MenuItem
                 key={index}
                 intent={intent}
-                className={modifiers.active ? "pt-active" : ""}
+                className={modifiers.active ? Classes.ACTIVE : ""}
                 onClick={handleClick}
                 text={owner.name}
             />
@@ -100,8 +99,9 @@ export class OwnerFilter extends React.Component<Props, State> {
         this.props.onOwnerFilterChange(owner.name);
     }
 
-    public onFilterChange(ownerFilterValue: string) {
+    public onFilterChange(e: React.ChangeEvent<HTMLInputElement>) {
         const { timerId } = this.state;
+        const ownerFilterValue = e.target.value;
 
         if (timerId !== null) {
             clearTimeout(timerId);
@@ -109,9 +109,9 @@ export class OwnerFilter extends React.Component<Props, State> {
 
         const newTimerId = setTimeout(() => {
             this.props.refreshOwners({
-                regionName: this.props.currentRegion!.name,
-                realmSlug: this.props.currentRealm!.slug,
                 query: ownerFilterValue,
+                realmSlug: this.props.currentRealm!.slug,
+                regionName: this.props.currentRegion!.name,
             });
         }, 0.25 * 1000);
         this.setState({ ownerFilterValue, timerId: newTimerId });
@@ -121,10 +121,14 @@ export class OwnerFilter extends React.Component<Props, State> {
         this.setState({ ownerFilterValue: "" });
         this.props.onOwnerFilterChange(null);
         this.props.refreshOwners({
-            regionName: this.props.currentRegion!.name,
-            realmSlug: this.props.currentRealm!.slug,
             query: "",
+            realmSlug: this.props.currentRealm!.slug,
+            regionName: this.props.currentRegion!.name,
         });
+    }
+
+    public inputValueRenderer(v: IOwner) {
+        return v.name;
     }
 
     public render() {
@@ -143,31 +147,25 @@ export class OwnerFilter extends React.Component<Props, State> {
                             itemRenderer={this.itemRenderer}
                             itemListRenderer={this.itemListRenderer}
                             itemPredicate={this.itemPredicate}
-                            onItemSelect={(owner: IOwner) => {
-                                this.onFilterSet(owner);
-                            }}
-                            inputValueRenderer={v => v.name}
-                            inputProps={{
-                                value: ownerFilterValue,
-                                onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
-                                    this.onFilterChange(e.target.value),
-                            }}
+                            onItemSelect={this.onFilterSet}
+                            inputValueRenderer={this.inputValueRenderer}
+                            inputProps={{ onChange: this.onFilterChange, value: ownerFilterValue }}
                         />
                         <Button
                             icon="filter-remove"
                             disabled={!canClearFilter}
                             text="Clear"
-                            onClick={() => this.onFilterClear()}
+                            onClick={this.onFilterClear}
                         />
                     </ControlGroup>
                 );
             case FetchOwnersLevel.failure:
-                return <Spinner className="pt-small" intent={Intent.DANGER} value={1} />;
+                return <Spinner className={Classes.SMALL} intent={Intent.DANGER} value={1} />;
             case FetchOwnersLevel.initial:
-                return <Spinner className="pt-small" intent={Intent.NONE} value={1} />;
+                return <Spinner className={Classes.SMALL} intent={Intent.NONE} value={1} />;
             case FetchOwnersLevel.fetching:
             default:
-                return <Spinner className="pt-small" intent={Intent.PRIMARY} />;
+                return <Spinner className={Classes.SMALL} intent={Intent.PRIMARY} />;
         }
     }
 }

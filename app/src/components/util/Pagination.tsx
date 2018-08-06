@@ -1,15 +1,20 @@
-import { Button, ButtonGroup, Intent } from "@blueprintjs/core";
 import * as React from "react";
 
-interface Props {
+import { Button, ButtonGroup, Intent } from "@blueprintjs/core";
+
+interface IProps {
     currentPage: number;
     pageCount: number;
     pagesShown: number;
     onPageChange: (page: number) => void;
 }
 
-export const Pagination: React.SFC<Props> = (props: Props) => {
-    const { currentPage, pageCount, onPageChange } = props;
+const onPageChangeClick = (props: IProps, page: number) => {
+    return () => props.onPageChange(page);
+};
+
+export const Pagination: React.SFC<IProps> = (props: IProps) => {
+    const { currentPage, pageCount } = props;
     let { pagesShown } = props;
     if (pageCount < pagesShown) {
         pagesShown = pageCount + 1;
@@ -37,7 +42,7 @@ export const Pagination: React.SFC<Props> = (props: Props) => {
             <Button
                 key={page}
                 intent={currentPage === page ? Intent.PRIMARY : Intent.NONE}
-                onClick={() => onPageChange(page)}
+                onClick={onPageChangeClick(props, page)}
             >
                 {page + 1}
             </Button>
@@ -64,7 +69,7 @@ export const Pagination: React.SFC<Props> = (props: Props) => {
 
         return (
             <ButtonGroup style={{ marginRight: "10px" }}>
-                <Button icon="double-chevron-left" onClick={() => onPageChange(0)} disabled={currentPage === 0}>
+                <Button icon="double-chevron-left" onClick={onPageChangeClick(props, 0)} disabled={currentPage === 0}>
                     First
                 </Button>
             </ButtonGroup>
@@ -77,12 +82,12 @@ export const Pagination: React.SFC<Props> = (props: Props) => {
             <ButtonGroup>
                 <Button
                     icon="chevron-left"
-                    onClick={() => onPageChange(currentPage - 1)}
+                    onClick={onPageChangeClick(props, currentPage - 1)}
                     disabled={currentPage === 0}
                 />
                 <Button
                     icon="chevron-right"
-                    onClick={() => onPageChange(currentPage + 1)}
+                    onClick={onPageChangeClick(props, currentPage + 1)}
                     disabled={currentPage === pageCount}
                 >
                     Next

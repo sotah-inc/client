@@ -1,8 +1,8 @@
-import { Popover, PopoverInteractionKind, Position } from "@blueprintjs/core";
 import * as React from "react";
 
-import { Currency } from "@app/components/util";
+import { Popover, PopoverInteractionKind, Position } from "@blueprintjs/core";
 
+import { Currency } from "@app/components/util";
 import {
     InventoryType,
     Item,
@@ -22,27 +22,25 @@ import {
 
 import "./ItemPopover.scss";
 
-export interface StateProps {
+export interface IStateProps {
     itemClasses: ItemClasses;
 }
 
-export interface DispatchProps {}
-
-export interface OwnProps {
+export interface IOwnProps {
     item: Item;
 
     onItemClick?: () => void;
     itemTextFormatter?: (itemText: string) => string;
 }
 
-type Props = Readonly<StateProps & DispatchProps & OwnProps>;
+type Props = Readonly<IStateProps & IOwnProps>;
 
 export class ItemPopover extends React.Component<Props> {
     public static defaultProps: Partial<Props> = {
+        itemTextFormatter: (itemText: string) => itemText,
         onItemClick: () => {
             return;
         },
-        itemTextFormatter: (itemText: string) => itemText,
     };
 
     public renderItemLevel(item: Item) {
@@ -343,12 +341,12 @@ export class ItemPopover extends React.Component<Props> {
         const itemText = this.itemTextFormatter(getItemTextValue(item));
         const itemIconUrl = getItemIconUrl(item);
         if (itemIconUrl === null) {
-            return <a onClick={() => this.onItemClick()}>{itemText}</a>;
+            return <a onClick={this.onItemClick}>{itemText}</a>;
         }
 
         return (
             <>
-                <img src={itemIconUrl} className="item-icon" /> <a onClick={() => this.onItemClick()}>{itemText}</a>
+                <img src={itemIconUrl} className="item-icon" /> <a onClick={this.onItemClick}>{itemText}</a>
             </>
         );
     }

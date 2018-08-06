@@ -1,23 +1,20 @@
-import { Intent, NonIdealState, Spinner } from "@blueprintjs/core";
 import * as React from "react";
+
+import { Classes, Intent, NonIdealState, Spinner } from "@blueprintjs/core";
 
 import { getPriceList, IPriceListMap } from "@app/api/data";
 import { Currency } from "@app/components/util";
-import ItemPopover from "@app/containers/util/ItemPopover";
+import { ItemPopoverContainer } from "@app/containers/util/ItemPopover";
 import { IRealm, IRegion, ItemsMap } from "@app/types/global";
 import { GetPriceListLevel, IPricelist, IPricelistEntry } from "@app/types/price-lists";
 
-export interface StateProps {}
-
-export interface DispatchProps {}
-
-export interface OwnProps {
+export interface IOwnProps {
     list: IPricelist;
     region: IRegion;
     realm: IRealm;
 }
 
-type Props = Readonly<StateProps & DispatchProps & OwnProps>;
+type Props = Readonly<IOwnProps>;
 
 type State = Readonly<{
     getPriceListLevel: GetPriceListLevel;
@@ -28,8 +25,8 @@ type State = Readonly<{
 export class PriceListTable extends React.Component<Props, State> {
     public state: State = {
         getPriceListLevel: GetPriceListLevel.initial,
-        pricelistMap: {},
         itemsMap: {},
+        pricelistMap: {},
     };
 
     public async reloadPricelistData() {
@@ -37,9 +34,9 @@ export class PriceListTable extends React.Component<Props, State> {
 
         const itemIds = list.pricelist_entries!.map(v => v.item_id);
         const data = await getPriceList({
-            regionName: region.name,
-            realmSlug: realm.slug,
             itemIds,
+            realmSlug: realm.slug,
+            regionName: region.name,
         });
         if (data === null) {
             this.setState({ getPriceListLevel: GetPriceListLevel.failure });
@@ -49,8 +46,8 @@ export class PriceListTable extends React.Component<Props, State> {
 
         this.setState({
             getPriceListLevel: GetPriceListLevel.success,
-            pricelistMap: data.price_list,
             itemsMap: data.items,
+            pricelistMap: data.price_list,
         });
     }
 
@@ -62,6 +59,10 @@ export class PriceListTable extends React.Component<Props, State> {
         if (this.props.list.pricelist_entries!.length !== prevProps.list.pricelist_entries!.length) {
             this.reloadPricelistData();
         }
+    }
+
+    public itemTextFormatter(quantityModifier: number) {
+        return (itemText: string) => `${itemText} \u00D7${quantityModifier}`;
     }
 
     public renderEntry(index: number, entry: IPricelistEntry) {
@@ -88,9 +89,9 @@ export class PriceListTable extends React.Component<Props, State> {
         return (
             <tr key={index}>
                 <td>
-                    <ItemPopover
+                    <ItemPopoverContainer
                         item={itemsMap[item_id]}
-                        itemTextFormatter={itemText => `${itemText} \u00D7${quantity_modifier}`}
+                        itemTextFormatter={this.itemTextFormatter(quantity_modifier)}
                     />
                 </td>
                 <td>
@@ -107,7 +108,7 @@ export class PriceListTable extends React.Component<Props, State> {
         const { list } = this.props;
 
         return (
-            <table className="pt-html-table pt-html-table-bordered pt-small price-list-table">
+            <table className={`${Classes.HTML_TABLE} ${Classes.HTML_TABLE_BORDERED} ${Classes.SMALL} price-list-table`}>
                 <thead>
                     <tr>
                         <th>Item</th>
@@ -128,7 +129,7 @@ export class PriceListTable extends React.Component<Props, State> {
                 return (
                     <NonIdealState
                         title="Could not load price-lists"
-                        visual={<Spinner className="pt-large" intent={Intent.DANGER} value={0} />}
+                        visual={<Spinner className={Classes.LARGE} intent={Intent.DANGER} value={0} />}
                     />
                 );
             case GetPriceListLevel.success:
@@ -136,7 +137,10 @@ export class PriceListTable extends React.Component<Props, State> {
             case GetPriceListLevel.initial:
             default:
                 return (
-                    <NonIdealState title="Loading" visual={<Spinner className="pt-large" intent={Intent.PRIMARY} />} />
+                    <NonIdealState
+                        title="Loading"
+                        visual={<Spinner className={Classes.LARGE} intent={Intent.PRIMARY} />}
+                    />
                 );
         }
     }

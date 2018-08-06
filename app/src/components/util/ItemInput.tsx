@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { Button, Menu, MenuItem } from "@blueprintjs/core";
+import { Button, Classes, Menu, MenuItem } from "@blueprintjs/core";
 import {
     IItemListRendererProps,
     IItemRendererProps,
@@ -29,9 +29,9 @@ type State = Readonly<{
 
 export class ItemInput extends React.Component<Props, State> {
     public state: State = {
-        timerId: null,
         filterValue: "",
         results: [],
+        timerId: null,
     };
 
     public componentDidMount() {
@@ -73,7 +73,7 @@ export class ItemInput extends React.Component<Props, State> {
             return null;
         }
 
-        let className = modifiers.active ? "pt-active" : "";
+        let className = modifiers.active ? Classes.ACTIVE : "";
         const { item } = result;
 
         let label = "n/a";
@@ -129,21 +129,17 @@ export class ItemInput extends React.Component<Props, State> {
         this.setState({ filterValue, timerId: newTimerId });
     }
 
+    public onClearClick() {
+        this.setState({ filterValue: "" }, this.triggerQuery);
+    }
+
     public renderClearButton() {
         const { filterValue } = this.state;
         if (filterValue === null || filterValue === "") {
             return;
         }
 
-        return (
-            <Button
-                icon="cross"
-                className="pt-minimal"
-                onClick={() => {
-                    this.setState({ filterValue: "" }, () => this.triggerQuery());
-                }}
-            />
-        );
+        return <Button icon="cross" className={Classes.MINIMAL} onClick={this.onClearClick} />;
     }
 
     public itemPredicate: ItemPredicate<IQueryItemResult> = (_: string, result: IQueryItemResult) => {
@@ -184,21 +180,19 @@ export class ItemInput extends React.Component<Props, State> {
 
         return (
             <ItemSuggest
-                inputValueRenderer={v => this.resolveResultTextValue(v)}
+                inputValueRenderer={this.resolveResultTextValue}
                 itemRenderer={this.itemRenderer}
                 items={results}
-                onItemSelect={(result: IQueryItemResult) => {
-                    this.onItemSelect(result);
-                }}
+                onItemSelect={this.onItemSelect}
                 closeOnSelect={true}
                 inputProps={{
-                    value: filterValue,
-                    onChange: (e: React.ChangeEvent<HTMLInputElement>) => this.onFilterChange(e.target.value),
-                    type: "search",
-                    leftIcon: "search",
-                    rightElement: this.renderClearButton(),
-                    className: "pt-fill",
                     autoFocus,
+                    className: Classes.FILL,
+                    leftIcon: "search",
+                    onChange: (e: React.ChangeEvent<HTMLInputElement>) => this.onFilterChange(e.target.value),
+                    rightElement: this.renderClearButton(),
+                    type: "search",
+                    value: filterValue,
                 }}
                 itemPredicate={this.itemPredicate}
                 itemListRenderer={this.itemListRenderer}

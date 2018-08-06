@@ -1,3 +1,5 @@
 import * as React from "react";
 
-export const DialogBody: React.SFC = props => <div className="pt-dialog-body">{props.children}</div>;
+import { Classes } from "@blueprintjs/core";
+
+export const DialogBody: React.SFC = props => <div className={Classes.DIALOG_BODY}>{props.children}</div>;

@@ -3,30 +3,30 @@ import { connect, Dispatch } from "react-redux";
 import { Actions } from "@app/actions";
 import { FetchUserPreferencesCreate, FetchUserPreferencesUpdate, RegionChange } from "@app/actions/main";
 import { ICreatePreferencesRequestBody, UpdatePreferencesRequestBody } from "@app/api/user";
-import { DispatchProps, OwnProps, RegionToggle, StateProps } from "@app/components/util/RegionToggle";
+import { IDispatchProps, IStateProps, RegionToggle } from "@app/components/util/RegionToggle";
 import { IStoreState } from "@app/types";
 import { IRegion } from "@app/types/global";
 
-const mapStateToProps = (state: IStoreState): StateProps => {
+const mapStateToProps = (state: IStoreState): IStateProps => {
     const { regions, currentRegion, fetchRegionLevel } = state.Main;
     return {
-        regions,
         currentRegion,
         fetchRegionLevel,
+        regions,
     };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<Actions>): DispatchProps => {
+const mapDispatchToProps = (dispatch: Dispatch<Actions>): IDispatchProps => {
     return {
-        onRegionChange: (region: IRegion) => dispatch(RegionChange(region)),
         createUserPreferences: (token: string, body: ICreatePreferencesRequestBody) =>
             dispatch(FetchUserPreferencesCreate(token, body)),
+        onRegionChange: (region: IRegion) => dispatch(RegionChange(region)),
         updateUserPreferences: (token: string, body: UpdatePreferencesRequestBody) =>
             dispatch(FetchUserPreferencesUpdate(token, body)),
     };
 };
 
-export default connect<StateProps, DispatchProps, OwnProps>(
+export const RegionToggleContainer = connect<IStateProps, IDispatchProps>(
     mapStateToProps,
     mapDispatchToProps,
 )(RegionToggle);

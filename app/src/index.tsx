@@ -8,7 +8,7 @@ import thunk from "redux-thunk";
 import { USER_LOGIN, USER_REGISTER } from "@app/actions/main";
 import { rootReducer } from "@app/reducers";
 import registerServiceWorker from "@app/registerServiceWorker";
-import App from "@app/route-containers/App";
+import { AppRouteContainer } from "@app/route-containers/App";
 import { defaultAuctionState, defaultMainState, defaultPriceListsState, IStoreState } from "@app/types";
 
 const ayy: IStoreState = {
@@ -41,7 +41,7 @@ const store = createStore<IStoreState>(rootReducer, ayy, applyMiddleware(localSt
 ReactDOM.render(
     <Provider store={store}>
         <Router>
-            <App />
+            <AppRouteContainer />
         </Router>
     </Provider>,
     document.getElementById("root") as HTMLElement,

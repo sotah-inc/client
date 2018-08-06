@@ -1,31 +1,35 @@
-import { Button, Intent, Menu, MenuItem, Popover, Position, Spinner } from "@blueprintjs/core";
 import * as React from "react";
+
+import { Button, Classes, Intent, Menu, MenuItem, Popover, Position, Spinner } from "@blueprintjs/core";
 
 import { ICreatePreferencesRequestBody, UpdatePreferencesRequestBody } from "@app/api/user";
 import { IRegion, IRegions } from "@app/types/global";
 import { FetchRegionLevel } from "@app/types/main";
 
-export interface StateProps {
+export interface IStateProps {
     currentRegion: IRegion | null;
     regions: IRegions;
     fetchRegionLevel: FetchRegionLevel;
 }
 
-export interface DispatchProps {
+export interface IDispatchProps {
     onRegionChange: (region: IRegion) => void;
     createUserPreferences: (token: string, body: ICreatePreferencesRequestBody) => void;
     updateUserPreferences: (token: string, body: UpdatePreferencesRequestBody) => void;
 }
 
-export interface OwnProps {}
-
-type Props = Readonly<StateProps & DispatchProps & OwnProps>;
+type Props = Readonly<IStateProps & IDispatchProps>;
 
 export class RegionToggle extends React.Component<Props> {
+    public onMenuItemClick(region: IRegion) {
+        const { onRegionChange } = this.props;
+        return () => onRegionChange(region);
+    }
+
     public renderMenuItem(region: IRegion, index: number) {
         let className = "";
         if (this.props.currentRegion !== null && region.name === this.props.currentRegion.name) {
-            className = "pt-active";
+            className = Classes.ACTIVE;
         }
 
         return (
@@ -34,7 +38,7 @@ export class RegionToggle extends React.Component<Props> {
                 icon="geosearch"
                 className={className}
                 text={region.name.toUpperCase()}
-                onClick={() => this.props.onRegionChange(region)}
+                onClick={this.onMenuItemClick.bind(this, region)}
             />
         );
     }
@@ -63,12 +67,12 @@ export class RegionToggle extends React.Component<Props> {
                     />
                 );
             case FetchRegionLevel.failure:
-                return <Spinner className="pt-small" intent={Intent.DANGER} value={1} />;
+                return <Spinner className={Classes.SMALL} intent={Intent.DANGER} value={1} />;
             case FetchRegionLevel.initial:
-                return <Spinner className="pt-small" intent={Intent.NONE} value={1} />;
+                return <Spinner className={Classes.SMALL} intent={Intent.NONE} value={1} />;
             case FetchRegionLevel.fetching:
             default:
-                return <Spinner className="pt-small" intent={Intent.PRIMARY} />;
+                return <Spinner className={Classes.SMALL} intent={Intent.PRIMARY} />;
         }
     }
 }

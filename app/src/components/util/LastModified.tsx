@@ -1,11 +1,11 @@
 import * as moment from "moment";
 import * as React from "react";
 
-interface Props {
+interface IProps {
     targetDate: Date;
 }
 
-export const LastModified: React.SFC<Props> = ({ targetDate }: Props) => {
+export const LastModified: React.SFC<IProps> = ({ targetDate }: IProps) => {
     return (
         <p style={{ textAlign: "right" }}>
             <em>

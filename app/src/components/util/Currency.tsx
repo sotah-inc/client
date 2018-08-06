@@ -1,10 +1,10 @@
 import * as React from "react";
 
-interface Props {
+interface IProps {
     amount: number;
 }
 
-export const Currency: React.SFC<Props> = (props: Props) => {
+export const Currency: React.SFC<IProps> = (props: IProps) => {
     let { amount } = props;
     if (amount === 0) {
         return <>0g</>;

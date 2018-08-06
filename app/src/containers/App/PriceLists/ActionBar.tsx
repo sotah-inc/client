@@ -7,31 +7,31 @@ import {
     ChangeIsDeleteListDialogOpen,
     ChangeIsEditListDialogOpen,
 } from "@app/actions/price-lists";
-import { ActionBar, DispatchProps, OwnProps, StateProps } from "@app/components/App/PriceLists/ActionBar";
+import { ActionBar, IDispatchProps, IStateProps } from "@app/components/App/PriceLists/ActionBar";
 import { IStoreState } from "@app/types";
 
-const mapStateToProps = (state: IStoreState): StateProps => {
+const mapStateToProps = (state: IStoreState): IStateProps => {
     const { currentRegion, currentRealm } = state.Main;
     const { isAddListDialogOpen, isAddEntryDialogOpen, selectedList } = state.PriceLists;
     return {
-        currentRegion,
         currentRealm,
-        isAddListDialogOpen,
+        currentRegion,
         isAddEntryDialogOpen,
+        isAddListDialogOpen,
         selectedList,
     };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<Actions>): DispatchProps => {
+const mapDispatchToProps = (dispatch: Dispatch<Actions>): IDispatchProps => {
     return {
-        changeIsAddListDialogOpen: (isDialogOpen: boolean) => dispatch(ChangeIsAddListDialogOpen(isDialogOpen)),
         changeIsAddEntryDialogOpen: (isDialogOpen: boolean) => dispatch(ChangeIsAddEntryDialogOpen(isDialogOpen)),
-        changeIsEditListDialogOpen: (isDialogOpen: boolean) => dispatch(ChangeIsEditListDialogOpen(isDialogOpen)),
+        changeIsAddListDialogOpen: (isDialogOpen: boolean) => dispatch(ChangeIsAddListDialogOpen(isDialogOpen)),
         changeIsDeleteListDialogOpen: (isDialogOpen: boolean) => dispatch(ChangeIsDeleteListDialogOpen(isDialogOpen)),
+        changeIsEditListDialogOpen: (isDialogOpen: boolean) => dispatch(ChangeIsEditListDialogOpen(isDialogOpen)),
     };
 };
 
-export default connect<StateProps, DispatchProps, OwnProps>(
+export const ActionBarContainer = connect<IStateProps, IDispatchProps>(
     mapStateToProps,
     mapDispatchToProps,
 )(ActionBar);

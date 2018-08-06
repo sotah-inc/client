@@ -1,8 +1,10 @@
 import * as React from "react";
 
+import { Classes } from "@blueprintjs/core";
+
 import { Currency } from "@app/components/util";
-import SortToggle from "@app/containers/App/AuctionList/SortToggle";
-import ItemPopover from "@app/containers/util/ItemPopover";
+import { SortToggleContainer } from "@app/containers/App/AuctionList/SortToggle";
+import { ItemPopoverContainer } from "@app/containers/util/ItemPopover";
 
 import { IQueryAuctionResult, SortKind } from "@app/types/auction";
 import { IAuction, Item } from "@app/types/global";
@@ -12,19 +14,17 @@ import "./AuctionTable.scss";
 
 type ListAuction = IAuction | null;
 
-export interface StateProps {
+export interface IStateProps {
     auctions: ListAuction[];
     selectedItems: IQueryAuctionResult[];
 }
 
-export interface DispatchProps {
+export interface IDispatchProps {
     onAuctionsQuerySelect: (aqResult: IQueryAuctionResult) => void;
     onAuctionsQueryDeselect: (index: number) => void;
 }
 
-export interface OwnProps {}
-
-type Props = Readonly<StateProps & DispatchProps & OwnProps>;
+type Props = Readonly<IStateProps & IDispatchProps>;
 
 export class AuctionTable extends React.Component<Props> {
     public isResultSelected(result: IQueryAuctionResult) {
@@ -54,7 +54,7 @@ export class AuctionTable extends React.Component<Props> {
     }
 
     public renderItemPopover(item: Item) {
-        return <ItemPopover item={item} onItemClick={() => this.onItemClick(item)} />;
+        return <ItemPopoverContainer item={item} onItemClick={this.onItemClick.bind(this, item)} />;
     }
 
     public renderAuction(auction: IAuction | null, index: number) {
@@ -91,26 +91,26 @@ export class AuctionTable extends React.Component<Props> {
         const { auctions } = this.props;
 
         return (
-            <table className="pt-html-table pt-html-table-bordered pt-small auction-table">
+            <table className={`${Classes.HTML_TABLE} ${Classes.HTML_TABLE_BORDERED} ${Classes.SMALL} auction-table`}>
                 <thead>
                     <tr>
                         <th>
-                            <SortToggle label="Item" sortKind={SortKind.item} />
+                            <SortToggleContainer label="Item" sortKind={SortKind.item} />
                         </th>
                         <th>
-                            <SortToggle label="Quantity" sortKind={SortKind.quantity} />
+                            <SortToggleContainer label="Quantity" sortKind={SortKind.quantity} />
                         </th>
                         <th>
-                            <SortToggle label="Buyout" sortKind={SortKind.buyout} />
+                            <SortToggleContainer label="Buyout" sortKind={SortKind.buyout} />
                         </th>
                         <th>
-                            <SortToggle label="BuyoutPer" sortKind={SortKind.buyoutPer} />
+                            <SortToggleContainer label="BuyoutPer" sortKind={SortKind.buyoutPer} />
                         </th>
                         <th>
-                            <SortToggle label="Auctions" sortKind={SortKind.auctions} />
+                            <SortToggleContainer label="Auctions" sortKind={SortKind.auctions} />
                         </th>
                         <th>
-                            <SortToggle label="Owner" sortKind={SortKind.owner} />
+                            <SortToggleContainer label="Owner" sortKind={SortKind.owner} />
                         </th>
                     </tr>
                 </thead>

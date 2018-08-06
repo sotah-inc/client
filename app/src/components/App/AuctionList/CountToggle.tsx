@@ -1,23 +1,24 @@
-import { Button, Menu, MenuItem, Popover, Position } from "@blueprintjs/core";
 import * as React from "react";
 
-export interface StateProps {
+import { Button, Classes, Menu, MenuItem, Popover, Position } from "@blueprintjs/core";
+
+export interface IStateProps {
     auctionsPerPage: number;
 }
 
-export interface DispatchProps {
+export interface IDispatchProps {
     onCountChange: (count: number) => void;
 }
 
-export interface OwnProps {}
-
-type Props = Readonly<StateProps & DispatchProps & OwnProps>;
+type Props = Readonly<IStateProps & IDispatchProps>;
 
 export class CountToggle extends React.Component<Props> {
     public renderMenuItem(count: number, index: number) {
+        const { auctionsPerPage, onCountChange } = this.props;
+
         let className = "";
-        if (this.props.auctionsPerPage === count) {
-            className = "pt-active";
+        if (auctionsPerPage === count) {
+            className = Classes.ACTIVE;
         }
 
         return (
@@ -25,7 +26,7 @@ export class CountToggle extends React.Component<Props> {
                 key={index}
                 className={className}
                 text={`${count} results`}
-                onClick={() => this.props.onCountChange(count)}
+                onClick={onCountChange.bind(this, count)}
             />
         );
     }

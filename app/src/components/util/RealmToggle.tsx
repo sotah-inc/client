@@ -1,4 +1,6 @@
-import { Button, Intent, Menu, MenuItem, Spinner } from "@blueprintjs/core";
+import * as React from "react";
+
+import { Button, Classes, Intent, Menu, MenuItem, Spinner } from "@blueprintjs/core";
 import {
     IItemListRendererProps,
     IItemRendererProps,
@@ -7,7 +9,6 @@ import {
     ItemRenderer,
     Select,
 } from "@blueprintjs/select";
-import * as React from "react";
 
 import { ICreatePreferencesRequestBody, UpdatePreferencesRequestBody } from "@app/api/user";
 import { IProfile, IRealm, IRealms, IRegion, IUserPreferences } from "@app/types/global";
@@ -16,7 +17,7 @@ import { didRealmChange } from "@app/util";
 
 const RealmToggleSelect = Select.ofType<IRealm>();
 
-export interface StateProps {
+export interface IStateProps {
     realms: IRealms;
     currentRealm: IRealm | null;
     fetchRealmLevel: FetchRealmLevel;
@@ -26,15 +27,13 @@ export interface StateProps {
     currentRegion: IRegion | null;
 }
 
-export interface DispatchProps {
+export interface IDispatchProps {
     onRealmChange: (realm: IRealm) => void;
     createUserPreferences: (token: string, body: ICreatePreferencesRequestBody) => void;
     updateUserPreferences: (token: string, body: UpdatePreferencesRequestBody) => void;
 }
 
-export interface OwnProps {}
-
-type Props = Readonly<StateProps & DispatchProps & OwnProps>;
+type Props = Readonly<IStateProps & IDispatchProps>;
 
 export class RealmToggle extends React.Component<Props> {
     public componentDidUpdate(prevProps: Props) {
@@ -56,8 +55,8 @@ export class RealmToggle extends React.Component<Props> {
 
             if (didRealmChange(prevProps.currentRealm, currentRealm)) {
                 persistUserPreferences(profile!.token, {
-                    current_region: currentRegion.name,
                     current_realm: currentRealm.slug,
+                    current_region: currentRegion.name,
                 });
             }
         }
@@ -83,7 +82,7 @@ export class RealmToggle extends React.Component<Props> {
             <MenuItem
                 key={index}
                 intent={intent}
-                className={modifiers.active ? "pt-active" : ""}
+                className={modifiers.active ? Classes.ACTIVE : ""}
                 label={realm.battlegroup}
                 onClick={handleClick}
                 text={realm.name}
@@ -129,12 +128,12 @@ export class RealmToggle extends React.Component<Props> {
                     </RealmToggleSelect>
                 );
             case FetchRealmLevel.failure:
-                return <Spinner className="pt-small" intent={Intent.DANGER} value={1} />;
+                return <Spinner className={Classes.SMALL} intent={Intent.DANGER} value={1} />;
             case FetchRealmLevel.initial:
-                return <Spinner className="pt-small" intent={Intent.NONE} value={1} />;
+                return <Spinner className={Classes.SMALL} intent={Intent.NONE} value={1} />;
             case FetchRealmLevel.fetching:
             default:
-                return <Spinner className="pt-small" intent={Intent.PRIMARY} />;
+                return <Spinner className={Classes.SMALL} intent={Intent.PRIMARY} />;
         }
     }
 }

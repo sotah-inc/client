@@ -1,6 +1,7 @@
 import {
     Alignment,
     ButtonGroup,
+    Classes,
     Intent,
     Navbar,
     NavbarDivider,
@@ -12,11 +13,11 @@ import * as React from "react";
 
 import { IGetAuctionsOptions, IQueryAuctionsOptions } from "@app/api/data";
 import { LastModified, Pagination } from "@app/components/util";
-import AuctionTable from "@app/containers/App/AuctionList/AuctionTable";
-import CountToggle from "@app/containers/App/AuctionList/CountToggle";
-import QueryAuctionsFilter from "@app/containers/App/AuctionList/QueryAuctionsFilter";
-import RealmToggle from "@app/containers/util/RealmToggle";
-import RegionToggle from "@app/containers/util/RegionToggle";
+import { AuctionTableContainer } from "@app/containers/App/AuctionList/AuctionTable";
+import { CountToggleContainer } from "@app/containers/App/AuctionList/CountToggle";
+import { QueryAuctionsFilterContainer } from "@app/containers/App/AuctionList/QueryAuctionsFilter";
+import { RealmToggleContainer } from "@app/containers/util/RealmToggle";
+import { RegionToggleContainer } from "@app/containers/util/RegionToggle";
 import {
     FetchAuctionsLevel,
     FetchItemClassesLevel,
@@ -31,7 +32,7 @@ import { didRealmChange } from "@app/util";
 
 type ListAuction = IAuction | null;
 
-export interface StateProps {
+export interface IStateProps {
     currentRegion: IRegion | null;
     currentRealm: IRealm | null;
     fetchAuctionsLevel: FetchAuctionsLevel;
@@ -49,16 +50,14 @@ export interface StateProps {
     userPreferences: IUserPreferences | null;
 }
 
-export interface DispatchProps {
+export interface IDispatchProps {
     refreshAuctions: (opts: IGetAuctionsOptions) => void;
     setCurrentPage: (page: number) => void;
     refreshAuctionsQuery: (opts: IQueryAuctionsOptions) => void;
     refreshItemClasses: () => void;
 }
 
-export interface OwnProps {}
-
-type Props = Readonly<StateProps & DispatchProps & OwnProps>;
+type Props = Readonly<IStateProps & IDispatchProps>;
 
 export class AuctionList extends React.Component<Props> {
     public componentDidMount() {
@@ -68,9 +67,9 @@ export class AuctionList extends React.Component<Props> {
             if (currentRegion !== null && currentRealm !== null) {
                 this.refreshAuctions();
                 refreshAuctionsQuery({
-                    regionName: currentRegion.name,
-                    realmSlug: currentRealm.slug,
                     query: "",
+                    realmSlug: currentRealm.slug,
+                    regionName: currentRegion.name,
                 });
             }
         }
@@ -97,14 +96,14 @@ export class AuctionList extends React.Component<Props> {
             .map(v => v.owner.name);
         const itemFilters: ItemId[] = selectedQueryAuctionResults.filter(v => v.item.name !== "").map(v => v.item.id);
         refreshAuctions({
-            regionName: currentRegion.name,
-            realmSlug: currentRealm.slug,
-            page: currentPage,
             count: auctionsPerPage,
+            itemFilters,
+            ownerFilters,
+            page: currentPage,
+            realmSlug: currentRealm.slug,
+            regionName: currentRegion.name,
             sortDirection,
             sortKind,
-            ownerFilters,
-            itemFilters,
         });
     }
 
@@ -157,9 +156,9 @@ export class AuctionList extends React.Component<Props> {
             const shouldRefreshAuctionsQuery = didRealmChange(prevProps.currentRealm, currentRealm);
             if (shouldRefreshAuctionsQuery) {
                 refreshAuctionsQuery({
-                    regionName: currentRegion.name,
-                    realmSlug: currentRealm.slug,
                     query: "",
+                    realmSlug: currentRealm.slug,
+                    regionName: currentRegion.name,
                 });
             }
         }
@@ -171,7 +170,7 @@ export class AuctionList extends React.Component<Props> {
             return null;
         }
 
-        return <Spinner className="pt-small" intent={Intent.PRIMARY} />;
+        return <Spinner className={Classes.SMALL} intent={Intent.PRIMARY} />;
     }
 
     public renderAuctionsFooter() {
@@ -204,7 +203,7 @@ export class AuctionList extends React.Component<Props> {
     }
 
     public renderAuctions() {
-        const { auctions, totalResults, auctionsPerPage, currentPage } = this.props;
+        const { auctions, totalResults, auctionsPerPage, currentPage, setCurrentPage } = this.props;
 
         // optionally appending blank auction lines
         if (totalResults > 0) {
@@ -219,27 +218,27 @@ export class AuctionList extends React.Component<Props> {
 
         return (
             <>
-                <QueryAuctionsFilter />
+                <QueryAuctionsFilterContainer />
                 <Navbar>
                     <NavbarGroup align={Alignment.LEFT}>
-                        <CountToggle />
+                        <CountToggleContainer />
                         <NavbarDivider />
                         <Pagination
                             pageCount={pageCount}
                             currentPage={currentPage}
                             pagesShown={5}
-                            onPageChange={page => this.props.setCurrentPage(page)}
+                            onPageChange={setCurrentPage}
                         />
                         {this.renderRefetchingSpinner()}
                     </NavbarGroup>
                     <NavbarGroup align={Alignment.RIGHT}>
                         <ButtonGroup>
-                            <RealmToggle />
-                            <RegionToggle />
+                            <RealmToggleContainer />
+                            <RegionToggleContainer />
                         </ButtonGroup>
                     </NavbarGroup>
                 </Navbar>
-                <AuctionTable />
+                <AuctionTableContainer />
                 {this.renderAuctionsFooter()}
             </>
         );
@@ -251,12 +250,15 @@ export class AuctionList extends React.Component<Props> {
                 return (
                     <NonIdealState
                         title="Loading"
-                        visual={<Spinner className="pt-large" intent={Intent.NONE} value={0} />}
+                        visual={<Spinner className={Classes.LARGE} intent={Intent.NONE} value={0} />}
                     />
                 );
             case FetchAuctionsLevel.fetching:
                 return (
-                    <NonIdealState title="Loading" visual={<Spinner className="pt-large" intent={Intent.PRIMARY} />} />
+                    <NonIdealState
+                        title="Loading"
+                        visual={<Spinner className={Classes.LARGE} intent={Intent.PRIMARY} />}
+                    />
                 );
             case FetchAuctionsLevel.failure:
                 return (

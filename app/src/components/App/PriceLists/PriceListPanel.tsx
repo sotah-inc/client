@@ -1,30 +1,31 @@
-import { Button, NonIdealState } from "@blueprintjs/core";
 import * as React from "react";
+
+import { Button, Classes, NonIdealState } from "@blueprintjs/core";
 
 import { PriceListTable } from "@app/components/App/PriceLists/PriceListPanel/PriceListTable";
 import { IRealm, IRegion, Item } from "@app/types/global";
 import { IPricelist } from "@app/types/price-lists";
 
-export interface StateProps {
+export interface IStateProps {
     currentRegion: IRegion | null;
     currentRealm: IRealm | null;
     isAddEntryDialogOpen: boolean;
 }
 
-export interface DispatchProps {
+export interface IDispatchProps {
     changeIsAddEntryDialogOpen: (isDialogOpen: boolean) => void;
 }
 
-export interface OwnProps {
+export interface IOwnProps {
     list: IPricelist;
 }
 
-export interface FormValues {
+export interface IFormValues {
     quantity: number;
     item: Item | null;
 }
 
-export type Props = Readonly<StateProps & DispatchProps & OwnProps>;
+export type Props = Readonly<IStateProps & IDispatchProps & IOwnProps>;
 
 export class PriceListPanel extends React.Component<Props> {
     public toggleDialog() {
@@ -42,9 +43,9 @@ export class PriceListPanel extends React.Component<Props> {
                     visual="list"
                     action={
                         <Button
-                            className="pt-fill"
+                            className={Classes.FILL}
                             icon="plus"
-                            onClick={() => this.toggleDialog()}
+                            onClick={this.toggleDialog}
                             text={`Add Entry to ${list.name}`}
                         />
                     }

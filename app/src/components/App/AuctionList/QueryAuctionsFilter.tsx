@@ -1,7 +1,10 @@
+import * as React from "react";
+
 import {
     Alignment,
     Button,
     Callout,
+    Classes,
     Intent,
     Menu,
     MenuItem,
@@ -18,7 +21,6 @@ import {
     ItemRenderer,
     Suggest,
 } from "@blueprintjs/select";
-import * as React from "react";
 
 import { IQueryAuctionsOptions } from "@app/api/data";
 import { IQueryAuctionResult, QueryAuctionsLevel } from "@app/types/auction";
@@ -27,7 +29,7 @@ import { getItemIconUrl, getItemTextValue, getSelectedResultIndex, qualityToColo
 
 const QueryAuctionResultSuggest = Suggest.ofType<IQueryAuctionResult>();
 
-export interface StateProps {
+export interface IStateProps {
     queryAuctionsLevel: QueryAuctionsLevel;
     currentRegion: IRegion | null;
     currentRealm: IRealm | null;
@@ -35,15 +37,13 @@ export interface StateProps {
     selectedItems: IQueryAuctionResult[];
 }
 
-export interface DispatchProps {
+export interface IDispatchProps {
     onAuctionsQuerySelect: (aqResult: IQueryAuctionResult) => void;
     onAuctionsQueryDeselect: (index: number) => void;
     refreshAuctionsQuery: (opts: IQueryAuctionsOptions) => void;
 }
 
-export interface OwnProps {}
-
-type Props = Readonly<StateProps & DispatchProps & OwnProps>;
+type Props = Readonly<IStateProps & IDispatchProps>;
 
 type State = Readonly<{
     filterValue: string;
@@ -111,7 +111,7 @@ export class QueryAuctionsFilter extends React.Component<Props, State> {
         }
 
         const { item, owner } = result;
-        let className = modifiers.active ? "pt-active" : "";
+        let className = modifiers.active ? Classes.ACTIVE : "";
 
         let label = "n/a";
         if (item.name !== "") {
@@ -175,8 +175,9 @@ export class QueryAuctionsFilter extends React.Component<Props, State> {
         this.props.onAuctionsQueryDeselect(index);
     }
 
-    public onFilterChange(filterValue: string) {
+    public onFilterChange(e: React.ChangeEvent<HTMLInputElement>) {
         const { timerId } = this.state;
+        const filterValue = e.target.value;
 
         if (timerId !== null) {
             clearTimeout(timerId);
@@ -184,9 +185,9 @@ export class QueryAuctionsFilter extends React.Component<Props, State> {
 
         const newTimerId = setTimeout(() => {
             this.props.refreshAuctionsQuery({
-                regionName: this.props.currentRegion!.name,
-                realmSlug: this.props.currentRealm!.slug,
                 query: filterValue,
+                realmSlug: this.props.currentRealm!.slug,
+                regionName: this.props.currentRegion!.name,
             });
         }, 0.25 * 1000);
         this.setState({ filterValue, timerId: newTimerId });
@@ -201,7 +202,7 @@ export class QueryAuctionsFilter extends React.Component<Props, State> {
         return getSelectedResultIndex(result, selectedItems);
     }
 
-    public resolveResultTextValue(result: IQueryAuctionResult): string {
+    public inputValueRenderer(result: IQueryAuctionResult): string {
         const { item, owner } = result;
 
         if (item.id > 0) {
@@ -213,10 +214,16 @@ export class QueryAuctionsFilter extends React.Component<Props, State> {
         return "n/a";
     }
 
+    public onTagRemove(index: number) {
+        const { onAuctionsQueryDeselect } = this.props;
+
+        return () => onAuctionsQueryDeselect(index);
+    }
+
     public renderSelectedItem(index: number, result: IQueryAuctionResult) {
         return (
-            <Tag key={index} onRemove={() => this.props.onAuctionsQueryDeselect(index)} style={{ marginRight: "5px" }}>
-                {this.resolveResultTextValue(result)}
+            <Tag key={index} onRemove={this.onTagRemove(index)} style={{ marginRight: "5px" }}>
+                {this.inputValueRenderer(result)}
             </Tag>
         );
     }
@@ -229,14 +236,24 @@ export class QueryAuctionsFilter extends React.Component<Props, State> {
 
         return (
             <Callout>
-                <h4 className="pt-callout-title">Filters</h4>
-                <div className="pt-tag-input">
-                    <div className="pt-tag-input-values">
+                <h4 className={Classes.CALLOUT_TITLE}>Filters</h4>
+                <div className={Classes.TAG_INPUT}>
+                    <div className={Classes.TAG_INPUT_VALUES}>
                         {selectedItems.map((v, i) => this.renderSelectedItem(i, v))}
                     </div>
                 </div>
             </Callout>
         );
+    }
+
+    public onRenderClearClick() {
+        const { refreshAuctionsQuery, currentRegion, currentRealm } = this.props;
+        this.setState({ filterValue: "" });
+        refreshAuctionsQuery({
+            query: "",
+            realmSlug: currentRealm!.slug,
+            regionName: currentRegion!.name,
+        });
     }
 
     public renderClearButton() {
@@ -245,20 +262,7 @@ export class QueryAuctionsFilter extends React.Component<Props, State> {
             return;
         }
 
-        return (
-            <Button
-                icon="cross"
-                className="pt-minimal"
-                onClick={() => {
-                    this.setState({ filterValue: "" });
-                    this.props.refreshAuctionsQuery({
-                        regionName: this.props.currentRegion!.name,
-                        realmSlug: this.props.currentRealm!.slug,
-                        query: "",
-                    });
-                }}
-            />
-        );
+        return <Button className={Classes.MINIMAL} icon="cross" onClick={this.onRenderClearClick} />;
     }
 
     public render() {
@@ -273,20 +277,17 @@ export class QueryAuctionsFilter extends React.Component<Props, State> {
                         <Navbar>
                             <NavbarGroup align={Alignment.LEFT}>
                                 <QueryAuctionResultSuggest
-                                    inputValueRenderer={v => this.resolveResultTextValue(v)}
+                                    inputValueRenderer={this.inputValueRenderer}
                                     itemRenderer={this.itemRenderer}
                                     items={items}
-                                    onItemSelect={(result: IQueryAuctionResult) => {
-                                        this.onItemSelect(result);
-                                    }}
+                                    onItemSelect={this.onItemSelect}
                                     closeOnSelect={false}
                                     inputProps={{
-                                        value: filterValue,
-                                        onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
-                                            this.onFilterChange(e.target.value),
-                                        type: "search",
                                         leftIcon: "search",
+                                        onChange: this.onFilterChange,
                                         rightElement: this.renderClearButton(),
+                                        type: "search",
+                                        value: filterValue,
                                     }}
                                     itemPredicate={this.itemPredicate}
                                     itemListRenderer={this.itemListRenderer}
@@ -297,12 +298,12 @@ export class QueryAuctionsFilter extends React.Component<Props, State> {
                     </>
                 );
             case QueryAuctionsLevel.failure:
-                return <Spinner className="pt-small" intent={Intent.DANGER} value={1} />;
+                return <Spinner className={Classes.SMALL} intent={Intent.DANGER} value={1} />;
             case QueryAuctionsLevel.initial:
-                return <Spinner className="pt-small" intent={Intent.NONE} value={1} />;
+                return <Spinner className={Classes.SMALL} intent={Intent.NONE} value={1} />;
             case QueryAuctionsLevel.fetching:
             default:
-                return <Spinner className="pt-small" intent={Intent.PRIMARY} />;
+                return <Spinner className={Classes.SMALL} intent={Intent.PRIMARY} />;
         }
     }
 }

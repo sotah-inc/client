@@ -3,36 +3,31 @@ import { connect, Dispatch } from "react-redux";
 import { Actions } from "@app/actions";
 import { AddAuctionsQuery, FetchAuctionsQuery, RemoveAuctionsQuery } from "@app/actions/auction";
 import { IQueryAuctionsOptions } from "@app/api/data";
-import {
-    DispatchProps,
-    OwnProps,
-    QueryAuctionsFilter,
-    StateProps,
-} from "@app/components/App/AuctionList/QueryAuctionsFilter";
+import { IDispatchProps, IStateProps, QueryAuctionsFilter } from "@app/components/App/AuctionList/QueryAuctionsFilter";
 import { IStoreState } from "@app/types";
 import { IQueryAuctionResult } from "@app/types/auction";
 
-const mapStateToProps = (state: IStoreState): StateProps => {
+const mapStateToProps = (state: IStoreState): IStateProps => {
     const { currentRegion, currentRealm } = state.Main;
     const { queryAuctionsLevel, queryAuctionResults, selectedQueryAuctionResults } = state.Auction;
     return {
-        queryAuctionsLevel,
-        currentRegion,
         currentRealm,
+        currentRegion,
         items: queryAuctionResults,
+        queryAuctionsLevel,
         selectedItems: selectedQueryAuctionResults,
     };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<Actions>): DispatchProps => {
+const mapDispatchToProps = (dispatch: Dispatch<Actions>): IDispatchProps => {
     return {
-        onAuctionsQuerySelect: (aqItem: IQueryAuctionResult) => dispatch(AddAuctionsQuery(aqItem)),
         onAuctionsQueryDeselect: (index: number) => dispatch(RemoveAuctionsQuery(index)),
+        onAuctionsQuerySelect: (aqItem: IQueryAuctionResult) => dispatch(AddAuctionsQuery(aqItem)),
         refreshAuctionsQuery: (opts: IQueryAuctionsOptions) => dispatch(FetchAuctionsQuery(opts)),
     };
 };
 
-export default connect<StateProps, DispatchProps, OwnProps>(
+export const QueryAuctionsFilterContainer = connect<IStateProps, IDispatchProps>(
     mapStateToProps,
     mapDispatchToProps,
 )(QueryAuctionsFilter);

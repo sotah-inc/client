@@ -2,18 +2,22 @@ import { IconName } from "@blueprintjs/icons";
 import { withFormik, WithFormikConfig } from "formik";
 import * as Yup from "yup";
 
-import { FormValues, ListForm } from "@app/components/App/PriceLists/util/ListForm";
+import { IFormValues, ListForm } from "@app/components/App/PriceLists/util/ListForm";
 import { PriceListRules } from "@app/validator-rules";
 
-interface FormProps {
+interface IFormProps {
     defaultName?: string;
     onComplete: (name: string) => void;
     submitIcon: IconName;
     submitText: string;
 }
 
-const config: WithFormikConfig<FormProps, FormValues> = {
-    mapPropsToValues: (props: FormProps) => {
+const config: WithFormikConfig<IFormProps, IFormValues> = {
+    handleSubmit: async (values, { setSubmitting, props }) => {
+        setSubmitting(false);
+        props.onComplete(values.name);
+    },
+    mapPropsToValues: (props: IFormProps) => {
         return {
             name: props.defaultName ? props.defaultName : "",
         };
@@ -21,10 +25,6 @@ const config: WithFormikConfig<FormProps, FormValues> = {
     validationSchema: Yup.object().shape({
         name: PriceListRules.name,
     }),
-    handleSubmit: async (values, { setSubmitting, props }) => {
-        setSubmitting(false);
-        props.onComplete(values.name);
-    },
 };
 
-export default withFormik(config)(ListForm);
+export const ListFormFormContainer = withFormik(config)(ListForm);
