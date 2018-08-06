@@ -199,11 +199,23 @@ export class App extends React.Component<Props> {
         switch (fetchRegionLevel) {
           case FetchRegionLevel.initial:
             if (authLevel === AuthLevel.unauthenticated) {
+              AppToaster.show({
+                message: 'Loading regions.',
+                intent: Intent.NONE,
+                icon: 'info-sign'
+              });
+
               refreshRegions();
             }
 
             break;
           case FetchRegionLevel.prompted:
+            AppToaster.show({
+              message: 'Loading regions.',
+              intent: Intent.NONE,
+              icon: 'info-sign'
+            });
+
             refreshRegions();
 
             break;
