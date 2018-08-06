@@ -2,6 +2,7 @@
     "extends": "@blueprintjs/tslint-config",
     "rules": {
         "no-submodule-imports": false,
-        "no-implicit-dependencies": false
+        "no-implicit-dependencies": false,
+        "jsx-no-lambda": false
     }
 }

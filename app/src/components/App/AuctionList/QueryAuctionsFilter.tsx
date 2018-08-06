@@ -164,17 +164,15 @@ export class QueryAuctionsFilter extends React.Component<Props, State> {
     };
 
     public onItemSelect(result: IQueryAuctionResult) {
+        const { onAuctionsQueryDeselect, onAuctionsQuerySelect } = this.props;
+
         if (this.isResultSelected(result)) {
-            this.props.onAuctionsQueryDeselect(this.getSelectedResultIndex(result));
+            onAuctionsQueryDeselect(this.getSelectedResultIndex(result));
 
             return;
         }
 
-        this.props.onAuctionsQuerySelect(result);
-    }
-
-    public onItemDeselect(index: number) {
-        this.props.onAuctionsQueryDeselect(index);
+        onAuctionsQuerySelect(result);
     }
 
     public onFilterChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -216,15 +214,11 @@ export class QueryAuctionsFilter extends React.Component<Props, State> {
         return "n/a";
     }
 
-    public onTagRemove(index: number) {
+    public renderSelectedItem(index: number, result: IQueryAuctionResult) {
         const { onAuctionsQueryDeselect } = this.props;
 
-        return () => onAuctionsQueryDeselect(index);
-    }
-
-    public renderSelectedItem(index: number, result: IQueryAuctionResult) {
         return (
-            <Tag key={index} onRemove={this.onTagRemove(index)} style={{ marginRight: "5px" }}>
+            <Tag key={index} onRemove={() => onAuctionsQueryDeselect(index)} style={{ marginRight: "5px" }}>
                 {this.inputValueRenderer(result)}
             </Tag>
         );
@@ -250,6 +244,7 @@ export class QueryAuctionsFilter extends React.Component<Props, State> {
 
     public onRenderClearClick() {
         const { refreshAuctionsQuery, currentRegion, currentRealm } = this.props;
+
         this.setState({ filterValue: "" });
         refreshAuctionsQuery({
             query: "",
@@ -260,11 +255,12 @@ export class QueryAuctionsFilter extends React.Component<Props, State> {
 
     public renderClearButton() {
         const { filterValue } = this.state;
+
         if (filterValue === null || filterValue === "") {
             return;
         }
 
-        return <Button className={Classes.MINIMAL} icon="cross" onClick={this.onRenderClearClick} />;
+        return <Button className={Classes.MINIMAL} icon="cross" onClick={() => this.onRenderClearClick()} />;
     }
 
     public render() {
@@ -282,11 +278,11 @@ export class QueryAuctionsFilter extends React.Component<Props, State> {
                                     inputValueRenderer={this.inputValueRenderer}
                                     itemRenderer={this.itemRenderer}
                                     items={items}
-                                    onItemSelect={this.onItemSelect}
+                                    onItemSelect={v => this.onItemSelect(v)}
                                     closeOnSelect={false}
                                     inputProps={{
                                         leftIcon: "search",
-                                        onChange: this.onFilterChange,
+                                        onChange: e => this.onFilterChange(e),
                                         rightElement: this.renderClearButton(),
                                         type: "search",
                                         value: filterValue,

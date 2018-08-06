@@ -25,7 +25,7 @@ type Props = Readonly<IStateProps & IDispatchProps & IOwnProps>;
 
 export class SortToggle extends React.Component<Props> {
     public onToggle(sortKind: SortKind) {
-        const { currentSortDirection, currentSortKind } = this.props;
+        const { currentSortDirection, currentSortKind, onChange } = this.props;
 
         let sortDirection = SortDirection.up;
         if (currentSortKind === sortKind) {
@@ -36,13 +36,9 @@ export class SortToggle extends React.Component<Props> {
             }
         }
 
-        this.props.onChange({ sortKind, sortDirection });
+        onChange({ sortKind, sortDirection });
 
         return;
-    }
-
-    public onSortClick(sortKind: SortKind) {
-        return () => this.onToggle(sortKind);
     }
 
     public renderButton(icon: IconName | null) {
@@ -53,7 +49,7 @@ export class SortToggle extends React.Component<Props> {
                 <Button
                     className={`${Classes.SMALL} ${Classes.MINIMAL}`}
                     text={label}
-                    onClick={this.onSortClick(sortKind)}
+                    onClick={() => this.onToggle(sortKind)}
                 />
             );
         }
@@ -63,7 +59,7 @@ export class SortToggle extends React.Component<Props> {
                 className={`${Classes.SMALL} ${Classes.MINIMAL}`}
                 text={label}
                 icon={icon}
-                onClick={this.onSortClick(sortKind)}
+                onClick={() => this.onToggle(sortKind)}
             />
         );
     }

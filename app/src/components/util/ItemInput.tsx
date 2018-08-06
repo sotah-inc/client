@@ -114,23 +114,16 @@ export class ItemInput extends React.Component<Props, State> {
         this.setState({ results: res.items });
     }
 
-    public onFilterChange(filterValue: string) {
+    public onFilterChange(e: React.ChangeEvent<HTMLInputElement>) {
         const { timerId } = this.state;
+        const filterValue = e.target.value;
 
         if (timerId !== null) {
             clearTimeout(timerId);
         }
 
-        const newTimerId = setTimeout(() => {
-            (async () => {
-                this.triggerQuery();
-            })();
-        }, 0.25 * 1000);
+        const newTimerId = setTimeout(() => this.triggerQuery(), 0.25 * 1000);
         this.setState({ filterValue, timerId: newTimerId });
-    }
-
-    public onClearClick() {
-        this.setState({ filterValue: "" }, this.triggerQuery);
     }
 
     public renderClearButton() {
@@ -139,7 +132,13 @@ export class ItemInput extends React.Component<Props, State> {
             return;
         }
 
-        return <Button icon="cross" className={Classes.MINIMAL} onClick={this.onClearClick} />;
+        return (
+            <Button
+                icon="cross"
+                className={Classes.MINIMAL}
+                onClick={() => this.setState({ filterValue: "" }, () => this.triggerQuery())}
+            />
+        );
     }
 
     public itemPredicate: ItemPredicate<IQueryItemResult> = (_: string, result: IQueryItemResult) => {
@@ -175,7 +174,7 @@ export class ItemInput extends React.Component<Props, State> {
     };
 
     public render() {
-        const { autoFocus } = this.props;
+        const { autoFocus, onSelect } = this.props;
         const { results, filterValue } = this.state;
 
         return (
@@ -183,13 +182,13 @@ export class ItemInput extends React.Component<Props, State> {
                 inputValueRenderer={this.resolveResultTextValue}
                 itemRenderer={this.itemRenderer}
                 items={results}
-                onItemSelect={this.onItemSelect}
+                onItemSelect={v => onSelect(v.item)}
                 closeOnSelect={true}
                 inputProps={{
                     autoFocus,
                     className: Classes.FILL,
                     leftIcon: "search",
-                    onChange: (e: React.ChangeEvent<HTMLInputElement>) => this.onFilterChange(e.target.value),
+                    onChange: e => this.onFilterChange(e),
                     rightElement: this.renderClearButton(),
                     type: "search",
                     value: filterValue,

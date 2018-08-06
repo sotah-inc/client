@@ -100,6 +100,7 @@ export class OwnerFilter extends React.Component<Props, State> {
     }
 
     public onFilterChange(e: React.ChangeEvent<HTMLInputElement>) {
+        const { refreshOwners, currentRealm, currentRegion } = this.props;
         const { timerId } = this.state;
         const ownerFilterValue = e.target.value;
 
@@ -108,27 +109,24 @@ export class OwnerFilter extends React.Component<Props, State> {
         }
 
         const newTimerId = setTimeout(() => {
-            this.props.refreshOwners({
+            refreshOwners({
                 query: ownerFilterValue,
-                realmSlug: this.props.currentRealm!.slug,
-                regionName: this.props.currentRegion!.name,
+                realmSlug: currentRealm!.slug,
+                regionName: currentRegion!.name,
             });
         }, 0.25 * 1000);
         this.setState({ ownerFilterValue, timerId: newTimerId });
     }
 
     public onFilterClear() {
+        const { onOwnerFilterChange, refreshOwners, currentRealm, currentRegion } = this.props;
         this.setState({ ownerFilterValue: "" });
-        this.props.onOwnerFilterChange(null);
-        this.props.refreshOwners({
+        onOwnerFilterChange(null);
+        refreshOwners({
             query: "",
-            realmSlug: this.props.currentRealm!.slug,
-            regionName: this.props.currentRegion!.name,
+            realmSlug: currentRealm!.slug,
+            regionName: currentRegion!.name,
         });
-    }
-
-    public inputValueRenderer(v: IOwner) {
-        return v.name;
     }
 
     public render() {
@@ -147,15 +145,15 @@ export class OwnerFilter extends React.Component<Props, State> {
                             itemRenderer={this.itemRenderer}
                             itemListRenderer={this.itemListRenderer}
                             itemPredicate={this.itemPredicate}
-                            onItemSelect={this.onFilterSet}
-                            inputValueRenderer={this.inputValueRenderer}
-                            inputProps={{ onChange: this.onFilterChange, value: ownerFilterValue }}
+                            onItemSelect={v => this.onFilterSet(v)}
+                            inputValueRenderer={v => v.name}
+                            inputProps={{ onChange: e => this.onFilterChange(e), value: ownerFilterValue }}
                         />
                         <Button
                             icon="filter-remove"
                             disabled={!canClearFilter}
                             text="Clear"
-                            onClick={this.onFilterClear}
+                            onClick={() => this.onFilterClear()}
                         />
                     </ControlGroup>
                 );

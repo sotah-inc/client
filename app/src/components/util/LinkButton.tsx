@@ -9,12 +9,15 @@ export interface IProps extends RouteComponentProps<IProps> {
     destination: string;
 }
 
-const onClick = (props: IProps) => {
-    return () => props.history.push(props.destination);
-};
-
 export const LinkButton: React.SFC<IProps> = (props: IProps) => {
-    const { destination, location, icon, text } = props;
+    const { destination, location, icon, text, history } = props;
 
-    return <Button icon={icon} text={text} active={location.pathname === destination} onClick={onClick(props)} />;
+    return (
+        <Button
+            icon={icon}
+            text={text}
+            active={location.pathname === destination}
+            onClick={() => history.push(destination)}
+        />
+    );
 };

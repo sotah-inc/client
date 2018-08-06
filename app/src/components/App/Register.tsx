@@ -72,17 +72,15 @@ export class Register extends React.Component<Props, State> {
         );
     }
 
-    public toggleDialog() {
-        this.setState({ isDialogOpen: !this.state.isDialogOpen });
-    }
-
     public render() {
+        const { isDialogOpen } = this.state;
+
         return (
             <>
-                <Button onClick={this.toggleDialog} text="Register" icon="user" />
+                <Button onClick={() => this.setState({ isDialogOpen: !isDialogOpen })} text="Register" icon="user" />
                 <Dialog
                     isOpen={this.state.isDialogOpen}
-                    onClose={this.toggleDialog}
+                    onClose={() => this.setState({ isDialogOpen: !isDialogOpen })}
                     title="Register"
                     icon="manually-entered-data"
                 >

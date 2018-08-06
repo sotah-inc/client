@@ -24,15 +24,19 @@ type Props = Readonly<IGeneratorOptions & IPropsOptions>;
 
 type FormFieldType = React.SFC<Props>;
 
-const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    return (props: Props) => {
-        const { setFieldValue, fieldName } = props;
-        setFieldValue(fieldName, e.target.value);
-    };
-};
-
 export const FormField: FormFieldType = (props: Props) => {
-    const { fieldName, helperText, label, type, placeholder, getError, getValue, getTouched, autofocus } = props;
+    const {
+        setFieldValue,
+        fieldName,
+        helperText,
+        label,
+        type,
+        placeholder,
+        getError,
+        getValue,
+        getTouched,
+        autofocus,
+    } = props;
     const error = getError();
     const isTouched = getTouched();
     const intent = error && isTouched ? Intent.DANGER : Intent.NONE;
@@ -50,7 +54,7 @@ export const FormField: FormFieldType = (props: Props) => {
                 type={type}
                 placeholder={placeholder}
                 value={getValue()}
-                onChange={onInputChange}
+                onChange={e => setFieldValue(fieldName, e.target.value)}
                 autoFocus={autofocus}
             />
         </FormGroup>

@@ -9,12 +9,8 @@ interface IProps {
     onPageChange: (page: number) => void;
 }
 
-const onPageChangeClick = (props: IProps, page: number) => {
-    return () => props.onPageChange(page);
-};
-
 export const Pagination: React.SFC<IProps> = (props: IProps) => {
-    const { currentPage, pageCount } = props;
+    const { currentPage, pageCount, onPageChange } = props;
     let { pagesShown } = props;
     if (pageCount < pagesShown) {
         pagesShown = pageCount + 1;
@@ -42,7 +38,7 @@ export const Pagination: React.SFC<IProps> = (props: IProps) => {
             <Button
                 key={page}
                 intent={currentPage === page ? Intent.PRIMARY : Intent.NONE}
-                onClick={onPageChangeClick(props, page)}
+                onClick={() => onPageChange(page)}
             >
                 {page + 1}
             </Button>
@@ -69,7 +65,7 @@ export const Pagination: React.SFC<IProps> = (props: IProps) => {
 
         return (
             <ButtonGroup style={{ marginRight: "10px" }}>
-                <Button icon="double-chevron-left" onClick={onPageChangeClick(props, 0)} disabled={currentPage === 0}>
+                <Button icon="double-chevron-left" onClick={() => onPageChange(0)} disabled={currentPage === 0}>
                     First
                 </Button>
             </ButtonGroup>
@@ -82,12 +78,12 @@ export const Pagination: React.SFC<IProps> = (props: IProps) => {
             <ButtonGroup>
                 <Button
                     icon="chevron-left"
-                    onClick={onPageChangeClick(props, currentPage - 1)}
+                    onClick={() => onPageChange(currentPage - 1)}
                     disabled={currentPage === 0}
                 />
                 <Button
                     icon="chevron-right"
-                    onClick={onPageChangeClick(props, currentPage + 1)}
+                    onClick={() => onPageChange(currentPage + 1)}
                     disabled={currentPage === pageCount}
                 >
                     Next

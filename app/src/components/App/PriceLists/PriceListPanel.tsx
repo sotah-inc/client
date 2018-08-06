@@ -28,12 +28,8 @@ export interface IFormValues {
 export type Props = Readonly<IStateProps & IDispatchProps & IOwnProps>;
 
 export class PriceListPanel extends React.Component<Props> {
-    public toggleDialog() {
-        this.props.changeIsAddEntryDialogOpen(!this.props.isAddEntryDialogOpen);
-    }
-
     public render() {
-        const { list, currentRegion, currentRealm } = this.props;
+        const { list, currentRegion, currentRealm, changeIsAddEntryDialogOpen } = this.props;
 
         if (list.pricelist_entries!.length === 0) {
             return (
@@ -45,7 +41,7 @@ export class PriceListPanel extends React.Component<Props> {
                         <Button
                             className={Classes.FILL}
                             icon="plus"
-                            onClick={this.toggleDialog}
+                            onClick={() => changeIsAddEntryDialogOpen(true)}
                             text={`Add Entry to ${list.name}`}
                         />
                     }

@@ -41,18 +41,6 @@ export interface IDispatchProps {
 export type Props = Readonly<IStateProps & IDispatchProps>;
 
 export class PriceLists extends React.Component<Props> {
-    public toggleEntryDialog() {
-        this.props.changeIsAddEntryDialogOpen(!this.props.isAddEntryDialogOpen);
-    }
-
-    public toggleEditListDialog() {
-        this.props.changeIsEditListDialogOpen(!this.props.isEditListDialogOpen);
-    }
-
-    public toggleDeleteListDialog() {
-        this.props.changeIsDeleteListDialogOpen(!this.props.isDeleteListDialogOpen);
-    }
-
     public onCreateEntryFormComplete(entry: IPricelistEntry) {
         const { selectedList, updatePricelist, profile } = this.props;
         updatePricelist({
@@ -78,22 +66,24 @@ export class PriceLists extends React.Component<Props> {
     }
 
     public onDeleteDialogCancel() {
-        const { changeIsDeleteListDialogOpen } = this.props;
-
-        changeIsDeleteListDialogOpen(false);
+        return () => {
+            const { changeIsDeleteListDialogOpen } = this.props;
+            changeIsDeleteListDialogOpen(false);
+        };
     }
 
     public onDeleteDialogConfirm() {
-        const { selectedList, deletePricelist, profile } = this.props;
-
-        deletePricelist({
-            id: selectedList!.id,
-            token: profile!.token,
-        });
+        return () => {
+            const { selectedList, deletePricelist, profile } = this.props;
+            deletePricelist({
+                id: selectedList!.id,
+                token: profile!.token,
+            });
+        };
     }
 
     public renderDeleteListDialog() {
-        const { isDeleteListDialogOpen, selectedList } = this.props;
+        const { isDeleteListDialogOpen, selectedList, changeIsDeleteListDialogOpen } = this.props;
 
         if (selectedList === null) {
             return;
@@ -102,7 +92,7 @@ export class PriceLists extends React.Component<Props> {
         return (
             <Dialog
                 isOpen={isDeleteListDialogOpen}
-                onClose={this.toggleDeleteListDialog}
+                onClose={() => changeIsDeleteListDialogOpen(isDeleteListDialogOpen)}
                 title="Delete List"
                 icon="delete"
             >
@@ -110,23 +100,17 @@ export class PriceLists extends React.Component<Props> {
                     <p>Hello, world!</p>
                 </DialogBody>
                 <DialogActions>
-                    <Button text="Cancel" intent={Intent.NONE} onClick={this.onDeleteDialogCancel} />
+                    <Button text="Cancel" intent={Intent.NONE} onClick={this.onDeleteDialogCancel()} />
                     <Button
                         type="submit"
                         intent={Intent.DANGER}
                         icon="delete"
                         text={`Delete "${selectedList.name}"`}
-                        onClick={this.onDeleteDialogConfirm}
+                        onClick={this.onDeleteDialogConfirm()}
                     />
                 </DialogActions>
             </Dialog>
         );
-    }
-
-    public onUnauthenticatedAction() {
-        const { changeIsLoginDialogOpen } = this.props;
-
-        changeIsLoginDialogOpen(true);
     }
 
     public render() {
@@ -136,6 +120,9 @@ export class PriceLists extends React.Component<Props> {
             updatePricelistLevel,
             isEditListDialogOpen,
             selectedList,
+            changeIsLoginDialogOpen,
+            changeIsAddEntryDialogOpen,
+            changeIsEditListDialogOpen,
         } = this.props;
 
         if (authLevel !== AuthLevel.authenticated) {
@@ -144,7 +131,14 @@ export class PriceLists extends React.Component<Props> {
                     title="Unauthenticated"
                     description="Please log in to use price-lists."
                     icon="list"
-                    action={<Button onClick={this.onUnauthenticatedAction} type="button" icon="log-in" text="Login" />}
+                    action={
+                        <Button
+                            onClick={() => changeIsLoginDialogOpen(true)}
+                            type="button"
+                            icon="log-in"
+                            text="Login"
+                        />
+                    }
                 />
             );
         }
@@ -154,24 +148,24 @@ export class PriceLists extends React.Component<Props> {
                 <CreateListDialogContainer />
                 <Dialog
                     isOpen={isAddEntryDialogOpen}
-                    onClose={this.toggleEntryDialog}
+                    onClose={() => changeIsAddEntryDialogOpen(!isAddEntryDialogOpen)}
                     title="New Entry"
                     icon="manually-entered-data"
                     canOutsideClickClose={false}
                 >
                     <CreateEntryFormFormContainer
-                        onComplete={this.onCreateEntryFormComplete}
+                        onComplete={(entry: IPricelistEntry) => this.onCreateEntryFormComplete(entry)}
                         isSubmitDisabled={updatePricelistLevel === UpdatePricelistLevel.fetching}
                     />
                 </Dialog>
                 <Dialog
                     isOpen={isEditListDialogOpen}
-                    onClose={this.toggleEditListDialog}
+                    onClose={() => () => changeIsEditListDialogOpen(!isEditListDialogOpen)}
                     title="Edit List"
                     icon="manually-entered-data"
                 >
                     <ListFormFormContainer
-                        onComplete={this.onEditListFormComplete}
+                        onComplete={() => changeIsEditListDialogOpen(false)}
                         defaultName={selectedList !== null ? selectedList.name : ""}
                         submitIcon="edit"
                         submitText="Save List"

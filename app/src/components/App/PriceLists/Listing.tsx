@@ -92,7 +92,9 @@ export class Listing extends React.Component<Props> {
     }
 
     public toggleDialog() {
-        this.props.changeIsAddListDialogOpen(!this.props.isAddListDialogOpen);
+        const { changeIsAddListDialogOpen, isAddListDialogOpen } = this.props;
+
+        changeIsAddListDialogOpen(!isAddListDialogOpen);
     }
 
     public renderTab(list: IPricelist, index: number) {
@@ -107,7 +109,9 @@ export class Listing extends React.Component<Props> {
     }
 
     public onTabChange(id: React.ReactText) {
-        const list = this.props.pricelists.reduce((result, v) => {
+        const { pricelists, changeSelectedList } = this.props;
+
+        const list = pricelists.reduce((result, v) => {
             if (result !== null) {
                 return result;
             }
@@ -123,11 +127,11 @@ export class Listing extends React.Component<Props> {
             return;
         }
 
-        this.props.changeSelectedList(list);
+        changeSelectedList(list);
     }
 
     public renderPricelists() {
-        const { pricelists, selectedList, currentRealm } = this.props;
+        const { pricelists, selectedList, currentRealm, changeIsAddListDialogOpen } = this.props;
 
         if (pricelists.length === 0) {
             return (
@@ -136,9 +140,12 @@ export class Listing extends React.Component<Props> {
                     description={`You have no price lists in ${currentRealm!.name}.`}
                     icon="list"
                     action={
-                        <Button className={Classes.FILL} icon="plus" onClick={this.toggleDialog}>
-                            Add List to {currentRealm!.name}
-                        </Button>
+                        <Button
+                            className={Classes.FILL}
+                            icon="plus"
+                            onClick={() => changeIsAddListDialogOpen(true)}
+                            text={`Add List to ${currentRealm!.name}`}
+                        />
                     }
                 />
             );
@@ -150,7 +157,7 @@ export class Listing extends React.Component<Props> {
                     id="price-lists"
                     className="price-lists"
                     selectedTabId={selectedList ? `tab-${selectedList.id}` : ""}
-                    onChange={this.onTabChange}
+                    onChange={v => this.onTabChange(v)}
                     vertical={true}
                     renderActiveTabPanelOnly={true}
                 >

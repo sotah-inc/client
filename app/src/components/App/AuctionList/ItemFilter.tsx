@@ -96,6 +96,7 @@ export class ItemFilter extends React.Component<Props, State> {
     }
 
     public onFilterChange(e: React.ChangeEvent<HTMLInputElement>) {
+        const { refreshItems } = this.props;
         const { timerId } = this.state;
         const itemFilterValue = e.target.value;
 
@@ -103,20 +104,16 @@ export class ItemFilter extends React.Component<Props, State> {
             clearTimeout(timerId);
         }
 
-        const newTimerId = setTimeout(() => {
-            this.props.refreshItems(itemFilterValue);
-        }, 0.25 * 1000);
+        const newTimerId = setTimeout(() => refreshItems(itemFilterValue), 0.25 * 1000);
         this.setState({ itemFilterValue, timerId: newTimerId });
     }
 
     public onFilterClear() {
-        this.setState({ itemFilterValue: "" });
-        this.props.onItemFilterChange(null);
-        this.props.refreshItems("");
-    }
+        const { onItemFilterChange, refreshItems } = this.props;
 
-    public inputValueRenderer(v: Item) {
-        return v.name;
+        this.setState({ itemFilterValue: "" });
+        onItemFilterChange(null);
+        refreshItems("");
     }
 
     public render() {
@@ -136,14 +133,14 @@ export class ItemFilter extends React.Component<Props, State> {
                             itemListRenderer={this.itemListRenderer}
                             itemPredicate={this.itemPredicate}
                             onItemSelect={this.onFilterSet}
-                            inputValueRenderer={this.inputValueRenderer}
-                            inputProps={{ onChange: this.onFilterChange, value: itemFilterValue }}
+                            inputValueRenderer={v => v.name}
+                            inputProps={{ onChange: e => this.onFilterChange(e), value: itemFilterValue }}
                         />
                         <Button
                             icon="filter-remove"
                             disabled={!canClearFilter}
                             text="Clear"
-                            onClick={this.onFilterClear}
+                            onClick={() => this.onFilterClear()}
                         />
                     </ControlGroup>
                 );

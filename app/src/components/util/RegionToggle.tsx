@@ -21,14 +21,11 @@ export interface IDispatchProps {
 type Props = Readonly<IStateProps & IDispatchProps>;
 
 export class RegionToggle extends React.Component<Props> {
-    public onMenuItemClick(region: IRegion) {
-        const { onRegionChange } = this.props;
-        return () => onRegionChange(region);
-    }
-
     public renderMenuItem(region: IRegion, index: number) {
+        const { currentRegion, onRegionChange } = this.props;
+
         let className = "";
-        if (this.props.currentRegion !== null && region.name === this.props.currentRegion.name) {
+        if (currentRegion !== null && region.name === currentRegion.name) {
             className = Classes.ACTIVE;
         }
 
@@ -38,7 +35,7 @@ export class RegionToggle extends React.Component<Props> {
                 icon="geosearch"
                 className={className}
                 text={region.name.toUpperCase()}
-                onClick={this.onMenuItemClick.bind(this, region)}
+                onClick={() => onRegionChange(region)}
             />
         );
     }

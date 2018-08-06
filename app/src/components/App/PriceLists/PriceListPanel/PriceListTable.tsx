@@ -61,10 +61,6 @@ export class PriceListTable extends React.Component<Props, State> {
         }
     }
 
-    public itemTextFormatter(quantityModifier: number) {
-        return (itemText: string) => `${itemText} \u00D7${quantityModifier}`;
-    }
-
     public renderEntry(index: number, entry: IPricelistEntry) {
         const { item_id, quantity_modifier } = entry;
         const { pricelistMap, itemsMap } = this.state;
@@ -91,7 +87,7 @@ export class PriceListTable extends React.Component<Props, State> {
                 <td>
                     <ItemPopoverContainer
                         item={itemsMap[item_id]}
-                        itemTextFormatter={this.itemTextFormatter(quantity_modifier)}
+                        itemTextFormatter={itemText => `${itemText} \u00D7${quantity_modifier}`}
                     />
                 </td>
                 <td>

@@ -26,7 +26,7 @@ export class CountToggle extends React.Component<Props> {
                 key={index}
                 className={className}
                 text={`${count} results`}
-                onClick={onCountChange.bind(this, count)}
+                onClick={() => onCountChange(count)}
             />
         );
     }

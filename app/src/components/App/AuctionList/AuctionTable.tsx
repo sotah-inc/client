@@ -54,7 +54,7 @@ export class AuctionTable extends React.Component<Props> {
     }
 
     public renderItemPopover(item: Item) {
-        return <ItemPopoverContainer item={item} onItemClick={this.onItemClick.bind(this, item)} />;
+        return <ItemPopoverContainer item={item} onItemClick={() => this.onItemClick(item)} />;
     }
 
     public renderAuction(auction: IAuction | null, index: number) {

@@ -28,7 +28,7 @@ export class Login extends React.Component<Props> {
         const { isLoggedIn } = this.props;
 
         if (isLoggedIn) {
-            this.toggleDialog();
+            this.toggleDialog(this.props);
         }
     }
 
@@ -64,8 +64,8 @@ export class Login extends React.Component<Props> {
         );
     }
 
-    public toggleDialog() {
-        this.props.changeIsLoginDialogOpen(!this.props.isLoginDialogOpen);
+    public toggleDialog(props: Props) {
+        return () => props.changeIsLoginDialogOpen(!props.isLoginDialogOpen);
     }
 
     public render() {
@@ -73,10 +73,10 @@ export class Login extends React.Component<Props> {
 
         return (
             <>
-                <Button onClick={this.toggleDialog} type="button" icon="log-in" text="Login" />
+                <Button onClick={this.toggleDialog(this.props)} type="button" icon="log-in" text="Login" />
                 <Dialog
                     isOpen={isLoginDialogOpen}
-                    onClose={this.toggleDialog}
+                    onClose={this.toggleDialog(this.props)}
                     title="Login"
                     icon="manually-entered-data"
                 >

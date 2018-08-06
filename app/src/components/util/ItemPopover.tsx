@@ -341,12 +341,12 @@ export class ItemPopover extends React.Component<Props> {
         const itemText = this.itemTextFormatter(getItemTextValue(item));
         const itemIconUrl = getItemIconUrl(item);
         if (itemIconUrl === null) {
-            return <a onClick={this.onItemClick}>{itemText}</a>;
+            return <a onClick={() => this.onItemClick()}>{itemText}</a>;
         }
 
         return (
             <>
-                <img src={itemIconUrl} className="item-icon" /> <a onClick={this.onItemClick}>{itemText}</a>
+                <img src={itemIconUrl} className="item-icon" /> <a onClick={() => this.onItemClick()}>{itemText}</a>
             </>
         );
     }

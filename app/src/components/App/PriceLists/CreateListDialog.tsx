@@ -71,24 +71,8 @@ export class CreateListDialog extends React.Component<Props, State> {
         }
     }
 
-    public toggleListDialog() {
-        this.props.changeIsAddListDialogOpen(!this.props.isAddListDialogOpen);
-    }
-
     public onNavClick(createListStep: CreateListStep) {
         this.setState({ createListStep });
-    }
-
-    public onListStepClick() {
-        this.onNavClick(CreateListStep.list);
-    }
-
-    public onEntryStepClick() {
-        this.onNavClick(CreateListStep.entry);
-    }
-
-    public onFinishStepClick() {
-        this.onNavClick(CreateListStep.finish);
     }
 
     public renderNav() {
@@ -99,7 +83,7 @@ export class CreateListDialog extends React.Component<Props, State> {
                 <li>
                     <Breadcrumb
                         text="List"
-                        onClick={this.onListStepClick}
+                        onClick={() => this.onNavClick(CreateListStep.list)}
                         className={
                             createListCompletion === CreateListCompletion.initial ? Classes.BREADCRUMB_CURRENT : ""
                         }
@@ -109,7 +93,7 @@ export class CreateListDialog extends React.Component<Props, State> {
                     <Breadcrumb
                         text="Entry"
                         disabled={createListCompletion < CreateListCompletion.list}
-                        onClick={this.onEntryStepClick}
+                        onClick={() => this.onNavClick(CreateListStep.entry)}
                         className={createListCompletion === CreateListCompletion.list ? Classes.BREADCRUMB_CURRENT : ""}
                     />
                 </li>
@@ -117,7 +101,7 @@ export class CreateListDialog extends React.Component<Props, State> {
                     <Breadcrumb
                         text="Finish"
                         disabled={createListCompletion < CreateListCompletion.entry}
-                        onClick={this.onFinishStepClick}
+                        onClick={() => this.onNavClick(CreateListStep.finish)}
                         className={
                             createListCompletion === CreateListCompletion.entry ? Classes.BREADCRUMB_CURRENT : ""
                         }
@@ -149,7 +133,7 @@ export class CreateListDialog extends React.Component<Props, State> {
 
         return (
             <ListFormFormContainer
-                onComplete={this.onCreateListFormComplete}
+                onComplete={v => this.onCreateListFormComplete(v)}
                 submitIcon="caret-right"
                 submitText="Next"
             >
@@ -178,7 +162,7 @@ export class CreateListDialog extends React.Component<Props, State> {
         }
 
         return (
-            <CreateEntryFormFormContainer onComplete={this.onCreateEntryFormComplete}>
+            <CreateEntryFormFormContainer onComplete={(v, item) => this.onCreateEntryFormComplete(v, item)}>
                 {this.renderNav()}
             </CreateEntryFormFormContainer>
         );
@@ -195,10 +179,6 @@ export class CreateListDialog extends React.Component<Props, State> {
                 <td>x{entry.quantity_modifier}</td>
             </tr>
         );
-    }
-
-    public onAddEntryClick() {
-        this.setState({ createListStep: CreateListStep.entry });
     }
 
     public onFinishClick() {
@@ -242,14 +222,14 @@ export class CreateListDialog extends React.Component<Props, State> {
                     <Button
                         text="Add More Entries"
                         intent={Intent.NONE}
-                        onClick={this.onAddEntryClick}
+                        onClick={() => this.setState({ createListStep: CreateListStep.entry })}
                         icon="caret-left"
                     />
                     <Button
                         text={`Finish "${listName}"`}
                         intent={Intent.PRIMARY}
                         disabled={createPricelistLevel === CreatePricelistLevel.fetching}
-                        onClick={this.onFinishClick}
+                        onClick={() => this.onFinishClick()}
                         icon="edit"
                     />
                 </DialogActions>
@@ -258,12 +238,12 @@ export class CreateListDialog extends React.Component<Props, State> {
     }
 
     public render() {
-        const { isAddListDialogOpen } = this.props;
+        const { isAddListDialogOpen, changeIsAddListDialogOpen } = this.props;
 
         return (
             <Dialog
                 isOpen={isAddListDialogOpen}
-                onClose={this.toggleListDialog}
+                onClose={() => changeIsAddListDialogOpen(!isAddListDialogOpen)}
                 title="New Price List"
                 icon="manually-entered-data"
                 canOutsideClickClose={false}

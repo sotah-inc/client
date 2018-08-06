@@ -47,11 +47,6 @@ export class CreateEntryForm extends React.Component<Props> {
         );
     }
 
-    public onItemInputSelect(item: Item) {
-        const { setFieldValue } = this.props;
-        setFieldValue("item", item);
-    }
-
     public render() {
         const {
             values,
@@ -77,7 +72,7 @@ export class CreateEntryForm extends React.Component<Props> {
                         <div className="pure-u-1-2">
                             <div style={{ paddingRight: "5px" }}>
                                 <FormGroup helperText={errors.item} label="Item" labelInfo={true} intent={itemIntent}>
-                                    <ItemInput onSelect={this.onItemInputSelect} autoFocus={true} />
+                                    <ItemInput onSelect={v => setFieldValue("item", v)} autoFocus={true} />
                                 </FormGroup>
                             </div>
                         </div>

@@ -25,37 +25,33 @@ export interface IDispatchProps {
 export type Props = Readonly<IStateProps & IDispatchProps>;
 
 export class ActionBar extends React.Component<Props> {
-    public toggleListDialog() {
-        this.props.changeIsAddListDialogOpen(!this.props.isAddListDialogOpen);
-    }
-
-    public toggleEntryDialog() {
-        this.props.changeIsAddEntryDialogOpen(!this.props.isAddEntryDialogOpen);
-    }
-
-    public onEditListClick() {
-        const { changeIsEditListDialogOpen } = this.props;
-        changeIsEditListDialogOpen(true);
-    }
-
-    public onDeleteListClick() {
-        const { changeIsDeleteListDialogOpen } = this.props;
-        changeIsDeleteListDialogOpen(true);
-    }
-
     public renderListButtons() {
-        const { selectedList } = this.props;
+        const {
+            selectedList,
+            changeIsAddEntryDialogOpen,
+            changeIsDeleteListDialogOpen,
+            changeIsEditListDialogOpen,
+        } = this.props;
 
         return (
             <>
                 <Navbar.Divider />
-                <Button icon="plus" onClick={this.toggleEntryDialog} text="Entry" disabled={selectedList === null} />
+                <Button
+                    icon="plus"
+                    onClick={() => changeIsAddEntryDialogOpen(true)}
+                    text="Entry"
+                    disabled={selectedList === null}
+                />
                 <Navbar.Divider />
                 <ButtonGroup>
-                    <Button icon="edit" onClick={this.onEditListClick} disabled={selectedList === null} />
+                    <Button
+                        icon="edit"
+                        onClick={() => changeIsEditListDialogOpen(true)}
+                        disabled={selectedList === null}
+                    />
                     <Button
                         icon="delete"
-                        onClick={this.onDeleteListClick}
+                        onClick={() => changeIsDeleteListDialogOpen(true)}
                         text="Delete"
                         disabled={selectedList === null}
                     />
@@ -65,7 +61,7 @@ export class ActionBar extends React.Component<Props> {
     }
 
     public renderButtons() {
-        const { currentRegion, currentRealm } = this.props;
+        const { currentRegion, currentRealm, changeIsAddListDialogOpen } = this.props;
 
         if (currentRegion === null || currentRealm === null) {
             return <Spinner className={Classes.SMALL} intent={Intent.PRIMARY} />;
@@ -73,7 +69,7 @@ export class ActionBar extends React.Component<Props> {
 
         return (
             <>
-                <Button icon="plus" onClick={this.toggleListDialog} text="List" />
+                <Button icon="plus" onClick={() => changeIsAddListDialogOpen(true)} text="List" />
                 {this.renderListButtons()}
             </>
         );
