@@ -135,7 +135,7 @@ export class AuctionList extends React.Component<Props> {
       const didSqaResultsChange = prevProps.selectedQueryAuctionResults.length
         !== selectedQueryAuctionResults.length;
             const didOptionsChange =
-                didRealmChange(prevProps.currentRealm, currentRealm) ||
+                didRealmChange(prevProps.currentRealm, currentRealm)
         || didPageChange
         || didCountChange
         || didSortChange
