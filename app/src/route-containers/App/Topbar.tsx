@@ -1,6 +1,6 @@
-import { withRouter } from 'react-router-dom';
+import { withRouter } from "react-router-dom";
 
-import { OwnProps } from '@app/components/App/Topbar';
-import Topbar from '@app/containers/App/Topbar';
+import { OwnProps } from "@app/components/App/Topbar";
+import Topbar from "@app/containers/App/Topbar";
 
 export default withRouter<OwnProps>(Topbar);

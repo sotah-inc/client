@@ -1,207 +1,208 @@
-import * as React from 'react';
+import * as React from "react";
 
-import { Menu, MenuItem, Button } from '@blueprintjs/core';
+import { Button, Menu, MenuItem } from "@blueprintjs/core";
 import {
-  Suggest,
-  ItemPredicate,
-  ItemListRenderer,
-  IItemListRendererProps,
-  ItemRenderer,
-  IItemRendererProps
-} from '@blueprintjs/select';
+    IItemListRendererProps,
+    IItemRendererProps,
+    ItemListRenderer,
+    ItemPredicate,
+    ItemRenderer,
+    Suggest,
+} from "@blueprintjs/select";
 
-import { Item, IQueryItemResult } from '@app/types/global';
-import { getItems } from '@app/api/data';
-import { qualityToColorClass, getItemIconUrl, getItemTextValue } from '@app/util';
+import { getItems } from "@app/api/data";
+import { IQueryItemResult, Item } from "@app/types/global";
+import { getItemIconUrl, getItemTextValue, qualityToColorClass } from "@app/util";
 
 const ItemSuggest = Suggest.ofType<IQueryItemResult>();
 
 type Props = Readonly<{
-  autoFocus?: boolean
-  onSelect(item: Item): void
+    autoFocus?: boolean;
+    onSelect(item: Item): void;
 }>;
 
 type State = Readonly<{
-  timerId: NodeJS.Timer | null
-  filterValue: string
-  results: IQueryItemResult[]
+    timerId: NodeJS.Timer | null;
+    filterValue: string;
+    results: IQueryItemResult[];
 }>;
 
 export class ItemInput extends React.Component<Props, State> {
-  state: State = {
-    timerId: null,
-    filterValue: '',
-    results: []
-  };
+    public state: State = {
+        timerId: null,
+        filterValue: "",
+        results: [],
+    };
 
-  componentDidMount() {
-    this.triggerQuery();
-  }
-
-  renderItemAsItemRendererText(item: Item) {
-    const itemText = getItemTextValue(item);
-    const itemIconUrl = getItemIconUrl(item);
-
-    if (itemIconUrl === null) {
-      return itemText;
+    public componentDidMount() {
+        this.triggerQuery();
     }
 
-    return (
-      <>
-        <img src={itemIconUrl} className="item-icon" /> {itemText}
-      </>
-    );
-  }
+    public renderItemAsItemRendererText(item: Item) {
+        const itemText = getItemTextValue(item);
+        const itemIconUrl = getItemIconUrl(item);
 
-  renderItemRendererTextContent(item: Item) {
-    if (item.id === 0) {
-      return 'n/a';
+        if (itemIconUrl === null) {
+            return itemText;
+        }
+
+        return (
+            <>
+                <img src={itemIconUrl} className="item-icon" /> {itemText}
+            </>
+        );
     }
 
-    return this.renderItemAsItemRendererText(item);
-  }
+    public renderItemRendererTextContent(item: Item) {
+        if (item.id === 0) {
+            return "n/a";
+        }
 
-  renderItemRendererText(item: Item) {
-    return (
-      <span className="item-input-menu-item">{this.renderItemRendererTextContent(item)}</span>
-    );
-  }
-
-  itemRenderer: ItemRenderer<IQueryItemResult> = (
-    result: IQueryItemResult,
-    { handleClick, modifiers, index }: IItemRendererProps
-  ) => {
-    if (!modifiers.matchesPredicate) {
-      return null;
+        return this.renderItemAsItemRendererText(item);
     }
 
-    let className = modifiers.active ? 'pt-active' : '';
-    const { item } = result;
-
-    let label = 'n/a';
-    if (item.name !== '') {
-      label = `#${item.id}`;
-      className = `${className} ${qualityToColorClass(item.quality)}`;
+    public renderItemRendererText(item: Item) {
+        return <span className="item-input-menu-item">{this.renderItemRendererTextContent(item)}</span>;
     }
 
-    return (
-      <MenuItem
-        key={index}
-        className={className}
-        onClick={handleClick}
-        text={this.renderItemRendererText(item)}
-        label={label}
-      />
-    );
-  }
+    public itemRenderer: ItemRenderer<IQueryItemResult> = (
+        result: IQueryItemResult,
+        { handleClick, modifiers, index }: IItemRendererProps,
+    ) => {
+        if (!modifiers.matchesPredicate) {
+            return null;
+        }
 
-  resolveResultTextValue(result: IQueryItemResult): string {
-    if (result.item.id === 0) {
-      return 'n/a';
+        let className = modifiers.active ? "pt-active" : "";
+        const { item } = result;
+
+        let label = "n/a";
+        if (item.name !== "") {
+            label = `#${item.id}`;
+            className = `${className} ${qualityToColorClass(item.quality)}`;
+        }
+
+        return (
+            <MenuItem
+                key={index}
+                className={className}
+                onClick={handleClick}
+                text={this.renderItemRendererText(item)}
+                label={label}
+            />
+        );
+    };
+
+    public resolveResultTextValue(result: IQueryItemResult): string {
+        if (result.item.id === 0) {
+            return "n/a";
+        }
+
+        return getItemTextValue(result.item);
     }
 
-    return getItemTextValue(result.item);
-  }
-
-  onItemSelect(result: IQueryItemResult) {
-    this.props.onSelect(result.item);
-  }
-
-  async triggerQuery() {
-    const res = await getItems(this.state.filterValue);
-    if (res === null) {
-      return;
+    public onItemSelect(result: IQueryItemResult) {
+        this.props.onSelect(result.item);
     }
 
-    this.setState({ results: res.items });
-  }
+    public async triggerQuery() {
+        const res = await getItems(this.state.filterValue);
+        if (res === null) {
+            return;
+        }
 
-  onFilterChange(filterValue: string) {
-    const { timerId } = this.state;
-
-    if (timerId !== null) {
-      clearTimeout(timerId);
+        this.setState({ results: res.items });
     }
 
-    const newTimerId = setTimeout(
-      () => {
-        (async () => {
-          this.triggerQuery();
-        })();
-      },
-      0.25 * 1000
-    );
-    this.setState({ filterValue, timerId: newTimerId });
-  }
+    public onFilterChange(filterValue: string) {
+        const { timerId } = this.state;
 
-  renderClearButton() {
-    const { filterValue } = this.state;
-    if (filterValue === null || filterValue === '') {
-      return;
+        if (timerId !== null) {
+            clearTimeout(timerId);
+        }
+
+        const newTimerId = setTimeout(() => {
+            (async () => {
+                this.triggerQuery();
+            })();
+        }, 0.25 * 1000);
+        this.setState({ filterValue, timerId: newTimerId });
     }
 
-    return (
-      <Button
-        icon="cross"
-        className="pt-minimal"
-        onClick={() => {
-          this.setState({ filterValue: '' }, () => this.triggerQuery());
-        }}
-      />
-    );
-  }
+    public renderClearButton() {
+        const { filterValue } = this.state;
+        if (filterValue === null || filterValue === "") {
+            return;
+        }
 
-  itemPredicate: ItemPredicate<IQueryItemResult> = (_: string, result: IQueryItemResult) => {
-    return result.rank > -1;
-  }
-
-  itemListRenderer: ItemListRenderer<IQueryItemResult> = (params: IItemListRendererProps<IQueryItemResult>) => {
-    const { items, itemsParentRef, renderItem } = params;
-    const renderedItems = items.map(renderItem).filter((renderedItem) => renderedItem !== null);
-    if (renderedItems.length === 0) {
-      return (
-        <Menu ulRef={itemsParentRef}>
-          <li>
-            <h6>Queried Results</h6>
-          </li>
-          <li><em>No results found.</em></li>
-        </Menu>
-      );
+        return (
+            <Button
+                icon="cross"
+                className="pt-minimal"
+                onClick={() => {
+                    this.setState({ filterValue: "" }, () => this.triggerQuery());
+                }}
+            />
+        );
     }
 
-    return (
-      <Menu ulRef={itemsParentRef} className="item-input-menu">
-        <li>
-          <h6>Queried Results</h6>
-        </li>
-        {renderedItems}
-      </Menu>
-    );
-  }
+    public itemPredicate: ItemPredicate<IQueryItemResult> = (_: string, result: IQueryItemResult) => {
+        return result.rank > -1;
+    };
 
-  render() {
-    const { autoFocus } = this.props;
-    const { results, filterValue } = this.state;
+    public itemListRenderer: ItemListRenderer<IQueryItemResult> = (
+        params: IItemListRendererProps<IQueryItemResult>,
+    ) => {
+        const { items, itemsParentRef, renderItem } = params;
+        const renderedItems = items.map(renderItem).filter(renderedItem => renderedItem !== null);
+        if (renderedItems.length === 0) {
+            return (
+                <Menu ulRef={itemsParentRef}>
+                    <li>
+                        <h6>Queried Results</h6>
+                    </li>
+                    <li>
+                        <em>No results found.</em>
+                    </li>
+                </Menu>
+            );
+        }
 
-    return (
-      <ItemSuggest
-        inputValueRenderer={(v) => this.resolveResultTextValue(v)}
-        itemRenderer={this.itemRenderer}
-        items={results}
-        onItemSelect={(result: IQueryItemResult) => { this.onItemSelect(result); }}
-        closeOnSelect={true}
-        inputProps={{
-          value: filterValue,
-          onChange: (e: React.ChangeEvent<HTMLInputElement>) => this.onFilterChange(e.target.value),
-          type: 'search',
-          leftIcon: 'search',
-          rightElement: this.renderClearButton(),
-          className: 'pt-fill',
-          autoFocus: autoFocus
-        }}
-        itemPredicate={this.itemPredicate}
-        itemListRenderer={this.itemListRenderer}
-      />
-    );
-  }
+        return (
+            <Menu ulRef={itemsParentRef} className="item-input-menu">
+                <li>
+                    <h6>Queried Results</h6>
+                </li>
+                {renderedItems}
+            </Menu>
+        );
+    };
+
+    public render() {
+        const { autoFocus } = this.props;
+        const { results, filterValue } = this.state;
+
+        return (
+            <ItemSuggest
+                inputValueRenderer={v => this.resolveResultTextValue(v)}
+                itemRenderer={this.itemRenderer}
+                items={results}
+                onItemSelect={(result: IQueryItemResult) => {
+                    this.onItemSelect(result);
+                }}
+                closeOnSelect={true}
+                inputProps={{
+                    value: filterValue,
+                    onChange: (e: React.ChangeEvent<HTMLInputElement>) => this.onFilterChange(e.target.value),
+                    type: "search",
+                    leftIcon: "search",
+                    rightElement: this.renderClearButton(),
+                    className: "pt-fill",
+                    autoFocus,
+                }}
+                itemPredicate={this.itemPredicate}
+                itemListRenderer={this.itemListRenderer}
+            />
+        );
+    }
 }

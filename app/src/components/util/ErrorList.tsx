@@ -1,22 +1,16 @@
-import * as React from 'react';
-import { FormGroup, Intent } from '@blueprintjs/core';
+import { FormGroup, Intent } from "@blueprintjs/core";
+import * as React from "react";
 
-import { IErrors } from '@app/types/global';
+import { IErrors } from "@app/types/global";
 
 type Props = Readonly<{
-  errors: IErrors
+    errors: IErrors;
 }>;
 
 const renderError = (value: string, index: number) => {
-  return (
-    <FormGroup key={index} helperText={value} intent={Intent.DANGER} />
-  );
+    return <FormGroup key={index} helperText={value} intent={Intent.DANGER} />;
 };
 
 export const ErrorList: React.SFC<Props> = ({ errors }: Props) => {
-  return (
-    <>
-      {Object.keys(errors).map((v, i) => renderError(errors[v], i))}
-    </>
-  );
+    return <>{Object.keys(errors).map((v, i) => renderError(errors[v], i))}</>;
 };

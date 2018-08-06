@@ -1,19 +1,19 @@
-import { connect, Dispatch } from 'react-redux';
+import { connect, Dispatch } from "react-redux";
 
-import { Topbar, StateProps, DispatchProps, OwnProps } from '@app/components/App/Topbar';
-import { IStoreState } from '@app/types';
-import { Actions } from '@app/actions';
+import { Actions } from "@app/actions";
+import { DispatchProps, OwnProps, StateProps, Topbar } from "@app/components/App/Topbar";
+import { IStoreState } from "@app/types";
 
 const mapStateToProps = (state: IStoreState): StateProps => {
-  const user = state.Main.profile === null ? null : state.Main.profile.user;
-  return { user };
+    const user = state.Main.profile === null ? null : state.Main.profile.user;
+    return { user };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<Actions>): DispatchProps => {
-  return {};
+    return {};
 };
 
 export default connect<StateProps, DispatchProps, OwnProps>(
-  mapStateToProps,
-  mapDispatchToProps
+    mapStateToProps,
+    mapDispatchToProps,
 )(Topbar);

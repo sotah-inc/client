@@ -1,19 +1,19 @@
-import { connect, Dispatch } from 'react-redux';
+import { connect, Dispatch } from "react-redux";
 
-import { ItemPopover, StateProps, DispatchProps, OwnProps } from '@app/components/util/ItemPopover';
-import { IStoreState } from '@app/types';
-import { Actions } from '@app/actions';
+import { Actions } from "@app/actions";
+import { DispatchProps, ItemPopover, OwnProps, StateProps } from "@app/components/util/ItemPopover";
+import { IStoreState } from "@app/types";
 
 const mapStateToProps = (state: IStoreState): StateProps => {
-  const { itemClasses } = state.Auction;
-  return { itemClasses };
+    const { itemClasses } = state.Auction;
+    return { itemClasses };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<Actions>): DispatchProps => {
-  return {};
+    return {};
 };
 
 export default connect<StateProps, DispatchProps, OwnProps>(
-  mapStateToProps,
-  mapDispatchToProps
+    mapStateToProps,
+    mapDispatchToProps,
 )(ItemPopover);

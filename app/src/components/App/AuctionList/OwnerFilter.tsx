@@ -1,54 +1,57 @@
-import * as React from 'react';
-import { Spinner, Menu, MenuItem, Intent, ControlGroup, Button } from '@blueprintjs/core';
+import { Button, ControlGroup, Intent, Menu, MenuItem, Spinner } from "@blueprintjs/core";
 import {
-  Suggest,
-  ItemPredicate,
-  ItemListRenderer,
-  IItemListRendererProps,
-  ItemRenderer,
-  IItemRendererProps
-} from '@blueprintjs/select';
+    IItemListRendererProps,
+    IItemRendererProps,
+    ItemListRenderer,
+    ItemPredicate,
+    ItemRenderer,
+    Suggest,
+} from "@blueprintjs/select";
+import * as React from "react";
 
-import { IOwner, OwnerName, IRegion, IRealm } from '@app/types/global';
-import { FetchOwnersLevel } from '@app/types/auction';
-import { IGetOwnersOptions } from '@app/api/data';
+import { IGetOwnersOptions } from "@app/api/data";
+import { FetchOwnersLevel } from "@app/types/auction";
+import { IOwner, IRealm, IRegion, OwnerName } from "@app/types/global";
 
 const OwnerFilterSuggest = Suggest.ofType<IOwner>();
 
-export type StateProps = {
-  fetchOwnersLevel: FetchOwnersLevel
-  owners: IOwner[]
-  ownerFilter: OwnerName | null
-  currentRegion: IRegion | null
-  currentRealm: IRealm | null
-};
+export interface StateProps {
+    fetchOwnersLevel: FetchOwnersLevel;
+    owners: IOwner[];
+    ownerFilter: OwnerName | null;
+    currentRegion: IRegion | null;
+    currentRealm: IRealm | null;
+}
 
-export type DispatchProps = {
-  onOwnerFilterChange: (ownerName: OwnerName | null) => void
+export interface DispatchProps {
+    onOwnerFilterChange: (ownerName: OwnerName | null) => void;
     refreshOwners: (opts: IGetOwnersOptions) => void;
-};
+}
 
 export interface OwnProps {}
 
 type Props = Readonly<StateProps & DispatchProps & OwnProps>;
 
 type State = Readonly<{
-  ownerFilterValue: string
-  timerId: NodeJS.Timer | null
+    ownerFilterValue: string;
+    timerId: NodeJS.Timer | null;
 }>;
 
 export class OwnerFilter extends React.Component<Props, State> {
-  public state: State = {
-    ownerFilterValue: '',
-    timerId: null
-  };
+    public state: State = {
+        ownerFilterValue: "",
+        timerId: null,
+    };
 
-  public itemPredicate: ItemPredicate<IOwner> = (query: string, item: IOwner) => {
-    query = query.toLowerCase();
-    return item.name.toLowerCase().indexOf(query) >= 0;
-  }
+    public itemPredicate: ItemPredicate<IOwner> = (query: string, item: IOwner) => {
+        query = query.toLowerCase();
+        return item.name.toLowerCase().indexOf(query) >= 0;
+    };
 
-  public itemRenderer: ItemRenderer<IOwner> = (owner: IOwner, { handleClick, modifiers, index }: IItemRendererProps) => {
+    public itemRenderer: ItemRenderer<IOwner> = (
+        owner: IOwner,
+        { handleClick, modifiers, index }: IItemRendererProps,
+    ) => {
         if (!modifiers.matchesPredicate) {
             return null;
         }
