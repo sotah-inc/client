@@ -1,5 +1,14 @@
 import * as React from 'react';
-import { ButtonGroup, Spinner, Intent, Navbar, NavbarGroup, Alignment, NavbarDivider } from '@blueprintjs/core';
+import {
+  ButtonGroup,
+  Spinner,
+  Intent,
+  Navbar,
+  NavbarGroup,
+  Alignment,
+  NavbarDivider,
+  NonIdealState
+} from '@blueprintjs/core';
 
 import RegionToggle from '@app/containers/util/RegionToggle';
 import RealmToggle from '@app/containers/util/RealmToggle';
@@ -238,10 +247,27 @@ export class AuctionList extends React.Component<Props> {
   render() {
     switch (this.props.fetchAuctionsLevel) {
       case FetchAuctionsLevel.initial:
+        return (
+          <NonIdealState
+            title="Loading"
+            visual={<Spinner className="pt-large" intent={Intent.NONE} value={0} />}
+          />
+        );
       case FetchAuctionsLevel.fetching:
-        return <>Loading...</>;
+        return (
+          <NonIdealState
+            title="Loading"
+            visual={<Spinner className="pt-large" intent={Intent.PRIMARY} />}
+          />
+        );
       case FetchAuctionsLevel.failure:
-        return <>Could not fetch auctions!</>;
+        return (
+          <NonIdealState
+            title="Fetch auctions failure"
+            description="Auctions could not be fetched"
+            visual="error"
+          />
+        );
       case FetchAuctionsLevel.refetching:
       case FetchAuctionsLevel.success:
         return this.renderAuctions();
