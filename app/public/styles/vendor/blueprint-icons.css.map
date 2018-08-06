@@ -1,0 +1,15 @@
+{
+	"version": 3,
+	"file": "blueprint-icons.css",
+	"sources": [
+		"../../src/blueprint-icons.scss",
+		"../../src/_font-imports.scss",
+		"../../src/_font-face.scss",
+		"../../src/_icons.scss",
+		"../../src/generated/_icon-variables.scss",
+		"../../src/generated/_icon-map.scss",
+		"../../src/generated/_icon-variables.scss"
+	],
+	"names": [],
+	"mappings": "AAAA;;;;;EAKE;AE6BA,UAAU;EACR,WAAW,ED3BI,SAAS;EC4BxB,WAAW,EALC,MAAM;EAMlB,UAAU,EALC,MAAM;EAOjB,GAAG,EA0BkB,gDAAe,CAZF,2BAA2B,EAYxC,0CAAe,CAVR,cAAc,EAUrB,yCAAe,CATT,kBAAkB;;AAtB/C,UAAU;EACR,WAAW,ED1BI,SAAS;EC2BxB,WAAW,EALC,MAAM;EAMlB,UAAU,EALC,MAAM;EAOjB,GAAG,EA0BkB,gDAAe,CAZF,2BAA2B,EAYxC,0CAAe,CAVR,cAAc,EAUrB,yCAAe,CATT,kBAAkB;;AExDjD;;GAEG;ACFH;;GAEG;ADFH;;GAEG"
+}
