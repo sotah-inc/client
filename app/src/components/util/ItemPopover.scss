@@ -1,3 +1,5 @@
+@import "../../vendor/blueprint-variables.scss";
+
 .item-icon-container,
 .quantity-container,
 .currency-container,
@@ -36,15 +38,28 @@
     }
 
     .item-level {
-        color: #D99E0B;
+        color: $gold3;
     }
 
     .on-use,
     .random-stats {
-        color: #29A634;
+        color: $green3;
     }
     
     .crafting-reagent {
         color: #137CBD;
+    }
+}
+
+.bp3-dark {
+    .item-popover-content {
+        .item-level {
+            color: $gold5;
+        }
+
+        .on-use,
+        .random-stats {
+            color: $green5;
+        }
     }
 }

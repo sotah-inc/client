@@ -11,6 +11,45 @@
     padding: $pt-grid-size;
 }
 
+html,
+body,
+#top-root,
+#root,
+#app {
+    height: 100%;
+}
+
+#app.dark-app {
+    background: #30404d;
+}
+
+.bp3-dark {
+    .poor-text,
+    .poor-text a {
+        color: $light-gray1 !important;
+    }
+
+    .common-text,
+    .common-text a {
+        color: $gray5 !important;
+    }
+
+    .uncommon-text,
+    .uncommon-text a {
+        color: $green5 !important;
+    }
+
+    .rare-text,
+    .rare-text a {
+        color: $blue5 !important;
+    }
+
+    .epic-text,
+    .epic-text a {
+        color: $violet5 !important;
+    }
+}
+
 .poor-text,
 .poor-text a {
     color: $gray1 !important;

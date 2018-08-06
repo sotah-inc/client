@@ -1,5 +1,6 @@
-import { Intent } from "@blueprintjs/core";
 import * as React from "react";
+
+import { Intent } from "@blueprintjs/core";
 import { RouteComponentProps } from "react-router-dom";
 
 import { Content } from "@app/components/App/Content";
@@ -263,6 +264,7 @@ export class App extends React.Component<Props, State> {
     }
 
     public renderConnected() {
+        // <div id="app" className={`${Classes.DARK} dark-app`}>
         return (
             <div id="app">
                 <TopbarRouteContainer />
