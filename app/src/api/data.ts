@@ -1,189 +1,180 @@
-import * as HTTPStatus from 'http-status';
+import * as HTTPStatus from "http-status";
 
-import { apiEndpoint } from './index';
-import {
-  Auction,
-  Region,
-  Realm,
-  Owner,
-  OwnerName,
-  ItemId,
-  QueryItemResult,
-  ItemsMap
-} from '../types/global';
-import { SortDirection, SortKind, QueryAuctionResult } from '../types/auction';
+import { QueryAuctionResult, SortDirection, SortKind } from "../types/auction";
+import { Auction, ItemId, ItemsMap, Owner, OwnerName, QueryItemResult, Realm, Region } from "../types/global";
+import { apiEndpoint } from "./index";
 
 export const getPing = async (): Promise<boolean> => {
-  try {
-    await fetch(`${apiEndpoint}/ping`);
-    return true;
-  } catch (err) {
-    return false;
-  }
+    try {
+        await fetch(`${apiEndpoint}/ping`);
+        return true;
+    } catch (err) {
+        return false;
+    }
 };
 
 export const getRegions = async (): Promise<Region[] | null> => {
-  const res = await fetch(`${apiEndpoint}/regions`);
-  if (res.status !== HTTPStatus.OK) {
-    return null;
-  }
+    const res = await fetch(`${apiEndpoint}/regions`);
+    if (res.status !== HTTPStatus.OK) {
+        return null;
+    }
 
-  return await res.json();
+    return res.json();
 };
 
 export const getStatus = async (regionName: string): Promise<Realm[] | null> => {
-  const res = await fetch(`${apiEndpoint}/region/${regionName}/realms`);
-  if (res.status !== HTTPStatus.OK) {
-    return null;
-  }
+    const res = await fetch(`${apiEndpoint}/region/${regionName}/realms`);
+    if (res.status !== HTTPStatus.OK) {
+        return null;
+    }
 
-  return (await res.json()).realms;
+    return (await res.json()).realms;
 };
 
-export type GetAuctionsOptions = {
-  regionName: string
-  realmSlug: string
-  page: number
-  count: number
-  sortDirection: SortDirection
-  sortKind: SortKind
-  ownerFilters: OwnerName[]
-  itemFilters: ItemId[]
-};
+export interface GetAuctionsOptions {
+    regionName: string;
+    realmSlug: string;
+    page: number;
+    count: number;
+    sortDirection: SortDirection;
+    sortKind: SortKind;
+    ownerFilters: OwnerName[];
+    itemFilters: ItemId[];
+}
 
-export type AuctionsResponse = {
-  auctions: Auction[] | null
-  total: number
-};
+export interface AuctionsResponse {
+    auctions: Auction[] | null;
+    total: number;
+}
 
 export const getAuctions = async (opts: GetAuctionsOptions): Promise<AuctionsResponse | null> => {
-  const { regionName, realmSlug, page, count, sortDirection, sortKind, ownerFilters, itemFilters } = opts;
-  const res = await fetch(`${apiEndpoint}/region/${regionName}/realm/${realmSlug}/auctions`, {
-    method: 'POST',
-    body: JSON.stringify({ page, count, sortDirection, sortKind, ownerFilters, itemFilters }),
-    headers: new Headers({ 'content-type': 'application/json' })
-  });
-  if (res.status !== HTTPStatus.OK) {
-    return null;
-  }
+    const { regionName, realmSlug, page, count, sortDirection, sortKind, ownerFilters, itemFilters } = opts;
+    const res = await fetch(`${apiEndpoint}/region/${regionName}/realm/${realmSlug}/auctions`, {
+        method: "POST",
+        body: JSON.stringify({ page, count, sortDirection, sortKind, ownerFilters, itemFilters }),
+        headers: new Headers({ "content-type": "application/json" }),
+    });
+    if (res.status !== HTTPStatus.OK) {
+        return null;
+    }
 
-  return await res.json();
+    return res.json();
 };
 
-export type GetOwnersOptions = {
-  regionName: string
-  realmSlug: string
-  query: string
-};
+export interface GetOwnersOptions {
+    regionName: string;
+    realmSlug: string;
+    query: string;
+}
 
-export type OwnersResponse = {
-  owners: Owner[]
-};
+export interface OwnersResponse {
+    owners: Owner[];
+}
 
 export const getOwners = async (opts: GetOwnersOptions): Promise<OwnersResponse | null> => {
-  const { regionName, realmSlug, query } = opts;
-  const res = await fetch(`${apiEndpoint}/region/${regionName}/realm/${realmSlug}/owners`, {
-    method: 'POST',
-    body: JSON.stringify({ query }),
-    headers: new Headers({ 'content-type': 'application/json' })
-  });
-  if (res.status !== HTTPStatus.OK) {
-    return null;
-  }
+    const { regionName, realmSlug, query } = opts;
+    const res = await fetch(`${apiEndpoint}/region/${regionName}/realm/${realmSlug}/owners`, {
+        method: "POST",
+        body: JSON.stringify({ query }),
+        headers: new Headers({ "content-type": "application/json" }),
+    });
+    if (res.status !== HTTPStatus.OK) {
+        return null;
+    }
 
-  return await res.json();
+    return res.json();
 };
 
-export type ItemsResponse = {
-  items: QueryItemResult[]
-};
+export interface ItemsResponse {
+    items: QueryItemResult[];
+}
 
 export const getItems = async (query: string): Promise<ItemsResponse | null> => {
-  const res = await fetch(`${apiEndpoint}/items`, {
-    method: 'POST',
-    body: JSON.stringify({ query }),
-    headers: new Headers({ 'content-type': 'application/json' })
-  });
-  if (res.status !== HTTPStatus.OK) {
-    return null;
-  }
+    const res = await fetch(`${apiEndpoint}/items`, {
+        method: "POST",
+        body: JSON.stringify({ query }),
+        headers: new Headers({ "content-type": "application/json" }),
+    });
+    if (res.status !== HTTPStatus.OK) {
+        return null;
+    }
 
-  return await res.json();
+    return res.json();
 };
 
-export type QueryAuctionsOptions = {
-  regionName: string
-  realmSlug: string
-  query: string
-};
+export interface QueryAuctionsOptions {
+    regionName: string;
+    realmSlug: string;
+    query: string;
+}
 
 export type AuctionsQueryItems = QueryAuctionResult[];
 
-export type AuctionsQueryResponse = {
-  items: AuctionsQueryItems
-};
+export interface AuctionsQueryResponse {
+    items: AuctionsQueryItems;
+}
 
 export const queryAuctions = async (opts: QueryAuctionsOptions): Promise<AuctionsQueryResponse | null> => {
-  const { regionName, realmSlug, query } = opts;
-  const res = await fetch(`${apiEndpoint}/region/${regionName}/realm/${realmSlug}/query-auctions`, {
-    method: 'POST',
-    body: JSON.stringify({ query }),
-    headers: new Headers({ 'content-type': 'application/json' })
-  });
-  if (res.status !== HTTPStatus.OK) {
-    return null;
-  }
+    const { regionName, realmSlug, query } = opts;
+    const res = await fetch(`${apiEndpoint}/region/${regionName}/realm/${realmSlug}/query-auctions`, {
+        method: "POST",
+        body: JSON.stringify({ query }),
+        headers: new Headers({ "content-type": "application/json" }),
+    });
+    if (res.status !== HTTPStatus.OK) {
+        return null;
+    }
 
-  return await res.json();
+    return res.json();
 };
 
-export type ResponseSubItemClass = {
-  subclass: number
-  name: string
-};
+export interface ResponseSubItemClass {
+    subclass: number;
+    name: string;
+}
 
-export type ResponseItemClass = {
-  class: number
-  name: string
-  subclasses: ResponseSubItemClass[]
-};
+export interface ResponseItemClass {
+    class: number;
+    name: string;
+    subclasses: ResponseSubItemClass[];
+}
 
-export type GetItemClassesResponse = {
-  classes: ResponseItemClass[] | null
-};
+export interface GetItemClassesResponse {
+    classes: ResponseItemClass[] | null;
+}
 
 export const getItemClasses = async (): Promise<GetItemClassesResponse | null> => {
-  return await (await fetch(`${apiEndpoint}/item-classes`)).json();
+    return (await fetch(`${apiEndpoint}/item-classes`)).json();
 };
 
-export type GetPriceListOptions = {
-  regionName: string
-  realmSlug: string
-  itemIds: ItemId[]
-};
+export interface GetPriceListOptions {
+    regionName: string;
+    realmSlug: string;
+    itemIds: ItemId[];
+}
 
-export type PriceListMap = {
-  [key: number]: {
-    bid: number
-    buyout: number
-  }
-};
+export interface PriceListMap {
+    [key: number]: {
+        bid: number;
+        buyout: number;
+    };
+}
 
-export type GetPriceListResponse = {
-  price_list: PriceListMap
-  items: ItemsMap
-};
+export interface GetPriceListResponse {
+    price_list: PriceListMap;
+    items: ItemsMap;
+}
 
 export const getPriceList = async (opts: GetPriceListOptions): Promise<GetPriceListResponse | null> => {
-  const { regionName, realmSlug, itemIds } = opts;
-  const res = await fetch(`${apiEndpoint}/region/${regionName}/realm/${realmSlug}/price-list`, {
-    method: 'POST',
-    body: JSON.stringify({ item_ids: itemIds }),
-    headers: new Headers({ 'content-type': 'application/json' })
-  });
-  if (res.status !== HTTPStatus.OK) {
-    return null;
-  }
+    const { regionName, realmSlug, itemIds } = opts;
+    const res = await fetch(`${apiEndpoint}/region/${regionName}/realm/${realmSlug}/price-list`, {
+        method: "POST",
+        body: JSON.stringify({ item_ids: itemIds }),
+        headers: new Headers({ "content-type": "application/json" }),
+    });
+    if (res.status !== HTTPStatus.OK) {
+        return null;
+    }
 
-  return await res.json();
+    return res.json();
 };
