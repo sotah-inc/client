@@ -207,6 +207,16 @@ export class App extends React.Component<Props> {
             refreshRegions();
 
             break;
+          case FetchRegionLevel.failure:
+            if (prevProps.fetchRegionLevel === FetchRegionLevel.fetching) {
+              AppToaster.show({
+                message: 'Failed to fetch regions.',
+                intent: Intent.DANGER,
+                icon: 'info-sign'
+              });
+            }
+
+            break;
           default:
             break;
         }
