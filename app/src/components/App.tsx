@@ -38,6 +38,7 @@ export type DispatchProps = {
   refreshRealms: (region: Region) => void
   changeIsLoginDialogOpen: (isLoginDialogOpen: boolean) => void
   loadUserPreferences: (token: string) => void
+  changeAuthLevel: (authLevel: AuthLevel) => void
 };
 
 export interface OwnProps extends RouteComponentProps<{}> {}
@@ -56,11 +57,13 @@ export class App extends React.Component<Props, State> {
   didHandleUnauth: boolean = false;
 
   componentDidMount() {
-    const { onLoad, preloadedToken, reloadUser } = this.props;
+    const { onLoad, preloadedToken, reloadUser, changeAuthLevel } = this.props;
 
     onLoad();
 
-    if (preloadedToken.length > 0) {
+    if (preloadedToken.length === 0) {
+      changeAuthLevel(AuthLevel.unauthenticated);
+    } else {
       reloadUser(preloadedToken);
     }
   }
@@ -72,10 +75,11 @@ export class App extends React.Component<Props, State> {
       currentRegion,
       fetchRealmLevel,
       refreshRealms,
-      fetchRegionLevel
+      fetchRegionLevel,
+      preloadedToken
     } = this.props;
 
-    if (this.didHandleUnauth === false) {
+    if (preloadedToken.length > 0 && this.didHandleUnauth === false) {
       if (fetchRegionLevel === FetchRegionLevel.success) {
         this.didHandleUnauth = true;
 

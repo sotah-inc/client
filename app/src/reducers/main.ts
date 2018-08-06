@@ -12,6 +12,7 @@ import {
   MainActions,
   REQUEST_PING, RECEIVE_PING,
   USER_REGISTER, USER_LOGIN, RECEIVE_USER_RELOAD,
+  CHANGE_AUTH_LEVEL,
   REQUEST_REGIONS, RECEIVE_REGIONS, REGION_CHANGE,
   REQUEST_REALMS, RECEIVE_REALMS, REALM_CHANGE,
   CHANGE_IS_LOGIN_DIALOG_OPEN,
@@ -48,6 +49,8 @@ export const main = (state: State, action: MainActions): State => {
         profile: { user: action.payload.user!, token: state.preloadedToken },
         authLevel: AuthLevel.authenticated
       };
+    case CHANGE_AUTH_LEVEL:
+      return { ...state, authLevel: action.payload };
     case REQUEST_USER_PREFERENCES:
       return { ...state, fetchUserPreferencesLevel: FetchUserPreferencesLevel.fetching };
     case RECEIVE_USER_PREFERENCES:

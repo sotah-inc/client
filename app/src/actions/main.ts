@@ -2,6 +2,7 @@ import { Dispatch } from 'redux';
 
 import { createAction, ActionsUnion } from './helpers';
 import { Profile, Region, Realm } from '../types/global';
+import { AuthLevel } from '../types/main';
 import { getPing, getStatus, getRegions,  } from '../api/data';
 import {
   ReloadUserResponse,
@@ -43,6 +44,9 @@ export const FetchUserReload = (token: string) => {
     dispatch(ReceiveUserReload(await reloadUser(token)));
   };
 };
+
+export const CHANGE_AUTH_LEVEL = 'CHANGE_AUTH_LEVEL';
+export const ChangeAuthLevel = (payload: AuthLevel) => createAction(CHANGE_AUTH_LEVEL, payload);
 
 export const REQUEST_USER_PREFERENCES = 'REQUEST_USER_PREFERENCES';
 export const RECEIVE_USER_PREFERENCES = 'RECEIVE_USER_PREFERENCES';
@@ -125,6 +129,7 @@ export const MainActions = {
   RequestPing, ReceivePing,
   UserRegister, UserLogin,
   RequestUserReload, ReceiveUserReload,
+  ChangeAuthLevel,
   RequestUserPreferences, ReceiveUserPreferences,
   RequestRegions, ReceiveRegions, RegionChange,
   RequestRealms, ReceiveRealms, RealmChange,
