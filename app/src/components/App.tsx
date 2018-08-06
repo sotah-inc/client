@@ -44,7 +44,15 @@ export interface OwnProps extends RouteComponentProps<{}> {}
 
 export type Props = Readonly<StateProps & DispatchProps & OwnProps>;
 
-export class App extends React.Component<Props> {
+type State = Readonly<{
+  regionToastKey: string
+}>;
+
+export class App extends React.Component<Props, State> {
+  state: State = {
+    regionToastKey: ''
+  };
+
   didHandleUnauth: boolean = false;
 
   componentDidMount() {
@@ -63,23 +71,26 @@ export class App extends React.Component<Props> {
       changeIsLoginDialogOpen,
       currentRegion,
       fetchRealmLevel,
-      refreshRealms
+      refreshRealms,
+      fetchRegionLevel
     } = this.props;
 
     if (this.didHandleUnauth === false) {
-      this.didHandleUnauth = true;
+      if (fetchRegionLevel === FetchRegionLevel.success) {
+        this.didHandleUnauth = true;
 
-      AppToaster.show({
-        message: 'Your session has expired.',
-        intent: Intent.WARNING,
-        icon: 'info-sign',
-        action: {
-          text: 'Login',
-          intent: Intent.PRIMARY,
-          icon: 'log-in',
-          onClick: () => changeIsLoginDialogOpen(!isLoginDialogOpen)
-        }
-      });
+        AppToaster.show({
+          message: 'Your session has expired.',
+          intent: Intent.WARNING,
+          icon: 'info-sign',
+          action: {
+            text: 'Login',
+            intent: Intent.PRIMARY,
+            icon: 'log-in',
+            onClick: () => changeIsLoginDialogOpen(!isLoginDialogOpen)
+          }
+        });
+      }
     }
 
     if (currentRegion !== null) {
@@ -180,6 +191,7 @@ export class App extends React.Component<Props> {
       refreshRegions,
       authLevel
     } = this.props;
+    const { regionToastKey } = this.state;
 
     switch (authLevel) {
       case AuthLevel.unauthenticated:
@@ -199,22 +211,24 @@ export class App extends React.Component<Props> {
         switch (fetchRegionLevel) {
           case FetchRegionLevel.initial:
             if (authLevel === AuthLevel.unauthenticated) {
-              AppToaster.show({
+              const initialToastKey = AppToaster.show({
                 message: 'Loading regions.',
                 intent: Intent.NONE,
                 icon: 'info-sign'
               });
+              this.setState({ regionToastKey: initialToastKey });
 
               refreshRegions();
             }
 
             break;
           case FetchRegionLevel.prompted:
-            AppToaster.show({
+            const promptedToastKey = AppToaster.show({
               message: 'Loading regions.',
               intent: Intent.NONE,
               icon: 'info-sign'
             });
+            this.setState({ regionToastKey: promptedToastKey });
 
             refreshRegions();
 
@@ -226,6 +240,19 @@ export class App extends React.Component<Props> {
                 intent: Intent.DANGER,
                 icon: 'info-sign'
               });
+            }
+
+            break;
+          case FetchRegionLevel.success:
+            if (prevProps.fetchRegionLevel !== fetchRegionLevel) {
+              if (regionToastKey.length > 0) {
+                setTimeout(
+                  () => AppToaster.dismiss(regionToastKey),
+                  5 * 100
+                );
+              }
+
+              this.setState({  regionToastKey: '' });
             }
 
             break;
