@@ -22,8 +22,13 @@ export const getPing = async (): Promise<boolean> => {
   }
 };
 
-export const getRegions = async (): Promise<Region[]> => {
-  return await (await fetch(`${apiEndpoint}/regions`)).json();
+export const getRegions = async (): Promise<Region[] | null> => {
+  const res = await fetch(`${apiEndpoint}/regions`);
+  if (res.status !== HTTPStatus.OK) {
+    return null;
+  }
+
+  return await res.json();
 };
 
 export const getStatus = async (regionName: string): Promise<Realm[] | null> => {
