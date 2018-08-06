@@ -1,19 +1,19 @@
-import { Profile, Realm, Realms, Region, Regions, UserPreferences } from "./global";
+import { IProfile, IRealm, IRealms, IRegion, IRegions, IUserPreferences } from "./global";
 
-export interface MainState {
+export interface IMainState {
     fetchPingLevel: FetchPingLevel;
-    profile: Profile | null;
-    userPreferences: UserPreferences | null;
+    profile: IProfile | null;
+    userPreferences: IUserPreferences | null;
     fetchUserPreferencesLevel: FetchUserPreferencesLevel;
     preloadedToken: string;
     isRegistered: boolean;
     isLoggedIn: boolean;
     fetchRegionLevel: FetchRegionLevel;
-    regions: Regions;
-    currentRegion: Region | null;
+    regions: IRegions;
+    currentRegion: IRegion | null;
     fetchRealmLevel: FetchRealmLevel;
-    realms: Realms;
-    currentRealm: Realm | null;
+    realms: IRealms;
+    currentRealm: IRealm | null;
     authLevel: AuthLevel;
     isLoginDialogOpen: boolean;
 }
@@ -54,20 +54,20 @@ export enum AuthLevel {
     unauthenticated,
 }
 
-export const defaultMainState: MainState = {
-    fetchPingLevel: FetchPingLevel.initial,
-    profile: null,
-    userPreferences: null,
-    fetchUserPreferencesLevel: FetchUserPreferencesLevel.initial,
-    preloadedToken: "",
-    isRegistered: false,
-    isLoggedIn: false,
-    fetchRegionLevel: FetchRegionLevel.initial,
-    regions: {},
-    currentRegion: null,
-    fetchRealmLevel: FetchRealmLevel.initial,
-    realms: {},
-    currentRealm: null,
+export const defaultMainState: IMainState = {
     authLevel: AuthLevel.initial,
+    currentRealm: null,
+    currentRegion: null,
+    fetchPingLevel: FetchPingLevel.initial,
+    fetchRealmLevel: FetchRealmLevel.initial,
+    fetchRegionLevel: FetchRegionLevel.initial,
+    fetchUserPreferencesLevel: FetchUserPreferencesLevel.initial,
+    isLoggedIn: false,
     isLoginDialogOpen: false,
+    isRegistered: false,
+    preloadedToken: "",
+    profile: null,
+    realms: {},
+    regions: {},
+    userPreferences: null,
 };

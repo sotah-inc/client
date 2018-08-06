@@ -1,13 +1,13 @@
 import { connect, Dispatch } from 'react-redux';
 
 import { RegionToggle, StateProps, DispatchProps, OwnProps } from '@app/components/util/RegionToggle';
-import { StoreState } from '@app/types';
-import { Region } from '@app/types/global';
-import { CreatePreferencesRequestBody, UpdatePreferencesRequestBody } from '@app/api/user';
+import { IStoreState } from '@app/types';
+import { IRegion } from '@app/types/global';
+import { ICreatePreferencesRequestBody, UpdatePreferencesRequestBody } from '@app/api/user';
 import { Actions } from '@app/actions';
 import { RegionChange, FetchUserPreferencesCreate, FetchUserPreferencesUpdate } from '@app/actions/main';
 
-const mapStateToProps = (state: StoreState): StateProps => {
+const mapStateToProps = (state: IStoreState): StateProps => {
   const {
     regions,
     currentRegion,
@@ -22,10 +22,10 @@ const mapStateToProps = (state: StoreState): StateProps => {
 
 const mapDispatchToProps = (dispatch: Dispatch<Actions>): DispatchProps => {
   return {
-    onRegionChange: (region: Region) => dispatch(RegionChange(region)),
+    onRegionChange: (region: IRegion) => dispatch(RegionChange(region)),
     createUserPreferences: (
       token: string,
-      body: CreatePreferencesRequestBody
+      body: ICreatePreferencesRequestBody
     ) => dispatch(FetchUserPreferencesCreate(token, body)),
     updateUserPreferences: (
       token: string,

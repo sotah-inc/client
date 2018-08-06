@@ -1,7 +1,7 @@
 import { connect, Dispatch } from 'react-redux';
 
-import { StoreState } from '@app/types';
-import { Region } from '@app/types/global';
+import { IStoreState } from '@app/types';
+import { IRegion } from '@app/types/global';
 import { AuthLevel } from '@app/types/main';
 import { App, StateProps, DispatchProps, OwnProps } from '@app/components/App';
 import { Actions } from '@app/actions';
@@ -15,7 +15,7 @@ import {
   FetchUserPreferences
 } from '@app/actions/main';
 
-const mapStateToProps = (state: StoreState): StateProps => {
+const mapStateToProps = (state: IStoreState): StateProps => {
   const {
     fetchPingLevel,
     fetchRegionLevel,
@@ -49,7 +49,7 @@ const mapDispatchToProps = (dispatch: Dispatch<Actions>): DispatchProps => {
     onLoad: () => dispatch(FetchPing()),
     reloadUser: (token: string) => dispatch(FetchUserReload(token)),
     refreshRegions: () => dispatch(FetchRegions()),
-    refreshRealms: (region: Region) => dispatch(FetchRealms(region)),
+    refreshRealms: (region: IRegion) => dispatch(FetchRealms(region)),
     changeIsLoginDialogOpen: (isLoginDialogOpen: boolean) => dispatch(ChangeIsLoginDialogOpen(isLoginDialogOpen)),
     loadUserPreferences: (token: string) => dispatch(FetchUserPreferences(token)),
     changeAuthLevel: (authLevel: AuthLevel) => dispatch(ChangeAuthLevel(authLevel))

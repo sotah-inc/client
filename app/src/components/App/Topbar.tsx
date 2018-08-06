@@ -5,10 +5,10 @@ import { RouteComponentProps } from 'react-router-dom';
 import Register from '@app/containers/App/Register';
 import Login from '@app/containers/App/Login';
 import LinkButton from '@app/route-containers/util/LinkButton';
-import { User } from '@app/types/global';
+import { IUser } from '@app/types/global';
 
 export type StateProps = {
-  user: User | null
+  user: IUser | null
 };
 
 export type DispatchProps = {};

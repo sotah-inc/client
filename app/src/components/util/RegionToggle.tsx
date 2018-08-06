@@ -1,19 +1,19 @@
 import * as React from 'react';
 import { Spinner, Button, Popover, Position, Menu, MenuItem, Intent } from '@blueprintjs/core';
 
-import { Region, Regions } from '@app/types/global';
+import { IRegion, IRegions } from '@app/types/global';
 import { FetchRegionLevel } from '@app/types/main';
-import { CreatePreferencesRequestBody, UpdatePreferencesRequestBody } from '@app/api/user';
+import { ICreatePreferencesRequestBody, UpdatePreferencesRequestBody } from '@app/api/user';
 
 export type StateProps = {
-  currentRegion: Region | null
-  regions: Regions
+  currentRegion: IRegion | null
+  regions: IRegions
   fetchRegionLevel: FetchRegionLevel
 };
 
 export type DispatchProps = {
-  onRegionChange: (region: Region) => void
-  createUserPreferences: (token: string, body: CreatePreferencesRequestBody) => void
+  onRegionChange: (region: IRegion) => void
+  createUserPreferences: (token: string, body: ICreatePreferencesRequestBody) => void
   updateUserPreferences: (token: string, body: UpdatePreferencesRequestBody) => void
 };
 
@@ -22,7 +22,7 @@ export type OwnProps = {};
 type Props = Readonly<StateProps & DispatchProps & OwnProps>;
 
 export class RegionToggle extends React.Component<Props> {
-  renderMenuItem(region: Region, index: number) {
+  renderMenuItem(region: IRegion, index: number) {
     let className = '';
     if (this.props.currentRegion !== null && region.name === this.props.currentRegion.name) {
       className = 'pt-active';
@@ -39,7 +39,7 @@ export class RegionToggle extends React.Component<Props> {
     );
   }
 
-  renderMenu(regions: Regions) {
+  renderMenu(regions: IRegions) {
     return (
       <Menu>
         <li>

@@ -3,13 +3,13 @@ import * as Yup from 'yup';
 
 import { FormValues, Login } from '@app/components/App/Login';
 import { loginUser } from '@app/api/user';
-import { Profile } from '@app/types/global';
+import { IProfile } from '@app/types/global';
 import { UserRules } from '@app/validator-rules';
 
 interface FormProps {
   isLoggedIn: boolean;
   isLoginDialogOpen: boolean;
-  onUserLogin: (payload: Profile) => void;
+  onUserLogin: (payload: IProfile) => void;
   changeIsLoginDialogOpen: (isLoginDialogOpen: boolean) => void;
 }
 

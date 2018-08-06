@@ -9,26 +9,26 @@ import {
   IItemRendererProps
 } from '@blueprintjs/select';
 
-import { Region, Realms, Realm, UserPreferences, Profile } from '@app/types/global';
+import { IRegion, IRealms, IRealm, IUserPreferences, IProfile } from '@app/types/global';
 import { FetchRealmLevel, AuthLevel } from '@app/types/main';
-import { CreatePreferencesRequestBody, UpdatePreferencesRequestBody } from '@app/api/user';
+import { ICreatePreferencesRequestBody, UpdatePreferencesRequestBody } from '@app/api/user';
 import { didRealmChange } from '@app/util';
 
-const RealmToggleSelect = Select.ofType<Realm>();
+const RealmToggleSelect = Select.ofType<IRealm>();
 
 export type StateProps = {
-  realms: Realms
-  currentRealm: Realm | null
+  realms: IRealms
+  currentRealm: IRealm | null
   fetchRealmLevel: FetchRealmLevel
-  userPreferences: UserPreferences | null
+  userPreferences: IUserPreferences | null
   authLevel: AuthLevel
-  profile: Profile | null
-  currentRegion: Region | null
+  profile: IProfile | null
+  currentRegion: IRegion | null
 };
 
 export type DispatchProps = {
-  onRealmChange: (realm: Realm) => void
-  createUserPreferences: (token: string, body: CreatePreferencesRequestBody) => void
+  onRealmChange: (realm: IRealm) => void
+  createUserPreferences: (token: string, body: ICreatePreferencesRequestBody) => void
   updateUserPreferences: (token: string, body: UpdatePreferencesRequestBody) => void
 };
 
@@ -63,13 +63,13 @@ export class RealmToggle extends React.Component<Props> {
     }
   }
 
-  itemPredicate: ItemPredicate<Realm> = (query: string, item: Realm) => {
+  itemPredicate: ItemPredicate<IRealm> = (query: string, item: IRealm) => {
     query = query.toLowerCase();
     return item.name.toLowerCase().indexOf(query) >= 0
       || item.battlegroup.toLowerCase().indexOf(query) >= 0;
   }
 
-  itemRenderer: ItemRenderer<Realm> = (realm: Realm, { handleClick, modifiers, index }: IItemRendererProps) => {
+  itemRenderer: ItemRenderer<IRealm> = (realm: IRealm, { handleClick, modifiers, index }: IItemRendererProps) => {
     if (!modifiers.matchesPredicate) {
       return null;
     }
@@ -91,7 +91,7 @@ export class RealmToggle extends React.Component<Props> {
     );
   }
 
-  itemListRenderer: ItemListRenderer<Realm> =  (params: IItemListRendererProps<Realm>) => {
+  itemListRenderer: ItemListRenderer<IRealm> =  (params: IItemListRendererProps<IRealm>) => {
     const { items, itemsParentRef, renderItem } = params;
     const renderedItems = items.map(renderItem).filter((renderedItem) => renderedItem !== null);
     return (
@@ -121,7 +121,7 @@ export class RealmToggle extends React.Component<Props> {
             itemRenderer={this.itemRenderer}
             itemListRenderer={this.itemListRenderer}
             itemPredicate={this.itemPredicate}
-            onItemSelect={(realm: Realm) => onRealmChange(realm)}
+            onItemSelect={(realm: IRealm) => onRealmChange(realm)}
             resetOnSelect={true}
             resetOnClose={true}
           >

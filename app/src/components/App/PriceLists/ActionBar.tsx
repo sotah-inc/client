@@ -9,17 +9,17 @@ import {
   Intent
 } from '@blueprintjs/core';
 
-import { Region, Realm } from '@app/types/global';
-import { Pricelist } from '@app/types/price-lists';
+import { IRegion, IRealm } from '@app/types/global';
+import { IPricelist } from '@app/types/price-lists';
 import RegionToggle from '@app/containers/util/RegionToggle';
 import RealmToggle from '@app/containers/util/RealmToggle';
 
 export type StateProps = {
-  currentRegion: Region | null
-  currentRealm: Realm | null
+  currentRegion: IRegion | null
+  currentRealm: IRealm | null
   isAddListDialogOpen: boolean
   isAddEntryDialogOpen: boolean
-  selectedList: Pricelist | null
+  selectedList: IPricelist | null
 };
 
 export type DispatchProps = {

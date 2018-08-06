@@ -1,27 +1,27 @@
 import * as React from 'react';
 import { NonIdealState, Spinner, Intent } from '@blueprintjs/core';
 
-import { Pricelist, PricelistEntry, GetPriceListLevel } from '@app/types/price-lists';
-import { Region, Realm, ItemsMap } from '@app/types/global';
+import { IPricelist, IPricelistEntry, GetPriceListLevel } from '@app/types/price-lists';
+import { IRegion, IRealm, ItemsMap } from '@app/types/global';
 import ItemPopover from '@app/containers/util/ItemPopover';
 import { Currency } from '@app/components/util';
-import { getPriceList, PriceListMap } from '@app/api/data';
+import { getPriceList, IPriceListMap } from '@app/api/data';
 
 export type StateProps = {};
 
 export type DispatchProps = {};
 
 export type OwnProps = {
-  list: Pricelist
-  region: Region
-  realm: Realm
+  list: IPricelist
+  region: IRegion
+  realm: IRealm
 };
 
 type Props = Readonly<StateProps & DispatchProps & OwnProps>;
 
 type State = Readonly<{
   getPriceListLevel: GetPriceListLevel
-  pricelistMap: PriceListMap
+  pricelistMap: IPriceListMap
   itemsMap: ItemsMap
 }>;
 
@@ -64,7 +64,7 @@ export class PriceListTable extends React.Component<Props, State> {
     }
   }
 
-  renderEntry(index: number, entry: PricelistEntry) {
+  renderEntry(index: number, entry: IPricelistEntry) {
     const { item_id, quantity_modifier } = entry;
     const { pricelistMap, itemsMap } = this.state;
 

@@ -13,15 +13,15 @@ import {
     SORT_CHANGE,
 } from "@app/actions/auction";
 import {
-    AuctionState,
     defaultAuctionState,
     FetchAuctionsLevel,
     FetchItemClassesLevel,
+    IAuctionState,
     QueryAuctionsLevel,
 } from "@app/types/auction";
-import { Auction, ItemClasses, SubItemClasses } from "@app/types/global";
+import { IAuction, ISubItemClasses, ItemClasses } from "@app/types/global";
 
-type State = Readonly<AuctionState> | undefined;
+type State = Readonly<IAuctionState> | undefined;
 
 export const auction = (state: State, action: AuctionActions): State => {
     if (state === undefined) {
@@ -40,16 +40,16 @@ export const auction = (state: State, action: AuctionActions): State => {
                 return { ...state, fetchAuctionsLevel: FetchAuctionsLevel.failure };
             }
 
-            let auctions: Auction[] = [];
+            let auctions: IAuction[] = [];
             if (action.payload.auctions !== null) {
                 auctions = action.payload.auctions;
             }
 
             return {
                 ...state,
+                auctions,
                 fetchAuctionsLevel: FetchAuctionsLevel.success,
                 totalResults: action.payload.total,
-                auctions,
             };
         case PAGE_CHANGE:
             return { ...state, currentPage: action.payload };
@@ -71,8 +71,8 @@ export const auction = (state: State, action: AuctionActions): State => {
 
             return {
                 ...state,
-                queryAuctionsLevel: QueryAuctionsLevel.success,
                 queryAuctionResults: action.payload.items,
+                queryAuctionsLevel: QueryAuctionsLevel.success,
             };
         case ADD_AUCTIONS_QUERY:
             return {
@@ -93,7 +93,7 @@ export const auction = (state: State, action: AuctionActions): State => {
 
             const itemClasses: ItemClasses = {};
             for (const itemClass of action.payload.classes) {
-                const subClasses: SubItemClasses = {};
+                const subClasses: ISubItemClasses = {};
                 for (const subItemClass of itemClass.subclasses) {
                     subClasses[subItemClass.subclass] = subItemClass;
                 }

@@ -1,16 +1,16 @@
-import { Auction, Item, ItemClasses, Owner } from "./global";
+import { IAuction, IOwner, Item, ItemClasses } from "./global";
 
-export interface AuctionState {
+export interface IAuctionState {
     fetchAuctionsLevel: FetchAuctionsLevel;
-    auctions: Auction[];
+    auctions: IAuction[];
     currentPage: number;
     auctionsPerPage: number;
     totalResults: number;
     sortDirection: SortDirection;
     sortKind: SortKind;
     queryAuctionsLevel: QueryAuctionsLevel;
-    queryAuctionResults: QueryAuctionResult[];
-    selectedQueryAuctionResults: QueryAuctionResult[];
+    queryAuctionResults: IQueryAuctionResult[];
+    selectedQueryAuctionResults: IQueryAuctionResult[];
     fetchItemClassesLevel: FetchItemClassesLevel;
     itemClasses: ItemClasses;
 }
@@ -40,7 +40,7 @@ export enum SortKind {
     owner,
 }
 
-export interface SortChangeOptions {
+export interface ISortChangeOptions {
     sortKind: SortKind;
     sortDirection: SortDirection;
 }
@@ -69,9 +69,9 @@ export enum QueryAuctionsLevel {
     failure,
 }
 
-export interface QueryAuctionResult {
+export interface IQueryAuctionResult {
     item: Item;
-    owner: Owner;
+    owner: IOwner;
     target: string;
     rank: number;
 }
@@ -84,17 +84,17 @@ export enum FetchItemClassesLevel {
     failure,
 }
 
-export const defaultAuctionState: AuctionState = {
-    fetchAuctionsLevel: FetchAuctionsLevel.initial,
+export const defaultAuctionState: IAuctionState = {
     auctions: [],
-    currentPage: 0,
     auctionsPerPage: 10,
-    totalResults: 0,
-    sortDirection: SortDirection.none,
-    sortKind: SortKind.none,
-    queryAuctionsLevel: QueryAuctionsLevel.initial,
-    queryAuctionResults: [],
-    selectedQueryAuctionResults: [],
+    currentPage: 0,
+    fetchAuctionsLevel: FetchAuctionsLevel.initial,
     fetchItemClassesLevel: FetchItemClassesLevel.initial,
     itemClasses: {},
+    queryAuctionResults: [],
+    queryAuctionsLevel: QueryAuctionsLevel.initial,
+    selectedQueryAuctionResults: [],
+    sortDirection: SortDirection.none,
+    sortKind: SortKind.none,
+    totalResults: 0,
 };

@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { Button, NonIdealState } from '@blueprintjs/core';
 
-import { Item, Region, Realm } from '@app/types/global';
-import { Pricelist } from '@app/types/price-lists';
+import { Item, IRegion, IRealm } from '@app/types/global';
+import { IPricelist } from '@app/types/price-lists';
 import { PriceListTable } from '@app/components/App/PriceLists/PriceListPanel/PriceListTable';
 
 export type StateProps = {
-  currentRegion: Region | null
-  currentRealm: Realm | null
+  currentRegion: IRegion | null
+  currentRealm: IRealm | null
   isAddEntryDialogOpen: boolean
 };
 
@@ -16,7 +16,7 @@ export type DispatchProps = {
 };
 
 export type OwnProps = {
-  list: Pricelist
+  list: IPricelist
 };
 
 export type FormValues = {

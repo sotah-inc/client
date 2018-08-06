@@ -10,11 +10,11 @@ import {
   IItemRendererProps
 } from '@blueprintjs/select';
 
-import { Item, QueryItemResult } from '@app/types/global';
+import { Item, IQueryItemResult } from '@app/types/global';
 import { getItems } from '@app/api/data';
 import { qualityToColorClass, getItemIconUrl, getItemTextValue } from '@app/util';
 
-const ItemSuggest = Suggest.ofType<QueryItemResult>();
+const ItemSuggest = Suggest.ofType<IQueryItemResult>();
 
 type Props = Readonly<{
   autoFocus?: boolean
@@ -24,7 +24,7 @@ type Props = Readonly<{
 type State = Readonly<{
   timerId: NodeJS.Timer | null
   filterValue: string
-  results: QueryItemResult[]
+  results: IQueryItemResult[]
 }>;
 
 export class ItemInput extends React.Component<Props, State> {
@@ -67,8 +67,8 @@ export class ItemInput extends React.Component<Props, State> {
     );
   }
 
-  itemRenderer: ItemRenderer<QueryItemResult> = (
-    result: QueryItemResult,
+  itemRenderer: ItemRenderer<IQueryItemResult> = (
+    result: IQueryItemResult,
     { handleClick, modifiers, index }: IItemRendererProps
   ) => {
     if (!modifiers.matchesPredicate) {
@@ -95,7 +95,7 @@ export class ItemInput extends React.Component<Props, State> {
     );
   }
 
-  resolveResultTextValue(result: QueryItemResult): string {
+  resolveResultTextValue(result: IQueryItemResult): string {
     if (result.item.id === 0) {
       return 'n/a';
     }
@@ -103,7 +103,7 @@ export class ItemInput extends React.Component<Props, State> {
     return getItemTextValue(result.item);
   }
 
-  onItemSelect(result: QueryItemResult) {
+  onItemSelect(result: IQueryItemResult) {
     this.props.onSelect(result.item);
   }
 
@@ -151,11 +151,11 @@ export class ItemInput extends React.Component<Props, State> {
     );
   }
 
-  itemPredicate: ItemPredicate<QueryItemResult> = (_: string, result: QueryItemResult) => {
+  itemPredicate: ItemPredicate<IQueryItemResult> = (_: string, result: IQueryItemResult) => {
     return result.rank > -1;
   }
 
-  itemListRenderer: ItemListRenderer<QueryItemResult> = (params: IItemListRendererProps<QueryItemResult>) => {
+  itemListRenderer: ItemListRenderer<IQueryItemResult> = (params: IItemListRendererProps<IQueryItemResult>) => {
     const { items, itemsParentRef, renderItem } = params;
     const renderedItems = items.map(renderItem).filter((renderedItem) => renderedItem !== null);
     if (renderedItems.length === 0) {
@@ -188,7 +188,7 @@ export class ItemInput extends React.Component<Props, State> {
         inputValueRenderer={(v) => this.resolveResultTextValue(v)}
         itemRenderer={this.itemRenderer}
         items={results}
-        onItemSelect={(result: QueryItemResult) => { this.onItemSelect(result); }}
+        onItemSelect={(result: IQueryItemResult) => { this.onItemSelect(result); }}
         closeOnSelect={true}
         inputProps={{
           value: filterValue,

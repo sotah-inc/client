@@ -1,14 +1,14 @@
-import { UpdatePricelistRequest, UpdatePricelistResponse } from "@app/api/price-lists";
-import { Errors, ItemId, RealmSlug, RegionName } from "./global";
+import { IUpdatePricelistRequest, IUpdatePricelistResponse } from "@app/api/price-lists";
+import { IErrors, ItemId, RealmSlug, RegionName } from "./global";
 
-export interface PriceListsState {
-    pricelists: Pricelist[];
+export interface IPriceListsState {
+    pricelists: IPricelist[];
     createPricelistLevel: CreatePricelistLevel;
-    createPricelistErrors: Errors;
+    createPricelistErrors: IErrors;
     updatePricelistLevel: UpdatePricelistLevel;
-    updatePricelistErrors: Errors;
+    updatePricelistErrors: IErrors;
     entryCreateLevel: EntryCreateLevel;
-    selectedList: Pricelist | null;
+    selectedList: IPricelist | null;
     isAddListDialogOpen: boolean;
     isEditListDialogOpen: boolean;
     isDeleteListDialogOpen: boolean;
@@ -55,48 +55,48 @@ export enum GetPricelistsLevel {
     failure,
 }
 
-export interface Pricelist {
+export interface IPricelist {
     id: number;
     user_id: number;
     name: string;
     region: RegionName;
     realm: RealmSlug;
-    pricelist_entries?: PricelistEntry[];
+    pricelist_entries?: IPricelistEntry[];
 }
 
-export interface PricelistEntry {
+export interface IPricelistEntry {
     id?: number;
     pricelist_id?: number;
     item_id: ItemId;
     quantity_modifier: number;
 }
 
-interface UpdatePricelistMeta {
+interface IUpdatePricelistMeta {
     isAddEntryDialogOpen?: boolean;
     isEditListDialogOpen?: boolean;
 }
 
-export interface UpdatePricelistRequestOptions {
-    request: UpdatePricelistRequest;
-    meta: UpdatePricelistMeta;
+export interface IUpdatePricelistRequestOptions {
+    request: IUpdatePricelistRequest;
+    meta: IUpdatePricelistMeta;
 }
 
-export interface UpdatePricelistResponseOptions {
-    response: UpdatePricelistResponse;
-    meta: UpdatePricelistMeta;
+export interface IUpdatePricelistResponseOptions {
+    response: IUpdatePricelistResponse;
+    meta: IUpdatePricelistMeta;
 }
 
-export const defaultPriceListsState: PriceListsState = {
-    pricelists: [],
-    createPricelistLevel: CreatePricelistLevel.initial,
+export const defaultPriceListsState: IPriceListsState = {
     createPricelistErrors: {},
-    updatePricelistLevel: UpdatePricelistLevel.initial,
-    updatePricelistErrors: {},
+    createPricelistLevel: CreatePricelistLevel.initial,
     entryCreateLevel: EntryCreateLevel.initial,
-    selectedList: null,
-    isAddListDialogOpen: false,
-    isEditListDialogOpen: false,
-    isDeleteListDialogOpen: false,
-    isAddEntryDialogOpen: false,
     getPricelistsLevel: GetPricelistsLevel.initial,
+    isAddEntryDialogOpen: false,
+    isAddListDialogOpen: false,
+    isDeleteListDialogOpen: false,
+    isEditListDialogOpen: false,
+    pricelists: [],
+    selectedList: null,
+    updatePricelistErrors: {},
+    updatePricelistLevel: UpdatePricelistLevel.initial,
 };

@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { Dialog, NonIdealState, Button, Intent } from '@blueprintjs/core';
 
-import { Profile } from '@app/types/global';
+import { IProfile } from '@app/types/global';
 import { AuthLevel } from '@app/types/main';
 import {
-  PricelistEntry,
+  IPricelistEntry,
   UpdatePricelistLevel,
-  Pricelist,
-  UpdatePricelistRequestOptions
+  IPricelist,
+  IUpdatePricelistRequestOptions
 } from '@app/types/price-lists';
 import CreateListDialog from '@app/containers/App/PriceLists/CreateListDialog';
 import ListForm from '@app/containers/App/PriceLists/util/ListForm';
@@ -15,7 +15,7 @@ import CreateEntryForm from '@app/containers/App/PriceLists/util/CreateEntryForm
 import ActionBar from '@app/containers/App/PriceLists/ActionBar';
 import Listing from '@app/containers/App/PriceLists/Listing';
 import { DialogBody, DialogActions } from '@app/components/util';
-import { DeletePricelistRequestOptions } from '@app/api/price-lists';
+import { IDeletePricelistRequestOptions } from '@app/api/price-lists';
 
 import './PriceLists.scss';
 
@@ -23,19 +23,19 @@ export type StateProps = {
   isAddEntryDialogOpen: boolean
   authLevel: AuthLevel
   updatePricelistLevel: UpdatePricelistLevel
-  selectedList: Pricelist | null
-  profile: Profile | null
+  selectedList: IPricelist | null
+  profile: IProfile | null
   isEditListDialogOpen: boolean
   isDeleteListDialogOpen: boolean
 };
 
 export type DispatchProps = {
   changeIsAddEntryDialogOpen: (isDialogOpen: boolean) => void
-  updatePricelist: (opts: UpdatePricelistRequestOptions) => void
+  updatePricelist: (opts: IUpdatePricelistRequestOptions) => void
   changeIsLoginDialogOpen: (isLoginDialogOpen: boolean) => void
   changeIsEditListDialogOpen: (isDialogOpen: boolean) => void
   changeIsDeleteListDialogOpen: (isDialogOpen: boolean) => void
-  deletePricelist: (opts: DeletePricelistRequestOptions) => void
+  deletePricelist: (opts: IDeletePricelistRequestOptions) => void
 };
 
 export type OwnProps = {};
@@ -55,7 +55,7 @@ export class PriceLists extends React.Component<Props> {
     this.props.changeIsDeleteListDialogOpen(!this.props.isDeleteListDialogOpen);
   }
 
-  onCreateEntryFormComplete(entry: PricelistEntry) {
+  onCreateEntryFormComplete(entry: IPricelistEntry) {
     const { selectedList, updatePricelist, profile } = this.props;
     updatePricelist({
       request: {
@@ -165,7 +165,7 @@ export class PriceLists extends React.Component<Props> {
           canOutsideClickClose={false}
         >
           <CreateEntryForm
-            onComplete={(v: PricelistEntry) => this.onCreateEntryFormComplete(v)}
+            onComplete={(v: IPricelistEntry) => this.onCreateEntryFormComplete(v)}
             isSubmitDisabled={updatePricelistLevel === UpdatePricelistLevel.fetching}
           />
         </Dialog>

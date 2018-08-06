@@ -3,11 +3,11 @@ import * as Yup from 'yup';
 
 import { FormValues, Register } from '@app/components/App/Register';
 import { registerUser } from '@app/api/user';
-import { Profile } from '@app/types/global';
+import { IProfile } from '@app/types/global';
 import { UserRules } from '@app/validator-rules';
 
 interface FormProps {
-  onUserRegister: (payload: Profile) => void;
+  onUserRegister: (payload: IProfile) => void;
   isRegistered: boolean;
 }
 

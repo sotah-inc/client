@@ -6,13 +6,13 @@ import {
   DispatchProps,
   OwnProps
 } from '@app/components/App/AuctionList/QueryAuctionsFilter';
-import { StoreState } from '@app/types';
-import { QueryAuctionResult } from '@app/types/auction';
+import { IStoreState } from '@app/types';
+import { IQueryAuctionResult } from '@app/types/auction';
 import { Actions } from '@app/actions';
 import { AddAuctionsQuery, RemoveAuctionsQuery, FetchAuctionsQuery } from '@app/actions/auction';
-import { QueryAuctionsOptions } from '@app/api/data';
+import { IQueryAuctionsOptions } from '@app/api/data';
 
-const mapStateToProps = (state: StoreState): StateProps => {
+const mapStateToProps = (state: IStoreState): StateProps => {
   const {
     currentRegion,
     currentRealm
@@ -33,9 +33,9 @@ const mapStateToProps = (state: StoreState): StateProps => {
 
 const mapDispatchToProps = (dispatch: Dispatch<Actions>): DispatchProps => {
   return {
-    onAuctionsQuerySelect: (aqItem: QueryAuctionResult) => dispatch(AddAuctionsQuery(aqItem)),
+    onAuctionsQuerySelect: (aqItem: IQueryAuctionResult) => dispatch(AddAuctionsQuery(aqItem)),
     onAuctionsQueryDeselect: (index: number) => dispatch(RemoveAuctionsQuery(index)),
-    refreshAuctionsQuery: (opts: QueryAuctionsOptions) => dispatch(FetchAuctionsQuery(opts))
+    refreshAuctionsQuery: (opts: IQueryAuctionsOptions) => dispatch(FetchAuctionsQuery(opts))
   };
 };
 

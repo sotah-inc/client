@@ -16,7 +16,7 @@ import {
     USER_LOGIN,
     USER_REGISTER,
 } from "@app/actions/main";
-import { Realm, Realms, Region, Regions } from "@app/types/global";
+import { IRealm, IRealms, IRegion, IRegions } from "@app/types/global";
 import {
     AuthLevel,
     defaultMainState,
@@ -24,10 +24,10 @@ import {
     FetchRealmLevel,
     FetchRegionLevel,
     FetchUserPreferencesLevel,
-    MainState,
+    IMainState,
 } from "@app/types/main";
 
-type State = Readonly<MainState> | undefined;
+type State = Readonly<IMainState> | undefined;
 
 export const main = (state: State, action: MainActions): State => {
     if (state === undefined) {
@@ -54,8 +54,8 @@ export const main = (state: State, action: MainActions): State => {
 
             return {
                 ...state,
-                profile: { user: action.payload.user!, token: state.preloadedToken },
                 authLevel: AuthLevel.authenticated,
+                profile: { user: action.payload.user!, token: state.preloadedToken },
             };
         case CHANGE_AUTH_LEVEL:
             return { ...state, authLevel: action.payload };
@@ -68,8 +68,8 @@ export const main = (state: State, action: MainActions): State => {
 
             return {
                 ...state,
-                fetchUserPreferencesLevel: FetchUserPreferencesLevel.success,
                 fetchRegionLevel: FetchRegionLevel.prompted,
+                fetchUserPreferencesLevel: FetchUserPreferencesLevel.success,
                 userPreferences: action.payload.preference,
             };
         case REQUEST_REGIONS:
@@ -79,7 +79,7 @@ export const main = (state: State, action: MainActions): State => {
                 return { ...state, fetchRegionLevel: FetchRegionLevel.failure };
             }
 
-            let currentRegion: Region | null = action.payload[0];
+            let currentRegion: IRegion | null = action.payload[0];
             if (state.userPreferences !== null) {
                 const { current_region: preferredRegionName } = state.userPreferences;
                 currentRegion = action.payload.reduce((result, v) => {
@@ -95,17 +95,17 @@ export const main = (state: State, action: MainActions): State => {
                 }, null);
             }
 
-            const regions: Regions = action.payload.reduce(
+            const regions: IRegions = action.payload.reduce(
                 (result, region) => ({ ...result, [region.name]: region }),
                 {},
             );
 
             return {
                 ...state,
-                fetchRegionLevel: FetchRegionLevel.success,
-                fetchRealmLevel: FetchRealmLevel.prompted,
-                regions,
                 currentRegion,
+                fetchRealmLevel: FetchRealmLevel.prompted,
+                fetchRegionLevel: FetchRegionLevel.success,
+                regions,
             };
         case REGION_CHANGE:
             return { ...state, currentRegion: action.payload, fetchRealmLevel: FetchRealmLevel.prompted };
@@ -116,7 +116,7 @@ export const main = (state: State, action: MainActions): State => {
                 return { ...state, fetchRealmLevel: FetchRealmLevel.failure };
             }
 
-            let currentRealm: Realm | null = action.payload[0];
+            let currentRealm: IRealm | null = action.payload[0];
             if (state.userPreferences !== null) {
                 const {
                     current_region: preferredRegionName,
@@ -137,7 +137,7 @@ export const main = (state: State, action: MainActions): State => {
                 }
             }
 
-            const realms: Realms = action.payload.reduce((result, realm) => ({ ...result, [realm.slug]: realm }), {});
+            const realms: IRealms = action.payload.reduce((result, realm) => ({ ...result, [realm.slug]: realm }), {});
 
             return { ...state, fetchRealmLevel: FetchRealmLevel.success, realms, currentRealm };
         case REALM_CHANGE:

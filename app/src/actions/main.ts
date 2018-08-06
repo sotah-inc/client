@@ -3,15 +3,15 @@ import { Dispatch } from "redux";
 import { getPing, getRegions, getStatus } from "../api/data";
 import {
     createPreferences,
-    CreatePreferencesRequestBody,
     getPreferences,
-    GetPreferencesResponse,
+    ICreatePreferencesRequestBody,
+    IGetPreferencesResponse,
+    IReloadUserResponse,
     reloadUser,
-    ReloadUserResponse,
     updatePreferences,
     UpdatePreferencesRequestBody,
 } from "../api/user";
-import { Profile, Realm, Region } from "../types/global";
+import { IProfile, IRealm, IRegion } from "../types/global";
 import { AuthLevel } from "../types/main";
 import { ActionsUnion, createAction } from "./helpers";
 
@@ -28,15 +28,15 @@ export const FetchPing = () => {
 };
 
 export const USER_REGISTER = "USER_REGISTER";
-export const UserRegister = (payload: Profile) => createAction(USER_REGISTER, payload);
+export const UserRegister = (payload: IProfile) => createAction(USER_REGISTER, payload);
 
 export const USER_LOGIN = "USER_LOGIN";
-export const UserLogin = (payload: Profile) => createAction(USER_LOGIN, payload);
+export const UserLogin = (payload: IProfile) => createAction(USER_LOGIN, payload);
 
 export const REQUEST_USER_RELOAD = "REQUEST_USER_RELOAD";
 export const RECEIVE_USER_RELOAD = "RECEIVE_USER_RELOAD";
 const RequestUserReload = () => createAction(REQUEST_USER_RELOAD);
-const ReceiveUserReload = (payload: ReloadUserResponse) => createAction(RECEIVE_USER_RELOAD, payload);
+const ReceiveUserReload = (payload: IReloadUserResponse) => createAction(RECEIVE_USER_RELOAD, payload);
 type FetchUserReloadType = ReturnType<typeof RequestUserReload | typeof ReceiveUserReload>;
 export const FetchUserReload = (token: string) => {
     return async (dispatch: Dispatch<FetchUserReloadType>) => {
@@ -51,7 +51,7 @@ export const ChangeAuthLevel = (payload: AuthLevel) => createAction(CHANGE_AUTH_
 export const REQUEST_USER_PREFERENCES = "REQUEST_USER_PREFERENCES";
 export const RECEIVE_USER_PREFERENCES = "RECEIVE_USER_PREFERENCES";
 const RequestUserPreferences = () => createAction(REQUEST_USER_PREFERENCES);
-const ReceiveUserPreferences = (payload: GetPreferencesResponse) => createAction(RECEIVE_USER_PREFERENCES, payload);
+const ReceiveUserPreferences = (payload: IGetPreferencesResponse) => createAction(RECEIVE_USER_PREFERENCES, payload);
 type FetchUserPreferencesType = ReturnType<typeof RequestUserPreferences | typeof ReceiveUserPreferences>;
 export const FetchUserPreferences = (token: string) => {
     return async (dispatch: Dispatch<FetchUserPreferencesType>) => {
@@ -63,12 +63,12 @@ export const FetchUserPreferences = (token: string) => {
 export const REQUEST_USER_PREFERENCES_CREATE = "REQUEST_USER_PREFERENCES_CREATE";
 export const RECEIVE_USER_PREFERENCES_CREATE = "RECEIVE_USER_PREFERENCES_CREATE";
 const RequestUserPreferencesCreate = () => createAction(REQUEST_USER_PREFERENCES_CREATE);
-const ReceiveUserPreferencesCreate = (payload: GetPreferencesResponse) =>
+const ReceiveUserPreferencesCreate = (payload: IGetPreferencesResponse) =>
     createAction(RECEIVE_USER_PREFERENCES_CREATE, payload);
 type FetchUserPreferencesCreateType = ReturnType<
     typeof RequestUserPreferencesCreate | typeof ReceiveUserPreferencesCreate
 >;
-export const FetchUserPreferencesCreate = (token: string, body: CreatePreferencesRequestBody) => {
+export const FetchUserPreferencesCreate = (token: string, body: ICreatePreferencesRequestBody) => {
     return async (dispatch: Dispatch<FetchUserPreferencesCreateType>) => {
         dispatch(RequestUserPreferencesCreate());
         dispatch(ReceiveUserPreferencesCreate(await createPreferences(token, body)));
@@ -78,7 +78,7 @@ export const FetchUserPreferencesCreate = (token: string, body: CreatePreference
 export const REQUEST_USER_PREFERENCES_UPDATE = "REQUEST_USER_PREFERENCES_UPDATE";
 export const RECEIVE_USER_PREFERENCES_UPDATE = "RECEIVE_USER_PREFERENCES_UPDATE";
 const RequestUserPreferencesUpdate = () => createAction(REQUEST_USER_PREFERENCES_UPDATE);
-const ReceiveUserPreferencesUpdate = (payload: GetPreferencesResponse) =>
+const ReceiveUserPreferencesUpdate = (payload: IGetPreferencesResponse) =>
     createAction(RECEIVE_USER_PREFERENCES_UPDATE, payload);
 type FetchUserPreferencesUpdateType = ReturnType<
     typeof RequestUserPreferencesUpdate | typeof ReceiveUserPreferencesUpdate
@@ -93,7 +93,7 @@ export const FetchUserPreferencesUpdate = (token: string, body: UpdatePreference
 export const REQUEST_REGIONS = "REQUEST_REGIONS";
 export const RECEIVE_REGIONS = "RECEIVE_REGIONS";
 const RequestRegions = () => createAction(REQUEST_REGIONS);
-const ReceiveRegions = (payload: Region[] | null) => createAction(RECEIVE_REGIONS, payload);
+const ReceiveRegions = (payload: IRegion[] | null) => createAction(RECEIVE_REGIONS, payload);
 type FetchRegionsType = ReturnType<typeof RequestRegions | typeof ReceiveRegions>;
 export const FetchRegions = () => {
     return async (dispatch: Dispatch<FetchRegionsType>) => {
@@ -103,14 +103,14 @@ export const FetchRegions = () => {
 };
 
 export const REGION_CHANGE = "REGION_CHANGE";
-export const RegionChange = (payload: Region) => createAction(REGION_CHANGE, payload);
+export const RegionChange = (payload: IRegion) => createAction(REGION_CHANGE, payload);
 
 export const REQUEST_REALMS = "REQUEST_REALMS";
 export const RECEIVE_REALMS = "RECEIVE_REALMS";
 const RequestRealms = () => createAction(REQUEST_REALMS);
-const ReceiveRealms = (payload: Realm[] | null) => createAction(RECEIVE_REALMS, payload);
+const ReceiveRealms = (payload: IRealm[] | null) => createAction(RECEIVE_REALMS, payload);
 type FetchRealmType = ReturnType<typeof RequestRealms | typeof ReceiveRealms>;
-export const FetchRealms = (region: Region) => {
+export const FetchRealms = (region: IRegion) => {
     return async (dispatch: Dispatch<FetchRealmType>) => {
         dispatch(RequestRealms());
         dispatch(ReceiveRealms(await getStatus(region.name)));
@@ -118,28 +118,28 @@ export const FetchRealms = (region: Region) => {
 };
 
 export const REALM_CHANGE = "REALM_CHANGE";
-export const RealmChange = (payload: Realm) => createAction(REALM_CHANGE, payload);
+export const RealmChange = (payload: IRealm) => createAction(REALM_CHANGE, payload);
 
 export const CHANGE_IS_LOGIN_DIALOG_OPEN = "CHANGE_IS_LOGIN_DIALOG_OPEN";
 export const ChangeIsLoginDialogOpen = (payload: boolean) => createAction(CHANGE_IS_LOGIN_DIALOG_OPEN, payload);
 
 export const MainActions = {
-    RequestPing,
-    ReceivePing,
-    UserRegister,
-    UserLogin,
-    RequestUserReload,
-    ReceiveUserReload,
     ChangeAuthLevel,
-    RequestUserPreferences,
-    ReceiveUserPreferences,
-    RequestRegions,
-    ReceiveRegions,
-    RegionChange,
-    RequestRealms,
-    ReceiveRealms,
-    RealmChange,
     ChangeIsLoginDialogOpen,
+    RealmChange,
+    ReceivePing,
+    ReceiveRealms,
+    ReceiveRegions,
+    ReceiveUserPreferences,
+    ReceiveUserReload,
+    RegionChange,
+    RequestPing,
+    RequestRealms,
+    RequestRegions,
+    RequestUserPreferences,
+    RequestUserReload,
+    UserLogin,
+    UserRegister,
 };
 
 export type MainActions = ActionsUnion<typeof MainActions>;

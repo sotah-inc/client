@@ -15,25 +15,25 @@ import RealmToggle from '@app/containers/util/RealmToggle';
 import CountToggle from '@app/containers/App/AuctionList/CountToggle';
 import QueryAuctionsFilter from '@app/containers/App/AuctionList/QueryAuctionsFilter';
 import AuctionTable from '@app/containers/App/AuctionList/AuctionTable';
-import { Auction, Region, Realm, OwnerName, ItemId, UserPreferences } from '@app/types/global';
+import { IAuction, IRegion, IRealm, OwnerName, ItemId, IUserPreferences } from '@app/types/global';
 import { AuthLevel, FetchUserPreferencesLevel } from '@app/types/main';
 import {
   FetchAuctionsLevel,
   SortKind,
   SortDirection,
   QueryAuctionsLevel,
-  QueryAuctionResult,
+  IQueryAuctionResult,
   FetchItemClassesLevel
 } from '@app/types/auction';
-import { GetAuctionsOptions, QueryAuctionsOptions } from '@app/api/data';
+import { IGetAuctionsOptions, IQueryAuctionsOptions } from '@app/api/data';
 import { Pagination, LastModified } from '@app/components/util';
 import { didRealmChange } from '@app/util';
 
-type ListAuction = Auction | null;
+type ListAuction = IAuction | null;
 
 export type StateProps = {
-  currentRegion: Region | null
-  currentRealm: Realm | null
+  currentRegion: IRegion | null
+  currentRealm: IRealm | null
   fetchAuctionsLevel: FetchAuctionsLevel
   auctions: ListAuction[]
   currentPage: number
@@ -42,17 +42,17 @@ export type StateProps = {
   sortKind: SortKind
   sortDirection: SortDirection
   queryAuctionsLevel: QueryAuctionsLevel
-  selectedQueryAuctionResults: QueryAuctionResult[]
+  selectedQueryAuctionResults: IQueryAuctionResult[]
   fetchItemClassesLevel: FetchItemClassesLevel
   authLevel: AuthLevel
   fetchUserPreferencesLevel: FetchUserPreferencesLevel
-  userPreferences: UserPreferences | null
+  userPreferences: IUserPreferences | null
 };
 
 export type DispatchProps = {
-  refreshAuctions: (opts: GetAuctionsOptions) => void
+  refreshAuctions: (opts: IGetAuctionsOptions) => void
   setCurrentPage: (page: number) => void
-  refreshAuctionsQuery: (opts: QueryAuctionsOptions) => void
+  refreshAuctionsQuery: (opts: IQueryAuctionsOptions) => void
   refreshItemClasses: () => void
 };
 
@@ -134,7 +134,8 @@ export class AuctionList extends React.Component<Props> {
         || prevProps.sortKind !== this.props.sortKind;
       const didSqaResultsChange = prevProps.selectedQueryAuctionResults.length
         !== selectedQueryAuctionResults.length;
-      const didOptionsChange = didRealmChange(prevProps.currentRealm, currentRealm)
+            const didOptionsChange =
+                didRealmChange(prevProps.currentRealm, currentRealm) ||
         || didPageChange
         || didCountChange
         || didSortChange
@@ -164,7 +165,7 @@ export class AuctionList extends React.Component<Props> {
     }
   }
 
-  renderRefetchingSpinner() {
+  public renderRefetchingSpinner() {
     const { fetchAuctionsLevel } = this.props;
     if (fetchAuctionsLevel !== FetchAuctionsLevel.refetching) {
       return null;
@@ -175,7 +176,7 @@ export class AuctionList extends React.Component<Props> {
     );
   }
 
-  renderAuctionsFooter() {
+  public renderAuctionsFooter() {
     const { currentPage, currentRealm } = this.props;
     const pageCount = this.getPageCount();
 
@@ -187,7 +188,7 @@ export class AuctionList extends React.Component<Props> {
     );
   }
 
-  getPageCount() {
+  public getPageCount() {
     const { totalResults, auctionsPerPage } = this.props;
 
     let pageCount = 0;
@@ -202,7 +203,7 @@ export class AuctionList extends React.Component<Props> {
     return pageCount;
   }
 
-  renderAuctions() {
+  public renderAuctions() {
     const { auctions, totalResults, auctionsPerPage, currentPage } = this.props;
 
     // optionally appending blank auction lines
@@ -244,35 +245,32 @@ export class AuctionList extends React.Component<Props> {
     );
   }
 
-  render() {
-    switch (this.props.fetchAuctionsLevel) {
-      case FetchAuctionsLevel.initial:
-        return (
-          <NonIdealState
-            title="Loading"
-            visual={<Spinner className="pt-large" intent={Intent.NONE} value={0} />}
-          />
-        );
-      case FetchAuctionsLevel.fetching:
-        return (
-          <NonIdealState
-            title="Loading"
-            visual={<Spinner className="pt-large" intent={Intent.PRIMARY} />}
-          />
-        );
-      case FetchAuctionsLevel.failure:
-        return (
-          <NonIdealState
-            title="Fetch auctions failure"
-            description="Auctions could not be fetched"
-            visual="error"
-          />
-        );
-      case FetchAuctionsLevel.refetching:
-      case FetchAuctionsLevel.success:
-        return this.renderAuctions();
-      default:
-        return <>You should never see this!</>;
+  public render() {
+        switch (this.props.fetchAuctionsLevel) {
+            case FetchAuctionsLevel.initial:
+                return (
+                    <NonIdealState
+                        title="Loading"
+                        visual={<Spinner className="pt-large" intent={Intent.NONE} value={0} />}
+                    />
+                );
+            case FetchAuctionsLevel.fetching:
+                return (
+                    <NonIdealState title="Loading" visual={<Spinner className="pt-large" intent={Intent.PRIMARY} />} />
+                );
+            case FetchAuctionsLevel.failure:
+                return (
+                    <NonIdealState
+                        title="Fetch auctions failure"
+                        description="Auctions could not be fetched"
+                        visual="error"
+                    />
+                );
+            case FetchAuctionsLevel.refetching:
+            case FetchAuctionsLevel.success:
+                return this.renderAuctions();
+            default:
+                return <>You should never see this!</>;
+        }
     }
-  }
 }

@@ -1,7 +1,7 @@
 import { apiEndpoint } from "@app/api";
-import { QueryAuctionResult } from "@app/types/auction";
-import { InventoryType, Item, ItemQuality, ItemStat, Realm, Region } from "@app/types/global";
-import { Pricelist } from "@app/types/price-lists";
+import { IQueryAuctionResult } from "@app/types/auction";
+import { InventoryType, IRealm, IRegion, Item, ItemQuality, ItemStat } from "@app/types/global";
+import { IPricelist } from "@app/types/price-lists";
 
 export const qualityToColorClass = (quality: ItemQuality): string => {
     switch (quality) {
@@ -89,7 +89,7 @@ export const itemStatToString = (stat: ItemStat): string => {
     }
 };
 
-export const getSelectedResultIndex = (result: QueryAuctionResult, selectedItems: QueryAuctionResult[]): number => {
+export const getSelectedResultIndex = (result: IQueryAuctionResult, selectedItems: IQueryAuctionResult[]): number => {
     if (selectedItems.length === 0) {
         return -1;
     }
@@ -121,9 +121,9 @@ export const getSelectedResultIndex = (result: QueryAuctionResult, selectedItems
     return -1;
 };
 
-export const priceListEntryTabId = (list: Pricelist): string => `tab-${list.id}`;
+export const priceListEntryTabId = (list: IPricelist): string => `tab-${list.id}`;
 
-export const didRegionChange = (prevRegion: Region | null, currentRegion: Region): boolean => {
+export const didRegionChange = (prevRegion: IRegion | null, currentRegion: IRegion): boolean => {
     if (prevRegion === null) {
         return true;
     }
@@ -135,7 +135,7 @@ export const didRegionChange = (prevRegion: Region | null, currentRegion: Region
     return true;
 };
 
-export const didRealmChange = (prevRealm: Realm | null, currentRealm: Realm): boolean => {
+export const didRealmChange = (prevRealm: IRealm | null, currentRealm: IRealm): boolean => {
     if (prevRealm === null) {
         return true;
     }

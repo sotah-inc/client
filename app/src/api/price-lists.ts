@@ -1,10 +1,10 @@
 import * as HTTPStatus from "http-status";
 
-import { Errors, ItemsMap, RealmSlug, RegionName } from "@app/types/global";
-import { Pricelist, PricelistEntry } from "@app/types/price-lists";
+import { IErrors, ItemsMap, RealmSlug, RegionName } from "@app/types/global";
+import { IPricelist, IPricelistEntry } from "@app/types/price-lists";
 import { apiEndpoint } from "./index";
 
-export interface CreatePricelistRequest {
+export interface ICreatePricelistRequest {
     pricelist: {
         name: string;
         region: RegionName;
@@ -16,25 +16,25 @@ export interface CreatePricelistRequest {
     }>;
 }
 
-export interface CreatePricelistResponse {
-    errors: Errors | null;
+export interface ICreatePricelistResponse {
+    errors: IErrors | null;
     data: {
-        pricelist: Pricelist;
-        entries: PricelistEntry[];
+        pricelist: IPricelist;
+        entries: IPricelistEntry[];
     } | null;
 }
 
 export const createPricelist = async (
     token: string,
-    request: CreatePricelistRequest,
-): Promise<CreatePricelistResponse> => {
+    request: ICreatePricelistRequest,
+): Promise<ICreatePricelistResponse> => {
     const res = await fetch(`${apiEndpoint}/user/pricelists`, {
-        method: "POST",
         body: JSON.stringify(request),
         headers: new Headers({
-            "content-type": "application/json",
             Authorization: `Bearer ${token}`,
+            "content-type": "application/json",
         }),
+        method: "POST",
     });
     switch (res.status) {
         case HTTPStatus.CREATED:
@@ -47,28 +47,28 @@ export const createPricelist = async (
     }
 };
 
-export interface UpdatePricelistRequest {
+export interface IUpdatePricelistRequest {
     token: string;
-    pricelist: Pricelist;
-    entries: PricelistEntry[];
+    pricelist: IPricelist;
+    entries: IPricelistEntry[];
 }
 
-export interface UpdatePricelistResponse {
-    errors: Errors | null;
+export interface IUpdatePricelistResponse {
+    errors: IErrors | null;
     data: {
-        pricelist: Pricelist;
-        entries: PricelistEntry[];
+        pricelist: IPricelist;
+        entries: IPricelistEntry[];
     } | null;
 }
 
-export const updatePricelist = async (request: UpdatePricelistRequest): Promise<UpdatePricelistResponse> => {
+export const updatePricelist = async (request: IUpdatePricelistRequest): Promise<IUpdatePricelistResponse> => {
     const res = await fetch(`${apiEndpoint}/user/pricelists/${request.pricelist.id}`, {
-        method: "PUT",
         body: JSON.stringify(request),
         headers: new Headers({
-            "content-type": "application/json",
             Authorization: `Bearer ${request.token}`,
+            "content-type": "application/json",
         }),
+        method: "PUT",
     });
     switch (res.status) {
         case HTTPStatus.OK:
@@ -81,41 +81,41 @@ export const updatePricelist = async (request: UpdatePricelistRequest): Promise<
     }
 };
 
-export interface GetPricelistsOptions {
+export interface IGetPricelistsOptions {
     token: string;
     regionName: RegionName;
     realmSlug: RealmSlug;
 }
 
-export interface GetPricelistsResponse {
-    pricelists: Pricelist[];
+export interface IGetPricelistsResponse {
+    pricelists: IPricelist[];
     items: ItemsMap;
 }
 
-export const getPricelists = async (opts: GetPricelistsOptions): Promise<GetPricelistsResponse> => {
+export const getPricelists = async (opts: IGetPricelistsOptions): Promise<IGetPricelistsResponse> => {
     const res = await fetch(`${apiEndpoint}/user/pricelists/region/${opts.regionName}/realm/${opts.realmSlug}`, {
-        method: "GET",
         headers: new Headers({
-            "content-type": "application/json",
             Authorization: `Bearer ${opts.token}`,
+            "content-type": "application/json",
         }),
+        method: "GET",
     });
 
     return res.json();
 };
 
-export interface DeletePricelistRequestOptions {
+export interface IDeletePricelistRequestOptions {
     token: string;
     id: number;
 }
 
-export const deletePricelist = async (opts: DeletePricelistRequestOptions): Promise<number | null> => {
+export const deletePricelist = async (opts: IDeletePricelistRequestOptions): Promise<number | null> => {
     const res = await fetch(`${apiEndpoint}/user/pricelists/${opts.id}`, {
-        method: "DELETE",
         headers: new Headers({
-            "content-type": "application/json",
             Authorization: `Bearer ${opts.token}`,
+            "content-type": "application/json",
         }),
+        method: "DELETE",
     });
     switch (res.status) {
         case HTTPStatus.OK:

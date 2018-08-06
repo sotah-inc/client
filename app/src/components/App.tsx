@@ -2,7 +2,7 @@ import * as React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import { Intent } from '@blueprintjs/core';
 
-import { Region, Realm, UserPreferences, Profile } from '@app/types/global';
+import { IRegion, IRealm, IUserPreferences, IProfile } from '@app/types/global';
 import {
   FetchPingLevel,
   FetchRegionLevel,
@@ -20,22 +20,22 @@ import './App.scss';
 export type StateProps = {
   fetchPingLevel: FetchPingLevel
   fetchRegionLevel: FetchRegionLevel
-  currentRegion: Region | null
+  currentRegion: IRegion | null
   fetchRealmLevel: FetchRealmLevel
-  currentRealm: Realm | null
+  currentRealm: IRealm | null
   preloadedToken: string
   authLevel: AuthLevel
   isLoginDialogOpen: boolean
   fetchUserPreferencesLevel: FetchUserPreferencesLevel
-  userPreferences: UserPreferences | null
-  profile: Profile | null
+  userPreferences: IUserPreferences | null
+  profile: IProfile | null
 };
 
 export type DispatchProps = {
   onLoad: () => void
   reloadUser: (token: string) => void
   refreshRegions: () => void
-  refreshRealms: (region: Region) => void
+  refreshRealms: (region: IRegion) => void
   changeIsLoginDialogOpen: (isLoginDialogOpen: boolean) => void
   loadUserPreferences: (token: string) => void
   changeAuthLevel: (authLevel: AuthLevel) => void

@@ -2,14 +2,14 @@ import * as React from 'react';
 import { Button } from '@blueprintjs/core';
 import { IconNames, IconName } from '@blueprintjs/icons';
 
-import { SortDirection, SortKind, SortChangeOptions } from '@app/types/auction';
+import { SortDirection, SortKind, ISortChangeOptions } from '@app/types/auction';
 
 export type StateProps = {
   currentSortDirection: SortDirection
   currentSortKind: SortKind
 };
 
-type OnChangeCb = (payload: SortChangeOptions) => void;
+type OnChangeCb = (payload: ISortChangeOptions) => void;
 
 export type DispatchProps = {
   onChange: OnChangeCb

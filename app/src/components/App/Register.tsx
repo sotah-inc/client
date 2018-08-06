@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Button, Dialog, Intent } from '@blueprintjs/core';
 import { FormikProps } from 'formik';
 
-import { Profile } from '@app/types/global';
+import { IProfile } from '@app/types/global';
 import { DialogBody, DialogActions } from '../util';
 import { Generator as FormFieldGenerator } from '../util/FormField';
 
@@ -11,7 +11,7 @@ export type StateProps = {
 };
 
 export type DispatchProps = {
-  onUserRegister: (payload: Profile) => void
+  onUserRegister: (payload: IProfile) => void
 };
 
 export type OwnProps = {};

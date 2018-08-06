@@ -5,24 +5,24 @@ import ListForm from '@app/containers/App/PriceLists/util/ListForm';
 import CreateEntryForm from '@app/containers/App/PriceLists/util/CreateEntryForm';
 import ItemPopover from '@app/containers/util/ItemPopover';
 import { DialogBody, DialogActions, ErrorList } from '@app/components/util';
-import { ItemClasses, Region, Realm, Errors, Profile, ItemsMap, Item } from '@app/types/global';
-import { CreateListStep, PricelistEntry, CreateListCompletion, CreatePricelistLevel } from '@app/types/price-lists';
-import { CreatePricelistRequest } from '@app/api/price-lists';
+import { ItemClasses, IRegion, IRealm, IErrors, IProfile, ItemsMap, Item } from '@app/types/global';
+import { CreateListStep, IPricelistEntry, CreateListCompletion, CreatePricelistLevel } from '@app/types/price-lists';
+import { ICreatePricelistRequest } from '@app/api/price-lists';
 import { AppToaster } from '@app/util/toasters';
 
 export type StateProps = {
   isAddListDialogOpen: boolean
   itemClasses: ItemClasses
-  currentRegion: Region | null
-  currentRealm: Realm | null
+  currentRegion: IRegion | null
+  currentRealm: IRealm | null
   createPricelistLevel: CreatePricelistLevel
-  createPricelistErrors: Errors
-  profile: Profile | null
+  createPricelistErrors: IErrors
+  profile: IProfile | null
 };
 
 export type DispatchProps = {
   changeIsAddListDialogOpen: (isDialogOpen: boolean) => void
-  createPricelist: (token: string, request: CreatePricelistRequest) => void
+  createPricelist: (token: string, request: ICreatePricelistRequest) => void
 };
 
 export type OwnProps = {};
@@ -33,7 +33,7 @@ type State = Readonly<{
   createListStep: CreateListStep
   listName: string
   createListCompletion: CreateListCompletion
-  entries: PricelistEntry[]
+  entries: IPricelistEntry[]
   entriesItems: ItemsMap
 }>;
 
@@ -143,7 +143,7 @@ export class CreateListDialog extends React.Component<Props, State> {
     );
   }
 
-  onCreateEntryFormComplete(entry: PricelistEntry) {
+  onCreateEntryFormComplete(entry: IPricelistEntry) {
     this.setState({
       entries: [...this.state.entries, entry],
       createListStep: CreateListStep.finish,
@@ -160,7 +160,7 @@ export class CreateListDialog extends React.Component<Props, State> {
 
     return (
       <CreateEntryForm
-        onComplete={(v: PricelistEntry, item: Item) => {
+        onComplete={(v: IPricelistEntry, item: Item) => {
           const entriesItems = this.state.entriesItems;
           entriesItems[item.id] = item;
           this.setState({ entriesItems: { ...entriesItems } });
@@ -172,7 +172,7 @@ export class CreateListDialog extends React.Component<Props, State> {
     );
   }
 
-  renderEntry(index: number, entry: PricelistEntry) {
+  renderEntry(index: number, entry: IPricelistEntry) {
     const { entriesItems } = this.state;
 
     return (

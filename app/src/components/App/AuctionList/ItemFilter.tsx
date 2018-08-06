@@ -9,7 +9,7 @@ import {
   IItemRendererProps
 } from '@blueprintjs/select';
 
-import { Item, Region, Realm } from '@app/types/global';
+import { Item, IRegion, IRealm } from '@app/types/global';
 import { FetchItemsLevel } from '@app/types/auction';
 
 const ItemFilterSuggest = Suggest.ofType<Item>();
@@ -18,8 +18,8 @@ export type StateProps = {
   fetchItemsLevel: FetchItemsLevel
   items: Item[]
   itemFilter: Item | null
-  currentRegion: Region | null
-  currentRealm: Realm | null
+  currentRegion: IRegion | null
+  currentRealm: IRealm | null
 };
 
 export type DispatchProps = {

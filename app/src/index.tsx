@@ -8,10 +8,10 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import App from '@app/route-containers/App';
 import { USER_LOGIN, USER_REGISTER } from '@app/actions/main';
 import { rootReducer } from '@app/reducers';
-import { StoreState, defaultMainState, defaultAuctionState, defaultPriceListsState } from '@app/types';
+import { IStoreState, defaultMainState, defaultAuctionState, defaultPriceListsState } from '@app/types';
 import registerServiceWorker from '@app/registerServiceWorker';
 
-const ayy: StoreState = {
+const ayy: IStoreState = {
   Auction: defaultAuctionState,
   Main: defaultMainState,
   PriceLists: defaultPriceListsState
@@ -36,7 +36,7 @@ const localStorageMiddleware: Middleware = () => next => action => {
   return next(action);
 };
 
-const store = createStore<StoreState>(rootReducer, ayy, applyMiddleware(localStorageMiddleware, thunk));
+const store = createStore<IStoreState>(rootReducer, ayy, applyMiddleware(localStorageMiddleware, thunk));
 
 ReactDOM.render(
   <Provider store={store}>

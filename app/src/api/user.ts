@@ -1,97 +1,88 @@
 import * as HTTPStatus from "http-status";
 
-import { Errors, RealmSlug, RegionName, User, UserPreferences } from "../types/global";
+import { IErrors, IUser, IUserPreferences, RealmSlug, RegionName } from "../types/global";
 import { apiEndpoint } from "./index";
 
-export interface RegisterUserResponse {
+interface IRegisterUserResponse {
     profile: {
-        user: User;
+        user: IUser;
         token: string;
     } | null;
-    errors: Errors | null;
+    errors: IErrors | null;
 }
 
-export const registerUser = async (email: string, password: string): Promise<RegisterUserResponse> => {
+export const registerUser = async (email: string, password: string): Promise<IRegisterUserResponse> => {
     const res = await fetch(`${apiEndpoint}/users`, {
-        method: "POST",
         body: JSON.stringify({ email, password }),
         headers: new Headers({ "content-type": "application/json" }),
+        method: "POST",
     });
     if (res.status === HTTPStatus.BAD_REQUEST) {
         return {
-            profile: null,
             errors: await res.json(),
+            profile: null,
         };
     }
 
     return { profile: await res.json(), errors: null };
 };
 
-export type LoginUserResponse = RegisterUserResponse;
+export type LoginUserResponse = IRegisterUserResponse;
 
 export const loginUser = async (email: string, password: string): Promise<LoginUserResponse> => {
     const res = await fetch(`${apiEndpoint}/login`, {
-        method: "POST",
         body: JSON.stringify({ email, password }),
         headers: new Headers({ "content-type": "application/json" }),
+        method: "POST",
     });
     if (res.status === HTTPStatus.BAD_REQUEST) {
         return {
-            profile: null,
             errors: await res.json(),
+            profile: null,
         };
     }
 
     return { profile: await res.json(), errors: null };
 };
 
-export interface ReloadUserResponse {
-    user: User | null;
+export interface IReloadUserResponse {
+    user: IUser | null;
     error: string | null;
 }
 
-export const reloadUser = async (token: string): Promise<ReloadUserResponse> => {
+export const reloadUser = async (token: string): Promise<IReloadUserResponse> => {
     const res = await fetch(`${apiEndpoint}/user`, {
-        method: "GET",
         headers: new Headers({
-            "content-type": "application/json",
             Authorization: `Bearer ${token}`,
+            "content-type": "application/json",
         }),
+        method: "GET",
     });
     if (res.status === HTTPStatus.UNAUTHORIZED) {
-        return {
-            user: null,
-            error: "Unauthorized",
-        };
+        return { error: "Unauthorized", user: null };
     }
 
     return { user: await res.json(), error: null };
 };
 
-export interface GetPreferencesResponse {
-    preference: UserPreferences | null;
+export interface IGetPreferencesResponse {
+    preference: IUserPreferences | null;
     error: string | null;
 }
 
-export const getPreferences = async (token: string): Promise<GetPreferencesResponse> => {
+export const getPreferences = async (token: string): Promise<IGetPreferencesResponse> => {
     const res = await fetch(`${apiEndpoint}/user/preferences`, {
-        method: "GET",
         headers: new Headers({
-            "content-type": "application/json",
             Authorization: `Bearer ${token}`,
+            "content-type": "application/json",
         }),
+        method: "GET",
     });
     switch (res.status) {
         case HTTPStatus.UNAUTHORIZED:
-            return {
-                preference: null,
-                error: "Unauthorized",
-            };
+            return { error: "Unauthorized", preference: null };
         case HTTPStatus.NOT_FOUND:
-            return {
-                preference: null,
-                error: null,
-            };
+            return { error: null, preference: null };
         default:
             break;
     }
@@ -99,59 +90,53 @@ export const getPreferences = async (token: string): Promise<GetPreferencesRespo
     return { preference: (await res.json()).preference, error: null };
 };
 
-export interface CreatePreferencesRequestBody {
+export interface ICreatePreferencesRequestBody {
     current_region?: RegionName;
     current_realm?: RealmSlug;
 }
 
-export interface CreatePreferencesResponse {
-    preference: UserPreferences | null;
+interface ICreatePreferencesResponse {
+    preference: IUserPreferences | null;
     error: string | null;
 }
 
 export const createPreferences = async (
     token: string,
-    body: CreatePreferencesRequestBody,
-): Promise<CreatePreferencesResponse> => {
+    body: ICreatePreferencesRequestBody,
+): Promise<ICreatePreferencesResponse> => {
     const res = await fetch(`${apiEndpoint}/user/preferences`, {
-        method: "POST",
-        headers: new Headers({
-            "content-type": "application/json",
-            Authorization: `Bearer ${token}`,
-        }),
         body: JSON.stringify(body),
+        headers: new Headers({
+            Authorization: `Bearer ${token}`,
+            "content-type": "application/json",
+        }),
+        method: "POST",
     });
     if (res.status === HTTPStatus.UNAUTHORIZED) {
-        return {
-            preference: null,
-            error: "Unauthorized",
-        };
+        return { error: "Unauthorized", preference: null };
     }
 
     return { preference: (await res.json()).preference, error: null };
 };
 
-export type UpdatePreferencesRequestBody = CreatePreferencesRequestBody;
+export type UpdatePreferencesRequestBody = ICreatePreferencesRequestBody;
 
-export type UpdatePreferencesResponse = CreatePreferencesResponse;
+export type UpdatePreferencesResponse = ICreatePreferencesResponse;
 
 export const updatePreferences = async (
     token: string,
     body: UpdatePreferencesRequestBody,
 ): Promise<UpdatePreferencesResponse> => {
     const res = await fetch(`${apiEndpoint}/user/preferences`, {
-        method: "PUT",
-        headers: new Headers({
-            "content-type": "application/json",
-            Authorization: `Bearer ${token}`,
-        }),
         body: JSON.stringify(body),
+        headers: new Headers({
+            Authorization: `Bearer ${token}`,
+            "content-type": "application/json",
+        }),
+        method: "PUT",
     });
     if (res.status === HTTPStatus.UNAUTHORIZED) {
-        return {
-            preference: null,
-            error: "Unauthorized",
-        };
+        return { error: "Unauthorized", preference: null };
     }
 
     return { preference: (await res.json()).preference, error: null };

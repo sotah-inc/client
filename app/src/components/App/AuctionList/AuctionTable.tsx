@@ -4,21 +4,21 @@ import SortToggle from '@app/containers/App/AuctionList/SortToggle';
 import ItemPopover from '@app/containers/util/ItemPopover';
 import { Currency } from '@app/components/util';
 
-import { Auction, Item } from '@app/types/global';
-import { SortKind, QueryAuctionResult } from '@app/types/auction';
+import { IAuction, Item } from '@app/types/global';
+import { SortKind, IQueryAuctionResult } from '@app/types/auction';
 import { qualityToColorClass, getSelectedResultIndex } from '@app/util';
 
 import './AuctionTable.scss';
 
-type ListAuction = Auction | null;
+type ListAuction = IAuction | null;
 
 export type StateProps = {
   auctions: ListAuction[]
-  selectedItems: QueryAuctionResult[]
+  selectedItems: IQueryAuctionResult[]
 };
 
 export type DispatchProps = {
-  onAuctionsQuerySelect: (aqResult: QueryAuctionResult) => void
+  onAuctionsQuerySelect: (aqResult: IQueryAuctionResult) => void
   onAuctionsQueryDeselect: (index: number) => void
 };
 
@@ -27,17 +27,17 @@ export type OwnProps = {};
 type Props = Readonly<StateProps & DispatchProps & OwnProps>;
 
 export class AuctionTable extends React.Component<Props> {
-  isResultSelected(result: QueryAuctionResult) {
+  isResultSelected(result: IQueryAuctionResult) {
     return this.getSelectedResultIndex(result) > -1;
   }
 
-  getSelectedResultIndex(result: QueryAuctionResult): number {
+  getSelectedResultIndex(result: IQueryAuctionResult): number {
     const selectedItems = this.props.selectedItems;
     return getSelectedResultIndex(result, selectedItems);
   }
 
   onItemClick(item: Item) {
-    const result: QueryAuctionResult = {
+    const result: IQueryAuctionResult = {
       item,
       owner: { name: '' },
       rank: 0,
@@ -59,7 +59,7 @@ export class AuctionTable extends React.Component<Props> {
     );
   }
 
-  renderAuction(auction: Auction | null, index: number) {
+  renderAuction(auction: IAuction | null, index: number) {
     if (auction === null) {
       return (
         <tr key={index}>

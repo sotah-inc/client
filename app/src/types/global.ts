@@ -1,13 +1,13 @@
 // region types
 export type RegionName = string;
 
-export interface Region {
+export interface IRegion {
     name: RegionName;
     hostname: string;
 }
 
-export interface Regions {
-    [key: string]: Region;
+export interface IRegions {
+    [key: string]: IRegion;
 }
 
 // item types
@@ -182,12 +182,12 @@ export interface ItemsMap {
 // owner types
 export type OwnerName = string;
 
-export interface Owner {
+export interface IOwner {
     name: OwnerName;
 }
 
 // auction types
-export interface Auction {
+export interface IAuction {
     item: Item;
     owner: OwnerName;
     ownerRealm: string;
@@ -200,14 +200,14 @@ export interface Auction {
 }
 
 // error types
-export interface Errors {
+export interface IErrors {
     [key: string]: string;
 }
 
 // realm types
 export type RealmSlug = string;
 
-export interface Realm {
+export interface IRealm {
     regionName: string;
     type: string;
     population: string;
@@ -222,22 +222,22 @@ export interface Realm {
     last_modified: number;
 }
 
-export interface Realms {
-    [key: string]: Realm;
+export interface IRealms {
+    [key: string]: IRealm;
 }
 
 // user types
-export interface User {
+export interface IUser {
     id: number;
     email: string;
 }
 
-export interface Profile {
-    user: User;
+export interface IProfile {
+    user: IUser;
     token: string;
 }
 
-export interface UserPreferences {
+export interface IUserPreferences {
     id: number;
     user_id: number;
     current_region: RegionName | null;
@@ -245,19 +245,19 @@ export interface UserPreferences {
 }
 
 // item-classes
-export interface SubItemClass {
+export interface ISubItemClass {
     subclass: number;
     name: string;
 }
 
-export interface SubItemClasses {
-    [key: number]: SubItemClass;
+export interface ISubItemClasses {
+    [key: number]: ISubItemClass;
 }
 
 export interface ItemClass {
     class: number;
     name: string;
-    subClasses: SubItemClasses;
+    subClasses: ISubItemClasses;
 }
 
 export interface ItemClasses {
@@ -265,7 +265,7 @@ export interface ItemClasses {
 }
 
 // item-query types
-export interface QueryItemResult {
+export interface IQueryItemResult {
     item: Item;
     target: string;
     rank: number;

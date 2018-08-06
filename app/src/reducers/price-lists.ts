@@ -19,13 +19,13 @@ import {
     CreatePricelistLevel,
     defaultPriceListsState,
     GetPricelistsLevel,
-    Pricelist,
-    PriceListsState,
+    IPricelist,
+    IPriceListsState,
     UpdatePricelistLevel,
 } from "@app/types/price-lists";
 import { getPricelistIndex } from "./helper";
 
-type State = Readonly<PriceListsState> | undefined;
+type State = Readonly<IPriceListsState> | undefined;
 
 export const priceLists = (state: State, action: PriceListsActions): State => {
     if (state === undefined) {
@@ -39,15 +39,15 @@ export const priceLists = (state: State, action: PriceListsActions): State => {
             if (action.payload.errors !== null) {
                 return {
                     ...state,
-                    createPricelistLevel: CreatePricelistLevel.failure,
                     createPricelistErrors: action.payload.errors,
+                    createPricelistLevel: CreatePricelistLevel.failure,
                 };
             }
 
             return {
                 ...state,
-                createPricelistLevel: CreatePricelistLevel.success,
                 createPricelistErrors: {},
+                createPricelistLevel: CreatePricelistLevel.success,
                 isAddListDialogOpen: false,
             };
         case REQUEST_UPDATE_PRICELIST:
@@ -56,8 +56,8 @@ export const priceLists = (state: State, action: PriceListsActions): State => {
             if (action.payload.response.errors !== null) {
                 return {
                     ...state,
-                    updatePricelistLevel: UpdatePricelistLevel.failure,
                     updatePricelistErrors: action.payload.response.errors,
+                    updatePricelistLevel: UpdatePricelistLevel.failure,
                 };
             }
 
@@ -68,14 +68,14 @@ export const priceLists = (state: State, action: PriceListsActions): State => {
             return {
                 ...state,
                 ...action.payload.meta,
-                updatePricelistLevel: UpdatePricelistLevel.success,
-                updatePricelistErrors: {},
                 pricelists: [
                     ...state.pricelists.splice(0, replacedIndex),
                     replacedPricelist,
                     ...state.pricelists.splice(replacedIndex + 1),
                 ],
                 selectedList: replacedPricelist,
+                updatePricelistErrors: {},
+                updatePricelistLevel: UpdatePricelistLevel.success,
             };
         case REQUEST_DELETE_PRICELIST:
             return { ...state };
@@ -85,7 +85,7 @@ export const priceLists = (state: State, action: PriceListsActions): State => {
                 ...state.pricelists.splice(0, deletedIndex),
                 ...state.pricelists.splice(deletedIndex + 1),
             ];
-            let onDeleteSelectedList: Pricelist | null = null;
+            let onDeleteSelectedList: IPricelist | null = null;
             if (onDeletePricelists.length > 0) {
                 const isLastDeleted = deletedIndex === onDeletePricelists.length;
                 onDeleteSelectedList = isLastDeleted
@@ -96,8 +96,8 @@ export const priceLists = (state: State, action: PriceListsActions): State => {
             return {
                 ...state,
                 isDeleteListDialogOpen: false,
-                selectedList: onDeleteSelectedList,
                 pricelists: onDeletePricelists,
+                selectedList: onDeleteSelectedList,
             };
         case REQUEST_GET_PRICELISTS:
             return {
@@ -105,15 +105,15 @@ export const priceLists = (state: State, action: PriceListsActions): State => {
                 getPricelistsLevel: GetPricelistsLevel.fetching,
             };
         case RECEIVE_GET_PRICELISTS:
-            let receivedSelectedList: Pricelist | null = null;
+            let receivedSelectedList: IPricelist | null = null;
             if (Object.keys(action.payload.pricelists).length > 0) {
                 receivedSelectedList = action.payload.pricelists[Object.keys(action.payload.pricelists)[0]];
             }
 
             return {
                 ...state,
-                pricelists: action.payload.pricelists,
                 getPricelistsLevel: GetPricelistsLevel.success,
+                pricelists: action.payload.pricelists,
                 selectedList: receivedSelectedList,
             };
         case CHANGE_ENTRY_CREATELEVEL:

@@ -1,13 +1,13 @@
 import { connect, Dispatch } from 'react-redux';
 
 import { Listing, StateProps, DispatchProps, OwnProps } from '@app/components/App/PriceLists/Listing';
-import { StoreState } from '@app/types';
-import { Pricelist } from '@app/types/price-lists';
+import { IStoreState } from '@app/types';
+import { IPricelist } from '@app/types/price-lists';
 import { Actions } from '@app/actions';
 import { ChangeSelectedList, ChangeIsAddListDialogOpen, FetchGetPricelists } from '@app/actions/price-lists';
-import { GetPricelistsOptions } from '@app/api/price-lists';
+import { IGetPricelistsOptions } from '@app/api/price-lists';
 
-const mapStateToProps = (state: StoreState): StateProps => {
+const mapStateToProps = (state: IStoreState): StateProps => {
   const { currentRegion, currentRealm, profile, authLevel, fetchUserPreferencesLevel } = state.Main;
   const { pricelists, selectedList, isAddListDialogOpen, getPricelistsLevel, createPricelistLevel } = state.PriceLists;
   return {
@@ -26,9 +26,9 @@ const mapStateToProps = (state: StoreState): StateProps => {
 
 const mapDispatchToProps = (dispatch: Dispatch<Actions>): DispatchProps => {
   return {
-    changeSelectedList: (selectedList: Pricelist) => dispatch(ChangeSelectedList(selectedList)),
+    changeSelectedList: (selectedList: IPricelist) => dispatch(ChangeSelectedList(selectedList)),
     changeIsAddListDialogOpen: (isDialogOpen: boolean) => dispatch(ChangeIsAddListDialogOpen(isDialogOpen)),
-    refreshPricelists: (opts: GetPricelistsOptions) => dispatch(FetchGetPricelists(opts))
+    refreshPricelists: (opts: IGetPricelistsOptions) => dispatch(FetchGetPricelists(opts))
   };
 };
 

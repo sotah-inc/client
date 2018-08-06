@@ -8,31 +8,31 @@ import {
   Intent
 } from '@blueprintjs/core';
 
-import { Region, Realm, Profile } from '@app/types/global';
+import { IRegion, IRealm, IProfile } from '@app/types/global';
 import { AuthLevel, FetchUserPreferencesLevel } from '@app/types/main';
-import { Pricelist, GetPricelistsLevel, CreatePricelistLevel } from '@app/types/price-lists';
+import { IPricelist, GetPricelistsLevel, CreatePricelistLevel } from '@app/types/price-lists';
 import PriceListPanel from '@app/containers/App/PriceLists/PriceListPanel';
 import { LastModified } from '@app/components/util';
 import { priceListEntryTabId, didRealmChange } from '@app/util';
-import { GetPricelistsOptions } from '@app/api/price-lists';
+import { IGetPricelistsOptions } from '@app/api/price-lists';
 
 export type StateProps = {
-  pricelists: Pricelist[]
-  selectedList: Pricelist | null
-  currentRegion: Region | null
-  currentRealm: Realm | null
+  pricelists: IPricelist[]
+  selectedList: IPricelist | null
+  currentRegion: IRegion | null
+  currentRealm: IRealm | null
   isAddListDialogOpen: boolean
   getPricelistsLevel: GetPricelistsLevel
-  profile: Profile | null
+  profile: IProfile | null
   authLevel: AuthLevel
   fetchUserPreferencesLevel: FetchUserPreferencesLevel
   createPricelistLevel: CreatePricelistLevel
 };
 
 export type DispatchProps = {
-  changeSelectedList: (list: Pricelist) => void
+  changeSelectedList: (list: IPricelist) => void
   changeIsAddListDialogOpen: (isDialogOpen: boolean) => void
-  refreshPricelists: (opts: GetPricelistsOptions) => void
+  refreshPricelists: (opts: IGetPricelistsOptions) => void
 };
 
 export type OwnProps = {};
@@ -102,7 +102,7 @@ export class Listing extends React.Component<Props> {
     this.props.changeIsAddListDialogOpen(!this.props.isAddListDialogOpen);
   }
 
-  renderTab(list: Pricelist, index: number) {
+  renderTab(list: IPricelist, index: number) {
     return (
       <Tab
         key={index}

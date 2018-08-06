@@ -1,3 +1,7 @@
 {
-    "extends": "@blueprintjs/tslint-config"
+    "extends": "@blueprintjs/tslint-config",
+    "rules": {
+        "no-submodule-imports": false,
+        "no-implicit-dependencies": false
+    }
 }
