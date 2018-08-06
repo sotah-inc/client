@@ -17,7 +17,7 @@ import { AppToaster } from "@app/util/toasters";
 
 import "./App.scss";
 
-export interface StateProps {
+export interface IStateProps {
     fetchPingLevel: FetchPingLevel;
     fetchRegionLevel: FetchRegionLevel;
     currentRegion: IRegion | null;
@@ -31,7 +31,7 @@ export interface StateProps {
     profile: IProfile | null;
 }
 
-export interface DispatchProps {
+export interface IDispatchProps {
     onLoad: () => void;
     reloadUser: (token: string) => void;
     refreshRegions: () => void;
@@ -41,9 +41,9 @@ export interface DispatchProps {
     changeAuthLevel: (authLevel: AuthLevel) => void;
 }
 
-export interface OwnProps extends RouteComponentProps<{}> {}
+export interface IOwnProps extends RouteComponentProps<{}> {}
 
-export type Props = Readonly<StateProps & DispatchProps & OwnProps>;
+export type Props = Readonly<IStateProps & IDispatchProps & IOwnProps>;
 
 type State = Readonly<{
     regionToastKey: string;
@@ -84,15 +84,15 @@ export class App extends React.Component<Props, State> {
                 this.didHandleUnauth = true;
 
                 AppToaster.show({
-                    message: "Your session has expired.",
-                    intent: Intent.WARNING,
-                    icon: "info-sign",
                     action: {
-                        text: "Login",
-                        intent: Intent.PRIMARY,
                         icon: "log-in",
+                        intent: Intent.PRIMARY,
                         onClick: () => changeIsLoginDialogOpen(!isLoginDialogOpen),
+                        text: "Login",
                     },
+                    icon: "info-sign",
+                    intent: Intent.WARNING,
+                    message: "Your session has expired.",
                 });
             }
         }
@@ -132,9 +132,9 @@ export class App extends React.Component<Props, State> {
             const hasBeenAuthorized = [AuthLevel.unauthenticated, AuthLevel.initial].indexOf(prevProps.authLevel) > -1;
             if (hasBeenAuthorized) {
                 AppToaster.show({
-                    message: "You are logged in.",
-                    intent: Intent.SUCCESS,
                     icon: "user",
+                    intent: Intent.SUCCESS,
+                    message: "You are logged in.",
                 });
 
                 if (fetchUserPreferencesLevel === FetchUserPreferencesLevel.initial) {
@@ -147,18 +147,18 @@ export class App extends React.Component<Props, State> {
             switch (fetchUserPreferencesLevel) {
                 case FetchUserPreferencesLevel.failure:
                     AppToaster.show({
-                        message: "There was an error loading your preferences.",
-                        intent: Intent.WARNING,
                         icon: "user",
+                        intent: Intent.WARNING,
+                        message: "There was an error loading your preferences.",
                     });
 
                     break;
                 case FetchUserPreferencesLevel.success:
                     if (userPreferences === null) {
                         AppToaster.show({
-                            message: "You have no preferences.",
-                            intent: Intent.WARNING,
                             icon: "user",
+                            intent: Intent.WARNING,
+                            message: "You have no preferences.",
                         });
 
                         break;
@@ -211,9 +211,9 @@ export class App extends React.Component<Props, State> {
                     case FetchRegionLevel.initial:
                         if (authLevel === AuthLevel.unauthenticated) {
                             const initialToastKey = AppToaster.show({
-                                message: "Loading regions.",
-                                intent: Intent.NONE,
                                 icon: "info-sign",
+                                intent: Intent.NONE,
+                                message: "Loading regions.",
                             });
                             this.setState({ regionToastKey: initialToastKey });
 
@@ -223,9 +223,9 @@ export class App extends React.Component<Props, State> {
                         break;
                     case FetchRegionLevel.prompted:
                         const promptedToastKey = AppToaster.show({
-                            message: "Loading regions.",
-                            intent: Intent.NONE,
                             icon: "info-sign",
+                            intent: Intent.NONE,
+                            message: "Loading regions.",
                         });
                         this.setState({ regionToastKey: promptedToastKey });
 
@@ -235,9 +235,9 @@ export class App extends React.Component<Props, State> {
                     case FetchRegionLevel.failure:
                         if (prevProps.fetchRegionLevel === FetchRegionLevel.fetching) {
                             AppToaster.show({
-                                message: "Failed to fetch regions.",
-                                intent: Intent.DANGER,
                                 icon: "info-sign",
+                                intent: Intent.DANGER,
+                                message: "Failed to fetch regions.",
                             });
                         }
 

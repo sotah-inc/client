@@ -10,12 +10,12 @@ import {
     FetchUserPreferences,
     FetchUserReload,
 } from "@app/actions/main";
-import { App, DispatchProps, OwnProps, StateProps } from "@app/components/App";
+import { App, IDispatchProps, IOwnProps, IStateProps } from "@app/components/App";
 import { IStoreState } from "@app/types";
 import { IRegion } from "@app/types/global";
 import { AuthLevel } from "@app/types/main";
 
-const mapStateToProps = (state: IStoreState): StateProps => {
+const mapStateToProps = (state: IStoreState): IStateProps => {
     const {
         fetchPingLevel,
         fetchRegionLevel,
@@ -30,33 +30,33 @@ const mapStateToProps = (state: IStoreState): StateProps => {
         profile,
     } = state.Main;
     return {
-        fetchPingLevel,
-        fetchRegionLevel,
-        currentRegion,
-        fetchRealmLevel,
-        currentRealm,
-        preloadedToken,
         authLevel,
-        isLoginDialogOpen,
+        currentRealm,
+        currentRegion,
+        fetchPingLevel,
+        fetchRealmLevel,
+        fetchRegionLevel,
         fetchUserPreferencesLevel,
-        userPreferences,
+        isLoginDialogOpen,
+        preloadedToken,
         profile,
+        userPreferences,
     };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<Actions>): DispatchProps => {
+const mapDispatchToProps = (dispatch: Dispatch<Actions>): IDispatchProps => {
     return {
-        onLoad: () => dispatch(FetchPing()),
-        reloadUser: (token: string) => dispatch(FetchUserReload(token)),
-        refreshRegions: () => dispatch(FetchRegions()),
-        refreshRealms: (region: IRegion) => dispatch(FetchRealms(region)),
+        changeAuthLevel: (authLevel: AuthLevel) => dispatch(ChangeAuthLevel(authLevel)),
         changeIsLoginDialogOpen: (isLoginDialogOpen: boolean) => dispatch(ChangeIsLoginDialogOpen(isLoginDialogOpen)),
         loadUserPreferences: (token: string) => dispatch(FetchUserPreferences(token)),
-        changeAuthLevel: (authLevel: AuthLevel) => dispatch(ChangeAuthLevel(authLevel)),
+        onLoad: () => dispatch(FetchPing()),
+        refreshRealms: (region: IRegion) => dispatch(FetchRealms(region)),
+        refreshRegions: () => dispatch(FetchRegions()),
+        reloadUser: (token: string) => dispatch(FetchUserReload(token)),
     };
 };
 
-export default connect<StateProps, DispatchProps, OwnProps>(
+export const AppContainer = connect<IStateProps, IDispatchProps, IOwnProps>(
     mapStateToProps,
     mapDispatchToProps,
 )(App);

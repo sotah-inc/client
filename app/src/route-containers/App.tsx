@@ -1,6 +1,6 @@
 import { withRouter } from "react-router-dom";
 
-import { OwnProps } from "@app/components/App";
-import App from "@app/containers/App";
+import { IOwnProps } from "@app/components/App";
+import { AppContainer } from "@app/containers/App";
 
-export default withRouter<OwnProps>(App);
+export const AppRouter = withRouter<IOwnProps>(AppContainer);
