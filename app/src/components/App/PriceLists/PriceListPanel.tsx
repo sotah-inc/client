@@ -40,7 +40,7 @@ export class PriceListPanel extends React.Component<Props> {
                 <NonIdealState
                     title="No entries"
                     description="You have no items to check."
-                    visual="list"
+                    icon="list"
                     action={
                         <Button
                             className={Classes.FILL}

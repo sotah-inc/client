@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { Classes, Intent, NonIdealState, Spinner } from "@blueprintjs/core";
+import { Classes, HTMLTable, Intent, NonIdealState, Spinner } from "@blueprintjs/core";
 
 import { getPriceList, IPriceListMap } from "@app/api/data";
 import { Currency } from "@app/components/util";
@@ -108,7 +108,9 @@ export class PriceListTable extends React.Component<Props, State> {
         const { list } = this.props;
 
         return (
-            <table className={`${Classes.HTML_TABLE} ${Classes.HTML_TABLE_BORDERED} ${Classes.SMALL} price-list-table`}>
+            <HTMLTable
+                className={`${Classes.HTML_TABLE} ${Classes.HTML_TABLE_BORDERED} ${Classes.SMALL} price-list-table`}
+            >
                 <thead>
                     <tr>
                         <th>Item</th>
@@ -117,7 +119,7 @@ export class PriceListTable extends React.Component<Props, State> {
                     </tr>
                 </thead>
                 <tbody>{list.pricelist_entries!.map((v, i) => this.renderEntry(i, v))}</tbody>
-            </table>
+            </HTMLTable>
         );
     }
 
@@ -129,7 +131,7 @@ export class PriceListTable extends React.Component<Props, State> {
                 return (
                     <NonIdealState
                         title="Could not load price-lists"
-                        visual={<Spinner className={Classes.LARGE} intent={Intent.DANGER} value={0} />}
+                        icon={<Spinner className={Classes.LARGE} intent={Intent.DANGER} value={0} />}
                     />
                 );
             case GetPriceListLevel.success:
@@ -139,7 +141,7 @@ export class PriceListTable extends React.Component<Props, State> {
                 return (
                     <NonIdealState
                         title="Loading"
-                        visual={<Spinner className={Classes.LARGE} intent={Intent.PRIMARY} />}
+                        icon={<Spinner className={Classes.LARGE} intent={Intent.PRIMARY} />}
                     />
                 );
         }

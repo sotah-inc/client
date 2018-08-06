@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { Breadcrumb, Button, Classes, Dialog, Intent } from "@blueprintjs/core";
+import { Breadcrumb, Button, Classes, Dialog, HTMLTable, Intent } from "@blueprintjs/core";
 
 import { ICreatePricelistRequest } from "@app/api/price-lists";
 import { DialogActions, DialogBody, ErrorList } from "@app/components/util";
@@ -223,7 +223,7 @@ export class CreateListDialog extends React.Component<Props, State> {
             <>
                 <DialogBody>
                     {this.renderNav()}
-                    <table
+                    <HTMLTable
                         className={`${Classes.HTML_TABLE} ${Classes.HTML_TABLE_BORDERED} ${
                             Classes.SMALL
                         } create-list-dialog-table`}
@@ -235,7 +235,7 @@ export class CreateListDialog extends React.Component<Props, State> {
                             </tr>
                         </thead>
                         <tbody>{entries.map((v, i) => this.renderEntry(i, v))}</tbody>
-                    </table>
+                    </HTMLTable>
                     <ErrorList errors={createPricelistErrors} />
                 </DialogBody>
                 <DialogActions>

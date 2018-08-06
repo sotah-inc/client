@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { Button, Classes, Intent, Menu, MenuItem, Popover, Position, Spinner } from "@blueprintjs/core";
+import { Button, Classes, H6, Intent, Menu, MenuItem, Popover, Position, Spinner } from "@blueprintjs/core";
 
 import { ICreatePreferencesRequestBody, UpdatePreferencesRequestBody } from "@app/api/user";
 import { IRegion, IRegions } from "@app/types/global";
@@ -47,7 +47,7 @@ export class RegionToggle extends React.Component<Props> {
         return (
             <Menu>
                 <li>
-                    <h6>Select Region</h6>
+                    <H6>Select Region</H6>
                 </li>
                 {Object.keys(regions).map((regionName, index) => this.renderMenuItem(regions[regionName], index))}
             </Menu>

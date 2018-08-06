@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { Button, Classes, Intent, Menu, MenuItem, Spinner } from "@blueprintjs/core";
+import { Button, Classes, H6, Intent, Menu, MenuItem, Spinner } from "@blueprintjs/core";
 import {
     IItemListRendererProps,
     IItemRendererProps,
@@ -96,7 +96,7 @@ export class RealmToggle extends React.Component<Props> {
         return (
             <Menu ulRef={itemsParentRef}>
                 <li>
-                    <h6>Select Realm</h6>
+                    <H6>Select Realm</H6>
                 </li>
                 {renderedItems}
             </Menu>

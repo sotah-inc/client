@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { Classes } from "@blueprintjs/core";
+import { Classes, HTMLTable } from "@blueprintjs/core";
 
 import { Currency } from "@app/components/util";
 import { SortToggleContainer } from "@app/containers/App/AuctionList/SortToggle";
@@ -91,7 +91,9 @@ export class AuctionTable extends React.Component<Props> {
         const { auctions } = this.props;
 
         return (
-            <table className={`${Classes.HTML_TABLE} ${Classes.HTML_TABLE_BORDERED} ${Classes.SMALL} auction-table`}>
+            <HTMLTable
+                className={`${Classes.HTML_TABLE} ${Classes.HTML_TABLE_BORDERED} ${Classes.SMALL} auction-table`}
+            >
                 <thead>
                     <tr>
                         <th>
@@ -115,7 +117,7 @@ export class AuctionTable extends React.Component<Props> {
                     </tr>
                 </thead>
                 <tbody>{auctions.map((auction, index) => this.renderAuction(auction, index))}</tbody>
-            </table>
+            </HTMLTable>
         );
     }
 }

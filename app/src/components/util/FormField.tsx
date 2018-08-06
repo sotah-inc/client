@@ -42,7 +42,7 @@ export const FormField: FormFieldType = (props: Props) => {
             helperText={error ? error : helperText}
             label={label || capitalize(fieldName)}
             labelFor={fieldName}
-            requiredLabel={true}
+            labelInfo={true}
             intent={intent}
         >
             <InputGroup

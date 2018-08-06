@@ -134,7 +134,7 @@ export class Listing extends React.Component<Props> {
                 <NonIdealState
                     title="No price lists"
                     description={`You have no price lists in ${currentRealm!.name}.`}
-                    visual="list"
+                    icon="list"
                     action={
                         <Button className={Classes.FILL} icon="plus" onClick={this.toggleDialog}>
                             Add List to {currentRealm!.name}
@@ -169,14 +169,14 @@ export class Listing extends React.Component<Props> {
                 return (
                     <NonIdealState
                         title="Loading"
-                        visual={<Spinner className={Classes.LARGE} intent={Intent.NONE} value={0} />}
+                        icon={<Spinner className={Classes.LARGE} intent={Intent.NONE} value={0} />}
                     />
                 );
             case GetPricelistsLevel.fetching:
                 return (
                     <NonIdealState
                         title="Loading"
-                        visual={<Spinner className={Classes.LARGE} intent={Intent.PRIMARY} />}
+                        icon={<Spinner className={Classes.LARGE} intent={Intent.PRIMARY} />}
                     />
                 );
             case GetPricelistsLevel.success:

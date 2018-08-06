@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { Button, FormGroup, Intent } from "@blueprintjs/core";
+import { Button, FormGroup, H5, Intent } from "@blueprintjs/core";
 import { FormikProps } from "formik";
 
 import { DialogActions, DialogBody, ItemInput } from "@app/components/util";
@@ -41,9 +41,9 @@ export class CreateEntryForm extends React.Component<Props> {
         }
 
         return (
-            <h5 className={`${className} new-entry-item`}>
+            <H5 className={`${className} new-entry-item`}>
                 <img src={itemIcon} /> {textValue}
-            </h5>
+            </H5>
         );
     }
 
@@ -76,12 +76,7 @@ export class CreateEntryForm extends React.Component<Props> {
                     <div className="pure-g">
                         <div className="pure-u-1-2">
                             <div style={{ paddingRight: "5px" }}>
-                                <FormGroup
-                                    helperText={errors.item}
-                                    label="Item"
-                                    requiredLabel={true}
-                                    intent={itemIntent}
-                                >
+                                <FormGroup helperText={errors.item} label="Item" labelInfo={true} intent={itemIntent}>
                                     <ItemInput onSelect={this.onItemInputSelect} autoFocus={true} />
                                 </FormGroup>
                             </div>

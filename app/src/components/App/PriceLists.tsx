@@ -143,7 +143,7 @@ export class PriceLists extends React.Component<Props> {
                 <NonIdealState
                     title="Unauthenticated"
                     description="Please log in to use price-lists."
-                    visual="list"
+                    icon="list"
                     action={<Button onClick={this.onUnauthenticatedAction} type="button" icon="log-in" text="Login" />}
                 />
             );

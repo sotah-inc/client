@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { Button, Classes, Menu, MenuItem, Popover, Position } from "@blueprintjs/core";
+import { Button, Classes, H6, Menu, MenuItem, Popover, Position } from "@blueprintjs/core";
 
 export interface IStateProps {
     auctionsPerPage: number;
@@ -36,7 +36,7 @@ export class CountToggle extends React.Component<Props> {
         return (
             <Menu>
                 <li>
-                    <h6>Results Per Page</h6>
+                    <H6>Results Per Page</H6>
                 </li>
                 {counts.map((count, index) => this.renderMenuItem(count, index))}
             </Menu>

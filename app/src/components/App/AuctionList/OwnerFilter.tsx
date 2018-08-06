@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { Button, Classes, ControlGroup, Intent, Menu, MenuItem, Spinner } from "@blueprintjs/core";
+import { Button, Classes, ControlGroup, H6, Intent, Menu, MenuItem, Spinner } from "@blueprintjs/core";
 import {
     IItemListRendererProps,
     IItemRendererProps,
@@ -75,7 +75,7 @@ export class OwnerFilter extends React.Component<Props, State> {
             return (
                 <Menu ulRef={itemsParentRef}>
                     <li>
-                        <h6>Select Owner</h6>
+                        <H6>Select Owner</H6>
                     </li>
                     <li>
                         <em>No results found.</em>
@@ -87,7 +87,7 @@ export class OwnerFilter extends React.Component<Props, State> {
         return (
             <Menu ulRef={itemsParentRef}>
                 <li>
-                    <h6>Select Owner</h6>
+                    <H6>Select Owner</H6>
                 </li>
                 {renderedItems}
             </Menu>

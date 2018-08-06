@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { Button, Classes, Menu, MenuItem } from "@blueprintjs/core";
+import { Button, Classes, H6, Menu, MenuItem } from "@blueprintjs/core";
 import {
     IItemListRendererProps,
     IItemRendererProps,
@@ -155,7 +155,7 @@ export class ItemInput extends React.Component<Props, State> {
             return (
                 <Menu ulRef={itemsParentRef}>
                     <li>
-                        <h6>Queried Results</h6>
+                        <H6>Queried Results</H6>
                     </li>
                     <li>
                         <em>No results found.</em>
@@ -167,7 +167,7 @@ export class ItemInput extends React.Component<Props, State> {
         return (
             <Menu ulRef={itemsParentRef} className="item-input-menu">
                 <li>
-                    <h6>Queried Results</h6>
+                    <H6>Queried Results</H6>
                 </li>
                 {renderedItems}
             </Menu>

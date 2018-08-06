@@ -5,6 +5,8 @@ import {
     Button,
     Callout,
     Classes,
+    H4,
+    H6,
     Intent,
     Menu,
     MenuItem,
@@ -142,7 +144,7 @@ export class QueryAuctionsFilter extends React.Component<Props, State> {
             return (
                 <Menu ulRef={itemsParentRef}>
                     <li>
-                        <h6>Queried Results</h6>
+                        <H6>Queried Results</H6>
                     </li>
                     <li>
                         <em>No results found.</em>
@@ -154,7 +156,7 @@ export class QueryAuctionsFilter extends React.Component<Props, State> {
         return (
             <Menu ulRef={itemsParentRef} className="qaf-menu">
                 <li>
-                    <h6>Queried Results</h6>
+                    <H6>Queried Results</H6>
                 </li>
                 {renderedItems}
             </Menu>
@@ -236,7 +238,7 @@ export class QueryAuctionsFilter extends React.Component<Props, State> {
 
         return (
             <Callout>
-                <h4 className={Classes.CALLOUT_TITLE}>Filters</h4>
+                <H4 className={Classes.HEADING}>Filters</H4>
                 <div className={Classes.TAG_INPUT}>
                     <div className={Classes.TAG_INPUT_VALUES}>
                         {selectedItems.map((v, i) => this.renderSelectedItem(i, v))}

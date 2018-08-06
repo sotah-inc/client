@@ -250,14 +250,14 @@ export class AuctionList extends React.Component<Props> {
                 return (
                     <NonIdealState
                         title="Loading"
-                        visual={<Spinner className={Classes.LARGE} intent={Intent.NONE} value={0} />}
+                        icon={<Spinner className={Classes.LARGE} intent={Intent.NONE} value={0} />}
                     />
                 );
             case FetchAuctionsLevel.fetching:
                 return (
                     <NonIdealState
                         title="Loading"
-                        visual={<Spinner className={Classes.LARGE} intent={Intent.PRIMARY} />}
+                        icon={<Spinner className={Classes.LARGE} intent={Intent.PRIMARY} />}
                     />
                 );
             case FetchAuctionsLevel.failure:
@@ -265,7 +265,7 @@ export class AuctionList extends React.Component<Props> {
                     <NonIdealState
                         title="Fetch auctions failure"
                         description="Auctions could not be fetched"
-                        visual="error"
+                        icon="error"
                     />
                 );
             case FetchAuctionsLevel.refetching:
