@@ -28,10 +28,10 @@ export const auction = (state: State, action: AuctionActions): State => {
 
   switch (action.type) {
     case REQUEST_AUCTIONS:
-      const fetchAuctionsLevel = state.fetchAuctionsLevel === FetchAuctionsLevel.initial
+      const requestFetchAuctionsLevel = state.fetchAuctionsLevel === FetchAuctionsLevel.initial
         ? FetchAuctionsLevel.fetching
         : FetchAuctionsLevel.refetching;
-      return { ...state, fetchAuctionsLevel };
+      return { ...state, fetchAuctionsLevel: requestFetchAuctionsLevel };
     case RECEIVE_AUCTIONS:
       if (action.payload === null) {
         return { ...state, fetchAuctionsLevel: FetchAuctionsLevel.failure };
