@@ -9,5 +9,5 @@
 - [ ] Use [Polaris](https://polaris.shopify.com/) (design methodology, not components)
 - [x] Use [Formik](https://github.com/jaredpalmer/formik)
 - [x] Use [jsx-space-before-trailing-slash rule](https://github.com/palantir/tslint-react/pull/144)
-- [ ] Use [Blueprint's tslint rules](https://www.npmjs.com/package/@blueprintjs/tslint-config)
-- [ ] Upgrade to Blueprint 3
+- [x] Use [Blueprint's tslint rules](https://www.npmjs.com/package/@blueprintjs/tslint-config)
+- [x] Upgrade to Blueprint 3
