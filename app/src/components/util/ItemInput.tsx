@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { Button, Classes, H6, Menu, MenuItem } from "@blueprintjs/core";
+import { Classes, H6, Menu, MenuItem } from "@blueprintjs/core";
 import {
     IItemListRendererProps,
     IItemRendererProps,
@@ -115,10 +115,6 @@ export class ItemInput extends React.Component<Props, State> {
         this.setState({ results: res.items });
     }
 
-    public renderClearButton() {
-        return <Button icon="cross" className={Classes.MINIMAL} onClick={() => this.triggerQuery("")} />;
-    }
-
     public itemPredicate: ItemPredicate<IQueryItemResult> = (_: string, result: IQueryItemResult) => {
         return result.rank > -1;
     };
@@ -167,7 +163,6 @@ export class ItemInput extends React.Component<Props, State> {
                     autoFocus,
                     className: Classes.FILL,
                     leftIcon: "search",
-                    rightElement: this.renderClearButton(),
                     type: "search",
                 }}
                 itemPredicate={this.itemPredicate}
