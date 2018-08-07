@@ -2,7 +2,6 @@ import * as React from "react";
 
 import {
     Alignment,
-    Button,
     Callout,
     Classes,
     H4,
@@ -23,6 +22,7 @@ import {
     ItemRenderer,
     Suggest,
 } from "@blueprintjs/select";
+import { debounce } from "lodash";
 
 import { IQueryAuctionsOptions } from "@app/api/data";
 import { IQueryAuctionResult, QueryAuctionsLevel } from "@app/types/auction";
@@ -48,15 +48,15 @@ export interface IDispatchProps {
 type Props = Readonly<IStateProps & IDispatchProps>;
 
 type State = Readonly<{
-    filterValue: string;
     timerId: NodeJS.Timer | null;
 }>;
 
 export class QueryAuctionsFilter extends React.Component<Props, State> {
     public state: State = {
-        filterValue: "",
         timerId: null,
     };
+
+    private debouncedTriggerQuery = debounce((filterValue: string) => this.triggerQuery(filterValue), 0.25 * 1000);
 
     public tagRenderer(result: IQueryAuctionResult) {
         const { item, owner } = result;
@@ -175,22 +175,14 @@ export class QueryAuctionsFilter extends React.Component<Props, State> {
         onAuctionsQuerySelect(result);
     }
 
-    public onFilterChange(e: React.ChangeEvent<HTMLInputElement>) {
-        const { timerId } = this.state;
-        const filterValue = e.target.value;
+    public triggerQuery(filterValue: string) {
+        const { refreshAuctionsQuery, currentRealm, currentRegion } = this.props;
 
-        if (timerId !== null) {
-            clearTimeout(timerId);
-        }
-
-        const newTimerId = setTimeout(() => {
-            this.props.refreshAuctionsQuery({
-                query: filterValue,
-                realmSlug: this.props.currentRealm!.slug,
-                regionName: this.props.currentRegion!.name,
-            });
-        }, 0.25 * 1000);
-        this.setState({ filterValue, timerId: newTimerId });
+        refreshAuctionsQuery({
+            query: filterValue,
+            realmSlug: currentRealm!.slug,
+            regionName: currentRegion!.name,
+        });
     }
 
     public isResultSelected(result: IQueryAuctionResult) {
@@ -242,30 +234,8 @@ export class QueryAuctionsFilter extends React.Component<Props, State> {
         );
     }
 
-    public onRenderClearClick() {
-        const { refreshAuctionsQuery, currentRegion, currentRealm } = this.props;
-
-        this.setState({ filterValue: "" });
-        refreshAuctionsQuery({
-            query: "",
-            realmSlug: currentRealm!.slug,
-            regionName: currentRegion!.name,
-        });
-    }
-
-    public renderClearButton() {
-        const { filterValue } = this.state;
-
-        if (filterValue === null || filterValue === "") {
-            return;
-        }
-
-        return <Button className={Classes.MINIMAL} icon="cross" onClick={() => this.onRenderClearClick()} />;
-    }
-
     public render() {
         const { queryAuctionsLevel, items } = this.props;
-        const { filterValue } = this.state;
 
         switch (queryAuctionsLevel) {
             case QueryAuctionsLevel.success:
@@ -280,12 +250,10 @@ export class QueryAuctionsFilter extends React.Component<Props, State> {
                                     items={items}
                                     onItemSelect={v => this.onItemSelect(v)}
                                     closeOnSelect={false}
+                                    onQueryChange={this.debouncedTriggerQuery}
                                     inputProps={{
                                         leftIcon: "search",
-                                        onChange: e => this.onFilterChange(e),
-                                        rightElement: this.renderClearButton(),
                                         type: "search",
-                                        value: filterValue,
                                     }}
                                     itemPredicate={this.itemPredicate}
                                     itemListRenderer={this.itemListRenderer}
