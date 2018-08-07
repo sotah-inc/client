@@ -1,5 +1,7 @@
 # sotah-client
 
+[![Build Status](https://travis-ci.org/ihsw/sotah-client.svg?branch=master)](https://travis-ci.org/ihsw/sotah-client)
+
 ## Features
 
 - [x] Use Yarn (not NPM)
