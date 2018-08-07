@@ -9,6 +9,7 @@ import {
     ItemRenderer,
     Suggest,
 } from "@blueprintjs/select";
+import { debounce } from "lodash";
 
 import { getItems } from "@app/api/data";
 import { IQueryItemResult, Item } from "@app/types/global";
@@ -23,19 +24,19 @@ type Props = Readonly<{
 
 type State = Readonly<{
     timerId: NodeJS.Timer | null;
-    filterValue: string;
     results: IQueryItemResult[];
 }>;
 
 export class ItemInput extends React.Component<Props, State> {
     public state: State = {
-        filterValue: "",
         results: [],
         timerId: null,
     };
 
+    private debouncedTriggerQuery = debounce((filterValue: string) => this.triggerQuery(filterValue), 0.25 * 1000);
+
     public componentDidMount() {
-        this.triggerQuery();
+        this.triggerQuery("");
     }
 
     public renderItemAsItemRendererText(item: Item) {
@@ -105,8 +106,8 @@ export class ItemInput extends React.Component<Props, State> {
         this.props.onSelect(result.item);
     }
 
-    public async triggerQuery() {
-        const res = await getItems(this.state.filterValue);
+    public async triggerQuery(filterValue: string) {
+        const res = await getItems(filterValue);
         if (res === null) {
             return;
         }
@@ -114,31 +115,8 @@ export class ItemInput extends React.Component<Props, State> {
         this.setState({ results: res.items });
     }
 
-    public onFilterChange(e: React.ChangeEvent<HTMLInputElement>) {
-        const { timerId } = this.state;
-        const filterValue = e.target.value;
-
-        if (timerId !== null) {
-            clearTimeout(timerId);
-        }
-
-        const newTimerId = setTimeout(() => this.triggerQuery(), 0.25 * 1000);
-        this.setState({ filterValue, timerId: newTimerId });
-    }
-
     public renderClearButton() {
-        const { filterValue } = this.state;
-        if (filterValue === null || filterValue === "") {
-            return;
-        }
-
-        return (
-            <Button
-                icon="cross"
-                className={Classes.MINIMAL}
-                onClick={() => this.setState({ filterValue: "" }, () => this.triggerQuery())}
-            />
-        );
+        return <Button icon="cross" className={Classes.MINIMAL} onClick={() => this.triggerQuery("")} />;
     }
 
     public itemPredicate: ItemPredicate<IQueryItemResult> = (_: string, result: IQueryItemResult) => {
@@ -175,7 +153,7 @@ export class ItemInput extends React.Component<Props, State> {
 
     public render() {
         const { autoFocus, onSelect } = this.props;
-        const { results, filterValue } = this.state;
+        const { results } = this.state;
 
         return (
             <ItemSuggest
@@ -184,14 +162,13 @@ export class ItemInput extends React.Component<Props, State> {
                 items={results}
                 onItemSelect={v => onSelect(v.item)}
                 closeOnSelect={true}
+                onQueryChange={this.debouncedTriggerQuery}
                 inputProps={{
                     autoFocus,
                     className: Classes.FILL,
                     leftIcon: "search",
-                    onChange: e => this.onFilterChange(e),
                     rightElement: this.renderClearButton(),
                     type: "search",
-                    value: filterValue,
                 }}
                 itemPredicate={this.itemPredicate}
                 itemListRenderer={this.itemListRenderer}
