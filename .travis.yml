@@ -1,0 +1,17 @@
+sudo: required
+language: node_js
+services:
+- docker
+node_js:
+- 9
+
+env:
+  global:
+  - DOCKER_IMAGE_NAME=$TRAVIS_REPO_SLUG:$TRAVIS_COMMIT
+
+install:
+- cd ./app && npm install -s
+script:
+- npm run -s lint
+- npm run -s build
+- git clean -xfd . && docker build -t $DOCKER_IMAGE_NAME ../
