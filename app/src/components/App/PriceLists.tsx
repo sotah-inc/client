@@ -160,7 +160,7 @@ export class PriceLists extends React.Component<Props> {
                 </Dialog>
                 <Dialog
                     isOpen={isEditListDialogOpen}
-                    onClose={() => () => changeIsEditListDialogOpen(!isEditListDialogOpen)}
+                    onClose={() => changeIsEditListDialogOpen(!isEditListDialogOpen)}
                     title="Edit List"
                     icon="manually-entered-data"
                 >
