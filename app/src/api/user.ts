@@ -17,14 +17,16 @@ export const registerUser = async (email: string, password: string): Promise<IRe
         headers: new Headers({ "content-type": "application/json" }),
         method: "POST",
     });
-    if (res.status === HTTPStatus.BAD_REQUEST) {
-        return {
-            errors: await res.json(),
-            profile: null,
-        };
+    switch (res.status) {
+        case HTTPStatus.OK:
+            return { profile: await res.json(), errors: null };
+        case HTTPStatus.BAD_REQUEST:
+            return { errors: await res.json(), profile: null };
+        case HTTPStatus.INTERNAL_SERVER_ERROR:
+            return { errors: { email: "There was a server error." }, profile: null };
+        default:
+            return { errors: { email: "There was an unknown error." }, profile: null };
     }
-
-    return { profile: await res.json(), errors: null };
 };
 
 export type LoginUserResponse = IRegisterUserResponse;
