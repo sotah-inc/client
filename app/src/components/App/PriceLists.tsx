@@ -66,20 +66,16 @@ export class PriceLists extends React.Component<Props> {
     }
 
     public onDeleteDialogCancel() {
-        return () => {
-            const { changeIsDeleteListDialogOpen } = this.props;
-            changeIsDeleteListDialogOpen(false);
-        };
+        const { changeIsDeleteListDialogOpen } = this.props;
+        changeIsDeleteListDialogOpen(false);
     }
 
     public onDeleteDialogConfirm() {
-        return () => {
-            const { selectedList, deletePricelist, profile } = this.props;
-            deletePricelist({
-                id: selectedList!.id,
-                token: profile!.token,
-            });
-        };
+        const { selectedList, deletePricelist, profile } = this.props;
+        deletePricelist({
+            id: selectedList!.id,
+            token: profile!.token,
+        });
     }
 
     public renderDeleteListDialog() {
@@ -100,13 +96,13 @@ export class PriceLists extends React.Component<Props> {
                     <p>Hello, world!</p>
                 </DialogBody>
                 <DialogActions>
-                    <Button text="Cancel" intent={Intent.NONE} onClick={this.onDeleteDialogCancel()} />
+                    <Button text="Cancel" intent={Intent.NONE} onClick={() => this.onDeleteDialogCancel()} />
                     <Button
                         type="submit"
                         intent={Intent.DANGER}
                         icon="delete"
                         text={`Delete "${selectedList.name}"`}
-                        onClick={this.onDeleteDialogConfirm()}
+                        onClick={() => this.onDeleteDialogConfirm()}
                     />
                 </DialogActions>
             </Dialog>
