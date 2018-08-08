@@ -18,7 +18,7 @@ export const registerUser = async (email: string, password: string): Promise<IRe
         method: "POST",
     });
     switch (res.status) {
-        case HTTPStatus.OK:
+        case HTTPStatus.CREATED:
             return { profile: await res.json(), errors: null };
         case HTTPStatus.BAD_REQUEST:
             return { errors: await res.json(), profile: null };
