@@ -3,7 +3,7 @@ import * as React from "react";
 import { Button, Classes, Dialog, HTMLTable, Intent } from "@blueprintjs/core";
 
 import { ICreatePricelistRequest } from "@app/api/price-lists";
-import { DialogActions, DialogBody, ErrorList } from "@app/components/util";
+import { DialogActions, DialogBody, ErrorList, PanelHeader } from "@app/components/util";
 import { ItemPopoverContainer } from "@app/containers/util/ItemPopover";
 import { CreateEntryFormFormContainer } from "@app/form-containers/App/PriceLists/util/CreateEntryForm";
 import { ListFormFormContainer } from "@app/form-containers/App/PriceLists/util/ListForm";
@@ -98,46 +98,20 @@ export class CreateListDialog extends React.Component<Props, State> {
 
         switch (createListStep) {
             case CreateListStep.list:
-                return (
-                    <>
-                        <span />
-                        <div className={Classes.HEADING}>List</div>
-                        <span />
-                    </>
-                );
+                return <PanelHeader title="List" />;
             case CreateListStep.entry:
                 return (
-                    <>
-                        <span>
-                            <Button
-                                className={Classes.PANEL_STACK_HEADER_BACK}
-                                small={true}
-                                minimal={true}
-                                text="List"
-                                icon="chevron-left"
-                                onClick={() => this.onNavClick(CreateListStep.list)}
-                            />
-                        </span>
-                        <div className={Classes.HEADING}>Entry</div>
-                        <span />
-                    </>
+                    <PanelHeader
+                        title="Entry"
+                        prev={{ onClick: () => this.onNavClick(CreateListStep.list), title: "List" }}
+                    />
                 );
             case CreateListStep.finish:
                 return (
-                    <>
-                        <span>
-                            <Button
-                                className={Classes.PANEL_STACK_HEADER_BACK}
-                                small={true}
-                                minimal={true}
-                                text="Entry"
-                                icon="chevron-left"
-                                onClick={() => this.onNavClick(CreateListStep.entry)}
-                            />
-                        </span>
-                        <div className={Classes.HEADING}>Finish</div>
-                        <span />
-                    </>
+                    <PanelHeader
+                        title="Finish"
+                        prev={{ onClick: () => this.onNavClick(CreateListStep.entry), title: "List" }}
+                    />
                 );
             default:
                 return;
