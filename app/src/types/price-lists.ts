@@ -3,9 +3,9 @@ import { IErrors, ItemId, RealmSlug, RegionName } from "./global";
 
 export interface IPriceListsState {
     pricelists: IPricelist[];
-    createPricelistLevel: CreatePricelistLevel;
+    createPricelistLevel: MutatePricelistLevel;
     createPricelistErrors: IErrors;
-    updatePricelistLevel: UpdatePricelistLevel;
+    updatePricelistLevel: MutatePricelistLevel;
     updatePricelistErrors: IErrors;
     entryCreateLevel: EntryCreateLevel;
     selectedList: IPricelist | null;
@@ -31,13 +31,7 @@ export enum EntryCreateLevel {
     success,
     failure,
 }
-export enum CreatePricelistLevel {
-    initial,
-    fetching,
-    success,
-    failure,
-}
-export enum UpdatePricelistLevel {
+export enum MutatePricelistLevel {
     initial,
     fetching,
     success,
@@ -88,7 +82,7 @@ export interface IUpdatePricelistResponseOptions {
 
 export const defaultPriceListsState: IPriceListsState = {
     createPricelistErrors: {},
-    createPricelistLevel: CreatePricelistLevel.initial,
+    createPricelistLevel: MutatePricelistLevel.initial,
     entryCreateLevel: EntryCreateLevel.initial,
     getPricelistsLevel: GetPricelistsLevel.initial,
     isAddEntryDialogOpen: false,
@@ -98,5 +92,5 @@ export const defaultPriceListsState: IPriceListsState = {
     pricelists: [],
     selectedList: null,
     updatePricelistErrors: {},
-    updatePricelistLevel: UpdatePricelistLevel.initial,
+    updatePricelistLevel: MutatePricelistLevel.initial,
 };

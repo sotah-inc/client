@@ -16,12 +16,11 @@ import {
     REQUEST_UPDATE_PRICELIST,
 } from "@app/actions/price-lists";
 import {
-    CreatePricelistLevel,
     defaultPriceListsState,
     GetPricelistsLevel,
     IPricelist,
     IPriceListsState,
-    UpdatePricelistLevel,
+    MutatePricelistLevel,
 } from "@app/types/price-lists";
 import { getPricelistIndex } from "./helper";
 
@@ -34,30 +33,30 @@ export const priceLists = (state: State, action: PriceListsActions): State => {
 
     switch (action.type) {
         case REQUEST_CREATE_PRICELIST:
-            return { ...state, createPricelistLevel: CreatePricelistLevel.fetching };
+            return { ...state, createPricelistLevel: MutatePricelistLevel.fetching };
         case RECEIVE_CREATE_PRICELIST:
             if (action.payload.errors !== null) {
                 return {
                     ...state,
                     createPricelistErrors: action.payload.errors,
-                    createPricelistLevel: CreatePricelistLevel.failure,
+                    createPricelistLevel: MutatePricelistLevel.failure,
                 };
             }
 
             return {
                 ...state,
                 createPricelistErrors: {},
-                createPricelistLevel: CreatePricelistLevel.success,
+                createPricelistLevel: MutatePricelistLevel.success,
                 isAddListDialogOpen: false,
             };
         case REQUEST_UPDATE_PRICELIST:
-            return { ...state, updatePricelistLevel: UpdatePricelistLevel.fetching };
+            return { ...state, updatePricelistLevel: MutatePricelistLevel.fetching };
         case RECEIVE_UPDATE_PRICELIST:
             if (action.payload.response.errors !== null) {
                 return {
                     ...state,
                     updatePricelistErrors: action.payload.response.errors,
-                    updatePricelistLevel: UpdatePricelistLevel.failure,
+                    updatePricelistLevel: MutatePricelistLevel.failure,
                 };
             }
 
@@ -75,7 +74,7 @@ export const priceLists = (state: State, action: PriceListsActions): State => {
                 ],
                 selectedList: replacedPricelist,
                 updatePricelistErrors: {},
-                updatePricelistLevel: UpdatePricelistLevel.success,
+                updatePricelistLevel: MutatePricelistLevel.success,
             };
         case REQUEST_DELETE_PRICELIST:
             return { ...state };

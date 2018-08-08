@@ -14,7 +14,7 @@ import {
     IPricelist,
     IPricelistEntry,
     IUpdatePricelistRequestOptions,
-    UpdatePricelistLevel,
+    MutatePricelistLevel,
 } from "@app/types/price-lists";
 
 import "./PriceLists.scss";
@@ -22,7 +22,7 @@ import "./PriceLists.scss";
 export interface IStateProps {
     isAddEntryDialogOpen: boolean;
     authLevel: AuthLevel;
-    updatePricelistLevel: UpdatePricelistLevel;
+    updatePricelistLevel: MutatePricelistLevel;
     selectedList: IPricelist | null;
     profile: IProfile | null;
     isEditListDialogOpen: boolean;
@@ -151,7 +151,7 @@ export class PriceLists extends React.Component<Props> {
                 >
                     <CreateEntryFormFormContainer
                         onComplete={(entry: IPricelistEntry) => this.onCreateEntryFormComplete(entry)}
-                        isSubmitDisabled={updatePricelistLevel === UpdatePricelistLevel.fetching}
+                        isSubmitDisabled={updatePricelistLevel === MutatePricelistLevel.fetching}
                     />
                 </Dialog>
                 <Dialog

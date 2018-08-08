@@ -8,7 +8,7 @@ import { ItemPopoverContainer } from "@app/containers/util/ItemPopover";
 import { CreateEntryFormFormContainer } from "@app/form-containers/App/PriceLists/util/CreateEntryForm";
 import { ListFormFormContainer } from "@app/form-containers/App/PriceLists/util/ListForm";
 import { IErrors, IProfile, IRealm, IRegion, Item, ItemClasses, ItemsMap } from "@app/types/global";
-import { CreateListCompletion, CreateListStep, CreatePricelistLevel, IPricelistEntry } from "@app/types/price-lists";
+import { CreateListCompletion, CreateListStep, IPricelistEntry, MutatePricelistLevel } from "@app/types/price-lists";
 import { AppToaster } from "@app/util/toasters";
 
 export interface IStateProps {
@@ -16,7 +16,7 @@ export interface IStateProps {
     itemClasses: ItemClasses;
     currentRegion: IRegion | null;
     currentRealm: IRealm | null;
-    createPricelistLevel: CreatePricelistLevel;
+    createPricelistLevel: MutatePricelistLevel;
     createPricelistErrors: IErrors;
     profile: IProfile | null;
 }
@@ -50,7 +50,7 @@ export class CreateListDialog extends React.Component<Props, State> {
 
         if (prevProps.createPricelistLevel !== createPricelistLevel) {
             switch (createPricelistLevel) {
-                case CreatePricelistLevel.success:
+                case MutatePricelistLevel.success:
                     AppToaster.show({
                         icon: "info-sign",
                         intent: Intent.SUCCESS,
@@ -243,7 +243,7 @@ export class CreateListDialog extends React.Component<Props, State> {
                     <Button
                         text={`Finish "${listName}"`}
                         intent={Intent.PRIMARY}
-                        disabled={createPricelistLevel === CreatePricelistLevel.fetching}
+                        disabled={createPricelistLevel === MutatePricelistLevel.fetching}
                         onClick={() => this.onFinishClick()}
                         icon="edit"
                     />
