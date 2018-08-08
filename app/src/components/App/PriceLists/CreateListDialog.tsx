@@ -37,7 +37,7 @@ type State = Readonly<{
 }>;
 
 export class CreateListDialog extends React.Component<Props, State> {
-    public state: State = {
+    public state = {
         createListCompletion: CreateListCompletion.initial,
         createListStep: CreateListStep.list,
         entries: [],
@@ -71,11 +71,29 @@ export class CreateListDialog extends React.Component<Props, State> {
         }
     }
 
-    public onNavClick(createListStep: CreateListStep) {
+    public render() {
+        const { isAddListDialogOpen, changeIsAddListDialogOpen } = this.props;
+
+        return (
+            <Dialog
+                isOpen={isAddListDialogOpen}
+                onClose={() => changeIsAddListDialogOpen(!isAddListDialogOpen)}
+                title="New Price List"
+                icon="manually-entered-data"
+                canOutsideClickClose={false}
+            >
+                {this.renderCreateListForm()}
+                {this.renderCreateEntriesForm()}
+                {this.renderFinish()}
+            </Dialog>
+        );
+    }
+
+    private onNavClick(createListStep: CreateListStep) {
         this.setState({ createListStep });
     }
 
-    public renderNav() {
+    private renderNav() {
         const { createListCompletion } = this.state;
 
         return (
@@ -111,7 +129,7 @@ export class CreateListDialog extends React.Component<Props, State> {
         );
     }
 
-    public onCreateListFormComplete(name: string) {
+    private onCreateListFormComplete(name: string) {
         let createListCompletion = CreateListCompletion.list;
         if (this.state.createListCompletion > createListCompletion) {
             createListCompletion = this.state.createListCompletion;
@@ -124,7 +142,7 @@ export class CreateListDialog extends React.Component<Props, State> {
         });
     }
 
-    public renderCreateListForm() {
+    private renderCreateListForm() {
         const { createListStep } = this.state;
 
         if (createListStep !== CreateListStep.list) {
@@ -142,7 +160,7 @@ export class CreateListDialog extends React.Component<Props, State> {
         );
     }
 
-    public onCreateEntryFormComplete(v: IPricelistEntry, item: Item) {
+    private onCreateEntryFormComplete(v: IPricelistEntry, item: Item) {
         const entriesItems = this.state.entriesItems;
         entriesItems[item.id] = item;
         this.setState({ entriesItems: { ...entriesItems } });
@@ -154,7 +172,7 @@ export class CreateListDialog extends React.Component<Props, State> {
         });
     }
 
-    public renderCreateEntriesForm() {
+    private renderCreateEntriesForm() {
         const { createListStep } = this.state;
 
         if (createListStep !== CreateListStep.entry) {
@@ -168,7 +186,7 @@ export class CreateListDialog extends React.Component<Props, State> {
         );
     }
 
-    public renderEntry(index: number, entry: IPricelistEntry) {
+    private renderEntry(index: number, entry: IPricelistEntry) {
         const { entriesItems } = this.state;
 
         return (
@@ -181,7 +199,7 @@ export class CreateListDialog extends React.Component<Props, State> {
         );
     }
 
-    public onFinishClick() {
+    private onFinishClick() {
         const { listName, entries } = this.state;
         const { createPricelist, currentRegion, currentRealm, profile } = this.props;
 
@@ -191,7 +209,7 @@ export class CreateListDialog extends React.Component<Props, State> {
         });
     }
 
-    public renderFinish() {
+    private renderFinish() {
         const { createListStep, listName, entries } = this.state;
         const { createPricelistLevel, createPricelistErrors } = this.props;
 
@@ -234,24 +252,6 @@ export class CreateListDialog extends React.Component<Props, State> {
                     />
                 </DialogActions>
             </>
-        );
-    }
-
-    public render() {
-        const { isAddListDialogOpen, changeIsAddListDialogOpen } = this.props;
-
-        return (
-            <Dialog
-                isOpen={isAddListDialogOpen}
-                onClose={() => changeIsAddListDialogOpen(!isAddListDialogOpen)}
-                title="New Price List"
-                icon="manually-entered-data"
-                canOutsideClickClose={false}
-            >
-                {this.renderCreateListForm()}
-                {this.renderCreateEntriesForm()}
-                {this.renderFinish()}
-            </Dialog>
         );
     }
 }

@@ -3,6 +3,7 @@
     "rules": {
         "no-submodule-imports": false,
         "no-implicit-dependencies": false,
-        "jsx-no-lambda": false
+        "jsx-no-lambda": false,
+        "no-console": true
     }
 }
