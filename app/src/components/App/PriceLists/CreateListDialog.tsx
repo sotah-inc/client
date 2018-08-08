@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { Breadcrumb, Button, Classes, Dialog, HTMLTable, Intent } from "@blueprintjs/core";
+import { Button, Classes, Dialog, HTMLTable, Intent } from "@blueprintjs/core";
 
 import { ICreatePricelistRequest } from "@app/api/price-lists";
 import { DialogActions, DialogBody, ErrorList } from "@app/components/util";
@@ -93,39 +93,62 @@ export class CreateListDialog extends React.Component<Props, State> {
         this.setState({ createListStep });
     }
 
-    private renderNav() {
-        const { createListCompletion } = this.state;
+    private renderNavHeader() {
+        const { createListStep } = this.state;
 
+        switch (createListStep) {
+            case CreateListStep.list:
+                return (
+                    <>
+                        <span />
+                        <div className={Classes.HEADING}>List</div>
+                        <span />
+                    </>
+                );
+            case CreateListStep.entry:
+                return (
+                    <>
+                        <span>
+                            <Button
+                                className={Classes.PANEL_STACK_HEADER_BACK}
+                                small={true}
+                                minimal={true}
+                                text="List"
+                                icon="chevron-left"
+                                onClick={() => this.onNavClick(CreateListStep.list)}
+                            />
+                        </span>
+                        <div className={Classes.HEADING}>Entry</div>
+                        <span />
+                    </>
+                );
+            case CreateListStep.finish:
+                return (
+                    <>
+                        <span>
+                            <Button
+                                className={Classes.PANEL_STACK_HEADER_BACK}
+                                small={true}
+                                minimal={true}
+                                text="Entry"
+                                icon="chevron-left"
+                                onClick={() => this.onNavClick(CreateListStep.entry)}
+                            />
+                        </span>
+                        <div className={Classes.HEADING}>Finish</div>
+                        <span />
+                    </>
+                );
+            default:
+                return;
+        }
+    }
+
+    private renderNav() {
         return (
-            <ul className={Classes.BREADCRUMBS}>
-                <li>
-                    <Breadcrumb
-                        text="List"
-                        onClick={() => this.onNavClick(CreateListStep.list)}
-                        className={
-                            createListCompletion === CreateListCompletion.initial ? Classes.BREADCRUMB_CURRENT : ""
-                        }
-                    />
-                </li>
-                <li>
-                    <Breadcrumb
-                        text="Entry"
-                        disabled={createListCompletion < CreateListCompletion.list}
-                        onClick={() => this.onNavClick(CreateListStep.entry)}
-                        className={createListCompletion === CreateListCompletion.list ? Classes.BREADCRUMB_CURRENT : ""}
-                    />
-                </li>
-                <li>
-                    <Breadcrumb
-                        text="Finish"
-                        disabled={createListCompletion < CreateListCompletion.entry}
-                        onClick={() => this.onNavClick(CreateListStep.finish)}
-                        className={
-                            createListCompletion === CreateListCompletion.entry ? Classes.BREADCRUMB_CURRENT : ""
-                        }
-                    />
-                </li>
-            </ul>
+            <div className={Classes.PANEL_STACK_HEADER} style={{ marginBottom: "10px" }}>
+                {this.renderNavHeader()}
+            </div>
         );
     }
 
