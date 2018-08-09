@@ -1,20 +1,28 @@
 import * as React from "react";
 
-import { Button, Classes } from "@blueprintjs/core";
+import { Button, Classes, IconName } from "@blueprintjs/core";
 
-interface IPrev {
+interface IAction {
     title: string;
     onClick: () => void;
 }
 
 interface IProps {
     title: string;
-    prev?: IPrev;
+    prev?: IAction;
+    next?: IAction;
 }
 
-const backButton = (prev?: IPrev) => {
-    if (!prev) {
+const actionButton = (action?: IAction, next?: boolean) => {
+    if (!action) {
         return <span />;
+    }
+
+    let style: React.CSSProperties = {};
+    let icon: IconName = "chevron-left";
+    if (next) {
+        icon = "chevron-right";
+        style = { marginRight: "5px", marginLeft: "auto" };
     }
 
     return (
@@ -23,9 +31,10 @@ const backButton = (prev?: IPrev) => {
                 className={Classes.PANEL_STACK_HEADER_BACK}
                 small={true}
                 minimal={true}
-                text={prev.title}
-                icon="chevron-left"
-                onClick={prev.onClick}
+                text={action.title}
+                icon={icon}
+                onClick={action.onClick}
+                style={style}
             />
         </span>
     );
@@ -34,9 +43,9 @@ const backButton = (prev?: IPrev) => {
 export const PanelHeader: React.SFC<IProps> = (props: IProps) => {
     return (
         <>
-            {backButton(props.prev)}
+            {actionButton(props.prev)}
             <div className={Classes.HEADING}>{props.title}</div>
-            <span />
+            {actionButton(props.next, true)}
         </>
     );
 };

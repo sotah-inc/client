@@ -96,6 +96,7 @@ export class ListDialog extends React.Component<Props, State> {
                     <PanelHeader
                         title="Entry"
                         prev={{ onClick: () => this.onNavClick(ListDialogStep.list), title: "List" }}
+                        next={{ onClick: () => this.onNavClick(ListDialogStep.finish), title: "Finish" }}
                     />
                 );
             case ListDialogStep.finish:
