@@ -9,7 +9,6 @@ import { IStoreState } from "@app/types";
 const mapStateToProps = (state: IStoreState): IStateProps => {
     const { currentRegion, currentRealm, profile } = state.Main;
     const { isAddListDialogOpen, createPricelistLevel, createPricelistErrors } = state.PriceLists;
-    const { itemClasses } = state.Auction;
 
     return {
         createPricelistErrors,
@@ -17,7 +16,6 @@ const mapStateToProps = (state: IStoreState): IStateProps => {
         currentRealm,
         currentRegion,
         isAddListDialogOpen,
-        itemClasses,
         profile,
     };
 };
