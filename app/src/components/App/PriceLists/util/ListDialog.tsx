@@ -38,7 +38,7 @@ type State = Readonly<{
     entriesItems: ItemsMap;
 }>;
 
-export class CreateListDialog extends React.Component<Props, State> {
+export class ListDialog extends React.Component<Props, State> {
     public state = {
         entries: [],
         entriesItems: {},
