@@ -120,11 +120,9 @@ export class ListDialog extends React.Component<Props, State> {
         );
     }
 
-    private onListFormComplete(name: string) {
-        this.setState({
-            listDialogStep: ListDialogStep.entry,
-            listName: name,
-        });
+    private onListFormComplete(listName: string) {
+        const listDialogStep = this.state.entries.length === 0 ? ListDialogStep.entry : ListDialogStep.finish;
+        this.setState({ listDialogStep, listName });
     }
 
     private renderListForm() {
