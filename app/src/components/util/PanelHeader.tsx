@@ -5,6 +5,7 @@ import { Button, Classes, IconName } from "@blueprintjs/core";
 interface IAction {
     title: string;
     onClick: () => void;
+    disabled?: boolean;
 }
 
 interface IProps {
@@ -17,6 +18,8 @@ const actionButton = (action?: IAction, next?: boolean) => {
     if (!action) {
         return <span />;
     }
+
+    const { title, onClick, disabled } = action;
 
     let style: React.CSSProperties = {};
     let icon: IconName = "chevron-left";
@@ -31,10 +34,11 @@ const actionButton = (action?: IAction, next?: boolean) => {
                 className={Classes.PANEL_STACK_HEADER_BACK}
                 small={true}
                 minimal={true}
-                text={action.title}
+                text={title}
                 icon={icon}
-                onClick={action.onClick}
+                onClick={onClick}
                 style={style}
+                disabled={disabled}
             />
         </span>
     );
