@@ -177,6 +177,12 @@ export class ListDialog extends React.Component<Props, State> {
         );
     }
 
+    private removeEntryAtIndex(index: number) {
+        const { entries } = this.state;
+
+        this.setState({ entries: [...entries.splice(0, index), ...entries.splice(index + 1)] });
+    }
+
     private renderEntry(index: number, entry: IPricelistEntry) {
         const { entriesItems } = this.state;
 
@@ -186,6 +192,9 @@ export class ListDialog extends React.Component<Props, State> {
                     <ItemPopoverContainer item={entriesItems[entry.item_id]} />
                 </td>
                 <td>x{entry.quantity_modifier}</td>
+                <td style={{ textAlign: "center" }}>
+                    <Button minimal={true} icon="delete" onClick={() => this.removeEntryAtIndex(index)} />
+                </td>
             </tr>
         );
     }
@@ -195,6 +204,31 @@ export class ListDialog extends React.Component<Props, State> {
         const { onComplete } = this.props;
 
         onComplete({ entries, name: listName });
+    }
+
+    private renderEntries() {
+        const { entries } = this.state;
+
+        if (entries.length > 0) {
+            return (
+                <HTMLTable
+                    className={`${Classes.HTML_TABLE} ${Classes.HTML_TABLE_BORDERED} ${
+                        Classes.SMALL
+                    } list-dialog-table`}
+                >
+                    <thead>
+                        <tr>
+                            <th>Item</th>
+                            <th>Quantity</th>
+                            <th>&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tbody>{entries.map((v, i) => this.renderEntry(i, v))}</tbody>
+                </HTMLTable>
+            );
+        }
+
+        return <ErrorList errors={{ entries: "There must be >1 entries." }} />;
     }
 
     private renderFinish() {
@@ -209,19 +243,7 @@ export class ListDialog extends React.Component<Props, State> {
             <>
                 <DialogBody>
                     {this.renderNav()}
-                    <HTMLTable
-                        className={`${Classes.HTML_TABLE} ${Classes.HTML_TABLE_BORDERED} ${
-                            Classes.SMALL
-                        } list-dialog-table`}
-                    >
-                        <thead>
-                            <tr>
-                                <th>Item</th>
-                                <th>Quantity</th>
-                            </tr>
-                        </thead>
-                        <tbody>{entries.map((v, i) => this.renderEntry(i, v))}</tbody>
-                    </HTMLTable>
+                    {this.renderEntries()}
                     <ErrorList errors={mutationErrors} />
                 </DialogBody>
                 <DialogActions>
@@ -234,7 +256,7 @@ export class ListDialog extends React.Component<Props, State> {
                     <Button
                         text={`Finish "${listName}"`}
                         intent={Intent.PRIMARY}
-                        disabled={mutatePricelistLevel === MutatePricelistLevel.fetching}
+                        disabled={mutatePricelistLevel === MutatePricelistLevel.fetching || entries.length === 0}
                         onClick={() => this.onFinishClick()}
                         icon="edit"
                     />
