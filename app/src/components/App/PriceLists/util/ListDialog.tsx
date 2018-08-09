@@ -7,7 +7,7 @@ import { ItemPopoverContainer } from "@app/containers/util/ItemPopover";
 import { CreateEntryFormFormContainer } from "@app/form-containers/App/PriceLists/util/CreateEntryForm";
 import { ListFormFormContainer } from "@app/form-containers/App/PriceLists/util/ListForm";
 import { IErrors, Item, ItemsMap } from "@app/types/global";
-import { IPricelistEntry, ListDialogCompletion, ListDialogStep, MutatePricelistLevel } from "@app/types/price-lists";
+import { IPricelistEntry, ListDialogStep, MutatePricelistLevel } from "@app/types/price-lists";
 
 interface IOnCompleteOptions {
     name: string;
@@ -35,7 +35,6 @@ export type Props = Readonly<IOwnProps>;
 type State = Readonly<{
     listDialogStep: ListDialogStep;
     listName: string;
-    listDialogCompletion: ListDialogCompletion;
     entries: IPricelistEntry[];
     entriesItems: ItemsMap;
 }>;
@@ -44,7 +43,6 @@ export class ListDialog extends React.Component<Props, State> {
     public state = {
         entries: [],
         entriesItems: {},
-        listDialogCompletion: ListDialogCompletion.initial,
         listDialogStep: ListDialogStep.list,
         listName: "",
     };
@@ -56,7 +54,6 @@ export class ListDialog extends React.Component<Props, State> {
             this.setState({
                 entries: [],
                 entriesItems: {},
-                listDialogCompletion: ListDialogCompletion.initial,
                 listDialogStep: ListDialogStep.list,
                 listName: "",
             });
@@ -124,13 +121,7 @@ export class ListDialog extends React.Component<Props, State> {
     }
 
     private onListFormComplete(name: string) {
-        let listDialogCompletion = ListDialogCompletion.list;
-        if (this.state.listDialogCompletion > listDialogCompletion) {
-            listDialogCompletion = this.state.listDialogCompletion;
-        }
-
         this.setState({
-            listDialogCompletion,
             listDialogStep: ListDialogStep.entry,
             listName: name,
         });
@@ -163,7 +154,6 @@ export class ListDialog extends React.Component<Props, State> {
 
         this.setState({
             entries: [...this.state.entries, v],
-            listDialogCompletion: ListDialogCompletion.entry,
             listDialogStep: ListDialogStep.finish,
         });
     }
