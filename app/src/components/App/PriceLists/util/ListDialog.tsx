@@ -24,6 +24,7 @@ export interface IOwnProps {
     mutationErrors: IErrors;
     mutatePricelistLevel: MutatePricelistLevel;
     resetTrigger: number;
+    defaultName?: string;
 
     onClose: () => void;
     onComplete: (opts: IOnCompleteOptions) => void;
@@ -131,7 +132,8 @@ export class ListDialog extends React.Component<Props, State> {
     }
 
     private renderListForm() {
-        const { listDialogStep } = this.state;
+        const { defaultName } = this.props;
+        const { listDialogStep, listName } = this.state;
 
         if (listDialogStep !== ListDialogStep.list) {
             return;
@@ -142,6 +144,7 @@ export class ListDialog extends React.Component<Props, State> {
                 onComplete={v => this.onListFormComplete(v)}
                 submitIcon="caret-right"
                 submitText="Next"
+                defaultName={listName || defaultName}
             >
                 {this.renderNav()}
             </ListFormFormContainer>

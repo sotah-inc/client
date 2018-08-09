@@ -55,7 +55,6 @@ export class EditListDialog extends React.Component<Props, State> {
     public render() {
         const {
             isEditListDialogOpen,
-            changeIsEditListDialogOpen,
             updatePricelistErrors,
             updatePricelistLevel,
             updatePricelist,
@@ -64,14 +63,19 @@ export class EditListDialog extends React.Component<Props, State> {
         } = this.props;
         const { listDialogResetTrigger } = this.state;
 
+        if (selectedList === null) {
+            return null;
+        }
+
         return (
             <ListDialog
                 isOpen={isEditListDialogOpen}
-                onClose={() => changeIsEditListDialogOpen(!isEditListDialogOpen)}
+                onClose={() => this.onListDialogClose()}
                 title="Edit Price List"
                 mutationErrors={updatePricelistErrors}
                 mutatePricelistLevel={updatePricelistLevel}
                 resetTrigger={listDialogResetTrigger}
+                defaultName={selectedList!.name}
                 onComplete={({ name, entries }) => {
                     updatePricelist({
                         meta: { isEditListDialogOpen: false },
@@ -80,5 +84,13 @@ export class EditListDialog extends React.Component<Props, State> {
                 }}
             />
         );
+    }
+
+    private onListDialogClose() {
+        const { changeIsEditListDialogOpen } = this.props;
+        const { listDialogResetTrigger } = this.state;
+
+        changeIsEditListDialogOpen(false);
+        this.setState({ listDialogResetTrigger: listDialogResetTrigger + 1 });
     }
 }
