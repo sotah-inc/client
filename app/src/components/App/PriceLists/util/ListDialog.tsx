@@ -7,7 +7,7 @@ import { ItemPopoverContainer } from "@app/containers/util/ItemPopover";
 import { CreateEntryFormFormContainer } from "@app/form-containers/App/PriceLists/util/CreateEntryForm";
 import { ListFormFormContainer } from "@app/form-containers/App/PriceLists/util/ListForm";
 import { IErrors, Item, ItemsMap } from "@app/types/global";
-import { CreateListCompletion, CreateListStep, IPricelistEntry, MutatePricelistLevel } from "@app/types/price-lists";
+import { IPricelistEntry, ListDialogCompletion, ListDialogStep, MutatePricelistLevel } from "@app/types/price-lists";
 
 interface IOnCompleteOptions {
     name: string;
@@ -31,19 +31,19 @@ export interface IOwnProps {
 export type Props = Readonly<IOwnProps>;
 
 type State = Readonly<{
-    createListStep: CreateListStep;
+    listDialogStep: ListDialogStep;
     listName: string;
-    createListCompletion: CreateListCompletion;
+    listDialogCompletion: ListDialogCompletion;
     entries: IPricelistEntry[];
     entriesItems: ItemsMap;
 }>;
 
 export class CreateListDialog extends React.Component<Props, State> {
     public state = {
-        createListCompletion: CreateListCompletion.initial,
-        createListStep: CreateListStep.list,
         entries: [],
         entriesItems: {},
+        listDialogCompletion: ListDialogCompletion.initial,
+        listDialogStep: ListDialogStep.list,
         listName: "",
     };
 
@@ -65,28 +65,28 @@ export class CreateListDialog extends React.Component<Props, State> {
         );
     }
 
-    private onNavClick(createListStep: CreateListStep) {
-        this.setState({ createListStep });
+    private onNavClick(listDialogStep: ListDialogStep) {
+        this.setState({ listDialogStep });
     }
 
     private renderNavHeader() {
-        const { createListStep } = this.state;
+        const { listDialogStep } = this.state;
 
-        switch (createListStep) {
-            case CreateListStep.list:
+        switch (listDialogStep) {
+            case ListDialogStep.list:
                 return <PanelHeader title="List" />;
-            case CreateListStep.entry:
+            case ListDialogStep.entry:
                 return (
                     <PanelHeader
                         title="Entry"
-                        prev={{ onClick: () => this.onNavClick(CreateListStep.list), title: "List" }}
+                        prev={{ onClick: () => this.onNavClick(ListDialogStep.list), title: "List" }}
                     />
                 );
-            case CreateListStep.finish:
+            case ListDialogStep.finish:
                 return (
                     <PanelHeader
                         title="Finish"
-                        prev={{ onClick: () => this.onNavClick(CreateListStep.entry), title: "List" }}
+                        prev={{ onClick: () => this.onNavClick(ListDialogStep.entry), title: "Entry" }}
                     />
                 );
             default:
@@ -103,22 +103,22 @@ export class CreateListDialog extends React.Component<Props, State> {
     }
 
     private onCreateListFormComplete(name: string) {
-        let createListCompletion = CreateListCompletion.list;
-        if (this.state.createListCompletion > createListCompletion) {
-            createListCompletion = this.state.createListCompletion;
+        let listDialogCompletion = ListDialogCompletion.list;
+        if (this.state.listDialogCompletion > listDialogCompletion) {
+            listDialogCompletion = this.state.listDialogCompletion;
         }
 
         this.setState({
-            createListCompletion,
-            createListStep: CreateListStep.entry,
+            listDialogCompletion,
+            listDialogStep: ListDialogStep.entry,
             listName: name,
         });
     }
 
     private renderCreateListForm() {
-        const { createListStep } = this.state;
+        const { listDialogStep } = this.state;
 
-        if (createListStep !== CreateListStep.list) {
+        if (listDialogStep !== ListDialogStep.list) {
             return;
         }
 
@@ -139,16 +139,16 @@ export class CreateListDialog extends React.Component<Props, State> {
         this.setState({ entriesItems: { ...entriesItems } });
 
         this.setState({
-            createListCompletion: CreateListCompletion.entry,
-            createListStep: CreateListStep.finish,
             entries: [...this.state.entries, v],
+            listDialogCompletion: ListDialogCompletion.entry,
+            listDialogStep: ListDialogStep.finish,
         });
     }
 
     private renderCreateEntriesForm() {
-        const { createListStep } = this.state;
+        const { listDialogStep } = this.state;
 
-        if (createListStep !== CreateListStep.entry) {
+        if (listDialogStep !== ListDialogStep.entry) {
             return;
         }
 
@@ -180,10 +180,10 @@ export class CreateListDialog extends React.Component<Props, State> {
     }
 
     private renderFinish() {
-        const { createListStep, listName, entries } = this.state;
+        const { listDialogStep, listName, entries } = this.state;
         const { mutatePricelistLevel, mutationErrors } = this.props;
 
-        if (createListStep !== CreateListStep.finish) {
+        if (listDialogStep !== ListDialogStep.finish) {
             return;
         }
 
@@ -210,7 +210,7 @@ export class CreateListDialog extends React.Component<Props, State> {
                     <Button
                         text="Add More Entries"
                         intent={Intent.NONE}
-                        onClick={() => this.setState({ createListStep: CreateListStep.entry })}
+                        onClick={() => this.setState({ listDialogStep: ListDialogStep.entry })}
                         icon="caret-left"
                     />
                     <Button

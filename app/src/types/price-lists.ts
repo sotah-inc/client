@@ -21,7 +21,17 @@ export enum CreateListStep {
     entry,
     finish,
 }
+export enum ListDialogStep {
+    list,
+    entry,
+    finish,
+}
 export enum CreateListCompletion {
+    initial,
+    list,
+    entry,
+}
+export enum ListDialogCompletion {
     initial,
     list,
     entry,
