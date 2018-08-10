@@ -74,8 +74,6 @@ export const priceLists = (state: State, action: PriceListsActions): State => {
             const replacedPricelist = action.payload.response.data!.pricelist;
             replacedPricelist.pricelist_entries = action.payload.response.data!.entries;
 
-            console.log(replacedIndex);
-
             let updatedPricelists = [
                 ...state.pricelists.slice(0, replacedIndex),
                 replacedPricelist,
