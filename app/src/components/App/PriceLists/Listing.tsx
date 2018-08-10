@@ -7,7 +7,7 @@ import { LastModified } from "@app/components/util";
 import { PriceListPanelContainer } from "@app/containers/App/PriceLists/PriceListPanel";
 import { IProfile, IRealm, IRegion } from "@app/types/global";
 import { AuthLevel, FetchUserPreferencesLevel } from "@app/types/main";
-import { GetPricelistsLevel, IPricelist, MutatePricelistLevel } from "@app/types/price-lists";
+import { GetPricelistsLevel, IPricelist } from "@app/types/price-lists";
 import { didRealmChange, priceListEntryTabId } from "@app/util";
 
 export interface IStateProps {
@@ -20,7 +20,6 @@ export interface IStateProps {
     profile: IProfile | null;
     authLevel: AuthLevel;
     fetchUserPreferencesLevel: FetchUserPreferencesLevel;
-    createPricelistLevel: MutatePricelistLevel;
 }
 
 export interface IDispatchProps {
@@ -69,7 +68,6 @@ export class Listing extends React.Component<Props> {
             profile,
             authLevel,
             fetchUserPreferencesLevel,
-            createPricelistLevel,
         } = this.props;
 
         if (currentRealm === null || currentRegion === null) {
@@ -77,10 +75,7 @@ export class Listing extends React.Component<Props> {
         }
 
         if (authLevel === AuthLevel.authenticated && fetchUserPreferencesLevel === FetchUserPreferencesLevel.success) {
-            const shouldRefreshPricelists =
-                didRealmChange(prevProps.currentRealm, currentRealm) ||
-                (prevProps.createPricelistLevel === MutatePricelistLevel.fetching &&
-                    createPricelistLevel === MutatePricelistLevel.success);
+            const shouldRefreshPricelists = didRealmChange(prevProps.currentRealm, currentRealm);
             if (shouldRefreshPricelists) {
                 refreshPricelists({
                     realmSlug: currentRealm.slug,

@@ -45,11 +45,19 @@ export const priceLists = (state: State, action: PriceListsActions): State => {
                 };
             }
 
+            const postCreateSelectedPricelist: IPricelist = {
+                ...action.payload.data!.pricelist,
+                pricelist_entries: action.payload.data!.entries,
+            };
+            const postCreatePricelists = [...state.pricelists, postCreateSelectedPricelist];
+
             return {
                 ...state,
                 createPricelistErrors: {},
                 createPricelistLevel: MutatePricelistLevel.success,
                 isAddListDialogOpen: false,
+                pricelists: postCreatePricelists,
+                selectedList: postCreateSelectedPricelist,
             };
         case REQUEST_UPDATE_PRICELIST:
             return { ...state, updatePricelistLevel: MutatePricelistLevel.fetching };

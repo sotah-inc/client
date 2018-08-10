@@ -9,16 +9,9 @@ import { IPricelist } from "@app/types/price-lists";
 
 const mapStateToProps = (state: IStoreState): IStateProps => {
     const { currentRegion, currentRealm, profile, authLevel, fetchUserPreferencesLevel } = state.Main;
-    const {
-        pricelists,
-        selectedList,
-        isAddListDialogOpen,
-        getPricelistsLevel,
-        createPricelistLevel,
-    } = state.PriceLists;
+    const { pricelists, selectedList, isAddListDialogOpen, getPricelistsLevel } = state.PriceLists;
     return {
         authLevel,
-        createPricelistLevel,
         currentRealm,
         currentRegion,
         fetchUserPreferencesLevel,
