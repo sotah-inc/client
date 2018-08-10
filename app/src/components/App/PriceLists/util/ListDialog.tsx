@@ -77,6 +77,15 @@ export class ListDialog extends React.Component<Props, State> {
                 listDialogStep: ListDialogStep.list,
                 listName: defaultName || "",
             });
+
+            return;
+        }
+
+        if (defaultName && defaultName !== prevProps.defaultName) {
+            this.setState({ listName: defaultName });
+        }
+        if (defaultEntries && defaultEntries !== prevProps.defaultEntries) {
+            this.setState({ entries: defaultEntries });
         }
     }
 
