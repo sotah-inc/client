@@ -34,7 +34,7 @@ export class EditListDialog extends React.Component<Props, State> {
     };
 
     public componentDidUpdate(prevProps: Props) {
-        const { updatePricelistLevel } = this.props;
+        const { updatePricelistLevel, selectedList } = this.props;
         const { listDialogResetTrigger } = this.state;
 
         if (prevProps.updatePricelistLevel !== updatePricelistLevel) {
@@ -43,7 +43,7 @@ export class EditListDialog extends React.Component<Props, State> {
                     AppToaster.show({
                         icon: "info-sign",
                         intent: Intent.SUCCESS,
-                        message: "Your pricelist has been saved.",
+                        message: `"${selectedList!.name}" has been saved.`,
                     });
                     this.setState({ listDialogResetTrigger: listDialogResetTrigger + 1 });
 
