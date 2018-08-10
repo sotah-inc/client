@@ -1,4 +1,5 @@
 import {
+    APPEND_ITEMS,
     CHANGE_ENTRY_CREATELEVEL,
     CHANGE_IS_ADD_ENTRY_DIALOG_OPEN,
     CHANGE_IS_ADD_LIST_DIALOG_OPEN,
@@ -15,6 +16,7 @@ import {
     REQUEST_GET_PRICELISTS,
     REQUEST_UPDATE_PRICELIST,
 } from "@app/actions/price-lists";
+import { Item } from "@app/types/global";
 import {
     defaultPriceListsState,
     GetPricelistsLevel,
@@ -128,6 +130,14 @@ export const priceLists = (state: State, action: PriceListsActions): State => {
             return { ...state, isDeleteListDialogOpen: action.payload };
         case CHANGE_IS_ADD_ENTRY_DIALOG_OPEN:
             return { ...state, isAddEntryDialogOpen: action.payload };
+        case APPEND_ITEMS:
+            const appendingItems = { ...state.items };
+            for (const itemId of Object.keys(action.payload)) {
+                const item: Item = action.payload[itemId];
+                appendingItems[item.id] = item;
+            }
+
+            return { ...state, items: appendingItems };
         default:
             return state;
     }
