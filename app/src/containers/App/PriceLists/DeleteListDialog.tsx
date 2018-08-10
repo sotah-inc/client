@@ -8,8 +8,9 @@ import { IStoreState } from "@app/types";
 
 const mapStateToProps = (state: IStoreState): IStateProps => {
     const { profile } = state.Main;
-    const { selectedList, isDeleteListDialogOpen } = state.PriceLists;
+    const { selectedList, isDeleteListDialogOpen, deletePricelistLevel } = state.PriceLists;
     return {
+        deletePricelistLevel,
         isDeleteListDialogOpen,
         profile,
         selectedList,

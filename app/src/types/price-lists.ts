@@ -15,6 +15,7 @@ export interface IPriceListsState {
     isAddEntryDialogOpen: boolean;
     getPricelistsLevel: GetPricelistsLevel;
     items: ItemsMap;
+    deletePricelistLevel: DeletePricelistLevel;
 }
 
 export enum CreateListStep {
@@ -59,6 +60,12 @@ export enum GetPricelistsLevel {
     success,
     failure,
 }
+export enum DeletePricelistLevel {
+    initial,
+    fetching,
+    success,
+    failure,
+}
 
 export interface IPricelist {
     id: number;
@@ -94,6 +101,7 @@ export interface IUpdatePricelistResponseOptions {
 export const defaultPriceListsState: IPriceListsState = {
     createPricelistErrors: {},
     createPricelistLevel: MutatePricelistLevel.initial,
+    deletePricelistLevel: DeletePricelistLevel.initial,
     entryCreateLevel: EntryCreateLevel.initial,
     getPricelistsLevel: GetPricelistsLevel.initial,
     isAddEntryDialogOpen: false,

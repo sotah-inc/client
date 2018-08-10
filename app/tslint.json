@@ -4,6 +4,6 @@
         "no-submodule-imports": false,
         "no-implicit-dependencies": false,
         "jsx-no-lambda": false,
-        "no-console": true
+        "no-console": false
     }
 }

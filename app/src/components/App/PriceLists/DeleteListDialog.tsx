@@ -5,12 +5,13 @@ import { Button, Callout, Dialog, Intent } from "@blueprintjs/core";
 import { IDeletePricelistRequestOptions } from "@app/api/price-lists";
 import { DialogActions, DialogBody } from "@app/components/util";
 import { IProfile } from "@app/types/global";
-import { IPricelist } from "@app/types/price-lists";
+import { DeletePricelistLevel, IPricelist } from "@app/types/price-lists";
 
 export interface IStateProps {
     selectedList: IPricelist | null;
     profile: IProfile | null;
     isDeleteListDialogOpen: boolean;
+    deletePricelistLevel: DeletePricelistLevel;
 }
 
 export interface IDispatchProps {
@@ -22,7 +23,7 @@ export type Props = Readonly<IStateProps & IDispatchProps>;
 
 export class DeleteListDialog extends React.Component<Props> {
     public render() {
-        const { isDeleteListDialogOpen, selectedList, changeIsDeleteListDialogOpen } = this.props;
+        const { isDeleteListDialogOpen, selectedList, changeIsDeleteListDialogOpen, deletePricelistLevel } = this.props;
 
         if (selectedList === null) {
             return null;
@@ -48,6 +49,7 @@ export class DeleteListDialog extends React.Component<Props> {
                         icon="delete"
                         text={`Delete "${selectedList.name}"`}
                         onClick={() => this.onDialogConfirm()}
+                        disabled={deletePricelistLevel === DeletePricelistLevel.fetching}
                     />
                 </DialogActions>
             </Dialog>

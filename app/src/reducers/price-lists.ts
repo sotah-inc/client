@@ -19,6 +19,7 @@ import {
 import { Item } from "@app/types/global";
 import {
     defaultPriceListsState,
+    DeletePricelistLevel,
     GetPricelistsLevel,
     IPricelist,
     IPriceListsState,
@@ -92,8 +93,12 @@ export const priceLists = (state: State, action: PriceListsActions): State => {
                 updatePricelistLevel: MutatePricelistLevel.success,
             };
         case REQUEST_DELETE_PRICELIST:
-            return { ...state };
+            return { ...state, deletePricelistLevel: DeletePricelistLevel.fetching };
         case RECEIVE_DELETE_PRICELIST:
+            if (action.payload === null) {
+                return { ...state, deletePricelistLevel: DeletePricelistLevel.failure };
+            }
+
             const deletedIndex = getPricelistIndex(state.pricelists, action.payload!);
 
             let onDeletePricelists = [
@@ -114,6 +119,7 @@ export const priceLists = (state: State, action: PriceListsActions): State => {
 
             return {
                 ...state,
+                deletePricelistLevel: DeletePricelistLevel.success,
                 isDeleteListDialogOpen: false,
                 pricelists: onDeletePricelists,
                 selectedList: onDeleteSelectedList,
