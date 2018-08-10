@@ -20,7 +20,7 @@ const config: WithFormikConfig<IFormProps, IFormValues> = {
     mapPropsToValues: (_: IFormProps) => {
         return {
             item: null,
-            quantity: -1,
+            quantity: 1,
         };
     },
     validationSchema: Yup.object().shape({

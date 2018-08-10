@@ -89,7 +89,7 @@ export class CreateEntryForm extends React.Component<Props> {
                         getError: () => errors.quantity,
                         getTouched: () => !!touched.quantity,
                         getValue: () => values.quantity.toString(),
-                        placeholder: "-1",
+                        placeholder: "1",
                         type: "number",
                     })}
                 </DialogBody>
