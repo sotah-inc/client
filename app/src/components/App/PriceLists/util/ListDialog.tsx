@@ -16,6 +16,7 @@ interface IOnCompleteOptions {
         item_id: number;
         quantity_modifier: number;
     }>;
+    items: ItemsMap;
 }
 
 export interface IStateProps {
@@ -231,10 +232,10 @@ export class ListDialog extends React.Component<Props, State> {
     }
 
     private onFinishClick() {
-        const { listName, entries } = this.state;
+        const { listName: name, entries, entriesItems: items } = this.state;
         const { onComplete } = this.props;
 
-        onComplete({ entries, name: listName });
+        onComplete({ entries, name, items });
     }
 
     private renderEntries() {

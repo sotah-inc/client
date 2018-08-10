@@ -11,6 +11,7 @@ import {
     IGetPricelistsResponse,
     updatePricelist,
 } from "@app/api/price-lists";
+import { ItemsMap } from "@app/types/global";
 import {
     EntryCreateLevel,
     IPricelist,
@@ -94,7 +95,11 @@ export const ChangeIsDeleteListDialogOpen = (payload: boolean) =>
 export const CHANGE_IS_ADD_ENTRY_DIALOG_OPEN = "CHANGE_IS_ADD_ENTRY_DIALOG_OPEN";
 export const ChangeIsAddEntryDialogOpen = (payload: boolean) => createAction(CHANGE_IS_ADD_ENTRY_DIALOG_OPEN, payload);
 
+export const APPEND_ITEMS = "APPEND_ITEMS";
+export const AppendItems = (payload: ItemsMap) => createAction(APPEND_ITEMS, payload);
+
 export const PriceListsActions = {
+    AppendItems,
     ChangeEntryCreateLevel,
     ChangeIsAddEntryDialogOpen,
     ChangeIsAddListDialogOpen,

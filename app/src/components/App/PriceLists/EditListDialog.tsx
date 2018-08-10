@@ -17,6 +17,7 @@ export interface IStateProps {
 }
 
 export interface IDispatchProps {
+    appendItems: (items: ItemsMap) => void;
     changeIsEditListDialogOpen: (isDialogOpen: boolean) => void;
     updatePricelist: (opts: IUpdatePricelistRequestOptions) => void;
 }
@@ -54,14 +55,7 @@ export class EditListDialog extends React.Component<Props, State> {
     }
 
     public render() {
-        const {
-            isEditListDialogOpen,
-            updatePricelistErrors,
-            updatePricelistLevel,
-            updatePricelist,
-            profile,
-            selectedList,
-        } = this.props;
+        const { isEditListDialogOpen, updatePricelistErrors, updatePricelistLevel, selectedList } = this.props;
         const { listDialogResetTrigger } = this.state;
 
         if (selectedList === null) {
@@ -78,12 +72,7 @@ export class EditListDialog extends React.Component<Props, State> {
                 resetTrigger={listDialogResetTrigger}
                 defaultName={selectedList!.name}
                 defaultEntries={selectedList.pricelist_entries}
-                onComplete={({ name, entries }) => {
-                    updatePricelist({
-                        meta: { isEditListDialogOpen: false },
-                        request: { entries, pricelist: { ...selectedList!, name }, token: profile!.token },
-                    });
-                }}
+                onComplete={v => this.onListDialogComplete(v)}
             />
         );
     }
@@ -94,5 +83,15 @@ export class EditListDialog extends React.Component<Props, State> {
 
         changeIsEditListDialogOpen(false);
         this.setState({ listDialogResetTrigger: listDialogResetTrigger + 1 });
+    }
+
+    private onListDialogComplete({ name, entries, items }) {
+        const { updatePricelist, profile, selectedList, appendItems } = this.props;
+
+        updatePricelist({
+            meta: { isEditListDialogOpen: false },
+            request: { entries, pricelist: { ...selectedList!, name }, token: profile!.token },
+        });
+        appendItems(items);
     }
 }
