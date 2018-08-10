@@ -29,7 +29,41 @@ export class PriceListTable extends React.Component<Props, State> {
         pricelistMap: {},
     };
 
-    public async reloadPricelistData() {
+    public async componentDidMount() {
+        await this.reloadPricelistData();
+    }
+
+    public componentDidUpdate(prevProps: Props) {
+        if (this.props.list.pricelist_entries!.length !== prevProps.list.pricelist_entries!.length) {
+            this.reloadPricelistData();
+        }
+    }
+
+    public render() {
+        const { getPriceListLevel } = this.state;
+
+        switch (getPriceListLevel) {
+            case GetPriceListLevel.failure:
+                return (
+                    <NonIdealState
+                        title="Could not load price-lists"
+                        icon={<Spinner className={Classes.LARGE} intent={Intent.DANGER} value={0} />}
+                    />
+                );
+            case GetPriceListLevel.success:
+                return this.renderTable();
+            case GetPriceListLevel.initial:
+            default:
+                return (
+                    <NonIdealState
+                        title="Loading"
+                        icon={<Spinner className={Classes.LARGE} intent={Intent.PRIMARY} />}
+                    />
+                );
+        }
+    }
+
+    private async reloadPricelistData() {
         const { list, region, realm } = this.props;
 
         const itemIds = list.pricelist_entries!.map(v => v.item_id);
@@ -51,17 +85,7 @@ export class PriceListTable extends React.Component<Props, State> {
         });
     }
 
-    public async componentDidMount() {
-        await this.reloadPricelistData();
-    }
-
-    public componentDidUpdate(prevProps: Props) {
-        if (this.props.list.pricelist_entries!.length !== prevProps.list.pricelist_entries!.length) {
-            this.reloadPricelistData();
-        }
-    }
-
-    public renderEntry(index: number, entry: IPricelistEntry) {
+    private renderEntry(index: number, entry: IPricelistEntry) {
         const { item_id, quantity_modifier } = entry;
         const { pricelistMap, itemsMap } = this.state;
 
@@ -100,8 +124,21 @@ export class PriceListTable extends React.Component<Props, State> {
         );
     }
 
-    public renderTable() {
+    private renderTable() {
         const { list } = this.props;
+        const { pricelistMap } = this.state;
+
+        const entries = list.pricelist_entries!.sort((a, b) => {
+            if (!(a.item_id in pricelistMap) || !(b.item_id in pricelistMap)) {
+                return 0;
+            }
+
+            if (pricelistMap[a.item_id].buyout === pricelistMap[b.item_id].buyout) {
+                return 0;
+            }
+
+            return pricelistMap[a.item_id].buyout > pricelistMap[b.item_id].buyout ? -1 : 1;
+        });
 
         return (
             <HTMLTable
@@ -114,32 +151,8 @@ export class PriceListTable extends React.Component<Props, State> {
                         <th>Buyout</th>
                     </tr>
                 </thead>
-                <tbody>{list.pricelist_entries!.map((v, i) => this.renderEntry(i, v))}</tbody>
+                <tbody>{entries.map((v, i) => this.renderEntry(i, v))}</tbody>
             </HTMLTable>
         );
-    }
-
-    public render() {
-        const { getPriceListLevel } = this.state;
-
-        switch (getPriceListLevel) {
-            case GetPriceListLevel.failure:
-                return (
-                    <NonIdealState
-                        title="Could not load price-lists"
-                        icon={<Spinner className={Classes.LARGE} intent={Intent.DANGER} value={0} />}
-                    />
-                );
-            case GetPriceListLevel.success:
-                return this.renderTable();
-            case GetPriceListLevel.initial:
-            default:
-                return (
-                    <NonIdealState
-                        title="Loading"
-                        icon={<Spinner className={Classes.LARGE} intent={Intent.PRIMARY} />}
-                    />
-                );
-        }
     }
 }
