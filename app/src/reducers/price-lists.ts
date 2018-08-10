@@ -74,14 +74,21 @@ export const priceLists = (state: State, action: PriceListsActions): State => {
             const replacedPricelist = action.payload.response.data!.pricelist;
             replacedPricelist.pricelist_entries = action.payload.response.data!.entries;
 
+            console.log(replacedIndex);
+
+            let updatedPricelists = [
+                ...state.pricelists.slice(0, replacedIndex),
+                replacedPricelist,
+                ...state.pricelists.slice(replacedIndex + 1),
+            ];
+            if (replacedIndex === 0) {
+                updatedPricelists = [replacedPricelist, ...state.pricelists.slice(1)];
+            }
+
             return {
                 ...state,
                 ...action.payload.meta,
-                pricelists: [
-                    ...state.pricelists.splice(0, replacedIndex),
-                    replacedPricelist,
-                    ...state.pricelists.splice(replacedIndex + 1),
-                ],
+                pricelists: updatedPricelists,
                 selectedList: replacedPricelist,
                 updatePricelistErrors: {},
                 updatePricelistLevel: MutatePricelistLevel.success,
@@ -90,10 +97,15 @@ export const priceLists = (state: State, action: PriceListsActions): State => {
             return { ...state };
         case RECEIVE_DELETE_PRICELIST:
             const deletedIndex = getPricelistIndex(state.pricelists, action.payload!);
-            const onDeletePricelists = [
-                ...state.pricelists.splice(0, deletedIndex),
-                ...state.pricelists.splice(deletedIndex + 1),
+
+            let onDeletePricelists = [
+                ...state.pricelists.slice(0, deletedIndex),
+                ...state.pricelists.slice(deletedIndex + 1),
             ];
+            if (deletedIndex === 0) {
+                onDeletePricelists = [...state.pricelists.slice(1)];
+            }
+
             let onDeleteSelectedList: IPricelist | null = null;
             if (onDeletePricelists.length > 0) {
                 const isLastDeleted = deletedIndex === onDeletePricelists.length;
