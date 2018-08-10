@@ -4,7 +4,7 @@ import { Intent } from "@blueprintjs/core";
 
 import { ICreatePricelistRequest } from "@app/api/price-lists";
 import { ListDialogContainer } from "@app/containers/App/PriceLists/util/ListDialog";
-import { IErrors, IProfile, IRealm, IRegion } from "@app/types/global";
+import { IErrors, IProfile, IRealm, IRegion, ItemsMap } from "@app/types/global";
 import { MutatePricelistLevel } from "@app/types/price-lists";
 import { AppToaster } from "@app/util/toasters";
 
@@ -18,6 +18,7 @@ export interface IStateProps {
 }
 
 export interface IDispatchProps {
+    appendItems: (items: ItemsMap) => void;
     changeIsAddListDialogOpen: (isDialogOpen: boolean) => void;
     createPricelist: (token: string, request: ICreatePricelistRequest) => void;
 }
@@ -60,10 +61,6 @@ export class CreateListDialog extends React.Component<Props, State> {
             changeIsAddListDialogOpen,
             createPricelistErrors,
             createPricelistLevel,
-            createPricelist,
-            profile,
-            currentRegion,
-            currentRealm,
         } = this.props;
         const { listDialogResetTrigger } = this.state;
 
@@ -75,13 +72,18 @@ export class CreateListDialog extends React.Component<Props, State> {
                 mutationErrors={createPricelistErrors}
                 mutatePricelistLevel={createPricelistLevel}
                 resetTrigger={listDialogResetTrigger}
-                onComplete={({ name, entries }) => {
-                    createPricelist(profile!.token, {
-                        entries,
-                        pricelist: { name, region: currentRegion!.name, realm: currentRealm!.slug },
-                    });
-                }}
+                onComplete={v => this.onListDialogComplete(v)}
             />
         );
+    }
+
+    private onListDialogComplete({ name, entries, items }) {
+        const { createPricelist, profile, appendItems, currentRegion, currentRealm } = this.props;
+
+        createPricelist(profile!.token, {
+            entries,
+            pricelist: { name, region: currentRegion!.name, realm: currentRealm!.slug },
+        });
+        appendItems(items);
     }
 }
