@@ -8,10 +8,11 @@ import { IUpdatePricelistRequestOptions } from "@app/types/price-lists";
 
 const mapStateToProps = (state: IStoreState): IStateProps => {
     const { profile } = state.Main;
-    const { isEditListDialogOpen, updatePricelistLevel, updatePricelistErrors, selectedList } = state.PriceLists;
+    const { isEditListDialogOpen, items, updatePricelistLevel, updatePricelistErrors, selectedList } = state.PriceLists;
 
     return {
         isEditListDialogOpen,
+        items,
         profile,
         selectedList,
         updatePricelistErrors,

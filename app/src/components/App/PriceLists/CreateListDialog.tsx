@@ -3,7 +3,7 @@ import * as React from "react";
 import { Intent } from "@blueprintjs/core";
 
 import { ICreatePricelistRequest } from "@app/api/price-lists";
-import { ListDialog } from "@app/components/App/PriceLists/util/ListDialog";
+import { ListDialogContainer } from "@app/containers/App/PriceLists/util/ListDialog";
 import { IErrors, IProfile, IRealm, IRegion } from "@app/types/global";
 import { MutatePricelistLevel } from "@app/types/price-lists";
 import { AppToaster } from "@app/util/toasters";
@@ -68,7 +68,7 @@ export class CreateListDialog extends React.Component<Props, State> {
         const { listDialogResetTrigger } = this.state;
 
         return (
-            <ListDialog
+            <ListDialogContainer
                 isOpen={isAddListDialogOpen}
                 onClose={() => changeIsAddListDialogOpen(!isAddListDialogOpen)}
                 title="New Price List"

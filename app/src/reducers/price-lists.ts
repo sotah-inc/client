@@ -112,6 +112,7 @@ export const priceLists = (state: State, action: PriceListsActions): State => {
             return {
                 ...state,
                 getPricelistsLevel: GetPricelistsLevel.success,
+                items: action.payload.items,
                 pricelists: action.payload.pricelists,
                 selectedList: receivedSelectedList,
             };

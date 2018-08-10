@@ -2,8 +2,8 @@ import * as React from "react";
 
 import { Intent } from "@blueprintjs/core";
 
-import { ListDialog } from "@app/components/App/PriceLists/util/ListDialog";
-import { IErrors, IProfile } from "@app/types/global";
+import { ListDialogContainer } from "@app/containers/App/PriceLists/util/ListDialog";
+import { IErrors, IProfile, ItemsMap } from "@app/types/global";
 import { IPricelist, IUpdatePricelistRequestOptions, MutatePricelistLevel } from "@app/types/price-lists";
 import { AppToaster } from "@app/util/toasters";
 
@@ -13,6 +13,7 @@ export interface IStateProps {
     updatePricelistErrors: IErrors;
     profile: IProfile | null;
     selectedList: IPricelist | null;
+    items: ItemsMap;
 }
 
 export interface IDispatchProps {
@@ -68,7 +69,7 @@ export class EditListDialog extends React.Component<Props, State> {
         }
 
         return (
-            <ListDialog
+            <ListDialogContainer
                 isOpen={isEditListDialogOpen}
                 onClose={() => this.onListDialogClose()}
                 title="Edit Price List"
@@ -76,6 +77,7 @@ export class EditListDialog extends React.Component<Props, State> {
                 mutatePricelistLevel={updatePricelistLevel}
                 resetTrigger={listDialogResetTrigger}
                 defaultName={selectedList!.name}
+                defaultEntries={selectedList.pricelist_entries}
                 onComplete={({ name, entries }) => {
                     updatePricelist({
                         meta: { isEditListDialogOpen: false },

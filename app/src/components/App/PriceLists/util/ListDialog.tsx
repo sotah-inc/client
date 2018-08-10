@@ -6,7 +6,7 @@ import { DialogActions, DialogBody, ErrorList, PanelHeader } from "@app/componen
 import { ItemPopoverContainer } from "@app/containers/util/ItemPopover";
 import { CreateEntryFormFormContainer } from "@app/form-containers/App/PriceLists/util/CreateEntryForm";
 import { ListFormFormContainer } from "@app/form-containers/App/PriceLists/util/ListForm";
-import { IErrors, Item, ItemsMap } from "@app/types/global";
+import { IErrors, Item, ItemId, ItemsMap } from "@app/types/global";
 import { IPricelistEntry, ListDialogStep, MutatePricelistLevel } from "@app/types/price-lists";
 
 interface IOnCompleteOptions {
@@ -18,6 +18,10 @@ interface IOnCompleteOptions {
     }>;
 }
 
+export interface IStateProps {
+    items: ItemsMap;
+}
+
 export interface IOwnProps {
     isOpen: boolean;
     title: string;
@@ -25,12 +29,13 @@ export interface IOwnProps {
     mutatePricelistLevel: MutatePricelistLevel;
     resetTrigger: number;
     defaultName?: string;
+    defaultEntries?: IPricelistEntry[];
 
     onClose: () => void;
     onComplete: (opts: IOnCompleteOptions) => void;
 }
 
-export type Props = Readonly<IOwnProps>;
+export type Props = Readonly<IOwnProps & IStateProps>;
 
 type State = Readonly<{
     listDialogStep: ListDialogStep;
@@ -47,15 +52,29 @@ export class ListDialog extends React.Component<Props, State> {
         listName: "",
     };
 
+    public componentDidMount() {
+        const { defaultName, defaultEntries } = this.props;
+        let listName = "";
+        if (defaultName) {
+            listName = defaultName;
+        }
+        let entries: IPricelistEntry[] = [];
+        if (defaultEntries) {
+            entries = defaultEntries;
+        }
+
+        this.setState({ listName, entries });
+    }
+
     public componentDidUpdate(prevProps: Props) {
-        const { resetTrigger } = this.props;
+        const { resetTrigger, defaultName, defaultEntries } = this.props;
 
         if (prevProps.resetTrigger !== resetTrigger) {
             this.setState({
-                entries: [],
+                entries: defaultEntries || [],
                 entriesItems: {},
                 listDialogStep: ListDialogStep.list,
-                listName: "",
+                listName: defaultName || "",
             });
         }
     }
@@ -176,14 +195,33 @@ export class ListDialog extends React.Component<Props, State> {
         this.setState({ entries: [...entries.splice(0, index), ...entries.splice(index + 1)] });
     }
 
-    private renderEntry(index: number, entry: IPricelistEntry) {
+    private getItem(id: ItemId) {
+        const { items } = this.props;
         const { entriesItems } = this.state;
 
+        if (id in items) {
+            return items[id];
+        }
+
+        if (id in entriesItems) {
+            return entriesItems[id];
+        }
+
+        return null;
+    }
+
+    private renderItemPopover(item: Item | null) {
+        if (item === null) {
+            return;
+        }
+
+        return <ItemPopoverContainer item={item} />;
+    }
+
+    private renderEntry(index: number, entry: IPricelistEntry) {
         return (
             <tr key={index}>
-                <td>
-                    <ItemPopoverContainer item={entriesItems[entry.item_id]} />
-                </td>
+                <td>{this.renderItemPopover(this.getItem(entry.item_id))}</td>
                 <td>x{entry.quantity_modifier}</td>
                 <td style={{ textAlign: "center" }}>
                     <Button minimal={true} icon="delete" onClick={() => this.removeEntryAtIndex(index)} />
