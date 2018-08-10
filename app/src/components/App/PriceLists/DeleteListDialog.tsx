@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { Button, Dialog, Intent } from "@blueprintjs/core";
+import { Button, Callout, Dialog, Intent } from "@blueprintjs/core";
 
 import { IDeletePricelistRequestOptions } from "@app/api/price-lists";
 import { DialogActions, DialogBody } from "@app/components/util";
@@ -36,7 +36,9 @@ export class DeleteListDialog extends React.Component<Props> {
                 icon="delete"
             >
                 <DialogBody>
-                    <p>Hello, world!</p>
+                    <Callout intent={Intent.DANGER} icon="info-sign">
+                        Are you sure you want to delete "{selectedList.name}"
+                    </Callout>
                 </DialogBody>
                 <DialogActions>
                     <Button text="Cancel" intent={Intent.NONE} onClick={() => this.onDialogCancel()} />
