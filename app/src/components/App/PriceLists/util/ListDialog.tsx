@@ -202,7 +202,7 @@ export class ListDialog extends React.Component<Props, State> {
     private removeEntryAtIndex(index: number) {
         const { entries } = this.state;
 
-        this.setState({ entries: [...entries.splice(0, index), ...entries.splice(index + 1)] });
+        this.setState({ entries: [...entries.slice(0, index), ...entries.slice(index + 1)] });
     }
 
     private getItem(id: ItemId) {
