@@ -133,11 +133,14 @@ export class PriceListTable extends React.Component<Props, State> {
                 return 0;
             }
 
-            if (pricelistMap[a.item_id].buyout === pricelistMap[b.item_id].buyout) {
+            const aResult = pricelistMap[a.item_id].buyout * a.quantity_modifier;
+            const bResult = pricelistMap[b.item_id].buyout * b.quantity_modifier;
+
+            if (aResult === bResult) {
                 return 0;
             }
 
-            return pricelistMap[a.item_id].buyout > pricelistMap[b.item_id].buyout ? -1 : 1;
+            return aResult > bResult ? -1 : 1;
         });
 
         return (
