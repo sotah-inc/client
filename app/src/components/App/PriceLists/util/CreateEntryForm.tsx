@@ -24,29 +24,6 @@ export interface IFormValues {
 export type Props = Readonly<IOwnProps & FormikProps<IFormValues>>;
 
 export class CreateEntryForm extends React.Component<Props> {
-    public renderSelectedItem(item: Item | null) {
-        if (item === null) {
-            return (
-                <p>
-                    <em>No item selected.</em>
-                </p>
-            );
-        }
-
-        const className = qualityToColorClass(item.quality);
-        const textValue = getItemTextValue(item);
-        const itemIcon = getItemIconUrl(item);
-        if (itemIcon === null) {
-            return <p className={className}>{textValue}</p>;
-        }
-
-        return (
-            <H5 className={`${className} new-entry-item`}>
-                <img src={itemIcon} /> {textValue}
-            </H5>
-        );
-    }
-
     public render() {
         const {
             values,
@@ -72,7 +49,7 @@ export class CreateEntryForm extends React.Component<Props> {
                         <div className="pure-u-1-2">
                             <div style={{ paddingRight: "5px" }}>
                                 <FormGroup helperText={errors.item} label="Item" labelInfo={true} intent={itemIntent}>
-                                    <ItemInput onSelect={v => setFieldValue("item", v)} autoFocus={true} />
+                                    <ItemInput onSelect={v => this.onItemSelect(v)} autoFocus={true} />
                                 </FormGroup>
                             </div>
                         </div>
@@ -104,6 +81,35 @@ export class CreateEntryForm extends React.Component<Props> {
                     />
                 </DialogActions>
             </form>
+        );
+    }
+
+    private onItemSelect(item: Item) {
+        const { setFieldValue } = this.props;
+
+        setFieldValue("item", item);
+    }
+
+    private renderSelectedItem(item: Item | null) {
+        if (item === null) {
+            return (
+                <p>
+                    <em>No item selected.</em>
+                </p>
+            );
+        }
+
+        const className = qualityToColorClass(item.quality);
+        const textValue = getItemTextValue(item);
+        const itemIcon = getItemIconUrl(item);
+        if (itemIcon === null) {
+            return <p className={className}>{textValue}</p>;
+        }
+
+        return (
+            <H5 className={`${className} new-entry-item`}>
+                <img src={itemIcon} /> {textValue}
+            </H5>
         );
     }
 }
