@@ -3,7 +3,7 @@ import * as React from "react";
 import { Dialog } from "@blueprintjs/core";
 
 import { CreateEntryFormFormContainer } from "@app/form-containers/App/PriceLists/util/CreateEntryForm";
-import { IProfile } from "@app/types/global";
+import { IProfile, Item } from "@app/types/global";
 import {
     IPricelist,
     IPricelistEntry,
@@ -25,9 +25,18 @@ export interface IDispatchProps {
 
 export type Props = Readonly<IStateProps & IDispatchProps>;
 
-export class CreateEntryDialog extends React.Component<Props> {
+interface IState {
+    entryFormError: string;
+}
+
+export class CreateEntryDialog extends React.Component<Props, IState> {
+    public state: IState = {
+        entryFormError: "",
+    };
+
     public render() {
         const { isAddEntryDialogOpen, updatePricelistLevel, changeIsAddEntryDialogOpen, selectedList } = this.props;
+        const { entryFormError } = this.state;
 
         if (selectedList === null) {
             return null;
@@ -43,7 +52,9 @@ export class CreateEntryDialog extends React.Component<Props> {
             >
                 <CreateEntryFormFormContainer
                     onComplete={(entry: IPricelistEntry) => this.onCreateEntryFormComplete(entry)}
+                    onItemSelect={v => this.onCreateEntryFormItemSelect(v)}
                     isSubmitDisabled={updatePricelistLevel === MutatePricelistLevel.fetching}
+                    externalItemError={entryFormError}
                 />
             </Dialog>
         );
@@ -59,5 +70,19 @@ export class CreateEntryDialog extends React.Component<Props> {
                 token: profile!.token,
             },
         });
+    }
+
+    private onCreateEntryFormItemSelect(item: Item) {
+        const { selectedList } = this.props;
+
+        for (const entry of selectedList!.pricelist_entries!) {
+            if (entry.item_id === item.id) {
+                this.setState({ entryFormError: "Item is already in the list." });
+
+                return;
+            }
+        }
+
+        this.setState({ entryFormError: "" });
     }
 }
