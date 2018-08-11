@@ -43,12 +43,14 @@ type State = Readonly<{
     listName: string;
     entries: IPricelistEntry[];
     entriesItems: ItemsMap;
+    entryFormError: string;
 }>;
 
 export class ListDialog extends React.Component<Props, State> {
-    public state = {
+    public state: State = {
         entries: [],
         entriesItems: {},
+        entryFormError: "",
         listDialogStep: ListDialogStep.list,
         listName: "",
     };
@@ -185,15 +187,33 @@ export class ListDialog extends React.Component<Props, State> {
         });
     }
 
+    private onCreateEntryFormItemSelect(item: Item) {
+        const { entries } = this.state;
+
+        for (const entry of entries) {
+            if (entry.item_id === item.id) {
+                this.setState({ entryFormError: "Item is already in the list." });
+
+                return;
+            }
+        }
+
+        this.setState({ entryFormError: "" });
+    }
+
     private renderCreateEntryForm() {
-        const { listDialogStep } = this.state;
+        const { listDialogStep, entryFormError } = this.state;
 
         if (listDialogStep !== ListDialogStep.entry) {
             return;
         }
 
         return (
-            <CreateEntryFormFormContainer onComplete={(v, item) => this.onCreateEntryFormComplete(v, item)}>
+            <CreateEntryFormFormContainer
+                onComplete={(v, item) => this.onCreateEntryFormComplete(v, item)}
+                onItemSelect={v => this.onCreateEntryFormItemSelect(v)}
+                externalItemError={entryFormError}
+            >
                 {this.renderNav()}
             </CreateEntryFormFormContainer>
         );

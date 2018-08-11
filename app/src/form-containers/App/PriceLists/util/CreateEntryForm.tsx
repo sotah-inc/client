@@ -8,7 +8,10 @@ import { PriceListRules } from "@app/validator-rules";
 
 interface IFormProps {
     onComplete: (entry: IPricelistEntry, item: Item) => void;
+    onItemSelect?: (item: Item) => void;
+
     isSubmitDisabled?: boolean;
+    externalItemError?: string;
 }
 
 const config: WithFormikConfig<IFormProps, IFormValues> = {
