@@ -13,6 +13,7 @@ export interface IAuctionState {
     selectedQueryAuctionResults: IQueryAuctionResult[];
     fetchItemClassesLevel: FetchItemClassesLevel;
     itemClasses: ItemClasses;
+    activeSelect: boolean;
 }
 
 export enum FetchAuctionsLevel {
@@ -85,6 +86,7 @@ export enum FetchItemClassesLevel {
 }
 
 export const defaultAuctionState: IAuctionState = {
+    activeSelect: true,
     auctions: [],
     auctionsPerPage: 10,
     currentPage: 0,

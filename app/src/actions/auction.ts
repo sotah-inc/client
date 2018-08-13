@@ -85,7 +85,11 @@ export const FetchItemClasses = () => {
     };
 };
 
+export const ACTIVESELECT_CHANGE = "ACTIVESELECT_CHANGE";
+export const ActiveSelectChange = (payload: boolean) => createAction(ACTIVESELECT_CHANGE, payload);
+
 export const AuctionActions = {
+    ActiveSelectChange,
     AddAuctionsQuery,
     CountChange,
     ItemFilterChange,

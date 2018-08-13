@@ -12,6 +12,7 @@ import {
     Navbar,
     NavbarGroup,
     Spinner,
+    Switch,
     Tag,
 } from "@blueprintjs/core";
 import {
@@ -37,25 +38,23 @@ export interface IStateProps {
     currentRealm: IRealm | null;
     items: IQueryAuctionResult[];
     selectedItems: IQueryAuctionResult[];
+    activeSelect: boolean;
 }
 
 export interface IDispatchProps {
     onAuctionsQuerySelect: (aqResult: IQueryAuctionResult) => void;
     onAuctionsQueryDeselect: (index: number) => void;
     refreshAuctionsQuery: (opts: IQueryAuctionsOptions) => void;
+    activeSelectChange: (v: boolean) => void;
 }
 
 type Props = Readonly<IStateProps & IDispatchProps>;
 
-type State = Readonly<{}>;
-
-export class QueryAuctionsFilter extends React.Component<Props, State> {
-    public state: State = {};
-
+export class QueryAuctionsFilter extends React.Component<Props> {
     private debouncedTriggerQuery = debounce((filterValue: string) => this.triggerQuery(filterValue), 0.25 * 1000);
 
     public render() {
-        const { queryAuctionsLevel, items } = this.props;
+        const { queryAuctionsLevel, items, activeSelect } = this.props;
 
         switch (queryAuctionsLevel) {
             case QueryAuctionsLevel.success:
@@ -79,6 +78,14 @@ export class QueryAuctionsFilter extends React.Component<Props, State> {
                                     itemListRenderer={this.itemListRenderer}
                                 />
                             </NavbarGroup>
+                            <NavbarGroup align={Alignment.RIGHT}>
+                                <Switch
+                                    checked={activeSelect}
+                                    label="Active"
+                                    style={{ marginBottom: "0" }}
+                                    onChange={() => this.onActiveChange()}
+                                />
+                            </NavbarGroup>
                         </Navbar>
                         {this.renderSelectedItems()}
                     </>
@@ -91,6 +98,12 @@ export class QueryAuctionsFilter extends React.Component<Props, State> {
             default:
                 return <Spinner className={Classes.SMALL} intent={Intent.PRIMARY} />;
         }
+    }
+
+    private onActiveChange() {
+        const { activeSelectChange, activeSelect } = this.props;
+
+        activeSelectChange(!activeSelect);
     }
 
     private itemPredicate: ItemPredicate<IQueryAuctionResult> = (_query: string, result: IQueryAuctionResult) => {
@@ -242,6 +255,7 @@ export class QueryAuctionsFilter extends React.Component<Props, State> {
 
     private renderSelectedItems() {
         const { selectedItems } = this.props;
+
         if (selectedItems.length === 0) {
             return;
         }

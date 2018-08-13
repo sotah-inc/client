@@ -1,4 +1,5 @@
 import {
+    ACTIVESELECT_CHANGE,
     ADD_AUCTIONS_QUERY,
     AuctionActions,
     COUNT_CHANGE,
@@ -105,6 +106,8 @@ export const auction = (state: State, action: AuctionActions): State => {
             }
 
             return { ...state, fetchItemClassesLevel: FetchItemClassesLevel.success, itemClasses };
+        case ACTIVESELECT_CHANGE:
+            return { ...state, activeSelect: action.payload };
         default:
             return state;
     }
