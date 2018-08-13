@@ -19,8 +19,10 @@ const mapStateToProps = (state: IStoreState): IStateProps => {
         queryAuctionsLevel,
         selectedQueryAuctionResults,
         fetchItemClassesLevel,
+        activeSelect,
     } = state.Auction;
     return {
+        activeSelect,
         auctions,
         auctionsPerPage,
         authLevel,

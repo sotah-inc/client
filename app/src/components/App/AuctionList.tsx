@@ -48,6 +48,7 @@ export interface IStateProps {
     authLevel: AuthLevel;
     fetchUserPreferencesLevel: FetchUserPreferencesLevel;
     userPreferences: IUserPreferences | null;
+    activeSelect: boolean;
 }
 
 export interface IDispatchProps {
@@ -88,6 +89,7 @@ export class AuctionList extends React.Component<Props> {
             refreshAuctionsQuery,
             authLevel,
             fetchUserPreferencesLevel,
+            activeSelect,
         } = this.props;
 
         if (fetchItemClassesLevel === FetchItemClassesLevel.initial) {
@@ -100,13 +102,15 @@ export class AuctionList extends React.Component<Props> {
             const didSortChange =
                 prevProps.sortDirection !== sortDirection || prevProps.sortKind !== this.props.sortKind;
             const didSqaResultsChange =
-                prevProps.selectedQueryAuctionResults.length !== selectedQueryAuctionResults.length;
+                activeSelect && prevProps.selectedQueryAuctionResults.length !== selectedQueryAuctionResults.length;
+            const didActiveSelectChange = prevProps.activeSelect !== activeSelect;
             const didOptionsChange =
                 didRealmChange(prevProps.currentRealm, currentRealm) ||
                 didPageChange ||
                 didCountChange ||
                 didSortChange ||
-                didSqaResultsChange;
+                didSqaResultsChange ||
+                didActiveSelectChange;
             const shouldRefreshAuctions =
                 fetchAuctionsLevel === FetchAuctionsLevel.initial ||
                 (fetchAuctionsLevel === FetchAuctionsLevel.success && didOptionsChange);
