@@ -138,6 +138,7 @@ export enum ItemStat {
     Vers = 40,
     Mastery = 49,
     FireResist = 51,
+    ShadowResist = 54,
     NatResist = 55,
     PvpPow = 57,
     AgiOrStr = 72,
