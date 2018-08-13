@@ -75,38 +75,6 @@ export class AuctionList extends React.Component<Props> {
         }
     }
 
-    public refreshAuctions() {
-        const {
-            currentRegion,
-            currentRealm,
-            currentPage,
-            auctionsPerPage,
-            sortDirection,
-            sortKind,
-            selectedQueryAuctionResults,
-            refreshAuctions,
-        } = this.props;
-
-        if (currentRegion === null || currentRealm === null) {
-            return;
-        }
-
-        const ownerFilters: OwnerName[] = selectedQueryAuctionResults
-            .filter(v => v.owner.name !== "")
-            .map(v => v.owner.name);
-        const itemFilters: ItemId[] = selectedQueryAuctionResults.filter(v => v.item.name !== "").map(v => v.item.id);
-        refreshAuctions({
-            count: auctionsPerPage,
-            itemFilters,
-            ownerFilters,
-            page: currentPage,
-            realmSlug: currentRealm.slug,
-            regionName: currentRegion.name,
-            sortDirection,
-            sortKind,
-        });
-    }
-
     public componentDidUpdate(prevProps: Props) {
         const {
             fetchAuctionsLevel,
@@ -164,7 +132,71 @@ export class AuctionList extends React.Component<Props> {
         }
     }
 
-    public renderRefetchingSpinner() {
+    public render() {
+        switch (this.props.fetchAuctionsLevel) {
+            case FetchAuctionsLevel.initial:
+                return (
+                    <NonIdealState
+                        title="Loading"
+                        icon={<Spinner className={Classes.LARGE} intent={Intent.NONE} value={0} />}
+                    />
+                );
+            case FetchAuctionsLevel.fetching:
+                return (
+                    <NonIdealState
+                        title="Loading"
+                        icon={<Spinner className={Classes.LARGE} intent={Intent.PRIMARY} />}
+                    />
+                );
+            case FetchAuctionsLevel.failure:
+                return (
+                    <NonIdealState
+                        title="Fetch auctions failure"
+                        description="Auctions could not be fetched"
+                        icon="error"
+                    />
+                );
+            case FetchAuctionsLevel.refetching:
+            case FetchAuctionsLevel.success:
+                return this.renderAuctions();
+            default:
+                return <>You should never see this!</>;
+        }
+    }
+
+    private refreshAuctions() {
+        const {
+            currentRegion,
+            currentRealm,
+            currentPage,
+            auctionsPerPage,
+            sortDirection,
+            sortKind,
+            selectedQueryAuctionResults,
+            refreshAuctions,
+        } = this.props;
+
+        if (currentRegion === null || currentRealm === null) {
+            return;
+        }
+
+        const ownerFilters: OwnerName[] = selectedQueryAuctionResults
+            .filter(v => v.owner.name !== "")
+            .map(v => v.owner.name);
+        const itemFilters: ItemId[] = selectedQueryAuctionResults.filter(v => v.item.name !== "").map(v => v.item.id);
+        refreshAuctions({
+            count: auctionsPerPage,
+            itemFilters,
+            ownerFilters,
+            page: currentPage,
+            realmSlug: currentRealm.slug,
+            regionName: currentRegion.name,
+            sortDirection,
+            sortKind,
+        });
+    }
+
+    private renderRefetchingSpinner() {
         const { fetchAuctionsLevel } = this.props;
         if (fetchAuctionsLevel !== FetchAuctionsLevel.refetching) {
             return null;
@@ -173,7 +205,7 @@ export class AuctionList extends React.Component<Props> {
         return <Spinner className={Classes.SMALL} intent={Intent.PRIMARY} />;
     }
 
-    public renderAuctionsFooter() {
+    private renderAuctionsFooter() {
         const { currentPage, currentRealm } = this.props;
         const pageCount = this.getPageCount();
 
@@ -187,7 +219,7 @@ export class AuctionList extends React.Component<Props> {
         );
     }
 
-    public getPageCount() {
+    private getPageCount() {
         const { totalResults, auctionsPerPage } = this.props;
 
         let pageCount = 0;
@@ -202,7 +234,7 @@ export class AuctionList extends React.Component<Props> {
         return pageCount;
     }
 
-    public renderAuctions() {
+    private renderAuctions() {
         const { auctions, totalResults, auctionsPerPage, currentPage, setCurrentPage } = this.props;
 
         // optionally appending blank auction lines
@@ -242,37 +274,5 @@ export class AuctionList extends React.Component<Props> {
                 {this.renderAuctionsFooter()}
             </>
         );
-    }
-
-    public render() {
-        switch (this.props.fetchAuctionsLevel) {
-            case FetchAuctionsLevel.initial:
-                return (
-                    <NonIdealState
-                        title="Loading"
-                        icon={<Spinner className={Classes.LARGE} intent={Intent.NONE} value={0} />}
-                    />
-                );
-            case FetchAuctionsLevel.fetching:
-                return (
-                    <NonIdealState
-                        title="Loading"
-                        icon={<Spinner className={Classes.LARGE} intent={Intent.PRIMARY} />}
-                    />
-                );
-            case FetchAuctionsLevel.failure:
-                return (
-                    <NonIdealState
-                        title="Fetch auctions failure"
-                        description="Auctions could not be fetched"
-                        icon="error"
-                    />
-                );
-            case FetchAuctionsLevel.refetching:
-            case FetchAuctionsLevel.success:
-                return this.renderAuctions();
-            default:
-                return <>You should never see this!</>;
-        }
     }
 }
