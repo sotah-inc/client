@@ -243,16 +243,25 @@ export class ItemPopover extends React.Component<Props> {
         return item.bonusStats.map((v, i) => this.renderItemStat(v, i));
     }
 
+    public renderDescription(item: Item) {
+        if (item.description.length === 0) {
+            return;
+        }
+
+        return <li className="description">"{item.description}"</li>;
+    }
+
     public renderCraftingReagent(item: Item) {
         if (item.itemClass !== ItemClassClasses.Tradeskill) {
             return;
         }
 
-        if (item.description !== "") {
-            return <li>"{item.description}"</li>;
-        }
-
-        return <li className="crafting-reagent">Crafting Reagent</li>;
+        return (
+            <>
+                {this.renderDescription(item)}
+                <li className="crafting-reagent">Crafting Reagent</li>
+            </>
+        );
     }
 
     public renderData(item: Item) {

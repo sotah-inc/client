@@ -37,7 +37,8 @@
         margin-bottom: 0;
     }
 
-    .item-level {
+    .item-level,
+    .description {
         color: $gold3;
     }
 
@@ -53,7 +54,8 @@
 
 .bp3-dark {
     .item-popover-content {
-        .item-level {
+        .item-level,
+        .description {
             color: $gold5;
         }
 
