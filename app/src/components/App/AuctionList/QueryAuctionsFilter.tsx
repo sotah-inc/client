@@ -47,14 +47,10 @@ export interface IDispatchProps {
 
 type Props = Readonly<IStateProps & IDispatchProps>;
 
-type State = Readonly<{
-    timerId: NodeJS.Timer | null;
-}>;
+type State = Readonly<{}>;
 
 export class QueryAuctionsFilter extends React.Component<Props, State> {
-    public state: State = {
-        timerId: null,
-    };
+    public state: State = {};
 
     private debouncedTriggerQuery = debounce((filterValue: string) => this.triggerQuery(filterValue), 0.25 * 1000);
 
