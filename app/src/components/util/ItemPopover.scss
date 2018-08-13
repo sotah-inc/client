@@ -47,7 +47,7 @@
     }
     
     .crafting-reagent {
-        color: #137CBD;
+        color: $blue3;
     }
 }
 
@@ -60,6 +60,10 @@
         .on-use,
         .random-stats {
             color: $green5;
+        }
+
+        .crafting-reagent {
+            color: $blue5;
         }
     }
 }
