@@ -34,7 +34,12 @@ export class PriceListTable extends React.Component<Props, State> {
     }
 
     public componentDidUpdate(prevProps: Props) {
-        if (this.props.list.pricelist_entries!.length !== prevProps.list.pricelist_entries!.length) {
+        const { list } = this.props;
+
+        const shouldReloadPricelistData =
+            this.props.list.pricelist_entries!.length !== prevProps.list.pricelist_entries!.length ||
+            list.id !== prevProps.list.id;
+        if (shouldReloadPricelistData) {
             this.reloadPricelistData();
         }
     }

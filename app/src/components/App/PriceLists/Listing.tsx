@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { Button, Classes, Intent, ITreeNode, NonIdealState, Spinner, Tab, Tabs, Tree } from "@blueprintjs/core";
+import { Button, Classes, Intent, ITreeNode, NonIdealState, Spinner, Tree } from "@blueprintjs/core";
 
 import { IGetPricelistsOptions } from "@app/api/price-lists";
 import { LastModified } from "@app/components/util";
@@ -8,7 +8,7 @@ import { PriceListPanelContainer } from "@app/containers/App/PriceLists/PriceLis
 import { IProfile, IRealm, IRegion } from "@app/types/global";
 import { AuthLevel, FetchUserPreferencesLevel } from "@app/types/main";
 import { GetPricelistsLevel, IPricelist } from "@app/types/price-lists";
-import { didRealmChange, priceListEntryTabId } from "@app/util";
+import { didRealmChange } from "@app/util";
 
 export interface IStateProps {
     pricelists: IPricelist[];
@@ -89,65 +89,19 @@ export class Listing extends React.Component<Props> {
         return <div style={{ marginTop: "20px" }}>{this.renderContent()}</div>;
     }
 
-    private renderTab(list: IPricelist, index: number) {
-        return (
-            <Tab
-                key={index}
-                id={priceListEntryTabId(list)}
-                title={list.name}
-                panel={<PriceListPanelContainer list={list} />}
-            />
-        );
-    }
-
-    private onTabChange(id: React.ReactText) {
-        const { pricelists, changeSelectedList } = this.props;
-
-        const list = pricelists.reduce((result, v) => {
-            if (result !== null) {
-                return result;
-            }
-
-            if (priceListEntryTabId(v) === id.toString()) {
-                return v;
-            }
-
-            return null;
-        }, null);
+    private renderTreeContent(list: IPricelist | null) {
+        const { currentRealm } = this.props;
 
         if (list === null) {
             return;
         }
-
-        changeSelectedList(list);
-    }
-
-    private renderTabs() {
-        const { pricelists, selectedList, currentRealm } = this.props;
 
         return (
             <>
-                <Tabs
-                    id="price-lists"
-                    className="price-lists"
-                    selectedTabId={selectedList ? `tab-${selectedList.id}` : ""}
-                    onChange={v => this.onTabChange(v)}
-                    vertical={true}
-                    renderActiveTabPanelOnly={true}
-                >
-                    {pricelists.map((v, i) => this.renderTab(v, i))}
-                </Tabs>
+                <PriceListPanelContainer list={list} />
                 <LastModified targetDate={new Date(currentRealm!.last_modified * 1000)} />
             </>
         );
-    }
-
-    private renderTreeContent(list: IPricelist | null) {
-        if (list === null) {
-            return;
-        }
-
-        return <PriceListPanelContainer list={list} />;
     }
 
     private onPricelistNodeClick(id: string) {
@@ -235,11 +189,6 @@ export class Listing extends React.Component<Props> {
                     }
                 />
             );
-        }
-
-        const x = false;
-        if (x) {
-            return this.renderTabs();
         }
 
         return this.renderTree();

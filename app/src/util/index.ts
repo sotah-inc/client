@@ -1,7 +1,6 @@
 import { apiEndpoint } from "@app/api";
 import { IQueryAuctionResult } from "@app/types/auction";
 import { InventoryType, IRealm, IRegion, Item, ItemQuality, ItemStat } from "@app/types/global";
-import { IPricelist } from "@app/types/price-lists";
 
 export const qualityToColorClass = (quality: ItemQuality): string => {
     switch (quality) {
@@ -122,8 +121,6 @@ export const getSelectedResultIndex = (result: IQueryAuctionResult, selectedItem
 
     return -1;
 };
-
-export const priceListEntryTabId = (list: IPricelist): string => `tab-${list.id}`;
 
 export const didRegionChange = (prevRegion: IRegion | null, currentRegion: IRegion): boolean => {
     if (prevRegion === null) {
