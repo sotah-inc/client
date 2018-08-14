@@ -123,25 +123,7 @@ export class Listing extends React.Component<Props> {
     }
 
     private renderTabs() {
-        const { pricelists, selectedList, currentRealm, changeIsAddListDialogOpen } = this.props;
-
-        if (pricelists.length === 0) {
-            return (
-                <NonIdealState
-                    title="No price lists"
-                    description={`You have no price lists in ${currentRealm!.name}.`}
-                    icon="list"
-                    action={
-                        <Button
-                            className={Classes.FILL}
-                            icon="plus"
-                            onClick={() => changeIsAddListDialogOpen(true)}
-                            text={`Add List to ${currentRealm!.name}`}
-                        />
-                    }
-                />
-            );
-        }
+        const { pricelists, selectedList, currentRealm } = this.props;
 
         return (
             <>
@@ -170,10 +152,35 @@ export class Listing extends React.Component<Props> {
             };
             return result;
         });
-        return <Tree contents={nodes} />;
+        return (
+            <>
+                <p>wew lad</p>
+                <Tree contents={nodes} />
+            </>
+        );
     }
 
     private renderPricelists() {
+        const { pricelists, currentRealm, changeIsAddListDialogOpen } = this.props;
+
+        if (pricelists.length === 0) {
+            return (
+                <NonIdealState
+                    title="No price lists"
+                    description={`You have no price lists in ${currentRealm!.name}.`}
+                    icon="list"
+                    action={
+                        <Button
+                            className={Classes.FILL}
+                            icon="plus"
+                            onClick={() => changeIsAddListDialogOpen(true)}
+                            text={`Add List to ${currentRealm!.name}`}
+                        />
+                    }
+                />
+            );
+        }
+
         const x = false;
         if (x) {
             return this.renderTabs();
