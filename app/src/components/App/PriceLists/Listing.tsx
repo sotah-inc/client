@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { Button, Classes, Intent, NonIdealState, Spinner, Tab, Tabs } from "@blueprintjs/core";
+import { Button, Classes, Intent, ITreeNode, NonIdealState, Spinner, Tab, Tabs, Tree } from "@blueprintjs/core";
 
 import { IGetPricelistsOptions } from "@app/api/price-lists";
 import { LastModified } from "@app/components/util";
@@ -122,7 +122,7 @@ export class Listing extends React.Component<Props> {
         changeSelectedList(list);
     }
 
-    private renderPricelists() {
+    private renderTabs() {
         const { pricelists, selectedList, currentRealm, changeIsAddListDialogOpen } = this.props;
 
         if (pricelists.length === 0) {
@@ -158,6 +158,28 @@ export class Listing extends React.Component<Props> {
                 <LastModified targetDate={new Date(currentRealm!.last_modified * 1000)} />
             </>
         );
+    }
+
+    private renderTree() {
+        const { pricelists } = this.props;
+
+        const nodes: ITreeNode[] = pricelists.map(v => {
+            const result: ITreeNode = {
+                id: v.id,
+                label: v.name,
+            };
+            return result;
+        });
+        return <Tree contents={nodes} />;
+    }
+
+    private renderPricelists() {
+        const x = false;
+        if (x) {
+            return this.renderTabs();
+        }
+
+        return this.renderTree();
     }
 
     private renderContent() {
