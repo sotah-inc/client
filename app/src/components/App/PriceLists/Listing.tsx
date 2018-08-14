@@ -15,7 +15,6 @@ export interface IStateProps {
     selectedList: IPricelist | null;
     currentRegion: IRegion | null;
     currentRealm: IRealm | null;
-    isAddListDialogOpen: boolean;
     getPricelistsLevel: GetPricelistsLevel;
     profile: IProfile | null;
     authLevel: AuthLevel;
@@ -86,13 +85,11 @@ export class Listing extends React.Component<Props> {
         }
     }
 
-    public toggleDialog() {
-        const { changeIsAddListDialogOpen, isAddListDialogOpen } = this.props;
-
-        changeIsAddListDialogOpen(!isAddListDialogOpen);
+    public render() {
+        return <div style={{ marginTop: "20px" }}>{this.renderContent()}</div>;
     }
 
-    public renderTab(list: IPricelist, index: number) {
+    private renderTab(list: IPricelist, index: number) {
         return (
             <Tab
                 key={index}
@@ -103,7 +100,7 @@ export class Listing extends React.Component<Props> {
         );
     }
 
-    public onTabChange(id: React.ReactText) {
+    private onTabChange(id: React.ReactText) {
         const { pricelists, changeSelectedList } = this.props;
 
         const list = pricelists.reduce((result, v) => {
@@ -125,7 +122,7 @@ export class Listing extends React.Component<Props> {
         changeSelectedList(list);
     }
 
-    public renderPricelists() {
+    private renderPricelists() {
         const { pricelists, selectedList, currentRealm, changeIsAddListDialogOpen } = this.props;
 
         if (pricelists.length === 0) {
@@ -163,7 +160,7 @@ export class Listing extends React.Component<Props> {
         );
     }
 
-    public renderContent() {
+    private renderContent() {
         const { getPricelistsLevel } = this.props;
 
         switch (getPricelistsLevel) {
@@ -188,9 +185,5 @@ export class Listing extends React.Component<Props> {
         }
 
         return;
-    }
-
-    public render() {
-        return <div style={{ marginTop: "20px" }}>{this.renderContent()}</div>;
     }
 }
