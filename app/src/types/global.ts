@@ -271,3 +271,15 @@ export interface IQueryItemResult {
     target: string;
     rank: number;
 }
+
+// profession and expansion types
+export interface IExpansion {
+    name: string;
+    label: string;
+    primary: boolean;
+}
+
+export interface IProfession {
+    name: string;
+    label: string;
+}

@@ -1,4 +1,14 @@
-import { IProfile, IRealm, IRealms, IRegion, IRegions, IUserPreferences } from "./global";
+import {
+    IExpansion,
+    IProfession,
+    IProfile,
+    IRealm,
+    IRealms,
+    IRegion,
+    IRegions,
+    ItemClasses,
+    IUserPreferences,
+} from "./global";
 
 export interface IMainState {
     fetchPingLevel: FetchPingLevel;
@@ -16,6 +26,10 @@ export interface IMainState {
     currentRealm: IRealm | null;
     authLevel: AuthLevel;
     isLoginDialogOpen: boolean;
+    expansions: IExpansion[];
+    professions: IProfession[];
+    itemClasses: ItemClasses;
+    fetchBootLevel: FetchBootLevel;
 }
 
 export enum FetchPingLevel {
@@ -26,6 +40,14 @@ export enum FetchPingLevel {
 }
 
 export enum FetchRegionLevel {
+    initial,
+    prompted,
+    fetching,
+    success,
+    failure,
+}
+
+export enum FetchBootLevel {
     initial,
     prompted,
     fetching,
@@ -58,6 +80,8 @@ export const defaultMainState: IMainState = {
     authLevel: AuthLevel.initial,
     currentRealm: null,
     currentRegion: null,
+    expansions: [],
+    fetchBootLevel: FetchBootLevel.initial,
     fetchPingLevel: FetchPingLevel.initial,
     fetchRealmLevel: FetchRealmLevel.initial,
     fetchRegionLevel: FetchRegionLevel.initial,
@@ -65,7 +89,9 @@ export const defaultMainState: IMainState = {
     isLoggedIn: false,
     isLoginDialogOpen: false,
     isRegistered: false,
+    itemClasses: {},
     preloadedToken: "",
+    professions: [],
     profile: null,
     realms: {},
     regions: {},

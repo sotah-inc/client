@@ -1,7 +1,18 @@
 import * as HTTPStatus from "http-status";
 
 import { IQueryAuctionResult, SortDirection, SortKind } from "../types/auction";
-import { IAuction, IOwner, IQueryItemResult, IRealm, IRegion, ItemId, ItemsMap, OwnerName } from "../types/global";
+import {
+    IAuction,
+    IExpansion,
+    IOwner,
+    IProfession,
+    IQueryItemResult,
+    IRealm,
+    IRegion,
+    ItemId,
+    ItemsMap,
+    OwnerName,
+} from "../types/global";
 import { apiEndpoint } from "./index";
 
 export const getPing = async (): Promise<boolean> => {
@@ -15,6 +26,22 @@ export const getPing = async (): Promise<boolean> => {
 
 export const getRegions = async (): Promise<IRegion[] | null> => {
     const res = await fetch(`${apiEndpoint}/regions`);
+    if (res.status !== HTTPStatus.OK) {
+        return null;
+    }
+
+    return res.json();
+};
+
+export interface IBootResponse {
+    regions: IRegion[];
+    item_classes: IResponseItemClass[];
+    expansions: IExpansion[];
+    professions: IProfession[];
+}
+
+export const getBoot = async (): Promise<IBootResponse | null> => {
+    const res = await fetch(`${apiEndpoint}/boot`);
     if (res.status !== HTTPStatus.OK) {
         return null;
     }

@@ -1,6 +1,6 @@
 import { Dispatch } from "redux";
 
-import { getPing, getRegions, getStatus } from "../api/data";
+import { getBoot, getPing, getRegions, getStatus, IBootResponse } from "../api/data";
 import {
     createPreferences,
     getPreferences,
@@ -102,6 +102,18 @@ export const FetchRegions = () => {
     };
 };
 
+export const REQUEST_BOOT = "REQUEST_BOOT";
+export const RECEIVE_BOOT = "RECEIVE_BOOT";
+const RequestBoot = () => createAction(REQUEST_BOOT);
+const ReceiveBoot = (payload: IBootResponse | null) => createAction(RECEIVE_BOOT, payload);
+type FetchBootType = ReturnType<typeof RequestBoot | typeof ReceiveBoot>;
+export const FetchBoot = () => {
+    return async (dispatch: Dispatch<FetchBootType>) => {
+        dispatch(RequestBoot());
+        dispatch(ReceiveBoot(await getBoot()));
+    };
+};
+
 export const REGION_CHANGE = "REGION_CHANGE";
 export const RegionChange = (payload: IRegion) => createAction(REGION_CHANGE, payload);
 
@@ -127,12 +139,14 @@ export const MainActions = {
     ChangeAuthLevel,
     ChangeIsLoginDialogOpen,
     RealmChange,
+    ReceiveBoot,
     ReceivePing,
     ReceiveRealms,
     ReceiveRegions,
     ReceiveUserPreferences,
     ReceiveUserReload,
     RegionChange,
+    RequestBoot,
     RequestPing,
     RequestRealms,
     RequestRegions,

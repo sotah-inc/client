@@ -3,12 +3,14 @@ import {
     CHANGE_IS_LOGIN_DIALOG_OPEN,
     MainActions,
     REALM_CHANGE,
+    RECEIVE_BOOT,
     RECEIVE_PING,
     RECEIVE_REALMS,
     RECEIVE_REGIONS,
     RECEIVE_USER_PREFERENCES,
     RECEIVE_USER_RELOAD,
     REGION_CHANGE,
+    REQUEST_BOOT,
     REQUEST_PING,
     REQUEST_REALMS,
     REQUEST_REGIONS,
@@ -16,7 +18,7 @@ import {
     USER_LOGIN,
     USER_REGISTER,
 } from "@app/actions/main";
-import { IRealm, IRealms, IRegion, IRegions } from "@app/types/global";
+import { IRealm, IRealms, IRegion, IRegions, ISubItemClasses, ItemClasses } from "@app/types/global";
 import {
     AuthLevel,
     defaultMainState,
@@ -144,6 +146,57 @@ export const main = (state: State, action: MainActions): State => {
             return { ...state, currentRealm: action.payload };
         case CHANGE_IS_LOGIN_DIALOG_OPEN:
             return { ...state, isLoginDialogOpen: action.payload };
+        case REQUEST_BOOT:
+            return { ...state };
+        case RECEIVE_BOOT:
+            if (action.payload === null) {
+                return { ...state, fetchRegionLevel: FetchRegionLevel.failure };
+            }
+
+            let bootCurrentRegion: IRegion | null = action.payload[0];
+            if (state.userPreferences !== null) {
+                const { current_region: preferredRegionName } = state.userPreferences;
+                bootCurrentRegion = action.payload.regions.reduce((result, v) => {
+                    if (result !== null) {
+                        return result;
+                    }
+
+                    if (v.name === preferredRegionName) {
+                        return v;
+                    }
+
+                    return null;
+                }, null);
+            }
+
+            const bootRegions: IRegions = action.payload.regions.reduce(
+                (result, region) => ({ ...result, [region.name]: region }),
+                {},
+            );
+
+            const bootItemClasses: ItemClasses = {};
+            for (const itemClass of action.payload.item_classes) {
+                const subClasses: ISubItemClasses = {};
+                for (const subItemClass of itemClass.subclasses) {
+                    subClasses[subItemClass.subclass] = subItemClass;
+                }
+                bootItemClasses[itemClass.class] = {
+                    class: itemClass.class,
+                    name: itemClass.name,
+                    subClasses,
+                };
+            }
+
+            return {
+                ...state,
+                currentRegion: bootCurrentRegion,
+                expansions: action.payload.expansions,
+                fetchRealmLevel: FetchRealmLevel.prompted,
+                fetchRegionLevel: FetchRegionLevel.success,
+                itemClasses: bootItemClasses,
+                professions: action.payload.professions,
+                regions: bootRegions,
+            };
         default:
             return state;
     }
