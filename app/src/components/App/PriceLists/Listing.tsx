@@ -142,21 +142,44 @@ export class Listing extends React.Component<Props> {
         );
     }
 
+    private renderTreeContent(list: IPricelist | null) {
+        if (list === null) {
+            return;
+        }
+
+        return <PriceListPanelContainer list={list} />;
+    }
+
     private renderTree() {
         const { pricelists, selectedList } = this.props;
 
-        const nodes: ITreeNode[] = pricelists.map(v => {
+        const pricelistNodes: ITreeNode[] = pricelists.map(v => {
             const result: ITreeNode = {
-                id: v.id,
+                id: `pricelist-${v.id}`,
                 isSelected: selectedList !== null && selectedList.id === v.id,
                 label: v.name,
             };
             return result;
         });
+
+        const nodes: ITreeNode[] = [
+            {
+                childNodes: pricelistNodes,
+                id: `top-0`,
+                isExpanded: true,
+                label: "Custom Pricelists",
+            },
+        ];
+
         return (
-            <>
-                <Tree contents={nodes} />
-            </>
+            <div className="pure-g">
+                <div className="pure-u-1-5">
+                    <Tree contents={nodes} className={Classes.ELEVATION_0} />
+                </div>
+                <div className="pure-u-4-5">
+                    <div style={{ paddingLeft: "10px" }}>{this.renderTreeContent(selectedList)}</div>
+                </div>
+            </div>
         );
     }
 
