@@ -152,6 +152,8 @@ export class Listing extends React.Component<Props> {
         const nodes: ITreeNode[] = [
             {
                 childNodes: pricelistNodes,
+                hasCaret: false,
+                icon: "list",
                 id: `top-0`,
                 isExpanded: true,
                 label: "Custom Pricelists",
