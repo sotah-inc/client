@@ -143,18 +143,18 @@ export class Listing extends React.Component<Props> {
     }
 
     private renderTree() {
-        const { pricelists } = this.props;
+        const { pricelists, selectedList } = this.props;
 
         const nodes: ITreeNode[] = pricelists.map(v => {
             const result: ITreeNode = {
                 id: v.id,
+                isSelected: selectedList !== null && selectedList.id === v.id,
                 label: v.name,
             };
             return result;
         });
         return (
             <>
-                <p>wew lad</p>
                 <Tree contents={nodes} />
             </>
         );
