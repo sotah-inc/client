@@ -150,6 +150,39 @@ export class Listing extends React.Component<Props> {
         return <PriceListPanelContainer list={list} />;
     }
 
+    private onPricelistNodeClick(id: string) {
+        const { pricelists, changeSelectedList } = this.props;
+
+        const list = pricelists.reduce((result, v) => {
+            if (result !== null) {
+                return result;
+            }
+
+            if (v.id.toString() === id) {
+                return v;
+            }
+
+            return null;
+        }, null);
+
+        if (list === null) {
+            return;
+        }
+
+        changeSelectedList(list);
+    }
+
+    private onNodeClick(node: ITreeNode) {
+        const [kind, id] = node.id.toString().split("-");
+        const nodeClickMap = { pricelist: v => this.onPricelistNodeClick(v) };
+
+        if (!(kind in nodeClickMap)) {
+            return;
+        }
+
+        nodeClickMap[kind](id);
+    }
+
     private renderTree() {
         const { pricelists, selectedList } = this.props;
 
@@ -174,7 +207,7 @@ export class Listing extends React.Component<Props> {
         return (
             <div className="pure-g">
                 <div className="pure-u-1-5">
-                    <Tree contents={nodes} className={Classes.ELEVATION_0} />
+                    <Tree contents={nodes} className={Classes.ELEVATION_0} onNodeClick={v => this.onNodeClick(v)} />
                 </div>
                 <div className="pure-u-4-5">
                     <div style={{ paddingLeft: "10px" }}>{this.renderTreeContent(selectedList)}</div>
