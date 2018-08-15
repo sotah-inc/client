@@ -5,7 +5,7 @@ import { Button, Classes, Intent, ITreeNode, NonIdealState, Spinner, Tree } from
 import { IGetPricelistsOptions } from "@app/api/price-lists";
 import { LastModified } from "@app/components/util";
 import { PriceListPanelContainer } from "@app/containers/App/PriceLists/PriceListPanel";
-import { IProfile, IRealm, IRegion } from "@app/types/global";
+import { IProfession, IProfile, IRealm, IRegion } from "@app/types/global";
 import { AuthLevel, FetchUserPreferencesLevel } from "@app/types/main";
 import { GetPricelistsLevel, IPricelist } from "@app/types/price-lists";
 import { didRealmChange } from "@app/util";
@@ -19,6 +19,7 @@ export interface IStateProps {
     profile: IProfile | null;
     authLevel: AuthLevel;
     fetchUserPreferencesLevel: FetchUserPreferencesLevel;
+    professions: IProfession[];
 }
 
 export interface IDispatchProps {
@@ -126,9 +127,16 @@ export class Listing extends React.Component<Props> {
         changeSelectedList(list);
     }
 
+    private onProfessionNodeClick(id: string) {
+        console.log("wew");
+    }
+
     private onNodeClick(node: ITreeNode) {
         const [kind, id] = node.id.toString().split("-");
-        const nodeClickMap = { pricelist: v => this.onPricelistNodeClick(v) };
+        const nodeClickMap = {
+            pricelist: v => this.onPricelistNodeClick(v),
+            profession: v => this.onProfessionNodeClick(v),
+        };
 
         if (!(kind in nodeClickMap)) {
             return;
@@ -138,7 +146,7 @@ export class Listing extends React.Component<Props> {
     }
 
     private renderTree() {
-        const { pricelists, selectedList } = this.props;
+        const { pricelists, selectedList, professions } = this.props;
 
         const pricelistNodes: ITreeNode[] = pricelists.map(v => {
             const result: ITreeNode = {
@@ -146,6 +154,16 @@ export class Listing extends React.Component<Props> {
                 isSelected: selectedList !== null && selectedList.id === v.id,
                 label: v.name,
             };
+
+            return result;
+        });
+
+        const professionNodes: ITreeNode[] = professions.map(v => {
+            const result: ITreeNode = {
+                id: `profession-${v.name}`,
+                label: v.label,
+            };
+
             return result;
         });
 
@@ -154,18 +172,26 @@ export class Listing extends React.Component<Props> {
                 childNodes: pricelistNodes,
                 hasCaret: false,
                 icon: "list",
-                id: `top-0`,
+                id: "pricelists",
                 isExpanded: true,
                 label: "Custom Pricelists",
+            },
+            {
+                childNodes: professionNodes,
+                hasCaret: false,
+                icon: "list",
+                id: "professions",
+                isExpanded: true,
+                label: "Professions",
             },
         ];
 
         return (
             <div className="pure-g">
-                <div className="pure-u-1-5">
+                <div className="pure-u-1-4">
                     <Tree contents={nodes} className={Classes.ELEVATION_0} onNodeClick={v => this.onNodeClick(v)} />
                 </div>
-                <div className="pure-u-4-5">
+                <div className="pure-u-3-4">
                     <div style={{ paddingLeft: "10px" }}>{this.renderTreeContent(selectedList)}</div>
                 </div>
             </div>
