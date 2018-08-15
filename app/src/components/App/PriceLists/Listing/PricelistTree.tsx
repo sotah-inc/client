@@ -22,9 +22,30 @@ export interface IDispatchProps {
 
 export type Props = Readonly<IStateProps & IDispatchProps>;
 
-export class PricelistTree extends React.Component<Props> {
+interface ITopOpenMap {
+    [key: string]: boolean;
+}
+
+interface IState {
+    topOpenMap: ITopOpenMap;
+}
+
+enum TopOpenKey {
+    pricelists = "pricelists",
+    professions = "professions",
+}
+
+export class PricelistTree extends React.Component<Props, IState> {
+    public state: IState = {
+        topOpenMap: {
+            [TopOpenKey.pricelists]: true,
+            [TopOpenKey.professions]: true,
+        },
+    };
+
     public render() {
         const { pricelists, selectedList, selectedProfession, professions } = this.props;
+        const { topOpenMap } = this.state;
 
         const pricelistNodes: ITreeNode[] = pricelists.map(v => {
             const result: ITreeNode = {
@@ -49,18 +70,18 @@ export class PricelistTree extends React.Component<Props> {
         const nodes: ITreeNode[] = [
             {
                 childNodes: pricelistNodes,
-                hasCaret: false,
+                hasCaret: true,
                 icon: "list",
-                id: "top-pricelists",
-                isExpanded: true,
+                id: `top-${TopOpenKey.pricelists}`,
+                isExpanded: topOpenMap[TopOpenKey.pricelists],
                 label: "Custom Pricelists",
             },
             {
                 childNodes: professionNodes,
-                hasCaret: false,
+                hasCaret: true,
                 icon: "list",
-                id: "top-professions",
-                isExpanded: true,
+                id: `top-${TopOpenKey.professions}`,
+                isExpanded: topOpenMap[TopOpenKey.professions],
                 label: "Professions",
             },
         ];
@@ -136,11 +157,18 @@ export class PricelistTree extends React.Component<Props> {
         changeSelectedProfession(profession);
     }
 
+    private onTopNodeClick(id: TopOpenKey) {
+        const { topOpenMap } = this.state;
+
+        this.setState({ topOpenMap: { ...topOpenMap, [id]: !topOpenMap[id] } });
+    }
+
     private onNodeClick(node: ITreeNode) {
         const [kind, id] = node.id.toString().split("-");
         const nodeClickMap = {
             pricelist: v => this.onPricelistNodeClick(v),
             profession: v => this.onProfessionNodeClick(v),
+            top: v => this.onTopNodeClick(v),
         };
 
         if (!(kind in nodeClickMap)) {
