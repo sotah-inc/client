@@ -1,5 +1,5 @@
 import { IUpdatePricelistRequest, IUpdatePricelistResponse } from "@app/api/price-lists";
-import { IErrors, ItemId, ItemsMap, RealmSlug, RegionName } from "./global";
+import { IErrors, IProfession, ItemId, ItemsMap, RealmSlug, RegionName } from "./global";
 
 export interface IPriceListsState {
     pricelists: IPricelist[];
@@ -16,6 +16,7 @@ export interface IPriceListsState {
     getPricelistsLevel: GetPricelistsLevel;
     items: ItemsMap;
     deletePricelistLevel: DeletePricelistLevel;
+    selectedProfession: IProfession | null;
 }
 
 export enum CreateListStep {
@@ -111,6 +112,7 @@ export const defaultPriceListsState: IPriceListsState = {
     items: [],
     pricelists: [],
     selectedList: null,
+    selectedProfession: null,
     updatePricelistErrors: {},
     updatePricelistLevel: MutatePricelistLevel.initial,
 };

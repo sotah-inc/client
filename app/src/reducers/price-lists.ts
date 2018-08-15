@@ -6,6 +6,7 @@ import {
     CHANGE_IS_DELETE_LIST_DIALOG_OPEN,
     CHANGE_IS_EDIT_LIST_DIALOG_OPEN,
     CHANGE_SELECTED_LIST,
+    CHANGE_SELECTED_PROFESSION,
     PriceListsActions,
     RECEIVE_CREATE_PRICELIST,
     RECEIVE_DELETE_PRICELIST,
@@ -146,6 +147,8 @@ export const priceLists = (state: State, action: PriceListsActions): State => {
             return { ...state, entryCreateLevel: action.payload };
         case CHANGE_SELECTED_LIST:
             return { ...state, selectedList: action.payload };
+        case CHANGE_SELECTED_PROFESSION:
+            return { ...state, selectedProfession: action.payload };
         case CHANGE_IS_ADD_LIST_DIALOG_OPEN:
             return { ...state, isAddListDialogOpen: action.payload };
         case CHANGE_IS_EDIT_LIST_DIALOG_OPEN:

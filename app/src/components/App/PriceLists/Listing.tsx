@@ -20,10 +20,12 @@ export interface IStateProps {
     authLevel: AuthLevel;
     fetchUserPreferencesLevel: FetchUserPreferencesLevel;
     professions: IProfession[];
+    selectedProfession: IProfession | null;
 }
 
 export interface IDispatchProps {
     changeSelectedList: (list: IPricelist) => void;
+    changeSelectedProfession: (profession: IProfession) => void;
     changeIsAddListDialogOpen: (isDialogOpen: boolean) => void;
     refreshPricelists: (opts: IGetPricelistsOptions) => void;
 }
@@ -128,7 +130,25 @@ export class Listing extends React.Component<Props> {
     }
 
     private onProfessionNodeClick(id: string) {
-        console.log("wew");
+        const { professions, changeSelectedProfession } = this.props;
+
+        const profession = professions.reduce((result, v) => {
+            if (result !== null) {
+                return result;
+            }
+
+            if (v.name === id) {
+                return v;
+            }
+
+            return null;
+        }, null);
+
+        if (profession === null) {
+            return;
+        }
+
+        changeSelectedProfession(profession);
     }
 
     private onNodeClick(node: ITreeNode) {
@@ -146,7 +166,7 @@ export class Listing extends React.Component<Props> {
     }
 
     private renderTree() {
-        const { pricelists, selectedList, professions } = this.props;
+        const { pricelists, selectedList, selectedProfession, professions } = this.props;
 
         const pricelistNodes: ITreeNode[] = pricelists.map(v => {
             const result: ITreeNode = {
@@ -161,6 +181,7 @@ export class Listing extends React.Component<Props> {
         const professionNodes: ITreeNode[] = professions.map(v => {
             const result: ITreeNode = {
                 id: `profession-${v.name}`,
+                isSelected: selectedProfession !== null && selectedProfession.name === v.name,
                 label: v.label,
             };
 

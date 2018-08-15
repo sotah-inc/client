@@ -11,7 +11,7 @@ import {
     IGetPricelistsResponse,
     updatePricelist,
 } from "@app/api/price-lists";
-import { ItemsMap } from "@app/types/global";
+import { IProfession, ItemsMap } from "@app/types/global";
 import {
     EntryCreateLevel,
     IPricelist,
@@ -82,6 +82,9 @@ export const ChangeEntryCreateLevel = (payload: EntryCreateLevel) => createActio
 export const CHANGE_SELECTED_LIST = "CHANGE_SELECTED_LIST";
 export const ChangeSelectedList = (payload: IPricelist) => createAction(CHANGE_SELECTED_LIST, payload);
 
+export const CHANGE_SELECTED_PROFESSION = "CHANGE_SELECTED_PROFESSION";
+export const ChangeSelectedProfession = (payload: IProfession) => createAction(CHANGE_SELECTED_PROFESSION, payload);
+
 export const CHANGE_IS_ADD_LIST_DIALOG_OPEN = "CHANGE_IS_ADD_LIST_DIALOG_OPEN";
 export const ChangeIsAddListDialogOpen = (payload: boolean) => createAction(CHANGE_IS_ADD_LIST_DIALOG_OPEN, payload);
 
@@ -106,6 +109,7 @@ export const PriceListsActions = {
     ChangeIsDeleteListDialogOpen,
     ChangeIsEditListDialogOpen,
     ChangeSelectedList,
+    ChangeSelectedProfession,
     ReceiveCreatePricelist,
     ReceiveDeletePricelist,
     ReceiveGetPricelists,
