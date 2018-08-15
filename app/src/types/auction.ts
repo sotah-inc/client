@@ -1,4 +1,4 @@
-import { IAuction, IOwner, Item, ItemClasses } from "./global";
+import { IAuction, IOwner, Item } from "./global";
 
 export interface IAuctionState {
     fetchAuctionsLevel: FetchAuctionsLevel;
@@ -11,8 +11,6 @@ export interface IAuctionState {
     queryAuctionsLevel: QueryAuctionsLevel;
     queryAuctionResults: IQueryAuctionResult[];
     selectedQueryAuctionResults: IQueryAuctionResult[];
-    fetchItemClassesLevel: FetchItemClassesLevel;
-    itemClasses: ItemClasses;
     activeSelect: boolean;
 }
 
@@ -77,22 +75,12 @@ export interface IQueryAuctionResult {
     rank: number;
 }
 
-export enum FetchItemClassesLevel {
-    initial,
-    fetching,
-    refetching,
-    success,
-    failure,
-}
-
 export const defaultAuctionState: IAuctionState = {
     activeSelect: true,
     auctions: [],
     auctionsPerPage: 10,
     currentPage: 0,
     fetchAuctionsLevel: FetchAuctionsLevel.initial,
-    fetchItemClassesLevel: FetchItemClassesLevel.initial,
-    itemClasses: {},
     queryAuctionResults: [],
     queryAuctionsLevel: QueryAuctionsLevel.initial,
     selectedQueryAuctionResults: [],

@@ -6,14 +6,12 @@ import {
     RECEIVE_BOOT,
     RECEIVE_PING,
     RECEIVE_REALMS,
-    RECEIVE_REGIONS,
     RECEIVE_USER_PREFERENCES,
     RECEIVE_USER_RELOAD,
     REGION_CHANGE,
     REQUEST_BOOT,
     REQUEST_PING,
     REQUEST_REALMS,
-    REQUEST_REGIONS,
     REQUEST_USER_PREFERENCES,
     USER_LOGIN,
     USER_REGISTER,
@@ -22,9 +20,9 @@ import { IRealm, IRealms, IRegion, IRegions, ISubItemClasses, ItemClasses } from
 import {
     AuthLevel,
     defaultMainState,
+    FetchBootLevel,
     FetchPingLevel,
     FetchRealmLevel,
-    FetchRegionLevel,
     FetchUserPreferencesLevel,
     IMainState,
 } from "@app/types/main";
@@ -70,44 +68,9 @@ export const main = (state: State, action: MainActions): State => {
 
             return {
                 ...state,
-                fetchRegionLevel: FetchRegionLevel.prompted,
+                fetchBootLevel: FetchBootLevel.prompted,
                 fetchUserPreferencesLevel: FetchUserPreferencesLevel.success,
                 userPreferences: action.payload.preference,
-            };
-        case REQUEST_REGIONS:
-            return { ...state, fetchRegionLevel: FetchRegionLevel.fetching };
-        case RECEIVE_REGIONS:
-            if (action.payload === null) {
-                return { ...state, fetchRegionLevel: FetchRegionLevel.failure };
-            }
-
-            let currentRegion: IRegion | null = action.payload[0];
-            if (state.userPreferences !== null) {
-                const { current_region: preferredRegionName } = state.userPreferences;
-                currentRegion = action.payload.reduce((result, v) => {
-                    if (result !== null) {
-                        return result;
-                    }
-
-                    if (v.name === preferredRegionName) {
-                        return v;
-                    }
-
-                    return null;
-                }, null);
-            }
-
-            const regions: IRegions = action.payload.reduce(
-                (result, region) => ({ ...result, [region.name]: region }),
-                {},
-            );
-
-            return {
-                ...state,
-                currentRegion,
-                fetchRealmLevel: FetchRealmLevel.prompted,
-                fetchRegionLevel: FetchRegionLevel.success,
-                regions,
             };
         case REGION_CHANGE:
             return { ...state, currentRegion: action.payload, fetchRealmLevel: FetchRealmLevel.prompted };
@@ -147,13 +110,13 @@ export const main = (state: State, action: MainActions): State => {
         case CHANGE_IS_LOGIN_DIALOG_OPEN:
             return { ...state, isLoginDialogOpen: action.payload };
         case REQUEST_BOOT:
-            return { ...state };
+            return { ...state, fetchBootLevel: FetchBootLevel.fetching };
         case RECEIVE_BOOT:
             if (action.payload === null) {
-                return { ...state, fetchRegionLevel: FetchRegionLevel.failure };
+                return { ...state, fetchBootLevel: FetchBootLevel.failure };
             }
 
-            let bootCurrentRegion: IRegion | null = action.payload[0];
+            let bootCurrentRegion: IRegion | null = action.payload.regions[0];
             if (state.userPreferences !== null) {
                 const { current_region: preferredRegionName } = state.userPreferences;
                 bootCurrentRegion = action.payload.regions.reduce((result, v) => {
@@ -191,8 +154,8 @@ export const main = (state: State, action: MainActions): State => {
                 ...state,
                 currentRegion: bootCurrentRegion,
                 expansions: action.payload.expansions,
+                fetchBootLevel: FetchBootLevel.success,
                 fetchRealmLevel: FetchRealmLevel.prompted,
-                fetchRegionLevel: FetchRegionLevel.success,
                 itemClasses: bootItemClasses,
                 professions: action.payload.professions,
                 regions: bootRegions,

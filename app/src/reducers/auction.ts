@@ -6,21 +6,13 @@ import {
     PAGE_CHANGE,
     RECEIVE_AUCTIONS,
     RECEIVE_AUCTIONS_QUERY,
-    RECEIVE_ITEMCLASSES,
     REMOVE_AUCTIONS_QUERY,
     REQUEST_AUCTIONS,
     REQUEST_AUCTIONS_QUERY,
-    REQUEST_ITEMCLASSES,
     SORT_CHANGE,
 } from "@app/actions/auction";
-import {
-    defaultAuctionState,
-    FetchAuctionsLevel,
-    FetchItemClassesLevel,
-    IAuctionState,
-    QueryAuctionsLevel,
-} from "@app/types/auction";
-import { IAuction, ISubItemClasses, ItemClasses } from "@app/types/global";
+import { defaultAuctionState, FetchAuctionsLevel, IAuctionState, QueryAuctionsLevel } from "@app/types/auction";
+import { IAuction } from "@app/types/global";
 
 type State = Readonly<IAuctionState> | undefined;
 
@@ -85,27 +77,6 @@ export const auction = (state: State, action: AuctionActions): State => {
                 (_result, i) => i !== action.payload,
             );
             return { ...state, selectedQueryAuctionResults: removedSelectedQueryAuctionResults };
-        case REQUEST_ITEMCLASSES:
-            return { ...state, fetchItemClassesLevel: FetchItemClassesLevel.fetching };
-        case RECEIVE_ITEMCLASSES:
-            if (action.payload === null || action.payload.classes === null) {
-                return { ...state, fetchItemClassesLevel: FetchItemClassesLevel.failure };
-            }
-
-            const itemClasses: ItemClasses = {};
-            for (const itemClass of action.payload.classes) {
-                const subClasses: ISubItemClasses = {};
-                for (const subItemClass of itemClass.subclasses) {
-                    subClasses[subItemClass.subclass] = subItemClass;
-                }
-                itemClasses[itemClass.class] = {
-                    class: itemClass.class,
-                    name: itemClass.name,
-                    subClasses,
-                };
-            }
-
-            return { ...state, fetchItemClassesLevel: FetchItemClassesLevel.success, itemClasses };
         case ACTIVESELECT_CHANGE:
             return { ...state, activeSelect: action.payload };
         default:

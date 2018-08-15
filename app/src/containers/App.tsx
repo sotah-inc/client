@@ -4,9 +4,9 @@ import { Actions } from "@app/actions";
 import {
     ChangeAuthLevel,
     ChangeIsLoginDialogOpen,
+    FetchBoot,
     FetchPing,
     FetchRealms,
-    FetchRegions,
     FetchUserPreferences,
     FetchUserReload,
 } from "@app/actions/main";
@@ -17,8 +17,8 @@ import { AuthLevel } from "@app/types/main";
 
 const mapStateToProps = (state: IStoreState): IStateProps => {
     const {
+        fetchBootLevel,
         fetchPingLevel,
-        fetchRegionLevel,
         currentRegion,
         fetchRealmLevel,
         currentRealm,
@@ -33,9 +33,9 @@ const mapStateToProps = (state: IStoreState): IStateProps => {
         authLevel,
         currentRealm,
         currentRegion,
+        fetchBootLevel,
         fetchPingLevel,
         fetchRealmLevel,
-        fetchRegionLevel,
         fetchUserPreferencesLevel,
         isLoginDialogOpen,
         preloadedToken,
@@ -46,12 +46,12 @@ const mapStateToProps = (state: IStoreState): IStateProps => {
 
 const mapDispatchToProps = (dispatch: Dispatch<Actions>): IDispatchProps => {
     return {
+        boot: () => dispatch(FetchBoot()),
         changeAuthLevel: (authLevel: AuthLevel) => dispatch(ChangeAuthLevel(authLevel)),
         changeIsLoginDialogOpen: (isLoginDialogOpen: boolean) => dispatch(ChangeIsLoginDialogOpen(isLoginDialogOpen)),
         loadUserPreferences: (token: string) => dispatch(FetchUserPreferences(token)),
         onLoad: () => dispatch(FetchPing()),
         refreshRealms: (region: IRegion) => dispatch(FetchRealms(region)),
-        refreshRegions: () => dispatch(FetchRegions()),
         reloadUser: (token: string) => dispatch(FetchUserReload(token)),
     };
 };

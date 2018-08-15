@@ -166,14 +166,6 @@ interface IResponseItemClass {
     subclasses: IResponseSubItemClass[];
 }
 
-export interface IGetItemClassesResponse {
-    classes: IResponseItemClass[] | null;
-}
-
-export const getItemClasses = async (): Promise<IGetItemClassesResponse | null> => {
-    return (await fetch(`${apiEndpoint}/item-classes`)).json();
-};
-
 interface IGetPriceListOptions {
     regionName: string;
     realmSlug: string;

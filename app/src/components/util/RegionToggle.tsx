@@ -4,12 +4,12 @@ import { Button, Classes, H6, Intent, Menu, MenuItem, Popover, Position, Spinner
 
 import { ICreatePreferencesRequestBody, UpdatePreferencesRequestBody } from "@app/api/user";
 import { IRegion, IRegions } from "@app/types/global";
-import { FetchRegionLevel } from "@app/types/main";
+import { FetchBootLevel } from "@app/types/main";
 
 export interface IStateProps {
     currentRegion: IRegion | null;
     regions: IRegions;
-    fetchRegionLevel: FetchRegionLevel;
+    fetchBootLevel: FetchBootLevel;
 }
 
 export interface IDispatchProps {
@@ -52,10 +52,10 @@ export class RegionToggle extends React.Component<Props> {
     }
 
     public render() {
-        const { currentRegion, fetchRegionLevel } = this.props;
+        const { currentRegion, fetchBootLevel } = this.props;
 
-        switch (fetchRegionLevel) {
-            case FetchRegionLevel.success:
+        switch (fetchBootLevel) {
+            case FetchBootLevel.success:
                 return (
                     <Popover
                         content={this.renderMenu(this.props.regions)}
@@ -63,11 +63,11 @@ export class RegionToggle extends React.Component<Props> {
                         position={Position.BOTTOM_RIGHT}
                     />
                 );
-            case FetchRegionLevel.failure:
+            case FetchBootLevel.failure:
                 return <Spinner className={Classes.SMALL} intent={Intent.DANGER} value={1} />;
-            case FetchRegionLevel.initial:
+            case FetchBootLevel.initial:
                 return <Spinner className={Classes.SMALL} intent={Intent.NONE} value={1} />;
-            case FetchRegionLevel.fetching:
+            case FetchBootLevel.fetching:
             default:
                 return <Spinner className={Classes.SMALL} intent={Intent.PRIMARY} />;
         }

@@ -4,7 +4,7 @@ import { IOwnProps, IStateProps, ItemPopover } from "@app/components/util/ItemPo
 import { IStoreState } from "@app/types";
 
 const mapStateToProps = (state: IStoreState): IStateProps => {
-    const { itemClasses } = state.Auction;
+    const { itemClasses } = state.Main;
     return { itemClasses };
 };
 

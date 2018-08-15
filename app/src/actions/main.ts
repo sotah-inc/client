@@ -1,6 +1,6 @@
 import { Dispatch } from "redux";
 
-import { getBoot, getPing, getRegions, getStatus, IBootResponse } from "../api/data";
+import { getBoot, getPing, getStatus, IBootResponse } from "../api/data";
 import {
     createPreferences,
     getPreferences,
@@ -90,18 +90,6 @@ export const FetchUserPreferencesUpdate = (token: string, body: UpdatePreference
     };
 };
 
-export const REQUEST_REGIONS = "REQUEST_REGIONS";
-export const RECEIVE_REGIONS = "RECEIVE_REGIONS";
-const RequestRegions = () => createAction(REQUEST_REGIONS);
-const ReceiveRegions = (payload: IRegion[] | null) => createAction(RECEIVE_REGIONS, payload);
-type FetchRegionsType = ReturnType<typeof RequestRegions | typeof ReceiveRegions>;
-export const FetchRegions = () => {
-    return async (dispatch: Dispatch<FetchRegionsType>) => {
-        dispatch(RequestRegions());
-        dispatch(ReceiveRegions(await getRegions()));
-    };
-};
-
 export const REQUEST_BOOT = "REQUEST_BOOT";
 export const RECEIVE_BOOT = "RECEIVE_BOOT";
 const RequestBoot = () => createAction(REQUEST_BOOT);
@@ -142,14 +130,12 @@ export const MainActions = {
     ReceiveBoot,
     ReceivePing,
     ReceiveRealms,
-    ReceiveRegions,
     ReceiveUserPreferences,
     ReceiveUserReload,
     RegionChange,
     RequestBoot,
     RequestPing,
     RequestRealms,
-    RequestRegions,
     RequestUserPreferences,
     RequestUserReload,
     UserLogin,

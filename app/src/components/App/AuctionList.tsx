@@ -20,7 +20,6 @@ import { RealmToggleContainer } from "@app/containers/util/RealmToggle";
 import { RegionToggleContainer } from "@app/containers/util/RegionToggle";
 import {
     FetchAuctionsLevel,
-    FetchItemClassesLevel,
     IQueryAuctionResult,
     QueryAuctionsLevel,
     SortDirection,
@@ -44,7 +43,6 @@ export interface IStateProps {
     sortDirection: SortDirection;
     queryAuctionsLevel: QueryAuctionsLevel;
     selectedQueryAuctionResults: IQueryAuctionResult[];
-    fetchItemClassesLevel: FetchItemClassesLevel;
     authLevel: AuthLevel;
     fetchUserPreferencesLevel: FetchUserPreferencesLevel;
     userPreferences: IUserPreferences | null;
@@ -55,7 +53,6 @@ export interface IDispatchProps {
     refreshAuctions: (opts: IGetAuctionsOptions) => void;
     setCurrentPage: (page: number) => void;
     refreshAuctionsQuery: (opts: IQueryAuctionsOptions) => void;
-    refreshItemClasses: () => void;
 }
 
 type Props = Readonly<IStateProps & IDispatchProps>;
@@ -85,16 +82,11 @@ export class AuctionList extends React.Component<Props> {
             auctionsPerPage,
             sortDirection,
             selectedQueryAuctionResults,
-            fetchItemClassesLevel,
             refreshAuctionsQuery,
             authLevel,
             fetchUserPreferencesLevel,
             activeSelect,
         } = this.props;
-
-        if (fetchItemClassesLevel === FetchItemClassesLevel.initial) {
-            this.props.refreshItemClasses();
-        }
 
         if (currentRegion !== null && currentRealm !== null) {
             const didPageChange = currentPage !== prevProps.currentPage;

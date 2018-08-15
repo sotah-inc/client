@@ -8,10 +8,10 @@ import { IStoreState } from "@app/types";
 import { IRegion } from "@app/types/global";
 
 const mapStateToProps = (state: IStoreState): IStateProps => {
-    const { regions, currentRegion, fetchRegionLevel } = state.Main;
+    const { regions, currentRegion, fetchBootLevel } = state.Main;
     return {
         currentRegion,
-        fetchRegionLevel,
+        fetchBootLevel,
         regions,
     };
 };

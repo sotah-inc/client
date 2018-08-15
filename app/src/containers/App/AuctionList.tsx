@@ -1,7 +1,7 @@
 import { connect, Dispatch } from "react-redux";
 
 import { Actions } from "@app/actions";
-import { FetchAuctions, FetchAuctionsQuery, FetchItemClasses, PageChange } from "@app/actions/auction";
+import { FetchAuctions, FetchAuctionsQuery, PageChange } from "@app/actions/auction";
 import { IGetAuctionsOptions, IQueryAuctionsOptions } from "@app/api/data";
 import { AuctionList, IDispatchProps, IStateProps } from "@app/components/App/AuctionList";
 import { IStoreState } from "@app/types";
@@ -18,7 +18,6 @@ const mapStateToProps = (state: IStoreState): IStateProps => {
         sortKind,
         queryAuctionsLevel,
         selectedQueryAuctionResults,
-        fetchItemClassesLevel,
         activeSelect,
     } = state.Auction;
     return {
@@ -30,7 +29,6 @@ const mapStateToProps = (state: IStoreState): IStateProps => {
         currentRealm,
         currentRegion,
         fetchAuctionsLevel,
-        fetchItemClassesLevel,
         fetchUserPreferencesLevel,
         queryAuctionsLevel,
         selectedQueryAuctionResults,
@@ -45,7 +43,6 @@ const mapDispatchToProps = (dispatch: Dispatch<Actions>): IDispatchProps => {
     return {
         refreshAuctions: (opts: IGetAuctionsOptions) => dispatch(FetchAuctions(opts)),
         refreshAuctionsQuery: (opts: IQueryAuctionsOptions) => dispatch(FetchAuctionsQuery(opts)),
-        refreshItemClasses: () => dispatch(FetchItemClasses()),
         setCurrentPage: (page: number) => dispatch(PageChange(page)),
     };
 };

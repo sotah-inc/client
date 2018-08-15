@@ -2,12 +2,10 @@ import { Dispatch } from "redux";
 
 import {
     getAuctions,
-    getItemClasses,
     getOwners,
     IAuctionsQueryResponse,
     IAuctionsResponse,
     IGetAuctionsOptions,
-    IGetItemClassesResponse,
     IGetOwnersOptions,
     IOwnersResponse,
     IQueryAuctionsOptions,
@@ -73,18 +71,6 @@ export const AddAuctionsQuery = (payload: IQueryAuctionResult) => createAction(A
 export const REMOVE_AUCTIONS_QUERY = "REMOVE_AUCTIONS_QUERY";
 export const RemoveAuctionsQuery = (payload: number) => createAction(REMOVE_AUCTIONS_QUERY, payload);
 
-export const REQUEST_ITEMCLASSES = "REQUEST_ITEMCLASSES";
-export const RECEIVE_ITEMCLASSES = "RECEIVE_ITEMCLASSES";
-const RequestItemClasses = () => createAction(REQUEST_ITEMCLASSES);
-const ReceiveItemClasses = (payload: IGetItemClassesResponse | null) => createAction(RECEIVE_ITEMCLASSES, payload);
-type FetchItemClassesType = ReturnType<typeof RequestItemClasses | typeof ReceiveItemClasses>;
-export const FetchItemClasses = () => {
-    return async (dispatch: Dispatch<FetchItemClassesType>) => {
-        dispatch(RequestItemClasses());
-        dispatch(ReceiveItemClasses(await getItemClasses()));
-    };
-};
-
 export const ACTIVESELECT_CHANGE = "ACTIVESELECT_CHANGE";
 export const ActiveSelectChange = (payload: boolean) => createAction(ACTIVESELECT_CHANGE, payload);
 
@@ -97,12 +83,10 @@ export const AuctionActions = {
     PageChange,
     ReceiveAuctions,
     ReceiveAuctionsQuery,
-    ReceiveItemClasses,
     ReceiveOwners,
     RemoveAuctionsQuery,
     RequestAuctions,
     RequestAuctionsQuery,
-    RequestItemClasses,
     RequestOwners,
     SortChange,
 };

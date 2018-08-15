@@ -18,7 +18,6 @@ export interface IMainState {
     preloadedToken: string;
     isRegistered: boolean;
     isLoggedIn: boolean;
-    fetchRegionLevel: FetchRegionLevel;
     regions: IRegions;
     currentRegion: IRegion | null;
     fetchRealmLevel: FetchRealmLevel;
@@ -34,14 +33,6 @@ export interface IMainState {
 
 export enum FetchPingLevel {
     initial,
-    fetching,
-    success,
-    failure,
-}
-
-export enum FetchRegionLevel {
-    initial,
-    prompted,
     fetching,
     success,
     failure,
@@ -84,7 +75,6 @@ export const defaultMainState: IMainState = {
     fetchBootLevel: FetchBootLevel.initial,
     fetchPingLevel: FetchPingLevel.initial,
     fetchRealmLevel: FetchRealmLevel.initial,
-    fetchRegionLevel: FetchRegionLevel.initial,
     fetchUserPreferencesLevel: FetchUserPreferencesLevel.initial,
     isLoggedIn: false,
     isLoginDialogOpen: false,
