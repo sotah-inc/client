@@ -19,25 +19,10 @@ export interface IPriceListsState {
     selectedProfession: IProfession | null;
 }
 
-export enum CreateListStep {
-    list,
-    entry,
-    finish,
-}
 export enum ListDialogStep {
     list,
     entry,
     finish,
-}
-export enum CreateListCompletion {
-    initial,
-    list,
-    entry,
-}
-export enum ListDialogCompletion {
-    initial,
-    list,
-    entry,
 }
 export enum EntryCreateLevel {
     initial,
