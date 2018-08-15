@@ -12,13 +12,14 @@ import { IStoreState } from "@app/types";
 
 const mapStateToProps = (state: IStoreState): IStateProps => {
     const { currentRegion, currentRealm } = state.Main;
-    const { isAddListDialogOpen, isAddEntryDialogOpen, selectedList } = state.PriceLists;
+    const { isAddListDialogOpen, isAddEntryDialogOpen, selectedList, selectedProfession } = state.PriceLists;
     return {
         currentRealm,
         currentRegion,
         isAddEntryDialogOpen,
         isAddListDialogOpen,
         selectedList,
+        selectedProfession,
     };
 };
 

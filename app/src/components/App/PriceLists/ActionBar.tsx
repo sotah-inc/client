@@ -4,7 +4,7 @@ import { Alignment, Button, ButtonGroup, Classes, Intent, Navbar, NavbarGroup, S
 
 import { RealmToggleContainer } from "@app/containers/util/RealmToggle";
 import { RegionToggleContainer } from "@app/containers/util/RegionToggle";
-import { IRealm, IRegion } from "@app/types/global";
+import { IProfession, IRealm, IRegion } from "@app/types/global";
 import { IPricelist } from "@app/types/price-lists";
 
 export interface IStateProps {
@@ -13,6 +13,7 @@ export interface IStateProps {
     isAddListDialogOpen: boolean;
     isAddEntryDialogOpen: boolean;
     selectedList: IPricelist | null;
+    selectedProfession: IProfession | null;
 }
 
 export interface IDispatchProps {
@@ -25,7 +26,21 @@ export interface IDispatchProps {
 export type Props = Readonly<IStateProps & IDispatchProps>;
 
 export class ActionBar extends React.Component<Props> {
-    public renderListButtons() {
+    public render() {
+        return (
+            <Navbar>
+                <NavbarGroup align={Alignment.LEFT}>{this.renderButtons()}</NavbarGroup>
+                <NavbarGroup align={Alignment.RIGHT}>
+                    <ButtonGroup>
+                        <RealmToggleContainer />
+                        <RegionToggleContainer />
+                    </ButtonGroup>
+                </NavbarGroup>
+            </Navbar>
+        );
+    }
+
+    private renderListButtons() {
         const {
             selectedList,
             changeIsAddEntryDialogOpen,
@@ -60,32 +75,23 @@ export class ActionBar extends React.Component<Props> {
         );
     }
 
-    public renderButtons() {
-        const { currentRegion, currentRealm, changeIsAddListDialogOpen } = this.props;
+    private renderButtons() {
+        const { currentRegion, currentRealm, changeIsAddListDialogOpen, selectedProfession } = this.props;
 
         if (currentRegion === null || currentRealm === null) {
             return <Spinner className={Classes.SMALL} intent={Intent.PRIMARY} />;
         }
 
+        let createListText = "List";
+        if (selectedProfession !== null) {
+            createListText = `${selectedProfession.label} List`;
+        }
+
         return (
             <>
-                <Button icon="plus" onClick={() => changeIsAddListDialogOpen(true)} text="List" />
+                <Button icon="plus" onClick={() => changeIsAddListDialogOpen(true)} text={createListText} />
                 {this.renderListButtons()}
             </>
-        );
-    }
-
-    public render() {
-        return (
-            <Navbar>
-                <NavbarGroup align={Alignment.LEFT}>{this.renderButtons()}</NavbarGroup>
-                <NavbarGroup align={Alignment.RIGHT}>
-                    <ButtonGroup>
-                        <RealmToggleContainer />
-                        <RegionToggleContainer />
-                    </ButtonGroup>
-                </NavbarGroup>
-            </Navbar>
         );
     }
 }

@@ -4,7 +4,7 @@ import { Intent } from "@blueprintjs/core";
 
 import { ICreatePricelistRequest } from "@app/api/price-lists";
 import { ListDialogContainer } from "@app/containers/App/PriceLists/util/ListDialog";
-import { IErrors, IProfile, IRealm, IRegion, ItemsMap } from "@app/types/global";
+import { IErrors, IProfession, IProfile, IRealm, IRegion, ItemsMap } from "@app/types/global";
 import { MutatePricelistLevel } from "@app/types/price-lists";
 import { AppToaster } from "@app/util/toasters";
 
@@ -15,6 +15,7 @@ export interface IStateProps {
     createPricelistLevel: MutatePricelistLevel;
     createPricelistErrors: IErrors;
     profile: IProfile | null;
+    selectedProfession: IProfession | null;
 }
 
 export interface IDispatchProps {
@@ -61,14 +62,20 @@ export class CreateListDialog extends React.Component<Props, State> {
             changeIsAddListDialogOpen,
             createPricelistErrors,
             createPricelistLevel,
+            selectedProfession,
         } = this.props;
         const { listDialogResetTrigger } = this.state;
+
+        let dialogTitle = "New Price List";
+        if (selectedProfession !== null) {
+            dialogTitle = `New ${selectedProfession.label} Price List`;
+        }
 
         return (
             <ListDialogContainer
                 isOpen={isAddListDialogOpen}
                 onClose={() => changeIsAddListDialogOpen(!isAddListDialogOpen)}
-                title="New Price List"
+                title={dialogTitle}
                 mutationErrors={createPricelistErrors}
                 mutatePricelistLevel={createPricelistLevel}
                 resetTrigger={listDialogResetTrigger}
