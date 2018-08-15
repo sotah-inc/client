@@ -4,27 +4,22 @@ import { Button, Classes, Intent, NonIdealState, Spinner } from "@blueprintjs/co
 
 import { IGetPricelistsOptions } from "@app/api/price-lists";
 import { PricelistTreeContainer } from "@app/containers/App/PriceLists/Listing/PricelistTree";
-import { IProfession, IProfile, IRealm, IRegion } from "@app/types/global";
+import { IProfile, IRealm, IRegion } from "@app/types/global";
 import { AuthLevel, FetchUserPreferencesLevel } from "@app/types/main";
 import { GetPricelistsLevel, IPricelist } from "@app/types/price-lists";
 import { didRealmChange } from "@app/util";
 
 export interface IStateProps {
     pricelists: IPricelist[];
-    selectedList: IPricelist | null;
     currentRegion: IRegion | null;
     currentRealm: IRealm | null;
     getPricelistsLevel: GetPricelistsLevel;
     profile: IProfile | null;
     authLevel: AuthLevel;
     fetchUserPreferencesLevel: FetchUserPreferencesLevel;
-    professions: IProfession[];
-    selectedProfession: IProfession | null;
 }
 
 export interface IDispatchProps {
-    changeSelectedList: (list: IPricelist) => void;
-    changeSelectedProfession: (profession: IProfession) => void;
     changeIsAddListDialogOpen: (isDialogOpen: boolean) => void;
     refreshPricelists: (opts: IGetPricelistsOptions) => void;
 }
