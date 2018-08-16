@@ -9,10 +9,12 @@ import {
     CHANGE_SELECTED_PROFESSION,
     PriceListsActions,
     RECEIVE_CREATE_PRICELIST,
+    RECEIVE_CREATE_PROFESSION_PRICELIST,
     RECEIVE_DELETE_PRICELIST,
     RECEIVE_GET_PRICELISTS,
     RECEIVE_UPDATE_PRICELIST,
     REQUEST_CREATE_PRICELIST,
+    REQUEST_CREATE_PROFESSION_PRICELIST,
     REQUEST_DELETE_PRICELIST,
     REQUEST_GET_PRICELISTS,
     REQUEST_UPDATE_PRICELIST,
@@ -61,6 +63,10 @@ export const priceLists = (state: State, action: PriceListsActions): State => {
                 pricelists: postCreatePricelists,
                 selectedList: postCreateSelectedPricelist,
             };
+        case REQUEST_CREATE_PROFESSION_PRICELIST:
+            return { ...state, createPricelistLevel: MutatePricelistLevel.fetching };
+        case RECEIVE_CREATE_PROFESSION_PRICELIST:
+            return { ...state, createPricelistLevel: MutatePricelistLevel.fetching };
         case REQUEST_UPDATE_PRICELIST:
             return { ...state, updatePricelistLevel: MutatePricelistLevel.fetching };
         case RECEIVE_UPDATE_PRICELIST:

@@ -1,6 +1,6 @@
 import * as HTTPStatus from "http-status";
 
-import { IErrors, ItemsMap, RealmSlug, RegionName } from "@app/types/global";
+import { IErrors, ItemsMap, ProfessionName, RealmSlug, RegionName } from "@app/types/global";
 import { IPricelist, IPricelistEntry } from "@app/types/price-lists";
 import { apiEndpoint } from "./index";
 
@@ -122,5 +122,49 @@ export const deletePricelist = async (opts: IDeletePricelistRequestOptions): Pro
             return opts.id;
         default:
             return null;
+    }
+};
+
+export interface ICreateProfessionPricelistRequest {
+    pricelist: {
+        name: string;
+        region: RegionName;
+        realm: RealmSlug;
+    };
+    entries: Array<{
+        item_id: number;
+        quantity_modifier: number;
+    }>;
+    profession_name: ProfessionName;
+}
+
+export interface ICreateProfessionPricelistResponse {
+    errors: IErrors | null;
+    data: {
+        pricelist: IPricelist;
+        entries: IPricelistEntry[];
+    } | null;
+}
+
+export const createProfessionPricelist = async (
+    token: string,
+    request: ICreateProfessionPricelistRequest,
+): Promise<ICreateProfessionPricelistResponse> => {
+    const res = await fetch(`${apiEndpoint}/user/profession-pricelists`, {
+        body: JSON.stringify(request),
+        headers: new Headers({
+            Authorization: `Bearer ${token}`,
+            "content-type": "application/json",
+        }),
+        method: "POST",
+    });
+    switch (res.status) {
+        case HTTPStatus.CREATED:
+            return { errors: null, data: await res.json() };
+        case HTTPStatus.UNAUTHORIZED:
+            return { errors: { error: "Unauthorized" }, data: null };
+        case HTTPStatus.BAD_REQUEST:
+        default:
+            return { errors: await res.json(), data: null };
     }
 };

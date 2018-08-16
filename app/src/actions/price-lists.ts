@@ -2,10 +2,13 @@ import { Dispatch } from "redux";
 
 import {
     createPricelist,
+    createProfessionPricelist,
     deletePricelist,
     getPricelists,
     ICreatePricelistRequest,
     ICreatePricelistResponse,
+    ICreateProfessionPricelistRequest,
+    ICreateProfessionPricelistResponse,
     IDeletePricelistRequestOptions,
     IGetPricelistsOptions,
     IGetPricelistsResponse,
@@ -101,6 +104,21 @@ export const ChangeIsAddEntryDialogOpen = (payload: boolean) => createAction(CHA
 export const APPEND_ITEMS = "APPEND_ITEMS";
 export const AppendItems = (payload: ItemsMap) => createAction(APPEND_ITEMS, payload);
 
+export const REQUEST_CREATE_PROFESSION_PRICELIST = "REQUEST_CREATE_PROFESSION_PRICELIST";
+export const RequestCreateProfessionPricelist = () => createAction(REQUEST_CREATE_PROFESSION_PRICELIST);
+export const RECEIVE_CREATE_PROFESSION_PRICELIST = "RECEIVE_CREATE_PROFESSION_PRICELIST";
+export const ReceiveCreateProfessionPricelist = (payload: ICreateProfessionPricelistResponse) =>
+    createAction(RECEIVE_CREATE_PROFESSION_PRICELIST, payload);
+type FetchCreateProfessionPricelistType = ReturnType<
+    typeof RequestCreateProfessionPricelist | typeof ReceiveCreatePricelist
+>;
+export const FetchCreateProfessionPricelist = (token: string, request: ICreateProfessionPricelistRequest) => {
+    return async (dispatch: Dispatch<FetchCreateProfessionPricelistType>) => {
+        dispatch(RequestCreateProfessionPricelist());
+        dispatch(ReceiveCreateProfessionPricelist(await createProfessionPricelist(token, request)));
+    };
+};
+
 export const PriceListsActions = {
     AppendItems,
     ChangeEntryCreateLevel,
@@ -111,10 +129,12 @@ export const PriceListsActions = {
     ChangeSelectedList,
     ChangeSelectedProfession,
     ReceiveCreatePricelist,
+    ReceiveCreateProfessionPricelist,
     ReceiveDeletePricelist,
     ReceiveGetPricelists,
     ReceiveUpdatePricelist,
     RequestCreatePricelist,
+    RequestCreateProfessionPricelist,
     RequestDeletePricelist,
     RequestGetPricelists,
     RequestUpdatePricelist,
