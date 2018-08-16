@@ -1,8 +1,13 @@
 import { connect, Dispatch } from "react-redux";
 
 import { Actions } from "@app/actions";
-import { AppendItems, ChangeIsAddListDialogOpen, FetchCreatePricelist } from "@app/actions/price-lists";
-import { ICreatePricelistRequest } from "@app/api/price-lists";
+import {
+    AppendItems,
+    ChangeIsAddListDialogOpen,
+    FetchCreatePricelist,
+    FetchCreateProfessionPricelist,
+} from "@app/actions/price-lists";
+import { ICreatePricelistRequest, ICreateProfessionPricelistRequest } from "@app/api/price-lists";
 import { CreateListDialog, IDispatchProps, IStateProps } from "@app/components/App/PriceLists/CreateListDialog";
 import { IStoreState } from "@app/types";
 import { ItemsMap } from "@app/types/global";
@@ -28,6 +33,8 @@ const mapDispatchToProps = (dispatch: Dispatch<Actions>): IDispatchProps => {
         changeIsAddListDialogOpen: (isDialogOpen: boolean) => dispatch(ChangeIsAddListDialogOpen(isDialogOpen)),
         createPricelist: (token: string, request: ICreatePricelistRequest) =>
             dispatch(FetchCreatePricelist(token, request)),
+        createProfessionPricelist: (token: string, request: ICreateProfessionPricelistRequest) =>
+            dispatch(FetchCreateProfessionPricelist(token, request)),
     };
 };
 

@@ -2,7 +2,7 @@ import * as React from "react";
 
 import { Intent } from "@blueprintjs/core";
 
-import { ICreatePricelistRequest } from "@app/api/price-lists";
+import { ICreatePricelistRequest, ICreateProfessionPricelistRequest } from "@app/api/price-lists";
 import { ListDialogContainer } from "@app/containers/App/PriceLists/util/ListDialog";
 import { IErrors, IProfession, IProfile, IRealm, IRegion, ItemsMap } from "@app/types/global";
 import { MutatePricelistLevel } from "@app/types/price-lists";
@@ -22,6 +22,7 @@ export interface IDispatchProps {
     appendItems: (items: ItemsMap) => void;
     changeIsAddListDialogOpen: (isDialogOpen: boolean) => void;
     createPricelist: (token: string, request: ICreatePricelistRequest) => void;
+    createProfessionPricelist: (token: string, request: ICreateProfessionPricelistRequest) => void;
 }
 
 export type Props = Readonly<IStateProps & IDispatchProps>;
@@ -85,12 +86,29 @@ export class CreateListDialog extends React.Component<Props, State> {
     }
 
     private onListDialogComplete({ name, entries, items }) {
-        const { createPricelist, profile, appendItems, currentRegion, currentRealm } = this.props;
+        const {
+            createPricelist,
+            profile,
+            appendItems,
+            currentRegion,
+            currentRealm,
+            selectedProfession,
+            createProfessionPricelist,
+        } = this.props;
 
-        createPricelist(profile!.token, {
-            entries,
-            pricelist: { name, region: currentRegion!.name, realm: currentRealm!.slug },
-        });
+        if (selectedProfession === null) {
+            createPricelist(profile!.token, {
+                entries,
+                pricelist: { name, region: currentRegion!.name, realm: currentRealm!.slug },
+            });
+        } else {
+            createProfessionPricelist(profile!.token, {
+                entries,
+                pricelist: { name, region: currentRegion!.name, realm: currentRealm!.slug },
+                profession_name: selectedProfession.name,
+            });
+        }
+
         appendItems(items);
     }
 }
