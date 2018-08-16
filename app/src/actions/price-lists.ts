@@ -4,12 +4,14 @@ import {
     createPricelist,
     createProfessionPricelist,
     deletePricelist,
+    deleteProfessionPricelist,
     getPricelists,
     ICreatePricelistRequest,
     ICreatePricelistResponse,
     ICreateProfessionPricelistRequest,
     ICreateProfessionPricelistResponse,
     IDeletePricelistRequestOptions,
+    IDeleteProfessionPricelistRequestOptions,
     IGetPricelistsOptions,
     IGetPricelistsResponse,
     updatePricelist,
@@ -116,6 +118,21 @@ export const FetchCreateProfessionPricelist = (token: string, request: ICreatePr
     return async (dispatch: Dispatch<FetchCreateProfessionPricelistType>) => {
         dispatch(RequestCreateProfessionPricelist());
         dispatch(ReceiveCreateProfessionPricelist(await createProfessionPricelist(token, request)));
+    };
+};
+
+export const REQUEST_DELETE_PROFESSION_PRICELIST = "REQUEST_DELETE_PROFESSION_PRICELIST";
+export const RequestDeleteProfessionPricelist = () => createAction(REQUEST_DELETE_PROFESSION_PRICELIST);
+export const RECEIVE_DELETE_PROFESSION_PRICELIST = "RECEIVE_DELETE_PROFESSION_PRICELIST";
+export const ReceiveDeleteProfessionPricelist = (payload: number | null) =>
+    createAction(RECEIVE_DELETE_PROFESSION_PRICELIST, payload);
+type FetchDeleteProfessionPricelistType = ReturnType<
+    typeof RequestDeleteProfessionPricelist | typeof ReceiveDeleteProfessionPricelist
+>;
+export const FetchDeleteProfessionPricelist = (opts: IDeleteProfessionPricelistRequestOptions) => {
+    return async (dispatch: Dispatch<FetchDeleteProfessionPricelistType>) => {
+        dispatch(RequestDeleteProfessionPricelist());
+        dispatch(ReceiveDeleteProfessionPricelist(await deleteProfessionPricelist(opts)));
     };
 };
 

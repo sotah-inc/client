@@ -2,9 +2,9 @@ import * as React from "react";
 
 import { Button, Callout, Dialog, Intent } from "@blueprintjs/core";
 
-import { IDeletePricelistRequestOptions } from "@app/api/price-lists";
+import { IDeletePricelistRequestOptions, IDeleteProfessionPricelistRequestOptions } from "@app/api/price-lists";
 import { DialogActions, DialogBody } from "@app/components/util";
-import { IProfile } from "@app/types/global";
+import { IProfession, IProfile } from "@app/types/global";
 import { DeletePricelistLevel, IPricelist } from "@app/types/price-lists";
 
 export interface IStateProps {
@@ -12,11 +12,13 @@ export interface IStateProps {
     profile: IProfile | null;
     isDeleteListDialogOpen: boolean;
     deletePricelistLevel: DeletePricelistLevel;
+    selectedProfession: IProfession | null;
 }
 
 export interface IDispatchProps {
     changeIsDeleteListDialogOpen: (isDialogOpen: boolean) => void;
     deletePricelist: (opts: IDeletePricelistRequestOptions) => void;
+    deleteProfessionPricelist: (opts: IDeleteProfessionPricelistRequestOptions) => void;
 }
 
 export type Props = Readonly<IStateProps & IDispatchProps>;
@@ -62,8 +64,16 @@ export class DeleteListDialog extends React.Component<Props> {
     }
 
     private onDialogConfirm() {
-        const { selectedList, deletePricelist, profile } = this.props;
-        deletePricelist({
+        const { selectedList, deletePricelist, profile, selectedProfession, deleteProfessionPricelist } = this.props;
+
+        if (selectedProfession === null) {
+            deletePricelist({
+                id: selectedList!.id,
+                token: profile!.token,
+            });
+        }
+
+        deleteProfessionPricelist({
             id: selectedList!.id,
             token: profile!.token,
         });

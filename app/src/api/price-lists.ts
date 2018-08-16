@@ -168,3 +168,26 @@ export const createProfessionPricelist = async (
             return { errors: await res.json(), data: null };
     }
 };
+
+export interface IDeleteProfessionPricelistRequestOptions {
+    token: string;
+    id: number;
+}
+
+export const deleteProfessionPricelist = async (
+    opts: IDeleteProfessionPricelistRequestOptions,
+): Promise<number | null> => {
+    const res = await fetch(`${apiEndpoint}/user/profession-pricelists/${opts.id}`, {
+        headers: new Headers({
+            Authorization: `Bearer ${opts.token}`,
+            "content-type": "application/json",
+        }),
+        method: "DELETE",
+    });
+    switch (res.status) {
+        case HTTPStatus.OK:
+            return opts.id;
+        default:
+            return null;
+    }
+};
