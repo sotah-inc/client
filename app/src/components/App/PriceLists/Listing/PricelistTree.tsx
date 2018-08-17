@@ -51,6 +51,17 @@ export class PricelistTree extends React.Component<Props, IState> {
         },
     };
 
+    public componentDidUpdate(prevProps: Props) {
+        const { getProfessionPricelistsLevel, expansions, changeSelectedExpansion } = this.props;
+
+        const shouldSelectFirstExpansion =
+            prevProps.getProfessionPricelistsLevel === GetProfessionPricelistsLevel.fetching &&
+            getProfessionPricelistsLevel === GetProfessionPricelistsLevel.success;
+        if (shouldSelectFirstExpansion) {
+            changeSelectedExpansion(expansions[0]);
+        }
+    }
+
     public render() {
         const { selectedList, pricelists } = this.props;
         const { topOpenMap } = this.state;
