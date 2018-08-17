@@ -177,11 +177,15 @@ export const priceLists = (state: State, action: PriceListsActions): State => {
         case REQUEST_PROFESSION_PRICELISTS:
             return { ...state, getProfessionPricelistsLevel: GetProfessionPricelistsLevel.fetching };
         case RECEIVE_PROFESSION_PRICELISTS:
+            if (action.payload.errors !== null) {
+                return { ...state, getProfessionPricelistsLevel: GetProfessionPricelistsLevel.failure };
+            }
+
             return {
                 ...state,
                 getProfessionPricelistsLevel: GetProfessionPricelistsLevel.success,
-                items: { ...state.items, ...action.payload.items },
-                professionPricelists: action.payload.profession_pricelists,
+                items: { ...state.items, ...action.payload.data!.items },
+                professionPricelists: action.payload.data!.profession_pricelists,
             };
         default:
             return state;

@@ -199,8 +199,11 @@ export interface IGetProfessionPricelistsRequestOptions {
 }
 
 export interface IGetProfessionPricelistsResponse {
-    items: ItemsMap;
-    profession_pricelists: IProfessionPricelist[];
+    data: {
+        items: ItemsMap;
+        profession_pricelists: IProfessionPricelist[];
+    } | null;
+    errors: IErrors | null;
 }
 
 export const getProfessionPricelists = async (
@@ -213,5 +216,11 @@ export const getProfessionPricelists = async (
             method: "GET",
         },
     );
-    return res.json();
+    switch (res.status) {
+        case HTTPStatus.OK:
+            return { errors: null, data: await res.json() };
+        default:
+            console.log("wew lad");
+            return { data: null, errors: { failure: "Failed to fetch profession-pricelists" } };
+    }
 };

@@ -1,23 +1,27 @@
 import * as React from "react";
 
-import { Classes, ITreeNode, Tree } from "@blueprintjs/core";
+import { Classes, Intent, ITreeNode, Spinner, Tree } from "@blueprintjs/core";
 
+import { IGetProfessionPricelistsRequestOptions } from "@app/api/price-lists";
 import { LastModified } from "@app/components/util";
 import { PriceListPanelContainer } from "@app/containers/App/PriceLists/PriceListPanel";
-import { IProfession, IRealm } from "@app/types/global";
-import { IPricelist } from "@app/types/price-lists";
+import { IProfession, IRealm, IRegion } from "@app/types/global";
+import { GetProfessionPricelistsLevel, IPricelist } from "@app/types/price-lists";
 
 export interface IStateProps {
     pricelists: IPricelist[];
     selectedList: IPricelist | null;
+    currentRegion: IRegion | null;
     currentRealm: IRealm | null;
     professions: IProfession[];
     selectedProfession: IProfession | null;
+    getProfessionPricelistsLevel: GetProfessionPricelistsLevel;
 }
 
 export interface IDispatchProps {
     changeSelectedList: (list: IPricelist) => void;
     changeSelectedProfession: (profession: IProfession) => void;
+    refreshProfessionPricelists: (opts: IGetProfessionPricelistsRequestOptions) => void;
 }
 
 export type Props = Readonly<IStateProps & IDispatchProps>;
@@ -44,32 +48,12 @@ export class PricelistTree extends React.Component<Props, IState> {
     };
 
     public render() {
-        const { pricelists, selectedList, selectedProfession, professions } = this.props;
+        const { selectedList } = this.props;
         const { topOpenMap } = this.state;
-
-        const pricelistNodes: ITreeNode[] = pricelists.map(v => {
-            const result: ITreeNode = {
-                id: `pricelist-${v.id}`,
-                isSelected: selectedList !== null && selectedList.id === v.id,
-                label: v.name,
-            };
-
-            return result;
-        });
-
-        const professionNodes: ITreeNode[] = professions.map(v => {
-            const result: ITreeNode = {
-                id: `profession-${v.name}`,
-                isSelected: selectedProfession !== null && selectedProfession.name === v.name,
-                label: v.label,
-            };
-
-            return result;
-        });
 
         const nodes: ITreeNode[] = [
             {
-                childNodes: pricelistNodes,
+                childNodes: this.getPricelistNodes(),
                 hasCaret: true,
                 icon: "list",
                 id: `top-${TopOpenKey.pricelists}`,
@@ -77,7 +61,7 @@ export class PricelistTree extends React.Component<Props, IState> {
                 label: "Custom Pricelists",
             },
             {
-                childNodes: professionNodes,
+                childNodes: this.getProfessionNodes(),
                 hasCaret: true,
                 icon: "list",
                 id: `top-${TopOpenKey.professions}`,
@@ -96,6 +80,90 @@ export class PricelistTree extends React.Component<Props, IState> {
                 </div>
             </div>
         );
+    }
+
+    private getPricelistNodes() {
+        const { pricelists, selectedList } = this.props;
+
+        return pricelists.map(v => {
+            const result: ITreeNode = {
+                id: `pricelist-${v.id}`,
+                isSelected: selectedList !== null && selectedList.id === v.id,
+                label: v.name,
+            };
+
+            return result;
+        });
+    }
+
+    private getProfessionNodes() {
+        const { professions } = this.props;
+
+        return professions.map(v => this.getProfessionNode(v));
+    }
+
+    private getProfessionNode(v: IProfession) {
+        const { selectedProfession, getProfessionPricelistsLevel } = this.props;
+
+        const isSelected = selectedProfession !== null && selectedProfession.name === v.name;
+        const result: ITreeNode = {
+            id: `profession-${v.name}`,
+            isSelected,
+            label: v.label,
+        };
+        if (!isSelected) {
+            return result;
+        }
+
+        result.isExpanded = true;
+        result.hasCaret = false;
+
+        switch (getProfessionPricelistsLevel) {
+            case GetProfessionPricelistsLevel.initial:
+                result.childNodes = [
+                    {
+                        icon: <Spinner size={20} value={0} intent={Intent.NONE} />,
+                        id: "loading-0",
+                        label: <span style={{ marginLeft: "5px" }}>Loading</span>,
+                    },
+                ];
+
+                break;
+            case GetProfessionPricelistsLevel.fetching:
+                result.childNodes = [
+                    {
+                        icon: <Spinner size={20} intent={Intent.PRIMARY} />,
+                        id: "loading-0",
+                        label: <span style={{ marginLeft: "5px" }}>Loading</span>,
+                    },
+                ];
+
+                break;
+            case GetProfessionPricelistsLevel.failure:
+                result.childNodes = [
+                    {
+                        icon: <Spinner size={20} intent={Intent.DANGER} />,
+                        id: "loading-0",
+                        label: <span style={{ marginLeft: "5px" }}>Failed to load profession pricelists!</span>,
+                    },
+                ];
+
+                break;
+            case GetProfessionPricelistsLevel.success:
+                result.childNodes = [
+                    {
+                        icon: <Spinner size={20} intent={Intent.SUCCESS} />,
+                        id: "loading-0",
+                        label: <span style={{ marginLeft: "5px" }}>Success!</span>,
+                    },
+                ];
+
+                break;
+            default:
+                break;
+        }
+
+        return result;
     }
 
     private renderTreeContent(list: IPricelist | null) {
@@ -136,7 +204,13 @@ export class PricelistTree extends React.Component<Props, IState> {
     }
 
     private onProfessionNodeClick(id: string) {
-        const { professions, changeSelectedProfession } = this.props;
+        const {
+            professions,
+            changeSelectedProfession,
+            refreshProfessionPricelists,
+            currentRegion,
+            currentRealm,
+        } = this.props;
 
         const profession = professions.reduce((result, v) => {
             if (result !== null) {
@@ -155,6 +229,11 @@ export class PricelistTree extends React.Component<Props, IState> {
         }
 
         changeSelectedProfession(profession);
+        refreshProfessionPricelists({
+            profession: profession!.name,
+            realm: currentRealm!.slug,
+            region: currentRegion!.name,
+        });
     }
 
     private onTopNodeClick(id: TopOpenKey) {
