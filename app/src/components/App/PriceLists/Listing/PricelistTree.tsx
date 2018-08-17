@@ -5,7 +5,7 @@ import { Classes, Intent, ITreeNode, Spinner, Tree } from "@blueprintjs/core";
 import { IGetProfessionPricelistsRequestOptions } from "@app/api/price-lists";
 import { LastModified } from "@app/components/util";
 import { PriceListPanelContainer } from "@app/containers/App/PriceLists/PriceListPanel";
-import { IProfession, IProfessionPricelist, IRealm, IRegion } from "@app/types/global";
+import { IExpansion, IProfession, IProfessionPricelist, IRealm, IRegion } from "@app/types/global";
 import { GetProfessionPricelistsLevel, IPricelist } from "@app/types/price-lists";
 
 export interface IStateProps {
@@ -17,6 +17,7 @@ export interface IStateProps {
     selectedProfession: IProfession | null;
     getProfessionPricelistsLevel: GetProfessionPricelistsLevel;
     professionPricelists: IProfessionPricelist[];
+    expansions: IExpansion[];
 }
 
 export interface IDispatchProps {

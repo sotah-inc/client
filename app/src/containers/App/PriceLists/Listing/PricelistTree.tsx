@@ -9,7 +9,7 @@ import { IProfession } from "@app/types/global";
 import { IPricelist } from "@app/types/price-lists";
 
 const mapStateToProps = (state: IStoreState): IStateProps => {
-    const { currentRealm, professions, currentRegion } = state.Main;
+    const { currentRealm, professions, currentRegion, expansions } = state.Main;
     const {
         pricelists,
         selectedList,
@@ -20,6 +20,7 @@ const mapStateToProps = (state: IStoreState): IStateProps => {
     return {
         currentRealm,
         currentRegion,
+        expansions,
         getProfessionPricelistsLevel,
         pricelists,
         professionPricelists,
