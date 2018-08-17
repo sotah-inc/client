@@ -175,7 +175,11 @@ export const priceLists = (state: State, action: PriceListsActions): State => {
 
             return { ...state, items: appendingItems };
         case REQUEST_PROFESSION_PRICELISTS:
-            return { ...state, getProfessionPricelistsLevel: GetProfessionPricelistsLevel.fetching };
+            return {
+                ...state,
+                getProfessionPricelistsLevel: GetProfessionPricelistsLevel.fetching,
+                professionPricelists: [],
+            };
         case RECEIVE_PROFESSION_PRICELISTS:
             if (action.payload.errors !== null) {
                 return { ...state, getProfessionPricelistsLevel: GetProfessionPricelistsLevel.failure };

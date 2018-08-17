@@ -92,8 +92,6 @@ export class PricelistTree extends React.Component<Props, IState> {
             label: v.name,
         };
 
-        console.log(result);
-
         return result;
     }
 
