@@ -10,12 +10,19 @@ import { IPricelist } from "@app/types/price-lists";
 
 const mapStateToProps = (state: IStoreState): IStateProps => {
     const { currentRealm, professions, currentRegion } = state.Main;
-    const { pricelists, selectedList, selectedProfession, getProfessionPricelistsLevel } = state.PriceLists;
+    const {
+        pricelists,
+        selectedList,
+        selectedProfession,
+        getProfessionPricelistsLevel,
+        professionPricelists,
+    } = state.PriceLists;
     return {
         currentRealm,
         currentRegion,
         getProfessionPricelistsLevel,
         pricelists,
+        professionPricelists,
         professions,
         selectedList,
         selectedProfession,

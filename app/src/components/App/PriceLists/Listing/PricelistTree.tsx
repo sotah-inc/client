@@ -5,7 +5,7 @@ import { Classes, Intent, ITreeNode, Spinner, Tree } from "@blueprintjs/core";
 import { IGetProfessionPricelistsRequestOptions } from "@app/api/price-lists";
 import { LastModified } from "@app/components/util";
 import { PriceListPanelContainer } from "@app/containers/App/PriceLists/PriceListPanel";
-import { IProfession, IRealm, IRegion } from "@app/types/global";
+import { IProfession, IProfessionPricelist, IRealm, IRegion } from "@app/types/global";
 import { GetProfessionPricelistsLevel, IPricelist } from "@app/types/price-lists";
 
 export interface IStateProps {
@@ -16,6 +16,7 @@ export interface IStateProps {
     professions: IProfession[];
     selectedProfession: IProfession | null;
     getProfessionPricelistsLevel: GetProfessionPricelistsLevel;
+    professionPricelists: IProfessionPricelist[];
 }
 
 export interface IDispatchProps {
@@ -150,13 +151,7 @@ export class PricelistTree extends React.Component<Props, IState> {
 
                 break;
             case GetProfessionPricelistsLevel.success:
-                result.childNodes = [
-                    {
-                        icon: <Spinner size={20} intent={Intent.SUCCESS} />,
-                        id: "loading-0",
-                        label: <span style={{ marginLeft: "5px" }}>Success!</span>,
-                    },
-                ];
+                result.childNodes = this.getProfessionPricelistNodes();
 
                 break;
             default:
@@ -164,6 +159,16 @@ export class PricelistTree extends React.Component<Props, IState> {
         }
 
         return result;
+    }
+
+    private getProfessionPricelistNodes(): ITreeNode[] {
+        const { professionPricelists } = this.props;
+
+        if (professionPricelists.length === 0) {
+            return [];
+        }
+
+        return [];
     }
 
     private renderTreeContent(list: IPricelist | null) {
