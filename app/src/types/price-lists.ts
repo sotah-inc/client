@@ -1,5 +1,14 @@
 import { IUpdatePricelistRequest, IUpdatePricelistResponse } from "@app/api/price-lists";
-import { IErrors, IProfession, IProfessionPricelist, ItemId, ItemsMap, RealmSlug, RegionName } from "./global";
+import {
+    IErrors,
+    IExpansion,
+    IProfession,
+    IProfessionPricelist,
+    ItemId,
+    ItemsMap,
+    RealmSlug,
+    RegionName,
+} from "./global";
 
 export interface IPriceListsState {
     pricelists: IPricelist[];
@@ -19,6 +28,7 @@ export interface IPriceListsState {
     selectedProfession: IProfession | null;
     professionPricelists: IProfessionPricelist[];
     getProfessionPricelistsLevel: GetProfessionPricelistsLevel;
+    selectedExpansion: IExpansion | null;
 }
 
 export enum ListDialogStep {
@@ -106,6 +116,7 @@ export const defaultPriceListsState: IPriceListsState = {
     items: [],
     pricelists: [],
     professionPricelists: [],
+    selectedExpansion: null,
     selectedList: null,
     selectedProfession: null,
     updatePricelistErrors: {},

@@ -1,11 +1,16 @@
 import { connect, Dispatch } from "react-redux";
 
 import { Actions } from "@app/actions";
-import { ChangeSelectedList, ChangeSelectedProfession, FetchProfessionPricelists } from "@app/actions/price-lists";
+import {
+    ChangeSelectedExpansion,
+    ChangeSelectedList,
+    ChangeSelectedProfession,
+    FetchProfessionPricelists,
+} from "@app/actions/price-lists";
 import { IGetProfessionPricelistsRequestOptions } from "@app/api/price-lists";
 import { IDispatchProps, IStateProps, PricelistTree } from "@app/components/App/PriceLists/Listing/PricelistTree";
 import { IStoreState } from "@app/types";
-import { IProfession } from "@app/types/global";
+import { IExpansion, IProfession } from "@app/types/global";
 import { IPricelist } from "@app/types/price-lists";
 
 const mapStateToProps = (state: IStoreState): IStateProps => {
@@ -16,6 +21,7 @@ const mapStateToProps = (state: IStoreState): IStateProps => {
         selectedProfession,
         getProfessionPricelistsLevel,
         professionPricelists,
+        selectedExpansion,
     } = state.PriceLists;
     return {
         currentRealm,
@@ -25,6 +31,7 @@ const mapStateToProps = (state: IStoreState): IStateProps => {
         pricelists,
         professionPricelists,
         professions,
+        selectedExpansion,
         selectedList,
         selectedProfession,
     };
@@ -32,6 +39,7 @@ const mapStateToProps = (state: IStoreState): IStateProps => {
 
 const mapDispatchToProps = (dispatch: Dispatch<Actions>): IDispatchProps => {
     return {
+        changeSelectedExpansion: (v: IExpansion) => dispatch(ChangeSelectedExpansion(v)),
         changeSelectedList: (selectedList: IPricelist) => dispatch(ChangeSelectedList(selectedList)),
         changeSelectedProfession: (profession: IProfession) => dispatch(ChangeSelectedProfession(profession)),
         refreshProfessionPricelists: (opts: IGetProfessionPricelistsRequestOptions) =>

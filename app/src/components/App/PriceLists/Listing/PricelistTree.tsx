@@ -18,12 +18,14 @@ export interface IStateProps {
     getProfessionPricelistsLevel: GetProfessionPricelistsLevel;
     professionPricelists: IProfessionPricelist[];
     expansions: IExpansion[];
+    selectedExpansion: IExpansion | null;
 }
 
 export interface IDispatchProps {
     changeSelectedList: (list: IPricelist) => void;
     changeSelectedProfession: (profession: IProfession) => void;
     refreshProfessionPricelists: (opts: IGetProfessionPricelistsRequestOptions) => void;
+    changeSelectedExpansion: (v: IExpansion) => void;
 }
 
 export type Props = Readonly<IStateProps & IDispatchProps>;
@@ -84,18 +86,6 @@ export class PricelistTree extends React.Component<Props, IState> {
         );
     }
 
-    private getPricelistNode(v: IPricelist) {
-        const { selectedList } = this.props;
-
-        const result: ITreeNode = {
-            id: `pricelist-${v.id}`,
-            isSelected: selectedList !== null && selectedList.id === v.id,
-            label: v.name,
-        };
-
-        return result;
-    }
-
     private getProfessionNodes() {
         const { professions } = this.props;
 
@@ -150,7 +140,7 @@ export class PricelistTree extends React.Component<Props, IState> {
 
                 break;
             case GetProfessionPricelistsLevel.success:
-                result.childNodes = this.getProfessionPricelistNodes();
+                result.childNodes = this.getExpansionNodes();
 
                 break;
             default:
@@ -158,6 +148,24 @@ export class PricelistTree extends React.Component<Props, IState> {
         }
 
         return result;
+    }
+
+    private getExpansionNodes(): ITreeNode[] {
+        const { expansions, selectedExpansion } = this.props;
+
+        return expansions.map(v => {
+            const result: ITreeNode = {
+                childNodes: this.getProfessionPricelistNodes(),
+                hasCaret: false,
+                id: `expansion-${v.name}`,
+                isExpanded: true,
+                isSelected: selectedExpansion !== null && selectedExpansion.name === v.name,
+                label: v.label,
+            };
+            result.childNodes = [];
+
+            return result;
+        });
     }
 
     private getProfessionPricelistNodes(): ITreeNode[] {
@@ -168,6 +176,18 @@ export class PricelistTree extends React.Component<Props, IState> {
         }
 
         return professionPricelists.map(v => this.getPricelistNode(v.pricelist));
+    }
+
+    private getPricelistNode(v: IPricelist) {
+        const { selectedList } = this.props;
+
+        const result: ITreeNode = {
+            id: `pricelist-${v.id}`,
+            isSelected: selectedList !== null && selectedList.id === v.id,
+            label: v.name,
+        };
+
+        return result;
     }
 
     private renderTreeContent(list: IPricelist | null) {
@@ -247,9 +267,32 @@ export class PricelistTree extends React.Component<Props, IState> {
         this.setState({ topOpenMap: { ...topOpenMap, [id]: !topOpenMap[id] } });
     }
 
+    private onExpansionClick(id: string) {
+        const { expansions, changeSelectedExpansion } = this.props;
+
+        const expansion = expansions.reduce((result, v) => {
+            if (result !== null) {
+                return result;
+            }
+
+            if (v.name === id) {
+                return v;
+            }
+
+            return null;
+        }, null);
+
+        if (expansion === null) {
+            return;
+        }
+
+        changeSelectedExpansion(expansion);
+    }
+
     private onNodeClick(node: ITreeNode) {
         const [kind, id] = node.id.toString().split("-");
         const nodeClickMap = {
+            expansion: v => this.onExpansionClick(v),
             pricelist: v => this.onPricelistNodeClick(v),
             profession: v => this.onProfessionNodeClick(v),
             top: v => this.onTopNodeClick(v),

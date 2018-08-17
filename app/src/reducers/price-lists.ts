@@ -5,6 +5,7 @@ import {
     CHANGE_IS_ADD_LIST_DIALOG_OPEN,
     CHANGE_IS_DELETE_LIST_DIALOG_OPEN,
     CHANGE_IS_EDIT_LIST_DIALOG_OPEN,
+    CHANGE_SELECTED_EXPANSION,
     CHANGE_SELECTED_LIST,
     CHANGE_SELECTED_PROFESSION,
     PriceListsActions,
@@ -210,6 +211,8 @@ export const priceLists = (state: State, action: PriceListsActions): State => {
                 professionPricelists: receivedProfessionPricelists,
                 selectedList: receivedProfessionSelectedList,
             };
+        case CHANGE_SELECTED_EXPANSION:
+            return { ...state, selectedExpansion: action.payload };
         default:
             return state;
     }
