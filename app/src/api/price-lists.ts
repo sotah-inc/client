@@ -210,7 +210,7 @@ export const getProfessionPricelists = async (
     opts: IGetProfessionPricelistsRequestOptions,
 ): Promise<IGetProfessionPricelistsResponse> => {
     const res = await fetch(
-        `${apiEndpoint}/user/profession-pricelists/region/${opts.region}/realm/${opts.realm}/${opts.profession}`,
+        `${apiEndpoint}/region/${opts.region}/realm/${opts.realm}/profession-pricelists/${opts.profession}`,
         {
             headers: new Headers({ "content-type": "application/json" }),
             method: "GET",
