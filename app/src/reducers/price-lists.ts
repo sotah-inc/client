@@ -155,7 +155,19 @@ export const priceLists = (state: State, action: PriceListsActions): State => {
         case CHANGE_ENTRY_CREATELEVEL:
             return { ...state, entryCreateLevel: action.payload };
         case CHANGE_SELECTED_LIST:
-            return { ...state, selectedList: action.payload };
+            const isProfessionPricelist = state.professionPricelists.reduce((result, v) => {
+                if (result) {
+                    return result;
+                }
+
+                return v.pricelist_id === action.payload.id;
+            }, false);
+
+            return {
+                ...state,
+                selectedList: action.payload,
+                selectedProfession: isProfessionPricelist ? state.selectedProfession : null,
+            };
         case CHANGE_SELECTED_PROFESSION:
             return { ...state, selectedProfession: action.payload };
         case CHANGE_IS_ADD_LIST_DIALOG_OPEN:
