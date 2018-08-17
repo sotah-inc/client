@@ -210,7 +210,7 @@ export const getProfessionPricelists = async (
     opts: IGetProfessionPricelistsRequestOptions,
 ): Promise<IGetProfessionPricelistsResponse> => {
     const res = await fetch(
-        `${apiEndpoint}/profession-pricelists/region/${opts.region}/realm/${opts.realm}/${opts.profession}`,
+        `${apiEndpoint}/user/profession-pricelists/region/${opts.region}/realm/${opts.realm}/${opts.profession}`,
         {
             headers: new Headers({ "content-type": "application/json" }),
             method: "GET",
@@ -220,7 +220,6 @@ export const getProfessionPricelists = async (
         case HTTPStatus.OK:
             return { errors: null, data: await res.json() };
         default:
-            console.log("wew lad");
             return { data: null, errors: { failure: "Failed to fetch profession-pricelists" } };
     }
 };
