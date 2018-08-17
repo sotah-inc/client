@@ -49,12 +49,12 @@ export class PricelistTree extends React.Component<Props, IState> {
     };
 
     public render() {
-        const { selectedList } = this.props;
+        const { selectedList, pricelists } = this.props;
         const { topOpenMap } = this.state;
 
         const nodes: ITreeNode[] = [
             {
-                childNodes: this.getPricelistNodes(),
+                childNodes: pricelists.map(v => this.getPricelistNode(v)),
                 hasCaret: true,
                 icon: "list",
                 id: `top-${TopOpenKey.pricelists}`,
@@ -93,12 +93,6 @@ export class PricelistTree extends React.Component<Props, IState> {
         };
 
         return result;
-    }
-
-    private getPricelistNodes() {
-        const { pricelists } = this.props;
-
-        return pricelists.map(v => this.getPricelistNode(v));
     }
 
     private getProfessionNodes() {
@@ -169,7 +163,7 @@ export class PricelistTree extends React.Component<Props, IState> {
         const { professionPricelists } = this.props;
 
         if (professionPricelists.length === 0) {
-            return [];
+            return [{ id: "none-none", label: <em>None found.</em> }];
         }
 
         return professionPricelists.map(v => this.getPricelistNode(v.pricelist));
