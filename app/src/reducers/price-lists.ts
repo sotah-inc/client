@@ -197,11 +197,18 @@ export const priceLists = (state: State, action: PriceListsActions): State => {
                 return { ...state, getProfessionPricelistsLevel: GetProfessionPricelistsLevel.failure };
             }
 
+            let receivedProfessionSelectedList = state.selectedList;
+            const receivedProfessionPricelists = action.payload.data!.profession_pricelists;
+            if (receivedProfessionPricelists.length > 0) {
+                receivedProfessionSelectedList = receivedProfessionPricelists[0].pricelist;
+            }
+
             return {
                 ...state,
                 getProfessionPricelistsLevel: GetProfessionPricelistsLevel.success,
                 items: { ...state.items, ...action.payload.data!.items },
-                professionPricelists: action.payload.data!.profession_pricelists,
+                professionPricelists: receivedProfessionPricelists,
+                selectedList: receivedProfessionSelectedList,
             };
         default:
             return state;
