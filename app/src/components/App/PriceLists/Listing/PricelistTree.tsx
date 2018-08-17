@@ -83,18 +83,24 @@ export class PricelistTree extends React.Component<Props, IState> {
         );
     }
 
+    private getPricelistNode(v: IPricelist) {
+        const { selectedList } = this.props;
+
+        const result: ITreeNode = {
+            id: `pricelist-${v.id}`,
+            isSelected: selectedList !== null && selectedList.id === v.id,
+            label: v.name,
+        };
+
+        console.log(result);
+
+        return result;
+    }
+
     private getPricelistNodes() {
-        const { pricelists, selectedList } = this.props;
+        const { pricelists } = this.props;
 
-        return pricelists.map(v => {
-            const result: ITreeNode = {
-                id: `pricelist-${v.id}`,
-                isSelected: selectedList !== null && selectedList.id === v.id,
-                label: v.name,
-            };
-
-            return result;
-        });
+        return pricelists.map(v => this.getPricelistNode(v));
     }
 
     private getProfessionNodes() {
@@ -168,7 +174,7 @@ export class PricelistTree extends React.Component<Props, IState> {
             return [];
         }
 
-        return [];
+        return professionPricelists.map(v => this.getPricelistNode(v.pricelist));
     }
 
     private renderTreeContent(list: IPricelist | null) {
@@ -187,9 +193,10 @@ export class PricelistTree extends React.Component<Props, IState> {
     }
 
     private onPricelistNodeClick(id: string) {
-        const { pricelists, changeSelectedList } = this.props;
+        const { pricelists, professionPricelists, changeSelectedList } = this.props;
 
-        const list = pricelists.reduce((result, v) => {
+        const consolidatedPricelists: IPricelist[] = [...pricelists, ...professionPricelists.map(v => v.pricelist)];
+        const list = consolidatedPricelists.reduce((result, v) => {
             if (result !== null) {
                 return result;
             }

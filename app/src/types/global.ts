@@ -1,3 +1,5 @@
+import { IPricelist } from "./price-lists";
+
 // region types
 export type RegionName = string;
 
@@ -291,4 +293,5 @@ export interface IProfessionPricelist {
     id: number;
     pricelist_id: number;
     profession_name: ProfessionName;
+    pricelist: IPricelist;
 }
