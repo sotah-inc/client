@@ -285,3 +285,10 @@ export interface IProfession {
     name: ProfessionName;
     label: string;
 }
+
+// profession pricelist types
+export interface IProfessionPricelist {
+    id: number;
+    pricelist_id: number;
+    profession_name: ProfessionName;
+}

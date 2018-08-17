@@ -1,5 +1,5 @@
 import { IUpdatePricelistRequest, IUpdatePricelistResponse } from "@app/api/price-lists";
-import { IErrors, IProfession, ItemId, ItemsMap, RealmSlug, RegionName } from "./global";
+import { IErrors, IProfession, IProfessionPricelist, ItemId, ItemsMap, RealmSlug, RegionName } from "./global";
 
 export interface IPriceListsState {
     pricelists: IPricelist[];
@@ -17,6 +17,8 @@ export interface IPriceListsState {
     items: ItemsMap;
     deletePricelistLevel: DeletePricelistLevel;
     selectedProfession: IProfession | null;
+    professionPricelists: IProfessionPricelist[];
+    getProfessionPricelistsLevel: GetProfessionPricelistsLevel;
 }
 
 export enum ListDialogStep {
@@ -41,6 +43,12 @@ export enum GetPriceListLevel {
     failure,
 }
 export enum GetPricelistsLevel {
+    initial,
+    fetching,
+    success,
+    failure,
+}
+export enum GetProfessionPricelistsLevel {
     initial,
     fetching,
     success,
@@ -90,12 +98,14 @@ export const defaultPriceListsState: IPriceListsState = {
     deletePricelistLevel: DeletePricelistLevel.initial,
     entryCreateLevel: EntryCreateLevel.initial,
     getPricelistsLevel: GetPricelistsLevel.initial,
+    getProfessionPricelistsLevel: GetProfessionPricelistsLevel.initial,
     isAddEntryDialogOpen: false,
     isAddListDialogOpen: false,
     isDeleteListDialogOpen: false,
     isEditListDialogOpen: false,
     items: [],
     pricelists: [],
+    professionPricelists: [],
     selectedList: null,
     selectedProfession: null,
     updatePricelistErrors: {},

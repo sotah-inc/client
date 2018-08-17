@@ -12,11 +12,13 @@ import {
     RECEIVE_CREATE_PROFESSION_PRICELIST,
     RECEIVE_DELETE_PRICELIST,
     RECEIVE_GET_PRICELISTS,
+    RECEIVE_PROFESSION_PRICELISTS,
     RECEIVE_UPDATE_PRICELIST,
     REQUEST_CREATE_PRICELIST,
     REQUEST_CREATE_PROFESSION_PRICELIST,
     REQUEST_DELETE_PRICELIST,
     REQUEST_GET_PRICELISTS,
+    REQUEST_PROFESSION_PRICELISTS,
     REQUEST_UPDATE_PRICELIST,
 } from "@app/actions/price-lists";
 import { Item } from "@app/types/global";
@@ -24,6 +26,7 @@ import {
     defaultPriceListsState,
     DeletePricelistLevel,
     GetPricelistsLevel,
+    GetProfessionPricelistsLevel,
     IPricelist,
     IPriceListsState,
     MutatePricelistLevel,
@@ -145,7 +148,7 @@ export const priceLists = (state: State, action: PriceListsActions): State => {
             return {
                 ...state,
                 getPricelistsLevel: GetPricelistsLevel.success,
-                items: action.payload.items,
+                items: { ...state.items, ...action.payload.items },
                 pricelists: action.payload.pricelists,
                 selectedList: receivedSelectedList,
             };
@@ -171,6 +174,15 @@ export const priceLists = (state: State, action: PriceListsActions): State => {
             }
 
             return { ...state, items: appendingItems };
+        case REQUEST_PROFESSION_PRICELISTS:
+            return { ...state, getProfessionPricelistsLevel: GetProfessionPricelistsLevel.fetching };
+        case RECEIVE_PROFESSION_PRICELISTS:
+            return {
+                ...state,
+                getProfessionPricelistsLevel: GetProfessionPricelistsLevel.success,
+                items: { ...state.items, ...action.payload.items },
+                professionPricelists: action.payload.profession_pricelists,
+            };
         default:
             return state;
     }

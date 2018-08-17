@@ -1,6 +1,6 @@
 import * as HTTPStatus from "http-status";
 
-import { IErrors, ItemsMap, ProfessionName, RealmSlug, RegionName } from "@app/types/global";
+import { IErrors, IProfessionPricelist, ItemsMap, ProfessionName, RealmSlug, RegionName } from "@app/types/global";
 import { IPricelist, IPricelistEntry } from "@app/types/price-lists";
 import { apiEndpoint } from "./index";
 
@@ -190,4 +190,28 @@ export const deleteProfessionPricelist = async (
         default:
             return null;
     }
+};
+
+export interface IGetProfessionPricelistsRequestOptions {
+    region: RegionName;
+    realm: RealmSlug;
+    profession: ProfessionName;
+}
+
+export interface IGetProfessionPricelistsResponse {
+    items: ItemsMap;
+    profession_pricelists: IProfessionPricelist[];
+}
+
+export const getProfessionPricelists = async (
+    opts: IGetProfessionPricelistsRequestOptions,
+): Promise<IGetProfessionPricelistsResponse> => {
+    const res = await fetch(
+        `${apiEndpoint}/profession-pricelists/region/${opts.region}/realm/${opts.realm}/${opts.profession}`,
+        {
+            headers: new Headers({ "content-type": "application/json" }),
+            method: "GET",
+        },
+    );
+    return res.json();
 };

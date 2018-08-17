@@ -6,6 +6,7 @@ import {
     deletePricelist,
     deleteProfessionPricelist,
     getPricelists,
+    getProfessionPricelists,
     ICreatePricelistRequest,
     ICreatePricelistResponse,
     ICreateProfessionPricelistRequest,
@@ -14,6 +15,8 @@ import {
     IDeleteProfessionPricelistRequestOptions,
     IGetPricelistsOptions,
     IGetPricelistsResponse,
+    IGetProfessionPricelistsRequestOptions,
+    IGetProfessionPricelistsResponse,
     updatePricelist,
 } from "@app/api/price-lists";
 import { IProfession, ItemsMap } from "@app/types/global";
@@ -136,6 +139,21 @@ export const FetchDeleteProfessionPricelist = (opts: IDeleteProfessionPricelistR
     };
 };
 
+export const REQUEST_PROFESSION_PRICELISTS = "GET_PROFESSION_PRICELISTS";
+export const RequestProfessionPricelists = () => createAction(REQUEST_PROFESSION_PRICELISTS);
+export const RECEIVE_PROFESSION_PRICELISTS = "RECEIVE_PROFESSION_PRICELISTS";
+export const ReceiveProfessionPricelists = (payload: IGetProfessionPricelistsResponse) =>
+    createAction(RECEIVE_PROFESSION_PRICELISTS, payload);
+type FetchProfessionPricelistsType = ReturnType<
+    typeof RequestProfessionPricelists | typeof ReceiveDeleteProfessionPricelist
+>;
+export const FetchProfessionPricelists = (opts: IGetProfessionPricelistsRequestOptions) => {
+    return async (dispatch: Dispatch<FetchProfessionPricelistsType>) => {
+        dispatch(RequestProfessionPricelists());
+        dispatch(ReceiveProfessionPricelists(await getProfessionPricelists(opts)));
+    };
+};
+
 export const PriceListsActions = {
     AppendItems,
     ChangeEntryCreateLevel,
@@ -149,11 +167,13 @@ export const PriceListsActions = {
     ReceiveCreateProfessionPricelist,
     ReceiveDeletePricelist,
     ReceiveGetPricelists,
+    ReceiveProfessionPricelists,
     ReceiveUpdatePricelist,
     RequestCreatePricelist,
     RequestCreateProfessionPricelist,
     RequestDeletePricelist,
     RequestGetPricelists,
+    RequestProfessionPricelists,
     RequestUpdatePricelist,
 };
 
