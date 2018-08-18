@@ -10,8 +10,8 @@ import {
 import { IGetProfessionPricelistsRequestOptions } from "@app/api/price-lists";
 import { IDispatchProps, IStateProps, PricelistTree } from "@app/components/App/PriceLists/Listing/PricelistTree";
 import { IStoreState } from "@app/types";
-import { IExpansion, IProfession } from "@app/types/global";
-import { IPricelist } from "@app/types/price-lists";
+import { IProfession } from "@app/types/global";
+import { IPricelist, ISelectExpansionPayload } from "@app/types/price-lists";
 
 const mapStateToProps = (state: IStoreState): IStateProps => {
     const { currentRealm, professions, currentRegion, expansions } = state.Main;
@@ -39,7 +39,7 @@ const mapStateToProps = (state: IStoreState): IStateProps => {
 
 const mapDispatchToProps = (dispatch: Dispatch<Actions>): IDispatchProps => {
     return {
-        changeSelectedExpansion: (v: IExpansion) => dispatch(ChangeSelectedExpansion(v)),
+        changeSelectedExpansion: (v: ISelectExpansionPayload) => dispatch(ChangeSelectedExpansion(v)),
         changeSelectedList: (selectedList: IPricelist) => dispatch(ChangeSelectedList(selectedList)),
         changeSelectedProfession: (profession: IProfession) => dispatch(ChangeSelectedProfession(profession)),
         refreshProfessionPricelists: (opts: IGetProfessionPricelistsRequestOptions) =>

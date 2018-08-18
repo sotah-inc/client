@@ -106,6 +106,11 @@ export interface IUpdatePricelistResponseOptions {
     meta: IUpdatePricelistMeta;
 }
 
+export interface ISelectExpansionPayload {
+    expansion: IExpansion;
+    jumpTo?: IPricelist | null;
+}
+
 export const defaultPriceListsState: IPriceListsState = {
     createPricelistErrors: {},
     createPricelistLevel: MutatePricelistLevel.initial,

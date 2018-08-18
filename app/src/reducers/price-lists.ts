@@ -221,11 +221,19 @@ export const priceLists = (state: State, action: PriceListsActions): State => {
                 professionPricelists: formatProfessionPricelists(action.payload.data!.profession_pricelists),
             };
         case CHANGE_SELECTED_EXPANSION:
+            let expansionSelectedList: IPricelist | null = null;
+            if (action.payload.jumpTo) {
+                expansionSelectedList = action.payload.jumpTo;
+            } else {
+                expansionSelectedList =
+                    getFirstExpansionPricelist(action.payload.expansion, state.professionPricelists) ||
+                    state.selectedList;
+            }
+
             return {
                 ...state,
-                selectedExpansion: action.payload,
-                selectedList:
-                    getFirstExpansionPricelist(action.payload, state.professionPricelists) || state.selectedList,
+                selectedExpansion: action.payload.expansion,
+                selectedList: expansionSelectedList,
             };
         default:
             return state;
