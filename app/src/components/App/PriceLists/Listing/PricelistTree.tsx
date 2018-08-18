@@ -337,7 +337,15 @@ export class PricelistTree extends React.Component<Props, IState> {
     }
 
     private onNodeClick(node: ITreeNode) {
-        const [kind, id] = node.id.toString().split("-");
+        const separatorIndex = node.id.toString().indexOf("-");
+        if (separatorIndex === -1) {
+            return;
+        }
+
+        const [kind, id] = [
+            node.id.toString().substr(0, separatorIndex),
+            node.id.toString().substr(separatorIndex + 1),
+        ];
         const nodeClickMap = {
             expansion: v => this.onExpansionClick(v),
             pricelist: v => this.onPricelistNodeClick(v),
