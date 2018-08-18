@@ -191,7 +191,7 @@ export class PricelistTree extends React.Component<Props, IState> {
             return [{ id: "none-none", label: <em>None found.</em> }];
         }
 
-        return result.map(v => this.getPricelistNode(v.pricelist));
+        return result.map(v => this.getPricelistNode(v.pricelist!));
     }
 
     private getPricelistNode(v: IPricelist) {
@@ -228,7 +228,7 @@ export class PricelistTree extends React.Component<Props, IState> {
         if (selectedExpansion !== null && selectedExpansion.name in professionPricelists) {
             consolidatedPricelists = [
                 ...pricelists,
-                ...professionPricelists[selectedExpansion.name].map(v => v.pricelist),
+                ...professionPricelists[selectedExpansion.name].map(v => v.pricelist!),
             ];
         }
 

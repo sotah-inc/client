@@ -32,7 +32,12 @@ import {
     IPriceListsState,
     MutatePricelistLevel,
 } from "@app/types/price-lists";
-import { formatProfessionPricelists, getFirstExpansionPricelist, getPricelistIndex } from "./helper";
+import {
+    formatProfessionPricelists,
+    getFirstExpansionPricelist,
+    getPricelistIndex,
+    handleCreateProfessionPricelistSuccess,
+} from "./helper";
 
 type State = Readonly<IPriceListsState> | undefined;
 
@@ -78,7 +83,7 @@ export const priceLists = (state: State, action: PriceListsActions): State => {
                 };
             }
 
-            return { ...state, createPricelistLevel: MutatePricelistLevel.fetching };
+            return handleCreateProfessionPricelistSuccess(state, action.payload);
         case REQUEST_UPDATE_PRICELIST:
             return { ...state, updatePricelistLevel: MutatePricelistLevel.fetching };
         case RECEIVE_UPDATE_PRICELIST:

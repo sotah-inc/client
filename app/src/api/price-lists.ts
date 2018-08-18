@@ -152,6 +152,7 @@ export interface ICreateProfessionPricelistResponse {
     data: {
         pricelist: IPricelist;
         entries: IPricelistEntry[];
+        profession_pricelist: IProfessionPricelist;
     } | null;
 }
 
