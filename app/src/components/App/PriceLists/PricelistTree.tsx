@@ -157,7 +157,7 @@ export class PricelistTree extends React.Component<Props, IState> {
             case GetProfessionPricelistsLevel.failure:
                 result.childNodes = [
                     {
-                        icon: <Spinner size={20} intent={Intent.DANGER} />,
+                        icon: <Spinner size={20} intent={Intent.DANGER} value={1} />,
                         id: "loading-0",
                         label: <span style={{ marginLeft: "5px" }}>Failed to load profession pricelists!</span>,
                     },
