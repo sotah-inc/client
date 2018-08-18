@@ -170,7 +170,7 @@ export class PricelistTree extends React.Component<Props, IState> {
                 childNodes: this.getProfessionPricelistNodes(v),
                 hasCaret: false,
                 id: `expansion-${v.name}`,
-                isExpanded: isSelected,
+                isExpanded: true,
                 isSelected,
                 label: v.label,
             };
@@ -180,14 +180,24 @@ export class PricelistTree extends React.Component<Props, IState> {
     }
 
     private getProfessionPricelistNodes(expansion: IExpansion): ITreeNode[] {
-        const { professionPricelists } = this.props;
+        const { professionPricelists, selectedExpansion } = this.props;
+
+        const isSelected = selectedExpansion !== null && expansion.name === selectedExpansion.name;
 
         if (expansion === null || !(expansion.name in professionPricelists)) {
+            if (!isSelected) {
+                return [];
+            }
+
             return [{ id: "none-none", label: <em>None found.</em> }];
         }
 
         const result = professionPricelists[expansion.name];
         if (result.length === 0) {
+            if (!isSelected) {
+                return [];
+            }
+
             return [{ id: "none-none", label: <em>None found.</em> }];
         }
 
@@ -227,7 +237,7 @@ export class PricelistTree extends React.Component<Props, IState> {
         let consolidatedPricelists: IPricelist[] = [...pricelists];
         if (selectedExpansion !== null && selectedExpansion.name in professionPricelists) {
             consolidatedPricelists = [
-                ...pricelists,
+                ...consolidatedPricelists,
                 ...professionPricelists[selectedExpansion.name].map(v => v.pricelist!),
             ];
         }
