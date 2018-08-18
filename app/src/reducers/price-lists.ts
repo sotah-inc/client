@@ -39,6 +39,7 @@ import {
     getFirstExpansionPricelist,
     getPricelistIndex,
     handleCreateProfessionPricelistSuccess,
+    handleDeleteProfessionPricelistSuccess,
 } from "./helper";
 
 type State = Readonly<IPriceListsState> | undefined;
@@ -152,11 +153,11 @@ export const priceLists = (state: State, action: PriceListsActions): State => {
                 selectedList: onDeleteSelectedList,
             };
         case RECEIVE_DELETE_PROFESSION_PRICELIST:
-            return {
-                ...state,
-                deletePricelistLevel: DeletePricelistLevel.success,
-                isDeleteListDialogOpen: false,
-            };
+            if (action.payload === null) {
+                return { ...state, deletePricelistLevel: DeletePricelistLevel.failure };
+            }
+
+            return handleDeleteProfessionPricelistSuccess(state, action.payload);
         case REQUEST_GET_PRICELISTS:
             return {
                 ...state,

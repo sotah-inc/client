@@ -1,6 +1,7 @@
 import { ICreateProfessionPricelistResponse } from "@app/api/price-lists";
 import { IExpansion, IProfessionPricelist } from "@app/types/global";
 import {
+    DeletePricelistLevel,
     IExpansionProfessionPricelistMap,
     IPricelist,
     IPriceListsState,
@@ -69,5 +70,29 @@ export const handleCreateProfessionPricelistSuccess = (
         createPricelistLevel: MutatePricelistLevel.success,
         isAddListDialogOpen: false,
         professionPricelists,
+    };
+};
+
+export const getProfessionPricelist = (state: IPriceListsState, pricelist: IPricelist): IProfessionPricelist | null => {
+    for (const expansionName of Object.keys(state.professionPricelists)) {
+        const professionPricelists = state.professionPricelists[expansionName];
+        for (const professionPricelist of professionPricelists) {
+            if (professionPricelist.pricelist_id === pricelist.id) {
+                return professionPricelist;
+            }
+        }
+    }
+
+    return null;
+};
+
+export const handleDeleteProfessionPricelistSuccess = (
+    state: IPriceListsState,
+    pricelistId: number,
+): IPriceListsState => {
+    return {
+        ...state,
+        deletePricelistLevel: DeletePricelistLevel.success,
+        isDeleteListDialogOpen: false,
     };
 };
