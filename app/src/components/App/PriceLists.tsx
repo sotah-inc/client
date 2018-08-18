@@ -5,7 +5,7 @@ import { CreateEntryDialogContainer } from "@app/containers/App/PriceLists/Creat
 import { CreateListDialogContainer } from "@app/containers/App/PriceLists/CreateListDialog";
 import { DeleteListDialogContainer } from "@app/containers/App/PriceLists/DeleteListDialog";
 import { EditListDialogContainer } from "@app/containers/App/PriceLists/EditListDialog";
-import { PricelistTreeContainer } from "@app/containers/App/PriceLists/Listing/PricelistTree";
+import { PricelistTreeContainer } from "@app/containers/App/PriceLists/PricelistTree";
 import { AuthLevel } from "@app/types/main";
 
 import "./PriceLists.scss";

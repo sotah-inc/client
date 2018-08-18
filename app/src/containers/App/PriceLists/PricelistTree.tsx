@@ -8,7 +8,7 @@ import {
     FetchProfessionPricelists,
 } from "@app/actions/price-lists";
 import { IGetProfessionPricelistsRequestOptions } from "@app/api/price-lists";
-import { IDispatchProps, IStateProps, PricelistTree } from "@app/components/App/PriceLists/Listing/PricelistTree";
+import { IDispatchProps, IStateProps, PricelistTree } from "@app/components/App/PriceLists/PricelistTree";
 import { IStoreState } from "@app/types";
 import { IProfession } from "@app/types/global";
 import { IPricelist, ISelectExpansionPayload } from "@app/types/price-lists";

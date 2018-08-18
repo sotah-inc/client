@@ -3,7 +3,7 @@ import * as React from "react";
 import { Button, Classes, Intent, NonIdealState, Spinner } from "@blueprintjs/core";
 
 import { IGetPricelistsOptions } from "@app/api/price-lists";
-import { PricelistTreeContainer } from "@app/containers/App/PriceLists/Listing/PricelistTree";
+import { PricelistTreeContainer } from "@app/containers/App/PriceLists/PricelistTree";
 import { IProfile, IRealm, IRegion } from "@app/types/global";
 import { AuthLevel, FetchUserPreferencesLevel } from "@app/types/main";
 import { GetPricelistsLevel, IPricelist } from "@app/types/price-lists";

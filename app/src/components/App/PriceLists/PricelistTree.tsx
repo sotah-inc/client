@@ -70,7 +70,7 @@ export class PricelistTree extends React.Component<Props, IState> {
     }
 
     public render() {
-        const { selectedList, pricelists, authLevel } = this.props;
+        const { selectedList, authLevel } = this.props;
         const { topOpenMap } = this.state;
 
         const nodes: ITreeNode[] = [];
@@ -78,7 +78,7 @@ export class PricelistTree extends React.Component<Props, IState> {
         // optionally appending custom-pricelists
         if (authLevel === AuthLevel.authenticated) {
             nodes.push({
-                childNodes: pricelists.map(v => this.getPricelistNode(v)),
+                childNodes: this.getPricelistNodes(),
                 hasCaret: true,
                 icon: "list",
                 id: `top-${TopOpenKey.pricelists}`,
@@ -228,6 +228,16 @@ export class PricelistTree extends React.Component<Props, IState> {
         };
 
         return result;
+    }
+
+    private getPricelistNodes(): ITreeNode[] {
+        const { pricelists } = this.props;
+
+        if (pricelists.length === 0) {
+            return [{ id: "none-none", label: <em>None found.</em> }];
+        }
+
+        return pricelists.map(v => this.getPricelistNode(v));
     }
 
     private onPricelistNodeClick(id: string) {
