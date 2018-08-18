@@ -5,8 +5,12 @@ import { Classes, HTMLTable, Intent, NonIdealState, Spinner } from "@blueprintjs
 import { getPriceList, IPriceListMap } from "@app/api/data";
 import { Currency } from "@app/components/util";
 import { ItemPopoverContainer } from "@app/containers/util/ItemPopover";
-import { IRealm, IRegion, ItemsMap } from "@app/types/global";
+import { IRealm, IRegion, ItemId, ItemsMap } from "@app/types/global";
 import { GetPriceListLevel, IPricelist, IPricelistEntry } from "@app/types/price-lists";
+
+export interface IStateProps {
+    items: ItemsMap;
+}
 
 export interface IOwnProps {
     list: IPricelist;
@@ -14,7 +18,7 @@ export interface IOwnProps {
     realm: IRealm;
 }
 
-type Props = Readonly<IOwnProps>;
+type Props = Readonly<IStateProps & IOwnProps>;
 
 type State = Readonly<{
     getPriceListLevel: GetPriceListLevel;
@@ -91,8 +95,8 @@ export class PriceListTable extends React.Component<Props, State> {
     }
 
     private renderEntry(index: number, entry: IPricelistEntry) {
+        const { pricelistMap } = this.state;
         const { item_id, quantity_modifier } = entry;
-        const { pricelistMap, itemsMap } = this.state;
 
         let bid: number = 0;
         let buyout: number = 0;
@@ -101,7 +105,8 @@ export class PriceListTable extends React.Component<Props, State> {
             buyout = pricelistMap[item_id].buyout;
         }
 
-        if (!(item_id in itemsMap)) {
+        const item = this.getItem(item_id);
+        if (item === null) {
             return (
                 <tr key={index}>
                     <td colSpan={3}>
@@ -115,7 +120,7 @@ export class PriceListTable extends React.Component<Props, State> {
             <tr key={index}>
                 <td>
                     <ItemPopoverContainer
-                        item={itemsMap[item_id]}
+                        item={item}
                         itemTextFormatter={itemText => `${itemText} \u00D7${quantity_modifier}`}
                     />
                 </td>
@@ -127,6 +132,21 @@ export class PriceListTable extends React.Component<Props, State> {
                 </td>
             </tr>
         );
+    }
+
+    private getItem(itemId: ItemId) {
+        const { items } = this.props;
+        const { itemsMap } = this.state;
+
+        if (itemId in items) {
+            return items[itemId];
+        }
+
+        if (itemId in itemsMap) {
+            return itemsMap[itemId];
+        }
+
+        return null;
     }
 
     private renderTable() {

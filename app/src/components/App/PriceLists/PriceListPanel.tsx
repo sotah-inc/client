@@ -2,7 +2,7 @@ import * as React from "react";
 
 import { Button, Classes, NonIdealState } from "@blueprintjs/core";
 
-import { PriceListTable } from "@app/components/App/PriceLists/PriceListPanel/PriceListTable";
+import { PriceListTableContainer } from "@app/containers/App/PriceLists/PriceListPanel/PriceListTable";
 import { IRealm, IRegion, Item } from "@app/types/global";
 import { IPricelist } from "@app/types/price-lists";
 
@@ -49,6 +49,6 @@ export class PriceListPanel extends React.Component<Props> {
             );
         }
 
-        return <PriceListTable list={list} region={currentRegion!} realm={currentRealm!} />;
+        return <PriceListTableContainer list={list} region={currentRegion!} realm={currentRealm!} />;
     }
 }
