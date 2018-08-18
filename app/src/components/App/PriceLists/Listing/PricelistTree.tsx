@@ -232,17 +232,14 @@ export class PricelistTree extends React.Component<Props, IState> {
     }
 
     private onPricelistNodeClick(id: string) {
-        const { pricelists, professionPricelists, selectedExpansion, changeSelectedList } = this.props;
+        const { pricelists, professionPricelists, changeSelectedList } = this.props;
 
-        let consolidatedPricelists: IPricelist[] = [...pricelists];
-        if (selectedExpansion !== null && selectedExpansion.name in professionPricelists) {
-            consolidatedPricelists = [
-                ...consolidatedPricelists,
-                ...professionPricelists[selectedExpansion.name].map(v => v.pricelist!),
-            ];
-        }
-
-        const list = consolidatedPricelists.reduce((result, v) => {
+        const consolidatedProfessionPricelists: IPricelist[] = Object.keys(professionPricelists).reduce(
+            (result: IPricelist[], key) => [...result, ...professionPricelists[key].map(v => v.pricelist!)],
+            [],
+        );
+        const searchablePricelists: IPricelist[] = [...pricelists, ...consolidatedProfessionPricelists];
+        const list = searchablePricelists.reduce((result, v) => {
             if (result !== null) {
                 return result;
             }
