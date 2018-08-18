@@ -12,12 +12,14 @@ import {
     RECEIVE_CREATE_PRICELIST,
     RECEIVE_CREATE_PROFESSION_PRICELIST,
     RECEIVE_DELETE_PRICELIST,
+    RECEIVE_DELETE_PROFESSION_PRICELIST,
     RECEIVE_GET_PRICELISTS,
     RECEIVE_PROFESSION_PRICELISTS,
     RECEIVE_UPDATE_PRICELIST,
     REQUEST_CREATE_PRICELIST,
     REQUEST_CREATE_PROFESSION_PRICELIST,
     REQUEST_DELETE_PRICELIST,
+    REQUEST_DELETE_PROFESSION_PRICELIST,
     REQUEST_GET_PRICELISTS,
     REQUEST_PROFESSION_PRICELISTS,
     REQUEST_UPDATE_PRICELIST,
@@ -117,6 +119,7 @@ export const priceLists = (state: State, action: PriceListsActions): State => {
                 updatePricelistLevel: MutatePricelistLevel.success,
             };
         case REQUEST_DELETE_PRICELIST:
+        case REQUEST_DELETE_PROFESSION_PRICELIST:
             return { ...state, deletePricelistLevel: DeletePricelistLevel.fetching };
         case RECEIVE_DELETE_PRICELIST:
             if (action.payload === null) {
@@ -147,6 +150,12 @@ export const priceLists = (state: State, action: PriceListsActions): State => {
                 isDeleteListDialogOpen: false,
                 pricelists: onDeletePricelists,
                 selectedList: onDeleteSelectedList,
+            };
+        case RECEIVE_DELETE_PROFESSION_PRICELIST:
+            return {
+                ...state,
+                deletePricelistLevel: DeletePricelistLevel.success,
+                isDeleteListDialogOpen: false,
             };
         case REQUEST_GET_PRICELISTS:
             return {
