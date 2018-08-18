@@ -14,7 +14,7 @@ import { IProfession } from "@app/types/global";
 import { IPricelist, ISelectExpansionPayload } from "@app/types/price-lists";
 
 const mapStateToProps = (state: IStoreState): IStateProps => {
-    const { currentRealm, professions, currentRegion, expansions } = state.Main;
+    const { currentRealm, professions, currentRegion, expansions, authLevel } = state.Main;
     const {
         pricelists,
         selectedList,
@@ -24,6 +24,7 @@ const mapStateToProps = (state: IStoreState): IStateProps => {
         selectedExpansion,
     } = state.PriceLists;
     return {
+        authLevel,
         currentRealm,
         currentRegion,
         expansions,

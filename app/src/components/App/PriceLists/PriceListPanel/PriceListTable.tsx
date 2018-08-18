@@ -7,6 +7,7 @@ import { Currency } from "@app/components/util";
 import { ItemPopoverContainer } from "@app/containers/util/ItemPopover";
 import { IRealm, IRegion, ItemId, ItemsMap } from "@app/types/global";
 import { GetPriceListLevel, IPricelist, IPricelistEntry } from "@app/types/price-lists";
+import { didRealmChange, didRegionChange } from "@app/util";
 
 export interface IStateProps {
     items: ItemsMap;
@@ -38,11 +39,13 @@ export class PriceListTable extends React.Component<Props, State> {
     }
 
     public componentDidUpdate(prevProps: Props) {
-        const { list } = this.props;
+        const { list, region, realm } = this.props;
 
         const shouldReloadPricelistData =
             this.props.list.pricelist_entries!.length !== prevProps.list.pricelist_entries!.length ||
-            list.id !== prevProps.list.id;
+            list.id !== prevProps.list.id ||
+            didRegionChange(prevProps.region, region) ||
+            didRealmChange(prevProps.realm, realm);
         if (shouldReloadPricelistData) {
             this.reloadPricelistData();
         }

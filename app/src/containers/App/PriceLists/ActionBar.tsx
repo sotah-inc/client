@@ -11,9 +11,10 @@ import { ActionBar, IDispatchProps, IStateProps } from "@app/components/App/Pric
 import { IStoreState } from "@app/types";
 
 const mapStateToProps = (state: IStoreState): IStateProps => {
-    const { currentRegion, currentRealm } = state.Main;
+    const { currentRegion, currentRealm, authLevel } = state.Main;
     const { isAddListDialogOpen, isAddEntryDialogOpen, selectedList, selectedProfession } = state.PriceLists;
     return {
+        authLevel,
         currentRealm,
         currentRegion,
         isAddEntryDialogOpen,

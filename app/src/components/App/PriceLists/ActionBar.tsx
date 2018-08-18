@@ -5,6 +5,7 @@ import { Alignment, Button, ButtonGroup, Classes, Intent, Navbar, NavbarGroup, S
 import { RealmToggleContainer } from "@app/containers/util/RealmToggle";
 import { RegionToggleContainer } from "@app/containers/util/RegionToggle";
 import { IProfession, IRealm, IRegion } from "@app/types/global";
+import { AuthLevel } from "@app/types/main";
 import { IPricelist } from "@app/types/price-lists";
 
 export interface IStateProps {
@@ -14,6 +15,7 @@ export interface IStateProps {
     isAddEntryDialogOpen: boolean;
     selectedList: IPricelist | null;
     selectedProfession: IProfession | null;
+    authLevel: AuthLevel;
 }
 
 export interface IDispatchProps {
@@ -42,11 +44,14 @@ export class ActionBar extends React.Component<Props> {
 
     private renderListButtons() {
         const {
+            authLevel,
             selectedList,
             changeIsAddEntryDialogOpen,
             changeIsDeleteListDialogOpen,
             changeIsEditListDialogOpen,
         } = this.props;
+
+        const canMutateEntry = authLevel === AuthLevel.authenticated && selectedList !== null;
 
         return (
             <>
@@ -55,20 +60,16 @@ export class ActionBar extends React.Component<Props> {
                     icon="plus"
                     onClick={() => changeIsAddEntryDialogOpen(true)}
                     text="Entry"
-                    disabled={selectedList === null}
+                    disabled={!canMutateEntry}
                 />
                 <Navbar.Divider />
                 <ButtonGroup>
-                    <Button
-                        icon="edit"
-                        onClick={() => changeIsEditListDialogOpen(true)}
-                        disabled={selectedList === null}
-                    />
+                    <Button icon="edit" onClick={() => changeIsEditListDialogOpen(true)} disabled={!canMutateEntry} />
                     <Button
                         icon="delete"
                         onClick={() => changeIsDeleteListDialogOpen(true)}
                         text="Delete"
-                        disabled={selectedList === null}
+                        disabled={!canMutateEntry}
                     />
                 </ButtonGroup>
             </>
@@ -76,7 +77,7 @@ export class ActionBar extends React.Component<Props> {
     }
 
     private renderButtons() {
-        const { currentRegion, currentRealm, changeIsAddListDialogOpen, selectedProfession } = this.props;
+        const { currentRegion, currentRealm, changeIsAddListDialogOpen, selectedProfession, authLevel } = this.props;
 
         if (currentRegion === null || currentRealm === null) {
             return <Spinner className={Classes.SMALL} intent={Intent.PRIMARY} />;
@@ -89,7 +90,12 @@ export class ActionBar extends React.Component<Props> {
 
         return (
             <>
-                <Button icon="plus" onClick={() => changeIsAddListDialogOpen(true)} text={createListText} />
+                <Button
+                    icon="plus"
+                    onClick={() => changeIsAddListDialogOpen(true)}
+                    text={createListText}
+                    disabled={authLevel !== AuthLevel.authenticated}
+                />
                 {this.renderListButtons()}
             </>
         );

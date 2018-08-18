@@ -203,8 +203,6 @@ export const deleteProfessionPricelist = async (
 };
 
 export interface IGetProfessionPricelistsRequestOptions {
-    region: RegionName;
-    realm: RealmSlug;
     profession: ProfessionName;
 }
 
@@ -219,13 +217,10 @@ export interface IGetProfessionPricelistsResponse {
 export const getProfessionPricelists = async (
     opts: IGetProfessionPricelistsRequestOptions,
 ): Promise<IGetProfessionPricelistsResponse> => {
-    const res = await fetch(
-        `${apiEndpoint}/region/${opts.region}/realm/${opts.realm}/profession-pricelists/${opts.profession}`,
-        {
-            headers: new Headers({ "content-type": "application/json" }),
-            method: "GET",
-        },
-    );
+    const res = await fetch(`${apiEndpoint}/profession-pricelists/${opts.profession}`, {
+        headers: new Headers({ "content-type": "application/json" }),
+        method: "GET",
+    });
     switch (res.status) {
         case HTTPStatus.OK:
             return { errors: null, data: await res.json() };
