@@ -1,4 +1,4 @@
-import { IProfessionPricelist } from "@app/types/global";
+import { IExpansion, IProfessionPricelist } from "@app/types/global";
 import { IExpansionProfessionPricelistMap, IPricelist } from "@app/types/price-lists";
 
 export const getPricelistIndex = (pricelists: IPricelist[], id: number): number => {
@@ -24,4 +24,15 @@ export const formatProfessionPricelists = (
 
         return result;
     }, {});
+};
+
+export const getFirstExpansionPricelist = (
+    expansion: IExpansion,
+    pricelistMap: IExpansionProfessionPricelistMap,
+): IPricelist | null => {
+    if (!(expansion.name in pricelistMap)) {
+        return null;
+    }
+
+    return pricelistMap[expansion.name][0].pricelist;
 };

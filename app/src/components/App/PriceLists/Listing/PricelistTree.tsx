@@ -165,12 +165,13 @@ export class PricelistTree extends React.Component<Props, IState> {
         const { expansions, selectedExpansion } = this.props;
 
         return expansions.map(v => {
+            const isSelected = selectedExpansion !== null && selectedExpansion.name === v.name;
             const result: ITreeNode = {
                 childNodes: this.getProfessionPricelistNodes(v),
                 hasCaret: false,
                 id: `expansion-${v.name}`,
-                isExpanded: true,
-                isSelected: selectedExpansion !== null && selectedExpansion.name === v.name,
+                isExpanded: isSelected,
+                isSelected,
                 label: v.label,
             };
 
@@ -182,7 +183,7 @@ export class PricelistTree extends React.Component<Props, IState> {
         const { professionPricelists } = this.props;
 
         if (expansion === null || !(expansion.name in professionPricelists)) {
-            return [];
+            return [{ id: "none-none", label: <em>None found.</em> }];
         }
 
         const result = professionPricelists[expansion.name];

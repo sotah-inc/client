@@ -32,7 +32,7 @@ import {
     IPriceListsState,
     MutatePricelistLevel,
 } from "@app/types/price-lists";
-import { formatProfessionPricelists, getPricelistIndex } from "./helper";
+import { formatProfessionPricelists, getFirstExpansionPricelist, getPricelistIndex } from "./helper";
 
 type State = Readonly<IPriceListsState> | undefined;
 
@@ -216,7 +216,12 @@ export const priceLists = (state: State, action: PriceListsActions): State => {
                 professionPricelists: formatProfessionPricelists(action.payload.data!.profession_pricelists),
             };
         case CHANGE_SELECTED_EXPANSION:
-            return { ...state, selectedExpansion: action.payload };
+            return {
+                ...state,
+                selectedExpansion: action.payload,
+                selectedList:
+                    getFirstExpansionPricelist(action.payload, state.professionPricelists) || state.selectedList,
+            };
         default:
             return state;
     }
