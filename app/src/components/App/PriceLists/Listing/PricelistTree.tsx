@@ -221,21 +221,6 @@ export class PricelistTree extends React.Component<Props, IState> {
         return result;
     }
 
-    private renderTreeContent(list: IPricelist | null) {
-        const { currentRealm } = this.props;
-
-        if (list === null) {
-            return;
-        }
-
-        return (
-            <>
-                <PriceListPanelContainer list={list} />
-                <LastModified targetDate={new Date(currentRealm!.last_modified * 1000)} />
-            </>
-        );
-    }
-
     private onPricelistNodeClick(id: string) {
         const {
             pricelists,
@@ -365,5 +350,20 @@ export class PricelistTree extends React.Component<Props, IState> {
         }
 
         nodeClickMap[kind](id);
+    }
+
+    private renderTreeContent(list: IPricelist | null) {
+        const { currentRealm } = this.props;
+
+        if (list === null) {
+            return;
+        }
+
+        return (
+            <>
+                <PriceListPanelContainer list={list} />
+                <LastModified targetDate={new Date(currentRealm!.last_modified * 1000)} />
+            </>
+        );
     }
 }
