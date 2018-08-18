@@ -32,7 +32,7 @@ import {
     IPriceListsState,
     MutatePricelistLevel,
 } from "@app/types/price-lists";
-import { getPricelistIndex } from "./helper";
+import { formatProfessionPricelists, getPricelistIndex } from "./helper";
 
 type State = Readonly<IPriceListsState> | undefined;
 
@@ -70,6 +70,14 @@ export const priceLists = (state: State, action: PriceListsActions): State => {
         case REQUEST_CREATE_PROFESSION_PRICELIST:
             return { ...state, createPricelistLevel: MutatePricelistLevel.fetching };
         case RECEIVE_CREATE_PROFESSION_PRICELIST:
+            if (action.payload.errors !== null) {
+                return {
+                    ...state,
+                    createPricelistErrors: action.payload.errors,
+                    createPricelistLevel: MutatePricelistLevel.failure,
+                };
+            }
+
             return { ...state, createPricelistLevel: MutatePricelistLevel.fetching };
         case REQUEST_UPDATE_PRICELIST:
             return { ...state, updatePricelistLevel: MutatePricelistLevel.fetching };
@@ -156,13 +164,16 @@ export const priceLists = (state: State, action: PriceListsActions): State => {
         case CHANGE_ENTRY_CREATELEVEL:
             return { ...state, entryCreateLevel: action.payload };
         case CHANGE_SELECTED_LIST:
-            const isProfessionPricelist = state.professionPricelists.reduce((result, v) => {
-                if (result) {
-                    return result;
-                }
+            let isProfessionPricelist = false;
+            for (const expansionName of Object.keys(state.professionPricelists)) {
+                for (const v of state.professionPricelists[expansionName]) {
+                    if (v.pricelist_id === action.payload.id) {
+                        isProfessionPricelist = true;
 
-                return v.pricelist_id === action.payload.id;
-            }, false);
+                        break;
+                    }
+                }
+            }
 
             return {
                 ...state,
@@ -191,25 +202,18 @@ export const priceLists = (state: State, action: PriceListsActions): State => {
             return {
                 ...state,
                 getProfessionPricelistsLevel: GetProfessionPricelistsLevel.fetching,
-                professionPricelists: [],
+                professionPricelists: {},
             };
         case RECEIVE_PROFESSION_PRICELISTS:
             if (action.payload.errors !== null) {
                 return { ...state, getProfessionPricelistsLevel: GetProfessionPricelistsLevel.failure };
             }
 
-            let receivedProfessionSelectedList = state.selectedList;
-            const receivedProfessionPricelists = action.payload.data!.profession_pricelists;
-            if (receivedProfessionPricelists.length > 0) {
-                receivedProfessionSelectedList = receivedProfessionPricelists[0].pricelist;
-            }
-
             return {
                 ...state,
                 getProfessionPricelistsLevel: GetProfessionPricelistsLevel.success,
                 items: { ...state.items, ...action.payload.data!.items },
-                professionPricelists: receivedProfessionPricelists,
-                selectedList: receivedProfessionSelectedList,
+                professionPricelists: formatProfessionPricelists(action.payload.data!.profession_pricelists),
             };
         case CHANGE_SELECTED_EXPANSION:
             return { ...state, selectedExpansion: action.payload };

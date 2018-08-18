@@ -275,8 +275,10 @@ export interface IQueryItemResult {
 }
 
 // profession and expansion types
+export type ExpansionName = string;
+
 export interface IExpansion {
-    name: string;
+    name: ExpansionName;
     label: string;
     primary: boolean;
 }
@@ -294,4 +296,5 @@ export interface IProfessionPricelist {
     pricelist_id: number;
     profession_name: ProfessionName;
     pricelist: IPricelist;
+    expansion: ExpansionName;
 }

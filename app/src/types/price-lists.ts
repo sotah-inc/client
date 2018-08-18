@@ -26,9 +26,13 @@ export interface IPriceListsState {
     items: ItemsMap;
     deletePricelistLevel: DeletePricelistLevel;
     selectedProfession: IProfession | null;
-    professionPricelists: IProfessionPricelist[];
+    professionPricelists: IExpansionProfessionPricelistMap;
     getProfessionPricelistsLevel: GetProfessionPricelistsLevel;
     selectedExpansion: IExpansion | null;
+}
+
+export interface IExpansionProfessionPricelistMap {
+    [key: string]: IProfessionPricelist[];
 }
 
 export enum ListDialogStep {
@@ -115,7 +119,7 @@ export const defaultPriceListsState: IPriceListsState = {
     isEditListDialogOpen: false,
     items: [],
     pricelists: [],
-    professionPricelists: [],
+    professionPricelists: {},
     selectedExpansion: null,
     selectedList: null,
     selectedProfession: null,

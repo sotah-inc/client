@@ -1,6 +1,14 @@
 import * as HTTPStatus from "http-status";
 
-import { IErrors, IProfessionPricelist, ItemsMap, ProfessionName, RealmSlug, RegionName } from "@app/types/global";
+import {
+    ExpansionName,
+    IErrors,
+    IProfessionPricelist,
+    ItemsMap,
+    ProfessionName,
+    RealmSlug,
+    RegionName,
+} from "@app/types/global";
 import { IPricelist, IPricelistEntry } from "@app/types/price-lists";
 import { apiEndpoint } from "./index";
 
@@ -136,6 +144,7 @@ export interface ICreateProfessionPricelistRequest {
         quantity_modifier: number;
     }>;
     profession_name: ProfessionName;
+    expansion_name: ExpansionName;
 }
 
 export interface ICreateProfessionPricelistResponse {

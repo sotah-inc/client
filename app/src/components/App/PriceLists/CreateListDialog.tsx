@@ -4,7 +4,7 @@ import { Intent } from "@blueprintjs/core";
 
 import { ICreatePricelistRequest, ICreateProfessionPricelistRequest } from "@app/api/price-lists";
 import { ListDialogContainer } from "@app/containers/App/PriceLists/util/ListDialog";
-import { IErrors, IProfession, IProfile, IRealm, IRegion, ItemsMap } from "@app/types/global";
+import { IErrors, IExpansion, IProfession, IProfile, IRealm, IRegion, ItemsMap } from "@app/types/global";
 import { MutatePricelistLevel } from "@app/types/price-lists";
 import { AppToaster } from "@app/util/toasters";
 
@@ -16,6 +16,7 @@ export interface IStateProps {
     createPricelistErrors: IErrors;
     profile: IProfile | null;
     selectedProfession: IProfession | null;
+    selectedExpansion: IExpansion | null;
 }
 
 export interface IDispatchProps {
@@ -94,6 +95,7 @@ export class CreateListDialog extends React.Component<Props, State> {
             currentRealm,
             selectedProfession,
             createProfessionPricelist,
+            selectedExpansion,
         } = this.props;
 
         if (selectedProfession === null) {
@@ -104,6 +106,7 @@ export class CreateListDialog extends React.Component<Props, State> {
         } else {
             createProfessionPricelist(profile!.token, {
                 entries,
+                expansion_name: selectedExpansion!.name,
                 pricelist: { name, region: currentRegion!.name, realm: currentRealm!.slug },
                 profession_name: selectedProfession.name,
             });

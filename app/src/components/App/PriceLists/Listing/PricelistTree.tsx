@@ -5,8 +5,8 @@ import { Classes, Intent, ITreeNode, Spinner, Tree } from "@blueprintjs/core";
 import { IGetProfessionPricelistsRequestOptions } from "@app/api/price-lists";
 import { LastModified } from "@app/components/util";
 import { PriceListPanelContainer } from "@app/containers/App/PriceLists/PriceListPanel";
-import { IExpansion, IProfession, IProfessionPricelist, IRealm, IRegion } from "@app/types/global";
-import { GetProfessionPricelistsLevel, IPricelist } from "@app/types/price-lists";
+import { IExpansion, IProfession, IRealm, IRegion } from "@app/types/global";
+import { GetProfessionPricelistsLevel, IExpansionProfessionPricelistMap, IPricelist } from "@app/types/price-lists";
 
 export interface IStateProps {
     pricelists: IPricelist[];
@@ -16,7 +16,7 @@ export interface IStateProps {
     professions: IProfession[];
     selectedProfession: IProfession | null;
     getProfessionPricelistsLevel: GetProfessionPricelistsLevel;
-    professionPricelists: IProfessionPricelist[];
+    professionPricelists: IExpansionProfessionPricelistMap;
     expansions: IExpansion[];
     selectedExpansion: IExpansion | null;
 }
@@ -166,27 +166,31 @@ export class PricelistTree extends React.Component<Props, IState> {
 
         return expansions.map(v => {
             const result: ITreeNode = {
-                childNodes: this.getProfessionPricelistNodes(),
+                childNodes: this.getProfessionPricelistNodes(v),
                 hasCaret: false,
                 id: `expansion-${v.name}`,
                 isExpanded: true,
                 isSelected: selectedExpansion !== null && selectedExpansion.name === v.name,
                 label: v.label,
             };
-            result.childNodes = [];
 
             return result;
         });
     }
 
-    private getProfessionPricelistNodes(): ITreeNode[] {
+    private getProfessionPricelistNodes(expansion: IExpansion): ITreeNode[] {
         const { professionPricelists } = this.props;
 
-        if (professionPricelists.length === 0) {
+        if (expansion === null || !(expansion.name in professionPricelists)) {
+            return [];
+        }
+
+        const result = professionPricelists[expansion.name];
+        if (result.length === 0) {
             return [{ id: "none-none", label: <em>None found.</em> }];
         }
 
-        return professionPricelists.map(v => this.getPricelistNode(v.pricelist));
+        return result.map(v => this.getPricelistNode(v.pricelist));
     }
 
     private getPricelistNode(v: IPricelist) {
@@ -217,9 +221,16 @@ export class PricelistTree extends React.Component<Props, IState> {
     }
 
     private onPricelistNodeClick(id: string) {
-        const { pricelists, professionPricelists, changeSelectedList } = this.props;
+        const { pricelists, professionPricelists, selectedExpansion, changeSelectedList } = this.props;
 
-        const consolidatedPricelists: IPricelist[] = [...pricelists, ...professionPricelists.map(v => v.pricelist)];
+        let consolidatedPricelists: IPricelist[] = [...pricelists];
+        if (selectedExpansion !== null && selectedExpansion.name in professionPricelists) {
+            consolidatedPricelists = [
+                ...pricelists,
+                ...professionPricelists[selectedExpansion.name].map(v => v.pricelist),
+            ];
+        }
+
         const list = consolidatedPricelists.reduce((result, v) => {
             if (result !== null) {
                 return result;

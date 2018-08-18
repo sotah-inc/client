@@ -300,6 +300,8 @@ export class ListDialog extends React.Component<Props, State> {
             return;
         }
 
+        console.log(mutationErrors);
+
         return (
             <>
                 <DialogBody>
