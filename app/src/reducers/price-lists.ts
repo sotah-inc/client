@@ -34,6 +34,7 @@ import {
     IPriceListsState,
     MutatePricelistLevel,
 } from "@app/types/price-lists";
+import { runners } from "./handlers";
 import {
     formatProfessionPricelists,
     getFirstExpansionPricelist,
@@ -246,6 +247,6 @@ export const priceLists = (state: State, action: PriceListsActions): State => {
                 selectedList: expansionSelectedList,
             };
         default:
-            return state;
+            return runners.pricelist(state, action);
     }
 };
