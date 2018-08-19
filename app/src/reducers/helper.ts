@@ -124,11 +124,19 @@ export const handleDeleteProfessionPricelistSuccess = (
     }
     stateProfessionPricelists[expansion] = onDeletePricelist;
 
+    let onDeleteSelectedList: IPricelist | null = null;
+    if (stateProfessionPricelists[expansion].length > 0) {
+        const isLastDeleted = deletedIndex === onDeletePricelist.length;
+        onDeleteSelectedList = isLastDeleted
+            ? onDeletePricelist[deletedIndex - 1].pricelist!
+            : onDeletePricelist[deletedIndex].pricelist!;
+    }
+
     return {
         ...state,
         deletePricelistLevel: DeletePricelistLevel.success,
         isDeleteListDialogOpen: false,
         professionPricelists: stateProfessionPricelists,
-        selectedList: null,
+        selectedList: onDeleteSelectedList,
     };
 };
