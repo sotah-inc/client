@@ -1,5 +1,5 @@
 import { ICreateProfessionPricelistResponse } from "@app/api/price-lists";
-import { IExpansion, IProfessionPricelist } from "@app/types/global";
+import { ExpansionName, IExpansion, IProfessionPricelist } from "@app/types/global";
 import {
     DeletePricelistLevel,
     IExpansionProfessionPricelistMap,
@@ -86,13 +86,49 @@ export const getProfessionPricelist = (state: IPriceListsState, pricelist: IPric
     return null;
 };
 
+interface IDeleteSearchResult {
+    index: number;
+    expansion: ExpansionName;
+}
+
 export const handleDeleteProfessionPricelistSuccess = (
     state: IPriceListsState,
     pricelistId: number,
 ): IPriceListsState => {
+    const stateProfessionPricelists = { ...state.professionPricelists };
+    const searchResult: IDeleteSearchResult | null = Object.keys(stateProfessionPricelists).reduce(
+        (result: IDeleteSearchResult | null, expansionName) => {
+            const professionPricelists = stateProfessionPricelists[expansionName];
+            for (let i = 0; i < professionPricelists.length; i++) {
+                const professionPricelist = professionPricelists[i];
+                if (professionPricelist.pricelist_id === pricelistId) {
+                    return { index: Number(i), expansion: expansionName };
+                }
+            }
+
+            return result;
+        },
+        null,
+    );
+    if (searchResult === null) {
+        return { ...state, deletePricelistLevel: DeletePricelistLevel.failure };
+    }
+
+    const { expansion, index: deletedIndex } = searchResult;
+    let onDeletePricelist = [
+        ...stateProfessionPricelists[expansion].slice(0, deletedIndex),
+        ...stateProfessionPricelists[expansion].slice(deletedIndex + 1),
+    ];
+    if (deletedIndex === 0) {
+        onDeletePricelist = stateProfessionPricelists[expansion].slice(1);
+    }
+    stateProfessionPricelists[expansion] = onDeletePricelist;
+
     return {
         ...state,
         deletePricelistLevel: DeletePricelistLevel.success,
         isDeleteListDialogOpen: false,
+        professionPricelists: stateProfessionPricelists,
+        selectedList: null,
     };
 };
