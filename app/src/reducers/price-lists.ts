@@ -9,14 +9,12 @@ import {
     CHANGE_SELECTED_LIST,
     CHANGE_SELECTED_PROFESSION,
     PriceListsActions,
-    RECEIVE_CREATE_PRICELIST,
     RECEIVE_CREATE_PROFESSION_PRICELIST,
     RECEIVE_DELETE_PRICELIST,
     RECEIVE_DELETE_PROFESSION_PRICELIST,
     RECEIVE_GET_PRICELISTS,
     RECEIVE_PROFESSION_PRICELISTS,
     RECEIVE_UPDATE_PRICELIST,
-    REQUEST_CREATE_PRICELIST,
     REQUEST_CREATE_PROFESSION_PRICELIST,
     REQUEST_DELETE_PRICELIST,
     REQUEST_DELETE_PROFESSION_PRICELIST,
@@ -51,31 +49,6 @@ export const priceLists = (state: State, action: PriceListsActions): State => {
     }
 
     switch (action.type) {
-        case REQUEST_CREATE_PRICELIST:
-            return { ...state, createPricelistLevel: MutatePricelistLevel.fetching };
-        case RECEIVE_CREATE_PRICELIST:
-            if (action.payload.errors !== null) {
-                return {
-                    ...state,
-                    createPricelistErrors: action.payload.errors,
-                    createPricelistLevel: MutatePricelistLevel.failure,
-                };
-            }
-
-            const postCreateSelectedPricelist: IPricelist = {
-                ...action.payload.data!.pricelist,
-                pricelist_entries: action.payload.data!.entries,
-            };
-            const postCreatePricelists = [...state.pricelists, postCreateSelectedPricelist];
-
-            return {
-                ...state,
-                createPricelistErrors: {},
-                createPricelistLevel: MutatePricelistLevel.success,
-                isAddListDialogOpen: false,
-                pricelists: postCreatePricelists,
-                selectedList: postCreateSelectedPricelist,
-            };
         case REQUEST_CREATE_PROFESSION_PRICELIST:
             return { ...state, createPricelistLevel: MutatePricelistLevel.fetching };
         case RECEIVE_CREATE_PROFESSION_PRICELIST:
