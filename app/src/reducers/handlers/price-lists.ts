@@ -1,4 +1,4 @@
-import { PriceListsActions, ReceiveCreateProfessionPricelist } from "@app/actions/price-lists";
+import { PriceListsActions, ReceiveCreatePricelist } from "@app/actions/price-lists";
 import { IPricelist, IPriceListsState, MutatePricelistLevel } from "@app/types/price-lists";
 
 import { IKindHandlers, Runner } from "./index";
@@ -9,7 +9,7 @@ const handlers: IKindHandlers<IPriceListsState, PriceListsActions> = {
             request: (state: IPriceListsState) => {
                 return { ...state, createPricelistLevel: MutatePricelistLevel.fetching };
             },
-            response: (state: IPriceListsState, action: ReturnType<typeof ReceiveCreateProfessionPricelist>) => {
+            response: (state: IPriceListsState, action: ReturnType<typeof ReceiveCreatePricelist>) => {
                 if (action.payload.errors !== null) {
                     return {
                         ...state,
