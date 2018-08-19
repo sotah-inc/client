@@ -1,6 +1,11 @@
-import { PriceListsActions, ReceiveCreatePricelist, ReceiveUpdatePricelist } from "@app/actions/price-lists";
+import {
+    PriceListsActions,
+    ReceiveCreatePricelist,
+    ReceiveDeletePricelist,
+    ReceiveUpdatePricelist,
+} from "@app/actions/price-lists";
 import { getPricelistIndex } from "@app/reducers/helper";
-import { IPricelist, IPriceListsState, MutatePricelistLevel } from "@app/types/price-lists";
+import { DeletePricelistLevel, IPricelist, IPriceListsState, MutatePricelistLevel } from "@app/types/price-lists";
 
 import { IKindHandlers, Runner } from "./index";
 
@@ -32,6 +37,41 @@ const handlers: IKindHandlers<IPriceListsState, PriceListsActions> = {
             },
             request: (state: IPriceListsState) => {
                 return { ...state, createPricelistLevel: MutatePricelistLevel.fetching };
+            },
+        },
+        delete: {
+            receive: (state: IPriceListsState, action: ReturnType<typeof ReceiveDeletePricelist>) => {
+                if (action.payload === null) {
+                    return { ...state, deletePricelistLevel: DeletePricelistLevel.failure };
+                }
+
+                const deletedIndex = getPricelistIndex(state.pricelists, action.payload);
+                const pricelists: IPricelist[] = (() => {
+                    if (deletedIndex === 0) {
+                        return [...state.pricelists.slice(1)];
+                    }
+
+                    return [...state.pricelists.slice(0, deletedIndex), ...state.pricelists.slice(deletedIndex + 1)];
+                })();
+                const selectedList: IPricelist | null = (() => {
+                    if (pricelists.length === 0) {
+                        return null;
+                    }
+
+                    const isLastDeleted = deletedIndex === pricelists.length;
+                    return isLastDeleted ? pricelists[deletedIndex - 1] : pricelists[deletedIndex];
+                })();
+
+                return {
+                    ...state,
+                    deletePricelistLevel: DeletePricelistLevel.success,
+                    isDeleteListDialogOpen: false,
+                    pricelists,
+                    selectedList,
+                };
+            },
+            request: (state: IPriceListsState): IPriceListsState => {
+                return { ...state, deletePricelistLevel: DeletePricelistLevel.fetching };
             },
         },
         update: {

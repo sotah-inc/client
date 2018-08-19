@@ -10,12 +10,10 @@ import {
     CHANGE_SELECTED_PROFESSION,
     PriceListsActions,
     RECEIVE_CREATE_PROFESSION_PRICELIST,
-    RECEIVE_DELETE_PRICELIST,
     RECEIVE_DELETE_PROFESSION_PRICELIST,
     RECEIVE_GET_PRICELISTS,
     RECEIVE_PROFESSION_PRICELISTS,
     REQUEST_CREATE_PROFESSION_PRICELIST,
-    REQUEST_DELETE_PRICELIST,
     REQUEST_DELETE_PROFESSION_PRICELIST,
     REQUEST_GET_PRICELISTS,
     REQUEST_PROFESSION_PRICELISTS,
@@ -34,7 +32,6 @@ import { runners } from "./handlers";
 import {
     formatProfessionPricelists,
     getFirstExpansionPricelist,
-    getPricelistIndex,
     handleCreateProfessionPricelistSuccess,
     handleDeleteProfessionPricelistSuccess,
 } from "./helper";
@@ -59,39 +56,8 @@ export const priceLists = (state: State, action: PriceListsActions): State => {
             }
 
             return handleCreateProfessionPricelistSuccess(state, action.payload);
-        case REQUEST_DELETE_PRICELIST:
         case REQUEST_DELETE_PROFESSION_PRICELIST:
             return { ...state, deletePricelistLevel: DeletePricelistLevel.fetching };
-        case RECEIVE_DELETE_PRICELIST:
-            if (action.payload === null) {
-                return { ...state, deletePricelistLevel: DeletePricelistLevel.failure };
-            }
-
-            const deletedIndex = getPricelistIndex(state.pricelists, action.payload!);
-
-            let onDeletePricelists = [
-                ...state.pricelists.slice(0, deletedIndex),
-                ...state.pricelists.slice(deletedIndex + 1),
-            ];
-            if (deletedIndex === 0) {
-                onDeletePricelists = [...state.pricelists.slice(1)];
-            }
-
-            let onDeleteSelectedList: IPricelist | null = null;
-            if (onDeletePricelists.length > 0) {
-                const isLastDeleted = deletedIndex === onDeletePricelists.length;
-                onDeleteSelectedList = isLastDeleted
-                    ? onDeletePricelists[deletedIndex - 1]
-                    : onDeletePricelists[deletedIndex];
-            }
-
-            return {
-                ...state,
-                deletePricelistLevel: DeletePricelistLevel.success,
-                isDeleteListDialogOpen: false,
-                pricelists: onDeletePricelists,
-                selectedList: onDeleteSelectedList,
-            };
         case RECEIVE_DELETE_PROFESSION_PRICELIST:
             if (action.payload === null) {
                 return { ...state, deletePricelistLevel: DeletePricelistLevel.failure };
