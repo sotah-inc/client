@@ -2,10 +2,18 @@ import {
     PriceListsActions,
     ReceiveCreatePricelist,
     ReceiveDeletePricelist,
+    ReceiveGetPricelists,
     ReceiveUpdatePricelist,
 } from "@app/actions/price-lists";
 import { getPricelistIndex } from "@app/reducers/helper";
-import { DeletePricelistLevel, IPricelist, IPriceListsState, MutatePricelistLevel } from "@app/types/price-lists";
+import { ItemsMap } from "@app/types/global";
+import {
+    DeletePricelistLevel,
+    GetPricelistsLevel,
+    IPricelist,
+    IPriceListsState,
+    MutatePricelistLevel,
+} from "@app/types/price-lists";
 
 import { IKindHandlers, Runner } from "./index";
 
@@ -112,6 +120,32 @@ const handlers: IKindHandlers<IPriceListsState, PriceListsActions> = {
             },
             request: (state: IPriceListsState) => {
                 return { ...state, updatePricelistLevel: MutatePricelistLevel.fetching };
+            },
+        },
+    },
+    pricelists: {
+        get: {
+            receive: (state: IPriceListsState, action: ReturnType<typeof ReceiveGetPricelists>) => {
+                const items: ItemsMap = { ...state.items, ...action.payload.items };
+                const pricelists = action.payload.pricelists;
+                const selectedList: IPricelist | null = (() => {
+                    if (pricelists.length === 0) {
+                        return null;
+                    }
+
+                    return pricelists[0];
+                })();
+
+                return {
+                    ...state,
+                    getPricelistsLevel: GetPricelistsLevel.success,
+                    items,
+                    pricelists,
+                    selectedList,
+                };
+            },
+            request: (state: IPriceListsState) => {
+                return { ...state, getPricelistsLevel: GetPricelistsLevel.fetching };
             },
         },
     },
