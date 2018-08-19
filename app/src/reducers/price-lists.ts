@@ -14,13 +14,11 @@ import {
     RECEIVE_DELETE_PROFESSION_PRICELIST,
     RECEIVE_GET_PRICELISTS,
     RECEIVE_PROFESSION_PRICELISTS,
-    RECEIVE_UPDATE_PRICELIST,
     REQUEST_CREATE_PROFESSION_PRICELIST,
     REQUEST_DELETE_PRICELIST,
     REQUEST_DELETE_PROFESSION_PRICELIST,
     REQUEST_GET_PRICELISTS,
     REQUEST_PROFESSION_PRICELISTS,
-    REQUEST_UPDATE_PRICELIST,
 } from "@app/actions/price-lists";
 import { Item } from "@app/types/global";
 import {
@@ -61,38 +59,6 @@ export const priceLists = (state: State, action: PriceListsActions): State => {
             }
 
             return handleCreateProfessionPricelistSuccess(state, action.payload);
-        case REQUEST_UPDATE_PRICELIST:
-            return { ...state, updatePricelistLevel: MutatePricelistLevel.fetching };
-        case RECEIVE_UPDATE_PRICELIST:
-            if (action.payload.response.errors !== null) {
-                return {
-                    ...state,
-                    updatePricelistErrors: action.payload.response.errors,
-                    updatePricelistLevel: MutatePricelistLevel.failure,
-                };
-            }
-
-            const replacedIndex = getPricelistIndex(state.pricelists, action.payload.response.data!.pricelist.id);
-            const replacedPricelist = action.payload.response.data!.pricelist;
-            replacedPricelist.pricelist_entries = action.payload.response.data!.entries;
-
-            let updatedPricelists = [
-                ...state.pricelists.slice(0, replacedIndex),
-                replacedPricelist,
-                ...state.pricelists.slice(replacedIndex + 1),
-            ];
-            if (replacedIndex === 0) {
-                updatedPricelists = [replacedPricelist, ...state.pricelists.slice(1)];
-            }
-
-            return {
-                ...state,
-                ...action.payload.meta,
-                pricelists: updatedPricelists,
-                selectedList: replacedPricelist,
-                updatePricelistErrors: {},
-                updatePricelistLevel: MutatePricelistLevel.success,
-            };
         case REQUEST_DELETE_PRICELIST:
         case REQUEST_DELETE_PROFESSION_PRICELIST:
             return { ...state, deletePricelistLevel: DeletePricelistLevel.fetching };

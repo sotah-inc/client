@@ -1,4 +1,5 @@
-import { PriceListsActions, ReceiveCreatePricelist } from "@app/actions/price-lists";
+import { PriceListsActions, ReceiveCreatePricelist, ReceiveUpdatePricelist } from "@app/actions/price-lists";
+import { getPricelistIndex } from "@app/reducers/helper";
 import { IPricelist, IPriceListsState, MutatePricelistLevel } from "@app/types/price-lists";
 
 import { IKindHandlers, Runner } from "./index";
@@ -6,10 +7,7 @@ import { IKindHandlers, Runner } from "./index";
 const handlers: IKindHandlers<IPriceListsState, PriceListsActions> = {
     pricelist: {
         create: {
-            request: (state: IPriceListsState) => {
-                return { ...state, createPricelistLevel: MutatePricelistLevel.fetching };
-            },
-            response: (state: IPriceListsState, action: ReturnType<typeof ReceiveCreatePricelist>) => {
+            receive: (state: IPriceListsState, action: ReturnType<typeof ReceiveCreatePricelist>) => {
                 if (action.payload.errors !== null) {
                     return {
                         ...state,
@@ -18,20 +16,62 @@ const handlers: IKindHandlers<IPriceListsState, PriceListsActions> = {
                     };
                 }
 
-                const nextSelectedPricelist: IPricelist = {
+                const selectedList: IPricelist = {
                     ...action.payload.data!.pricelist,
                     pricelist_entries: action.payload.data!.entries,
                 };
-                const nextPricelists = [...state.pricelists, nextSelectedPricelist];
 
                 return {
                     ...state,
                     createPricelistErrors: {},
                     createPricelistLevel: MutatePricelistLevel.success,
                     isAddListDialogOpen: false,
-                    pricelists: nextPricelists,
-                    selectedList: nextSelectedPricelist,
+                    pricelists: [...state.pricelists, selectedList],
+                    selectedList,
                 };
+            },
+            request: (state: IPriceListsState) => {
+                return { ...state, createPricelistLevel: MutatePricelistLevel.fetching };
+            },
+        },
+        update: {
+            receive: (state: IPriceListsState, action: ReturnType<typeof ReceiveUpdatePricelist>) => {
+                if (action.payload.response.errors !== null) {
+                    return {
+                        ...state,
+                        updatePricelistErrors: action.payload.response.errors,
+                        updatePricelistLevel: MutatePricelistLevel.failure,
+                    };
+                }
+
+                const replacedIndex = getPricelistIndex(state.pricelists, action.payload.response.data!.pricelist.id);
+                const selectedList: IPricelist = {
+                    ...action.payload.response.data!.pricelist,
+                    pricelist_entries: action.payload.response.data!.entries,
+                };
+                const pricelists: IPricelist[] = (() => {
+                    if (replacedIndex === 0) {
+                        return [selectedList, ...state.pricelists.slice(1)];
+                    }
+
+                    return [
+                        ...state.pricelists.slice(0, replacedIndex),
+                        selectedList,
+                        ...state.pricelists.slice(replacedIndex + 1),
+                    ];
+                })();
+
+                return {
+                    ...state,
+                    ...action.payload.meta,
+                    pricelists,
+                    selectedList,
+                    updatePricelistErrors: {},
+                    updatePricelistLevel: MutatePricelistLevel.success,
+                };
+            },
+            request: (state: IPriceListsState) => {
+                return { ...state, updatePricelistLevel: MutatePricelistLevel.fetching };
             },
         },
     },
