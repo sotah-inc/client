@@ -2,17 +2,18 @@ import * as React from "react";
 
 import { Classes, Intent, ITreeNode, NonIdealState, Spinner, Tree } from "@blueprintjs/core";
 
-import { IGetProfessionPricelistsRequestOptions } from "@app/api/price-lists";
+import { IGetPricelistsOptions, IGetProfessionPricelistsRequestOptions } from "@app/api/price-lists";
 import { LastModified } from "@app/components/util";
 import { PriceListPanelContainer } from "@app/containers/App/PriceLists/PriceListPanel";
-import { IExpansion, IProfession, IRealm, IRegion } from "@app/types/global";
-import { AuthLevel } from "@app/types/main";
+import { IExpansion, IProfession, IProfile, IRealm, IRegion } from "@app/types/global";
+import { AuthLevel, FetchUserPreferencesLevel } from "@app/types/main";
 import {
     GetProfessionPricelistsLevel,
     IExpansionProfessionPricelistMap,
     IPricelist,
     ISelectExpansionPayload,
 } from "@app/types/price-lists";
+import { didRealmChange } from "@app/util";
 
 export interface IStateProps {
     pricelists: IPricelist[];
@@ -26,6 +27,8 @@ export interface IStateProps {
     expansions: IExpansion[];
     selectedExpansion: IExpansion | null;
     authLevel: AuthLevel;
+    fetchUserPreferencesLevel: FetchUserPreferencesLevel;
+    profile: IProfile | null;
 }
 
 export interface IDispatchProps {
@@ -34,6 +37,7 @@ export interface IDispatchProps {
     refreshProfessionPricelists: (opts: IGetProfessionPricelistsRequestOptions) => void;
     changeSelectedExpansion: (v: ISelectExpansionPayload) => void;
     resetProfessionsSelections: () => void;
+    refreshPricelists: (opts: IGetPricelistsOptions) => void;
 }
 
 export type Props = Readonly<IStateProps & IDispatchProps>;
@@ -60,13 +64,39 @@ export class PricelistTree extends React.Component<Props, IState> {
     };
 
     public componentDidUpdate(prevProps: Props) {
-        const { getProfessionPricelistsLevel, expansions, changeSelectedExpansion } = this.props;
+        const {
+            getProfessionPricelistsLevel,
+            expansions,
+            changeSelectedExpansion,
+            currentRegion,
+            currentRealm,
+            authLevel,
+            profile,
+            refreshPricelists,
+            fetchUserPreferencesLevel,
+        } = this.props;
 
         const shouldSelectFirstExpansion =
             prevProps.getProfessionPricelistsLevel === GetProfessionPricelistsLevel.fetching &&
             getProfessionPricelistsLevel === GetProfessionPricelistsLevel.success;
         if (shouldSelectFirstExpansion) {
             changeSelectedExpansion({ expansion: expansions[0] });
+        }
+
+        if (currentRegion !== null && currentRealm !== null) {
+            const hasFinishedLoading =
+                authLevel === AuthLevel.authenticated &&
+                fetchUserPreferencesLevel === FetchUserPreferencesLevel.success;
+            if (hasFinishedLoading) {
+                const shouldRefreshPricelists = didRealmChange(prevProps.currentRealm, currentRealm);
+                if (shouldRefreshPricelists) {
+                    refreshPricelists({
+                        realmSlug: currentRealm.slug,
+                        regionName: currentRegion.name,
+                        token: profile!.token,
+                    });
+                }
+            }
         }
     }
 
