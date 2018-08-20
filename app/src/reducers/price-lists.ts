@@ -9,25 +9,18 @@ import {
     CHANGE_SELECTED_LIST,
     CHANGE_SELECTED_PROFESSION,
     PriceListsActions,
-    RECEIVE_DELETE_PROFESSION_PRICELIST,
     RECEIVE_PROFESSION_PRICELISTS,
-    REQUEST_DELETE_PROFESSION_PRICELIST,
     REQUEST_PROFESSION_PRICELISTS,
 } from "@app/actions/price-lists";
 import { Item } from "@app/types/global";
 import {
     defaultPriceListsState,
-    DeletePricelistLevel,
     GetProfessionPricelistsLevel,
     IPricelist,
     IPriceListsState,
 } from "@app/types/price-lists";
 import { runners } from "./handlers";
-import {
-    formatProfessionPricelists,
-    getFirstExpansionPricelist,
-    handleDeleteProfessionPricelistSuccess,
-} from "./helper";
+import { formatProfessionPricelists, getFirstExpansionPricelist } from "./helper";
 
 type State = Readonly<IPriceListsState> | undefined;
 
@@ -37,14 +30,6 @@ export const priceLists = (state: State, action: PriceListsActions): State => {
     }
 
     switch (action.type) {
-        case REQUEST_DELETE_PROFESSION_PRICELIST:
-            return { ...state, deletePricelistLevel: DeletePricelistLevel.fetching };
-        case RECEIVE_DELETE_PROFESSION_PRICELIST:
-            if (action.payload === null) {
-                return { ...state, deletePricelistLevel: DeletePricelistLevel.failure };
-            }
-
-            return handleDeleteProfessionPricelistSuccess(state, action.payload);
         case CHANGE_ENTRY_CREATELEVEL:
             return { ...state, entryCreateLevel: action.payload };
         case CHANGE_SELECTED_LIST:

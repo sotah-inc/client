@@ -3,10 +3,11 @@ import {
     ReceiveCreatePricelist,
     ReceiveCreateProfessionPricelist,
     ReceiveDeletePricelist,
+    ReceiveDeleteProfessionPricelist,
     ReceiveGetPricelists,
     ReceiveUpdatePricelist,
 } from "@app/actions/price-lists";
-import { getPricelistIndex } from "@app/reducers/helper";
+import { getPricelistIndex, getProfessionPricelistIndex } from "@app/reducers/helper";
 import { IProfessionPricelist, ItemsMap } from "@app/types/global";
 import {
     DeletePricelistLevel,
@@ -199,7 +200,49 @@ const handlers: IKindHandlers<IPriceListsState, PriceListsActions> = {
                 return { ...state, createPricelistLevel: MutatePricelistLevel.fetching };
             },
         },
-        delete: {},
+        delete: {
+            receive: (state: IPriceListsState, action: ReturnType<typeof ReceiveDeleteProfessionPricelist>) => {
+                if (action.payload === null) {
+                    return { ...state, deletePricelistLevel: DeletePricelistLevel.failure };
+                }
+
+                const expansionName = state.selectedExpansion!.name;
+                const prevResult = state.professionPricelists[expansionName];
+                const deletedIndex = getProfessionPricelistIndex(prevResult, action.payload);
+                const nextResult: IProfessionPricelist[] = (() => {
+                    if (deletedIndex === 0) {
+                        return [...prevResult.slice(1)];
+                    }
+
+                    return [...prevResult.slice(0, deletedIndex), ...prevResult.slice(deletedIndex + 1)];
+                })();
+                const professionPricelists: IExpansionProfessionPricelistMap = {
+                    ...state.professionPricelists,
+                    [expansionName]: nextResult,
+                };
+                const selectedList: IPricelist | null = (() => {
+                    if (nextResult.length === 0) {
+                        return null;
+                    }
+
+                    const isLastDeleted = deletedIndex === nextResult.length;
+                    return isLastDeleted
+                        ? nextResult[deletedIndex - 1].pricelist!
+                        : nextResult[deletedIndex].pricelist!;
+                })();
+
+                return {
+                    ...state,
+                    deletePricelistLevel: DeletePricelistLevel.success,
+                    isDeleteListDialogOpen: false,
+                    professionPricelists,
+                    selectedList,
+                };
+            },
+            request: (state: IPriceListsState) => {
+                return { ...state, deletePricelistLevel: DeletePricelistLevel.fetching };
+            },
+        },
         update: {},
     },
 };

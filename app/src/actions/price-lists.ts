@@ -129,11 +129,11 @@ export const FetchCreateProfessionPricelist = (token: string, request: ICreatePr
     };
 };
 
-export const REQUEST_DELETE_PROFESSION_PRICELIST = "REQUEST_DELETE_PROFESSION_PRICELIST";
-export const RequestDeleteProfessionPricelist = () => createAction(REQUEST_DELETE_PROFESSION_PRICELIST);
-export const RECEIVE_DELETE_PROFESSION_PRICELIST = "RECEIVE_DELETE_PROFESSION_PRICELIST";
+export const REQUEST_DELETE_PROFESSIONPRICELIST = "REQUEST_DELETE_PROFESSIONPRICELIST";
+export const RequestDeleteProfessionPricelist = () => createAction(REQUEST_DELETE_PROFESSIONPRICELIST);
+export const RECEIVE_DELETE_PROFESSIONPRICELIST = "RECEIVE_DELETE_PROFESSIONPRICELIST";
 export const ReceiveDeleteProfessionPricelist = (payload: number | null) =>
-    createAction(RECEIVE_DELETE_PROFESSION_PRICELIST, payload);
+    createAction(RECEIVE_DELETE_PROFESSIONPRICELIST, payload);
 type FetchDeleteProfessionPricelistType = ReturnType<
     typeof RequestDeleteProfessionPricelist | typeof ReceiveDeleteProfessionPricelist
 >;
