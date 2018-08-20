@@ -1,15 +1,17 @@
 import {
     PriceListsActions,
     ReceiveCreatePricelist,
+    ReceiveCreateProfessionPricelist,
     ReceiveDeletePricelist,
     ReceiveGetPricelists,
     ReceiveUpdatePricelist,
 } from "@app/actions/price-lists";
 import { getPricelistIndex } from "@app/reducers/helper";
-import { ItemsMap } from "@app/types/global";
+import { IProfessionPricelist, ItemsMap } from "@app/types/global";
 import {
     DeletePricelistLevel,
     GetPricelistsLevel,
+    IExpansionProfessionPricelistMap,
     IPricelist,
     IPriceListsState,
     MutatePricelistLevel,
@@ -148,6 +150,57 @@ const handlers: IKindHandlers<IPriceListsState, PriceListsActions> = {
                 return { ...state, getPricelistsLevel: GetPricelistsLevel.fetching };
             },
         },
+    },
+    professionpricelist: {
+        create: {
+            receive: (state: IPriceListsState, action: ReturnType<typeof ReceiveCreateProfessionPricelist>) => {
+                if (action.payload.errors !== null) {
+                    return {
+                        ...state,
+                        createPricelistErrors: action.payload.errors,
+                        createPricelistLevel: MutatePricelistLevel.failure,
+                    };
+                }
+
+                const selectedList: IPricelist = {
+                    ...action.payload.data!.pricelist,
+                    pricelist_entries: action.payload.data!.entries,
+                };
+                const professionPricelist: IProfessionPricelist = {
+                    ...action.payload.data!.profession_pricelist,
+                    pricelist: selectedList,
+                };
+                const professionPricelists: IExpansionProfessionPricelistMap = (() => {
+                    const expansionName = state.selectedExpansion!.name;
+                    const result: IProfessionPricelist[] = (() => {
+                        if (!(expansionName in state.professionPricelists)) {
+                            return [professionPricelist];
+                        }
+
+                        return [...state.professionPricelists[expansionName], professionPricelist];
+                    })();
+
+                    return {
+                        ...state.professionPricelists,
+                        [expansionName]: result,
+                    };
+                })();
+
+                return {
+                    ...state,
+                    createPricelistErrors: {},
+                    createPricelistLevel: MutatePricelistLevel.success,
+                    isAddListDialogOpen: false,
+                    professionPricelists,
+                    selectedList,
+                };
+            },
+            request: (state: IPriceListsState) => {
+                return { ...state, createPricelistLevel: MutatePricelistLevel.fetching };
+            },
+        },
+        delete: {},
+        update: {},
     },
 };
 

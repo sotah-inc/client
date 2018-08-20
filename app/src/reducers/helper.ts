@@ -1,11 +1,9 @@
-import { ICreateProfessionPricelistResponse } from "@app/api/price-lists";
 import { ExpansionName, IExpansion, IProfessionPricelist } from "@app/types/global";
 import {
     DeletePricelistLevel,
     IExpansionProfessionPricelistMap,
     IPricelist,
     IPriceListsState,
-    MutatePricelistLevel,
 } from "@app/types/price-lists";
 
 export const getPricelistIndex = (pricelists: IPricelist[], id: number): number => {
@@ -42,35 +40,6 @@ export const getFirstExpansionPricelist = (
     }
 
     return pricelistMap[expansion.name][0].pricelist!;
-};
-
-export const handleCreateProfessionPricelistSuccess = (
-    state: IPriceListsState,
-    payload: ICreateProfessionPricelistResponse,
-): IPriceListsState => {
-    const { selectedExpansion } = state;
-
-    const professionPricelist = {
-        ...payload.data!.profession_pricelist,
-        pricelist: { ...payload.data!.pricelist, pricelist_entries: payload.data!.entries },
-    };
-
-    const professionPricelists = { ...state.professionPricelists };
-    if (selectedExpansion !== null) {
-        if (selectedExpansion.name in professionPricelists) {
-            professionPricelists[selectedExpansion.name].push(professionPricelist);
-        } else {
-            professionPricelists[selectedExpansion.name] = [professionPricelist];
-        }
-    }
-
-    return {
-        ...state,
-        createPricelistErrors: {},
-        createPricelistLevel: MutatePricelistLevel.success,
-        isAddListDialogOpen: false,
-        professionPricelists,
-    };
 };
 
 export const getProfessionPricelist = (state: IPriceListsState, pricelist: IPricelist): IProfessionPricelist | null => {

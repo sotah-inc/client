@@ -114,11 +114,11 @@ export const ChangeIsAddEntryDialogOpen = (payload: boolean) => createAction(CHA
 export const APPEND_ITEMS = "APPEND_ITEMS";
 export const AppendItems = (payload: ItemsMap) => createAction(APPEND_ITEMS, payload);
 
-export const REQUEST_CREATE_PROFESSION_PRICELIST = "REQUEST_CREATE_PROFESSION_PRICELIST";
-export const RequestCreateProfessionPricelist = () => createAction(REQUEST_CREATE_PROFESSION_PRICELIST);
-export const RECEIVE_CREATE_PROFESSION_PRICELIST = "RECEIVE_CREATE_PROFESSION_PRICELIST";
+export const REQUEST_CREATE_PROFESSIONPRICELIST = "REQUEST_CREATE_PROFESSIONPRICELIST";
+export const RequestCreateProfessionPricelist = () => createAction(REQUEST_CREATE_PROFESSIONPRICELIST);
+export const RECEIVE_CREATE_PROFESSIONPRICELIST = "RECEIVE_CREATE_PROFESSIONPRICELIST";
 export const ReceiveCreateProfessionPricelist = (payload: ICreateProfessionPricelistResponse) =>
-    createAction(RECEIVE_CREATE_PROFESSION_PRICELIST, payload);
+    createAction(RECEIVE_CREATE_PROFESSIONPRICELIST, payload);
 type FetchCreateProfessionPricelistType = ReturnType<
     typeof RequestCreateProfessionPricelist | typeof ReceiveCreatePricelist
 >;

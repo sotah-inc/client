@@ -9,10 +9,8 @@ import {
     CHANGE_SELECTED_LIST,
     CHANGE_SELECTED_PROFESSION,
     PriceListsActions,
-    RECEIVE_CREATE_PROFESSION_PRICELIST,
     RECEIVE_DELETE_PROFESSION_PRICELIST,
     RECEIVE_PROFESSION_PRICELISTS,
-    REQUEST_CREATE_PROFESSION_PRICELIST,
     REQUEST_DELETE_PROFESSION_PRICELIST,
     REQUEST_PROFESSION_PRICELISTS,
 } from "@app/actions/price-lists";
@@ -23,13 +21,11 @@ import {
     GetProfessionPricelistsLevel,
     IPricelist,
     IPriceListsState,
-    MutatePricelistLevel,
 } from "@app/types/price-lists";
 import { runners } from "./handlers";
 import {
     formatProfessionPricelists,
     getFirstExpansionPricelist,
-    handleCreateProfessionPricelistSuccess,
     handleDeleteProfessionPricelistSuccess,
 } from "./helper";
 
@@ -41,18 +37,6 @@ export const priceLists = (state: State, action: PriceListsActions): State => {
     }
 
     switch (action.type) {
-        case REQUEST_CREATE_PROFESSION_PRICELIST:
-            return { ...state, createPricelistLevel: MutatePricelistLevel.fetching };
-        case RECEIVE_CREATE_PROFESSION_PRICELIST:
-            if (action.payload.errors !== null) {
-                return {
-                    ...state,
-                    createPricelistErrors: action.payload.errors,
-                    createPricelistLevel: MutatePricelistLevel.failure,
-                };
-            }
-
-            return handleCreateProfessionPricelistSuccess(state, action.payload);
         case REQUEST_DELETE_PROFESSION_PRICELIST:
             return { ...state, deletePricelistLevel: DeletePricelistLevel.fetching };
         case RECEIVE_DELETE_PROFESSION_PRICELIST:
