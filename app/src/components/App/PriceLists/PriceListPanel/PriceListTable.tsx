@@ -7,7 +7,7 @@ import { Currency } from "@app/components/util";
 import { ItemPopoverContainer } from "@app/containers/util/ItemPopover";
 import { IRealm, IRegion, ItemId, ItemsMap } from "@app/types/global";
 import { GetPriceListLevel, IPricelist, IPricelistEntry } from "@app/types/price-lists";
-import { didRealmChange, didRegionChange } from "@app/util";
+import { didRealmChange, didRegionChange, qualityToColorClass } from "@app/util";
 
 export interface IStateProps {
     items: ItemsMap;
@@ -121,7 +121,7 @@ export class PriceListTable extends React.Component<Props, State> {
 
         return (
             <tr key={index}>
-                <td>
+                <td className={qualityToColorClass(item.quality)}>
                     <ItemPopoverContainer
                         item={item}
                         itemTextFormatter={itemText => `${itemText} \u00D7${quantity_modifier}`}
