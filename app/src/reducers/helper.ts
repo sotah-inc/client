@@ -23,20 +23,6 @@ export const getProfessionPricelistIndex = (professionPricelists: IProfessionPri
     return -1;
 };
 
-export const formatProfessionPricelists = (
-    professionPricelists: IProfessionPricelist[],
-): IExpansionProfessionPricelistMap => {
-    return professionPricelists.reduce((result: IExpansionProfessionPricelistMap, v: IProfessionPricelist) => {
-        if (!(v.expansion in result)) {
-            result[v.expansion] = [];
-        }
-
-        result[v.expansion].push(v);
-
-        return result;
-    }, {});
-};
-
 export const getFirstExpansionPricelist = (
     expansion: IExpansion,
     pricelistMap: IExpansionProfessionPricelistMap,

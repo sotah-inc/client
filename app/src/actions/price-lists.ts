@@ -144,18 +144,18 @@ export const FetchDeleteProfessionPricelist = (opts: IDeleteProfessionPricelistR
     };
 };
 
-export const REQUEST_PROFESSION_PRICELISTS = "GET_PROFESSION_PRICELISTS";
-export const RequestProfessionPricelists = () => createAction(REQUEST_PROFESSION_PRICELISTS);
-export const RECEIVE_PROFESSION_PRICELISTS = "RECEIVE_PROFESSION_PRICELISTS";
-export const ReceiveProfessionPricelists = (payload: IGetProfessionPricelistsResponse) =>
-    createAction(RECEIVE_PROFESSION_PRICELISTS, payload);
+export const REQUEST_GET_PROFESSIONPRICELISTS = "REQUEST_GET_PROFESSIONPRICELISTS";
+export const RequestGetProfessionPricelists = () => createAction(REQUEST_GET_PROFESSIONPRICELISTS);
+export const RECEIVE_GET_PROFESSIONPRICELISTS = "RECEIVE_GET_PROFESSIONPRICELISTS";
+export const ReceiveGetProfessionPricelists = (payload: IGetProfessionPricelistsResponse) =>
+    createAction(RECEIVE_GET_PROFESSIONPRICELISTS, payload);
 type FetchProfessionPricelistsType = ReturnType<
-    typeof RequestProfessionPricelists | typeof ReceiveDeleteProfessionPricelist
+    typeof RequestGetProfessionPricelists | typeof ReceiveDeleteProfessionPricelist
 >;
-export const FetchProfessionPricelists = (opts: IGetProfessionPricelistsRequestOptions) => {
+export const FetchGetProfessionPricelists = (opts: IGetProfessionPricelistsRequestOptions) => {
     return async (dispatch: Dispatch<FetchProfessionPricelistsType>) => {
-        dispatch(RequestProfessionPricelists());
-        dispatch(ReceiveProfessionPricelists(await getProfessionPricelists(opts)));
+        dispatch(RequestGetProfessionPricelists());
+        dispatch(ReceiveGetProfessionPricelists(await getProfessionPricelists(opts)));
     };
 };
 
@@ -174,14 +174,14 @@ export const PriceListsActions = {
     ReceiveDeletePricelist,
     ReceiveDeleteProfessionPricelist,
     ReceiveGetPricelists,
-    ReceiveProfessionPricelists,
+    ReceiveGetProfessionPricelists,
     ReceiveUpdatePricelist,
     RequestCreatePricelist,
     RequestCreateProfessionPricelist,
     RequestDeletePricelist,
     RequestDeleteProfessionPricelist,
     RequestGetPricelists,
-    RequestProfessionPricelists,
+    RequestGetProfessionPricelists,
     RequestUpdatePricelist,
 };
 

@@ -5,6 +5,7 @@ import {
     ReceiveDeletePricelist,
     ReceiveDeleteProfessionPricelist,
     ReceiveGetPricelists,
+    ReceiveGetProfessionPricelists,
     ReceiveUpdatePricelist,
 } from "@app/actions/price-lists";
 import { getPricelistIndex, getProfessionPricelistIndex } from "@app/reducers/helper";
@@ -12,6 +13,7 @@ import { IProfessionPricelist, ItemsMap } from "@app/types/global";
 import {
     DeletePricelistLevel,
     GetPricelistsLevel,
+    GetProfessionPricelistsLevel,
     IExpansionProfessionPricelistMap,
     IPricelist,
     IPriceListsState,
@@ -244,6 +246,41 @@ const handlers: IKindHandlers<IPriceListsState, PriceListsActions> = {
             },
         },
         update: {},
+    },
+    professionpricelists: {
+        get: {
+            receive: (state: IPriceListsState) => {
+                return {
+                    ...state,
+                    getProfessionPricelistsLevel: GetProfessionPricelistsLevel.fetching,
+                    professionPricelists: {},
+                };
+            },
+            request: (state: IPriceListsState, action: ReturnType<typeof ReceiveGetProfessionPricelists>) => {
+                if (action.payload.errors !== null) {
+                    return { ...state, getProfessionPricelistsLevel: GetProfessionPricelistsLevel.failure };
+                }
+
+                const professionPricelists: IExpansionProfessionPricelistMap = action.payload.data!.profession_pricelists.reduce(
+                    (result: IExpansionProfessionPricelistMap, v: IProfessionPricelist) => {
+                        if (!(v.expansion in result)) {
+                            result[v.expansion] = [];
+                        }
+                        result[v.expansion].push(v);
+
+                        return result;
+                    },
+                    {},
+                );
+
+                return {
+                    ...state,
+                    getProfessionPricelistsLevel: GetProfessionPricelistsLevel.success,
+                    items: { ...state.items, ...action.payload.data!.items },
+                    professionPricelists,
+                };
+            },
+        },
     },
 };
 

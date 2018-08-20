@@ -9,18 +9,11 @@ import {
     CHANGE_SELECTED_LIST,
     CHANGE_SELECTED_PROFESSION,
     PriceListsActions,
-    RECEIVE_PROFESSION_PRICELISTS,
-    REQUEST_PROFESSION_PRICELISTS,
 } from "@app/actions/price-lists";
 import { Item } from "@app/types/global";
-import {
-    defaultPriceListsState,
-    GetProfessionPricelistsLevel,
-    IPricelist,
-    IPriceListsState,
-} from "@app/types/price-lists";
+import { defaultPriceListsState, IPricelist, IPriceListsState } from "@app/types/price-lists";
 import { runners } from "./handlers";
-import { formatProfessionPricelists, getFirstExpansionPricelist } from "./helper";
+import { getFirstExpansionPricelist } from "./helper";
 
 type State = Readonly<IPriceListsState> | undefined;
 
@@ -67,23 +60,6 @@ export const priceLists = (state: State, action: PriceListsActions): State => {
             }
 
             return { ...state, items: appendingItems };
-        case REQUEST_PROFESSION_PRICELISTS:
-            return {
-                ...state,
-                getProfessionPricelistsLevel: GetProfessionPricelistsLevel.fetching,
-                professionPricelists: {},
-            };
-        case RECEIVE_PROFESSION_PRICELISTS:
-            if (action.payload.errors !== null) {
-                return { ...state, getProfessionPricelistsLevel: GetProfessionPricelistsLevel.failure };
-            }
-
-            return {
-                ...state,
-                getProfessionPricelistsLevel: GetProfessionPricelistsLevel.success,
-                items: { ...state.items, ...action.payload.data!.items },
-                professionPricelists: formatProfessionPricelists(action.payload.data!.profession_pricelists),
-            };
         case CHANGE_SELECTED_EXPANSION:
             let expansionSelectedList: IPricelist | null = null;
             if (action.payload.jumpTo) {
