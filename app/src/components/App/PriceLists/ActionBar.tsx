@@ -1,10 +1,21 @@
 import * as React from "react";
 
-import { Alignment, Button, ButtonGroup, Classes, Intent, Navbar, NavbarGroup, Spinner } from "@blueprintjs/core";
+import {
+    Alignment,
+    Button,
+    ButtonGroup,
+    Classes,
+    Intent,
+    Navbar,
+    NavbarGroup,
+    Position,
+    Spinner,
+    Tooltip,
+} from "@blueprintjs/core";
 
 import { RealmToggleContainer } from "@app/containers/util/RealmToggle";
 import { RegionToggleContainer } from "@app/containers/util/RegionToggle";
-import { IProfession, IRealm, IRegion } from "@app/types/global";
+import { IProfession, IProfile, IRealm, IRegion } from "@app/types/global";
 import { AuthLevel } from "@app/types/main";
 import { IPricelist } from "@app/types/price-lists";
 
@@ -16,6 +27,7 @@ export interface IStateProps {
     selectedList: IPricelist | null;
     selectedProfession: IProfession | null;
     authLevel: AuthLevel;
+    profile: IProfile | null;
 }
 
 export interface IDispatchProps {
@@ -49,9 +61,14 @@ export class ActionBar extends React.Component<Props> {
             changeIsAddEntryDialogOpen,
             changeIsDeleteListDialogOpen,
             changeIsEditListDialogOpen,
+            selectedProfession,
+            profile,
         } = this.props;
 
-        const canMutateEntry = authLevel === AuthLevel.authenticated && selectedList !== null;
+        let canMutateEntry = authLevel === AuthLevel.authenticated && selectedList !== null;
+        if (selectedProfession !== null && profile !== null && profile.user.id !== 1) {
+            canMutateEntry = false;
+        }
 
         return (
             <>
@@ -76,26 +93,39 @@ export class ActionBar extends React.Component<Props> {
         );
     }
 
-    private renderButtons() {
-        const { currentRegion, currentRealm, changeIsAddListDialogOpen, selectedProfession, authLevel } = this.props;
-
-        if (currentRegion === null || currentRealm === null) {
-            return <Spinner className={Classes.SMALL} intent={Intent.PRIMARY} />;
-        }
+    private renderAddListButton() {
+        const { changeIsAddListDialogOpen, selectedProfession, authLevel, profile } = this.props;
 
         let createListText = "List";
         if (selectedProfession !== null) {
             createListText = `${selectedProfession.label} List`;
         }
 
+        if (authLevel === AuthLevel.unauthenticated || profile === null) {
+            return <Button icon="plus" text={createListText} disabled={true} />;
+        }
+
+        if (selectedProfession !== null && profile.user.id !== 1) {
+            return (
+                <Tooltip content="You are not authorized to manage profession pricelists!" position={Position.RIGHT}>
+                    <Button icon="plus" text={createListText} disabled={true} />
+                </Tooltip>
+            );
+        }
+
+        return <Button icon="plus" onClick={() => changeIsAddListDialogOpen(true)} text={createListText} />;
+    }
+
+    private renderButtons() {
+        const { currentRegion, currentRealm } = this.props;
+
+        if (currentRegion === null || currentRealm === null) {
+            return <Spinner className={Classes.SMALL} intent={Intent.PRIMARY} />;
+        }
+
         return (
             <>
-                <Button
-                    icon="plus"
-                    onClick={() => changeIsAddListDialogOpen(true)}
-                    text={createListText}
-                    disabled={authLevel !== AuthLevel.authenticated}
-                />
+                {this.renderAddListButton()}
                 {this.renderListButtons()}
             </>
         );
