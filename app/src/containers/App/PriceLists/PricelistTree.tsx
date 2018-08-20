@@ -6,6 +6,7 @@ import {
     ChangeSelectedList,
     ChangeSelectedProfession,
     FetchGetProfessionPricelists,
+    ResetProfessionsSelections,
 } from "@app/actions/price-lists";
 import { IGetProfessionPricelistsRequestOptions } from "@app/api/price-lists";
 import { IDispatchProps, IStateProps, PricelistTree } from "@app/components/App/PriceLists/PricelistTree";
@@ -45,6 +46,7 @@ const mapDispatchToProps = (dispatch: Dispatch<Actions>): IDispatchProps => {
         changeSelectedProfession: (profession: IProfession) => dispatch(ChangeSelectedProfession(profession)),
         refreshProfessionPricelists: (opts: IGetProfessionPricelistsRequestOptions) =>
             dispatch(FetchGetProfessionPricelists(opts)),
+        resetProfessionsSelections: () => dispatch(ResetProfessionsSelections()),
     };
 };
 

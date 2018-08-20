@@ -9,6 +9,7 @@ import {
     CHANGE_SELECTED_LIST,
     CHANGE_SELECTED_PROFESSION,
     PriceListsActions,
+    RESET_PROFESSIONS_SELECTIONS,
 } from "@app/actions/price-lists";
 import { Item } from "@app/types/global";
 import { defaultPriceListsState, IPricelist, IPriceListsState } from "@app/types/price-lists";
@@ -75,6 +76,8 @@ export const priceLists = (state: State, action: PriceListsActions): State => {
                 selectedExpansion: action.payload.expansion,
                 selectedList: expansionSelectedList,
             };
+        case RESET_PROFESSIONS_SELECTIONS:
+            return { ...state, selectedProfession: null, selectedExpansion: null, selectedList: null };
         default:
             return runners.pricelist(state, action);
     }

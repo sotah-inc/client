@@ -33,6 +33,7 @@ export interface IDispatchProps {
     changeSelectedProfession: (profession: IProfession) => void;
     refreshProfessionPricelists: (opts: IGetProfessionPricelistsRequestOptions) => void;
     changeSelectedExpansion: (v: ISelectExpansionPayload) => void;
+    resetProfessionsSelections: () => void;
 }
 
 export type Props = Readonly<IStateProps & IDispatchProps>;
@@ -295,7 +296,13 @@ export class PricelistTree extends React.Component<Props, IState> {
     }
 
     private onProfessionNodeClick(id: string) {
-        const { professions, changeSelectedProfession, refreshProfessionPricelists } = this.props;
+        const {
+            professions,
+            changeSelectedProfession,
+            refreshProfessionPricelists,
+            selectedProfession,
+            resetProfessionsSelections,
+        } = this.props;
 
         const profession = professions.reduce((result, v) => {
             if (result !== null) {
@@ -309,7 +316,9 @@ export class PricelistTree extends React.Component<Props, IState> {
             return null;
         }, null);
 
-        if (profession === null) {
+        if (profession === null || (selectedProfession !== null && profession.name === selectedProfession.name)) {
+            resetProfessionsSelections();
+
             return;
         }
 

@@ -159,6 +159,9 @@ export const FetchGetProfessionPricelists = (opts: IGetProfessionPricelistsReque
     };
 };
 
+export const RESET_PROFESSIONS_SELECTIONS = "RESET_PROFESSIONS_SELECTIONS";
+export const ResetProfessionsSelections = () => createAction(RESET_PROFESSIONS_SELECTIONS);
+
 export const PriceListsActions = {
     AppendItems,
     ChangeEntryCreateLevel,
@@ -183,6 +186,7 @@ export const PriceListsActions = {
     RequestGetPricelists,
     RequestGetProfessionPricelists,
     RequestUpdatePricelist,
+    ResetProfessionsSelections,
 };
 
 export type PriceListsActions = ActionsUnion<typeof PriceListsActions>;
