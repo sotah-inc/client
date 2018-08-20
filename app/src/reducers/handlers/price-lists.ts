@@ -97,27 +97,59 @@ const handlers: IKindHandlers<IPriceListsState, PriceListsActions> = {
                     };
                 }
 
-                const replacedIndex = getPricelistIndex(state.pricelists, action.payload.response.data!.pricelist.id);
                 const selectedList: IPricelist = {
                     ...action.payload.response.data!.pricelist,
                     pricelist_entries: action.payload.response.data!.entries,
                 };
-                const pricelists: IPricelist[] = (() => {
-                    if (replacedIndex === 0) {
-                        return [selectedList, ...state.pricelists.slice(1)];
-                    }
 
-                    return [
-                        ...state.pricelists.slice(0, replacedIndex),
+                let replacedIndex = getPricelistIndex(state.pricelists, selectedList.id);
+                if (replacedIndex !== -1) {
+                    const pricelists: IPricelist[] = (() => {
+                        if (replacedIndex === 0) {
+                            return [selectedList, ...state.pricelists.slice(1)];
+                        }
+
+                        return [
+                            ...state.pricelists.slice(0, replacedIndex),
+                            selectedList,
+                            ...state.pricelists.slice(replacedIndex + 1),
+                        ];
+                    })();
+
+                    return {
+                        ...state,
+                        ...action.payload.meta,
+                        pricelists,
                         selectedList,
-                        ...state.pricelists.slice(replacedIndex + 1),
-                    ];
+                        updatePricelistErrors: {},
+                        updatePricelistLevel: MutatePricelistLevel.success,
+                    };
+                }
+
+                const professionPricelists: IExpansionProfessionPricelistMap = (() => {
+                    const expansionName = state.selectedExpansion!.name;
+                    const prevResult = state.professionPricelists[expansionName];
+                    replacedIndex = getProfessionPricelistIndex(prevResult, selectedList.id);
+
+                    const professionPricelist: IProfessionPricelist = {
+                        ...prevResult[replacedIndex],
+                        pricelist: selectedList,
+                    };
+
+                    return {
+                        ...state.professionPricelists,
+                        [expansionName]: [
+                            ...prevResult.slice(0, replacedIndex),
+                            professionPricelist,
+                            ...prevResult.slice(replacedIndex + 1),
+                        ],
+                    };
                 })();
 
                 return {
                     ...state,
                     ...action.payload.meta,
-                    pricelists,
+                    professionPricelists,
                     selectedList,
                     updatePricelistErrors: {},
                     updatePricelistLevel: MutatePricelistLevel.success,
