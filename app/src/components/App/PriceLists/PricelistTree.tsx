@@ -5,7 +5,7 @@ import { Classes, Intent, ITreeNode, NonIdealState, Spinner, Tree } from "@bluep
 import { IGetPricelistsOptions, IGetProfessionPricelistsRequestOptions } from "@app/api/price-lists";
 import { LastModified } from "@app/components/util";
 import { PriceListPanelContainer } from "@app/containers/App/PriceLists/PriceListPanel";
-import { IExpansion, IProfession, IProfile, IRealm, IRegion } from "@app/types/global";
+import { IExpansion, IProfession, IProfile, IRealm, IRegion, ItemsMap } from "@app/types/global";
 import { AuthLevel, FetchUserPreferencesLevel } from "@app/types/main";
 import {
     GetProfessionPricelistsLevel,
@@ -13,7 +13,7 @@ import {
     IPricelist,
     ISelectExpansionPayload,
 } from "@app/types/price-lists";
-import { didRealmChange } from "@app/util";
+import { didRealmChange, getItemIconUrl } from "@app/util";
 
 export interface IStateProps {
     pricelists: IPricelist[];
@@ -29,6 +29,7 @@ export interface IStateProps {
     authLevel: AuthLevel;
     fetchUserPreferencesLevel: FetchUserPreferencesLevel;
     profile: IProfile | null;
+    items: ItemsMap;
 }
 
 export interface IDispatchProps {
@@ -131,7 +132,7 @@ export class PricelistTree extends React.Component<Props, IState> {
         return (
             <div style={{ marginTop: "10px" }}>
                 <div className="pure-g">
-                    <div className="pure-u-1-4">
+                    <div className="pure-u-1-4 pricelist-tree">
                         <Tree contents={nodes} className={Classes.ELEVATION_0} onNodeClick={v => this.onNodeClick(v)} />
                     </div>
                     <div className="pure-u-3-4">
@@ -148,11 +149,21 @@ export class PricelistTree extends React.Component<Props, IState> {
         return professions.map(v => this.getProfessionNode(v));
     }
 
+    private renderProfessionIcon(v: IProfession) {
+        if (v.icon_url.length === 0) {
+            return;
+        }
+
+        return <img src={v.icon_url} className="item-icon" />;
+    }
+
     private getProfessionNode(v: IProfession) {
         const { selectedProfession, getProfessionPricelistsLevel } = this.props;
 
         const isSelected = selectedProfession !== null && selectedProfession.name === v.name;
         const result: ITreeNode = {
+            className: "profession-node",
+            icon: this.renderProfessionIcon(v),
             id: `profession-${v.name}`,
             isSelected,
             label: v.label,
@@ -213,6 +224,7 @@ export class PricelistTree extends React.Component<Props, IState> {
             const isSelected = selectedExpansion !== null && selectedExpansion.name === v.name;
             const result: ITreeNode = {
                 childNodes: this.getProfessionPricelistNodes(v),
+                className: "expansion-node",
                 hasCaret: false,
                 id: `expansion-${v.name}`,
                 isExpanded: true,
@@ -249,10 +261,36 @@ export class PricelistTree extends React.Component<Props, IState> {
         return result.map(v => this.getPricelistNode(v.pricelist!));
     }
 
+    private renderPricelistIcon(v: IPricelist) {
+        const { items } = this.props;
+
+        if (!v.pricelist_entries) {
+            return;
+        }
+
+        if (v.pricelist_entries.length === 0) {
+            return;
+        }
+
+        const itemId = v.pricelist_entries[0].item_id;
+        if (!(itemId in items)) {
+            return;
+        }
+
+        const itemIconUrl = getItemIconUrl(items[itemId]);
+        if (itemIconUrl === null) {
+            return;
+        }
+
+        return <img src={itemIconUrl} className="item-icon" />;
+    }
+
     private getPricelistNode(v: IPricelist) {
         const { selectedList } = this.props;
 
         const result: ITreeNode = {
+            className: "pricelist-node",
+            icon: this.renderPricelistIcon(v),
             id: `pricelist-${v.id}`,
             isSelected: selectedList !== null && selectedList.id === v.id,
             label: v.name,

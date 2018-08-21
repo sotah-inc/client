@@ -102,3 +102,18 @@ body.bp3-dark,
         margin-bottom: -5px;
     }
 }
+
+.pricelist-tree {
+    .item-icon {
+        width: 20px;
+        height: 20px;
+        border-radius: 3px;
+        margin-right: 5px;
+    }
+
+    .profession-node > .bp3-tree-node-content > .bp3-tree-node-caret-none,
+    .expansion-node > .bp3-tree-node-content > .bp3-tree-node-caret-none,
+    .pricelist-node > .bp3-tree-node-content > .bp3-tree-node-caret-none {
+        min-width: 10px;
+    }
+}
