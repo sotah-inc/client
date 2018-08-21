@@ -229,7 +229,7 @@ export class PricelistTree extends React.Component<Props, IState> {
                 id: `expansion-${v.name}`,
                 isExpanded: true,
                 isSelected,
-                label: v.label,
+                label: <span style={{ color: v.label_color }}>{v.label}</span>,
             };
 
             return result;
