@@ -157,15 +157,14 @@ export class PriceListTable extends React.Component<Props, State> {
         const { pricelistMap } = this.state;
 
         const entries = [...list.pricelist_entries!].sort((a, b) => {
-            if (!(a.item_id in pricelistMap) || !(b.item_id in pricelistMap)) {
-                return 0;
+            let aResult = 0;
+            if (a.item_id in pricelistMap) {
+                aResult = pricelistMap[a.item_id].buyout * a.quantity_modifier;
             }
 
-            const aResult = pricelistMap[a.item_id].buyout * a.quantity_modifier;
-            const bResult = pricelistMap[b.item_id].buyout * b.quantity_modifier;
-
-            if (aResult === bResult) {
-                return 0;
+            let bResult = 0;
+            if (b.item_id in pricelistMap) {
+                bResult = pricelistMap[b.item_id].buyout * b.quantity_modifier;
             }
 
             return aResult > bResult ? -1 : 1;
