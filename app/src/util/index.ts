@@ -19,6 +19,10 @@ export const qualityToColorClass = (quality: ItemQuality): string => {
 };
 
 export const getItemIconUrl = (item: Item): string | null => {
+    if (item.icon_url !== "") {
+        return item.icon_url;
+    }
+
     if (item.icon === "") {
         return null;
     }

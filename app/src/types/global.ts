@@ -176,6 +176,7 @@ export interface Item {
     weaponInfo: ItemWeaponInfo;
     bonusStats: ItemBonusStat[];
     description: string;
+    icon_url: string;
 }
 
 export interface ItemsMap {
