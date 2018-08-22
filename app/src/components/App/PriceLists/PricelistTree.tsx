@@ -5,6 +5,7 @@ import { Classes, Intent, ITreeNode, NonIdealState, Spinner, Tree } from "@bluep
 import { IGetPricelistsOptions, IGetProfessionPricelistsRequestOptions } from "@app/api/price-lists";
 import { LastModified } from "@app/components/util";
 import { PriceListPanelContainer } from "@app/containers/App/PriceLists/PriceListPanel";
+import { PricelistIconContainer } from "@app/containers/util/PricelistIcon";
 import { IExpansion, IProfession, IProfile, IRealm, IRegion, ItemsMap } from "@app/types/global";
 import { AuthLevel, FetchUserPreferencesLevel } from "@app/types/main";
 import {
@@ -13,7 +14,6 @@ import {
     IPricelist,
     ISelectExpansionPayload,
 } from "@app/types/price-lists";
-import { getItemIconUrl } from "@app/util";
 
 export interface IStateProps {
     pricelists: IPricelist[];
@@ -269,36 +269,12 @@ export class PricelistTree extends React.Component<Props, IState> {
         return nodes;
     }
 
-    private renderPricelistIcon(v: IPricelist) {
-        const { items } = this.props;
-
-        if (!v.pricelist_entries) {
-            return;
-        }
-
-        if (v.pricelist_entries.length === 0) {
-            return;
-        }
-
-        const itemId = v.pricelist_entries[0].item_id;
-        if (!(itemId in items)) {
-            return;
-        }
-
-        const itemIconUrl = getItemIconUrl(items[itemId]);
-        if (itemIconUrl === null) {
-            return;
-        }
-
-        return <img src={itemIconUrl} className="item-icon" />;
-    }
-
     private getPricelistNode(v: IPricelist) {
         const { selectedList } = this.props;
 
         const result: ITreeNode = {
             className: "pricelist-node",
-            icon: this.renderPricelistIcon(v),
+            icon: <PricelistIconContainer pricelist={v} />,
             id: `pricelist-${v.id}`,
             isSelected: selectedList !== null && selectedList.id === v.id,
             label: v.name,

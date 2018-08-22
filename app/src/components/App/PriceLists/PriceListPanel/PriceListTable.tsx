@@ -1,10 +1,11 @@
 import * as React from "react";
 
-import { Classes, HTMLTable, Intent, NonIdealState, Spinner } from "@blueprintjs/core";
+import { Classes, H2, HTMLTable, Intent, NonIdealState, Spinner } from "@blueprintjs/core";
 
 import { getPriceList, IPriceListMap } from "@app/api/data";
 import { Currency } from "@app/components/util";
 import { ItemPopoverContainer } from "@app/containers/util/ItemPopover";
+import { PricelistIconContainer } from "@app/containers/util/PricelistIcon";
 import { IRealm, IRegion, ItemId, ItemsMap } from "@app/types/global";
 import { GetPriceListLevel, IPricelist, IPricelistEntry } from "@app/types/price-lists";
 import { didRealmChange, didRegionChange, qualityToColorClass } from "@app/util";
@@ -183,18 +184,24 @@ export class PriceListTable extends React.Component<Props, State> {
         });
 
         return (
-            <HTMLTable
-                className={`${Classes.HTML_TABLE} ${Classes.HTML_TABLE_BORDERED} ${Classes.SMALL} price-list-table`}
-            >
-                <thead>
-                    <tr>
-                        <th>Item</th>
-                        <th>Bid</th>
-                        <th>Buyout</th>
-                    </tr>
-                </thead>
-                <tbody>{entries.map((v, i) => this.renderEntry(i, v))}</tbody>
-            </HTMLTable>
+            <>
+                <H2 className="pricelist-table-heading">
+                    <PricelistIconContainer pricelist={list} />
+                    {list.name}
+                </H2>
+                <HTMLTable
+                    className={`${Classes.HTML_TABLE} ${Classes.HTML_TABLE_BORDERED} ${Classes.SMALL} price-list-table`}
+                >
+                    <thead>
+                        <tr>
+                            <th>Item</th>
+                            <th>Bid</th>
+                            <th>Buyout</th>
+                        </tr>
+                    </thead>
+                    <tbody>{entries.map((v, i) => this.renderEntry(i, v))}</tbody>
+                </HTMLTable>
+            </>
         );
     }
 }
