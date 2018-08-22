@@ -1,10 +1,9 @@
 import * as React from "react";
 
-import { Classes, Intent, ITreeNode, NonIdealState, Spinner, Tree } from "@blueprintjs/core";
+import { Classes, Intent, ITreeNode, Spinner, Tree } from "@blueprintjs/core";
 
 import { IGetPricelistsOptions, IGetProfessionPricelistsRequestOptions } from "@app/api/price-lists";
-import { LastModified } from "@app/components/util";
-import { PricelistPanelContainer } from "@app/containers/App/PriceLists/PricelistTree/PricelistPanel";
+import { TreeContentContainer } from "@app/containers/App/PriceLists/PricelistTree/TreeContent";
 import { PricelistIconContainer } from "@app/containers/util/PricelistIcon";
 import { IExpansion, IProfession, IProfile, IRealm, IRegion, ItemsMap } from "@app/types/global";
 import { AuthLevel, FetchUserPreferencesLevel } from "@app/types/main";
@@ -102,7 +101,7 @@ export class PricelistTree extends React.Component<Props, IState> {
     }
 
     public render() {
-        const { selectedList, authLevel } = this.props;
+        const { authLevel } = this.props;
         const { topOpenMap } = this.state;
 
         const nodes: ITreeNode[] = [];
@@ -136,7 +135,9 @@ export class PricelistTree extends React.Component<Props, IState> {
                         <Tree contents={nodes} className={Classes.ELEVATION_0} onNodeClick={v => this.onNodeClick(v)} />
                     </div>
                     <div className="pure-u-3-4">
-                        <div style={{ paddingLeft: "10px" }}>{this.renderTreeContent(selectedList)}</div>
+                        <div style={{ paddingLeft: "10px" }}>
+                            <TreeContentContainer />
+                        </div>
                     </div>
                 </div>
             </div>
@@ -428,46 +429,5 @@ export class PricelistTree extends React.Component<Props, IState> {
         }
 
         nodeClickMap[kind](id);
-    }
-
-    private renderLastModified() {
-        const { currentRealm } = this.props;
-
-        if (currentRealm === null) {
-            return;
-        }
-
-        return <LastModified targetDate={new Date(currentRealm.last_modified * 1000)} />;
-    }
-
-    private renderTreeContent(list: IPricelist | null) {
-        const { authLevel } = this.props;
-
-        if (list === null) {
-            if (authLevel === AuthLevel.unauthenticated) {
-                return (
-                    <NonIdealState
-                        title="Pricelists"
-                        icon="list"
-                        description="Please select a profession to view pricelists."
-                    />
-                );
-            }
-
-            return (
-                <NonIdealState
-                    title="Pricelists"
-                    icon="list"
-                    description="Please select a profession to view pricelists."
-                />
-            );
-        }
-
-        return (
-            <>
-                <PricelistPanelContainer list={list} />
-                {this.renderLastModified()}
-            </>
-        );
     }
 }
