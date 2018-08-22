@@ -87,7 +87,11 @@ export class PricelistTree extends React.Component<Props, IState> {
     public componentDidUpdate(prevProps: Props) {
         const { authLevel, fetchUserPreferencesLevel, refreshPricelists, profile, currentRealm } = this.props;
 
-        if (prevProps.currentRealm === null && currentRealm !== null) {
+        const shouldRefreshPricelists =
+            (prevProps.currentRealm === null && currentRealm !== null) ||
+            (prevProps.fetchUserPreferencesLevel === FetchUserPreferencesLevel.fetching &&
+                fetchUserPreferencesLevel === FetchUserPreferencesLevel.success);
+        if (shouldRefreshPricelists) {
             const hasFinishedLoading =
                 authLevel === AuthLevel.authenticated &&
                 fetchUserPreferencesLevel === FetchUserPreferencesLevel.success;
@@ -450,8 +454,18 @@ export class PricelistTree extends React.Component<Props, IState> {
         nodeClickMap[kind](id);
     }
 
+    private renderLastModified() {
+        const { currentRealm } = this.props;
+
+        if (currentRealm === null) {
+            return;
+        }
+
+        return <LastModified targetDate={new Date(currentRealm.last_modified * 1000)} />;
+    }
+
     private renderTreeContent(list: IPricelist | null) {
-        const { currentRealm, authLevel } = this.props;
+        const { authLevel } = this.props;
 
         if (list === null) {
             if (authLevel === AuthLevel.unauthenticated) {
@@ -476,7 +490,7 @@ export class PricelistTree extends React.Component<Props, IState> {
         return (
             <>
                 <PriceListPanelContainer list={list} />
-                <LastModified targetDate={new Date(currentRealm!.last_modified * 1000)} />
+                {this.renderLastModified()}
             </>
         );
     }

@@ -35,6 +35,11 @@ export class PriceListTable extends React.Component<Props, State> {
     };
 
     public async componentDidMount() {
+        const { region, realm } = this.props;
+        if (region === null || realm === null) {
+            return;
+        }
+
         await this.reloadPricelistData();
     }
 
