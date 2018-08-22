@@ -4,7 +4,7 @@ import { Classes, Intent, ITreeNode, NonIdealState, Spinner, Tree } from "@bluep
 
 import { IGetPricelistsOptions, IGetProfessionPricelistsRequestOptions } from "@app/api/price-lists";
 import { LastModified } from "@app/components/util";
-import { PriceListPanelContainer } from "@app/containers/App/PriceLists/PriceListPanel";
+import { PricelistPanelContainer } from "@app/containers/App/PriceLists/PricelistTree/PricelistPanel";
 import { PricelistIconContainer } from "@app/containers/util/PricelistIcon";
 import { IExpansion, IProfession, IProfile, IRealm, IRegion, ItemsMap } from "@app/types/global";
 import { AuthLevel, FetchUserPreferencesLevel } from "@app/types/main";
@@ -465,7 +465,7 @@ export class PricelistTree extends React.Component<Props, IState> {
 
         return (
             <>
-                <PriceListPanelContainer list={list} />
+                <PricelistPanelContainer list={list} />
                 {this.renderLastModified()}
             </>
         );

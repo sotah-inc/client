@@ -28,7 +28,7 @@ type State = Readonly<{
     itemsMap: ItemsMap;
 }>;
 
-export class PriceListTable extends React.Component<Props, State> {
+export class PricelistTable extends React.Component<Props, State> {
     public state: State = {
         getPriceListLevel: GetPriceListLevel.initial,
         itemsMap: {},

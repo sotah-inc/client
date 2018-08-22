@@ -2,7 +2,12 @@ import { connect, Dispatch } from "react-redux";
 
 import { Actions } from "@app/actions";
 import { ChangeIsAddEntryDialogOpen } from "@app/actions/price-lists";
-import { IDispatchProps, IOwnProps, IStateProps, PriceListPanel } from "@app/components/App/PriceLists/PriceListPanel";
+import {
+    IDispatchProps,
+    IOwnProps,
+    IStateProps,
+    PricelistPanel,
+} from "@app/components/App/PriceLists/PricelistTree/PricelistPanel";
 import { IStoreState } from "@app/types";
 
 const mapStateToProps = (state: IStoreState): IStateProps => {
@@ -17,7 +22,7 @@ const mapDispatchToProps = (dispatch: Dispatch<Actions>): IDispatchProps => {
     };
 };
 
-export const PriceListPanelContainer = connect<IStateProps, IDispatchProps, IOwnProps>(
+export const PricelistPanelContainer = connect<IStateProps, IDispatchProps, IOwnProps>(
     mapStateToProps,
     mapDispatchToProps,
-)(PriceListPanel);
+)(PricelistPanel);

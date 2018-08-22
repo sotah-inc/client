@@ -2,7 +2,7 @@ import * as React from "react";
 
 import { Button, Classes, NonIdealState } from "@blueprintjs/core";
 
-import { PriceListTableContainer } from "@app/containers/App/PriceLists/PriceListPanel/PriceListTable";
+import { PricelistTableContainer } from "@app/containers/App/PriceLists/PricelistTree/PricelistPanel/PricelistTable";
 import { IRealm, IRegion, Item } from "@app/types/global";
 import { IPricelist } from "@app/types/price-lists";
 
@@ -27,7 +27,7 @@ export interface IFormValues {
 
 export type Props = Readonly<IStateProps & IDispatchProps & IOwnProps>;
 
-export class PriceListPanel extends React.Component<Props> {
+export class PricelistPanel extends React.Component<Props> {
     public render() {
         const { list, currentRegion, currentRealm, changeIsAddEntryDialogOpen } = this.props;
 
@@ -49,6 +49,6 @@ export class PriceListPanel extends React.Component<Props> {
             );
         }
 
-        return <PriceListTableContainer list={list} region={currentRegion!} realm={currentRealm!} />;
+        return <PricelistTableContainer list={list} region={currentRegion!} realm={currentRealm!} />;
     }
 }
