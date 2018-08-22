@@ -91,8 +91,6 @@ export const updatePricelist = async (request: IUpdatePricelistRequest): Promise
 
 export interface IGetPricelistsOptions {
     token: string;
-    regionName: RegionName;
-    realmSlug: RealmSlug;
 }
 
 export interface IGetPricelistsResponse {
@@ -101,7 +99,7 @@ export interface IGetPricelistsResponse {
 }
 
 export const getPricelists = async (opts: IGetPricelistsOptions): Promise<IGetPricelistsResponse> => {
-    const res = await fetch(`${apiEndpoint}/user/pricelists/region/${opts.regionName}/realm/${opts.realmSlug}`, {
+    const res = await fetch(`${apiEndpoint}/user/pricelists`, {
         headers: new Headers({
             Authorization: `Bearer ${opts.token}`,
             "content-type": "application/json",

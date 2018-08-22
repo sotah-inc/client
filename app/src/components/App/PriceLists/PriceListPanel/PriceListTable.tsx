@@ -170,7 +170,7 @@ export class PriceListTable extends React.Component<Props, State> {
                 bResult = pricelistMap[b.item_id].buyout * b.quantity_modifier;
             }
 
-            if (aResult === bResult) {
+            if (aResult === bResult && aItem && bItem) {
                 return aItem.normalized_name > bItem.normalized_name ? 1 : -1;
             }
 

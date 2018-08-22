@@ -1,14 +1,5 @@
 import { IUpdatePricelistRequest, IUpdatePricelistResponse } from "@app/api/price-lists";
-import {
-    IErrors,
-    IExpansion,
-    IProfession,
-    IProfessionPricelist,
-    ItemId,
-    ItemsMap,
-    RealmSlug,
-    RegionName,
-} from "./global";
+import { IErrors, IExpansion, IProfession, IProfessionPricelist, ItemId, ItemsMap } from "./global";
 
 export interface IPriceListsState {
     pricelists: IPricelist[];
@@ -79,8 +70,6 @@ export interface IPricelist {
     id: number;
     user_id: number;
     name: string;
-    region: RegionName;
-    realm: RealmSlug;
     pricelist_entries?: IPricelistEntry[];
 }
 

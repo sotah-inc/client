@@ -91,11 +91,7 @@ export class PricelistTree extends React.Component<Props, IState> {
             if (hasFinishedLoading) {
                 const shouldRefreshPricelists = didRealmChange(prevProps.currentRealm, currentRealm);
                 if (shouldRefreshPricelists) {
-                    refreshPricelists({
-                        realmSlug: currentRealm.slug,
-                        regionName: currentRegion.name,
-                        token: profile!.token,
-                    });
+                    refreshPricelists({ token: profile!.token });
                 }
             }
         }
@@ -258,7 +254,6 @@ export class PricelistTree extends React.Component<Props, IState> {
             return [{ id: "none-none", label: <em>None found.</em> }];
         }
 
-        console.log("wew lad");
         const nodes = result.map(v => this.getPricelistNode(v.pricelist!)).sort((a, b) => {
             if (a.label === b.label) {
                 return 0;
