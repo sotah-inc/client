@@ -7,6 +7,7 @@ import {
     deleteProfessionPricelist,
     getPricelists,
     getProfessionPricelists,
+    getUnmetDemand,
     ICreatePricelistRequest,
     ICreatePricelistResponse,
     ICreateProfessionPricelistRequest,
@@ -17,6 +18,8 @@ import {
     IGetPricelistsResponse,
     IGetProfessionPricelistsRequestOptions,
     IGetProfessionPricelistsResponse,
+    IGetUnmetDemandRequestOptions,
+    IGetUnmetDemandResponse,
     updatePricelist,
 } from "@app/api/price-lists";
 import { IProfession, ItemsMap } from "@app/types/global";
@@ -162,6 +165,19 @@ export const FetchGetProfessionPricelists = (opts: IGetProfessionPricelistsReque
 export const RESET_PROFESSIONS_SELECTIONS = "RESET_PROFESSIONS_SELECTIONS";
 export const ResetProfessionsSelections = () => createAction(RESET_PROFESSIONS_SELECTIONS);
 
+export const REQUEST_GET_UNMETDEMAND = "REQUEST_GET_UNMETDEMAND";
+export const RequestGetUnmetDemand = () => createAction(REQUEST_GET_UNMETDEMAND);
+export const RECEIVE_GET_UNMETDEMAND = "RECEIVE_GET_UNMETDEMAND";
+export const ReceiveGetUnmetDemand = (payload: IGetUnmetDemandResponse | null) =>
+    createAction(RECEIVE_GET_UNMETDEMAND, payload);
+type FetchUnmetDemandType = ReturnType<typeof RequestGetUnmetDemand | typeof ReceiveGetUnmetDemand>;
+export const FetchGetUnmetDemand = (opts: IGetUnmetDemandRequestOptions) => {
+    return async (dispatch: Dispatch<FetchUnmetDemandType>) => {
+        dispatch(RequestGetUnmetDemand());
+        dispatch(ReceiveGetUnmetDemand(await getUnmetDemand(opts)));
+    };
+};
+
 export const PriceListsActions = {
     AppendItems,
     ChangeEntryCreateLevel,
@@ -178,6 +194,7 @@ export const PriceListsActions = {
     ReceiveDeleteProfessionPricelist,
     ReceiveGetPricelists,
     ReceiveGetProfessionPricelists,
+    ReceiveGetUnmetDemand,
     ReceiveUpdatePricelist,
     RequestCreatePricelist,
     RequestCreateProfessionPricelist,
@@ -185,6 +202,7 @@ export const PriceListsActions = {
     RequestDeleteProfessionPricelist,
     RequestGetPricelists,
     RequestGetProfessionPricelists,
+    RequestGetUnmetDemand,
     RequestUpdatePricelist,
     ResetProfessionsSelections,
 };

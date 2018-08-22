@@ -7,8 +7,8 @@ import {
 import { IStoreState } from "@app/types";
 
 const mapStateToProps = (state: IStoreState): IStateProps => {
-    const { currentRealm } = state.Main;
-    return { currentRealm };
+    const { currentRealm, currentRegion, expansions } = state.Main;
+    return { currentRealm, currentRegion, expansions };
 };
 
 export const RealmSummaryPanelContainer = connect<IStateProps>(mapStateToProps)(RealmSummaryPanel);

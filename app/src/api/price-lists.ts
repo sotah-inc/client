@@ -226,3 +226,30 @@ export const getProfessionPricelists = async (
             return { data: null, errors: { failure: "Failed to fetch profession-pricelists" } };
     }
 };
+
+export interface IGetUnmetDemandRequestOptions {
+    region: RegionName;
+    realm: RealmSlug;
+    expansion: ExpansionName;
+}
+
+export interface IGetUnmetDemandResponse {
+    data: {
+        items: ItemsMap;
+    } | null;
+    errors: IErrors | null;
+}
+
+export const getUnmetDemand = async (opts: IGetUnmetDemandRequestOptions): Promise<IGetUnmetDemandResponse | null> => {
+    const res = await fetch(`${apiEndpoint}/region/${opts.region}/realm/${opts.realm}/unmet-demand`, {
+        body: JSON.stringify({ expansion: opts.expansion }),
+        headers: new Headers({ "content-type": "application/json" }),
+        method: "POST",
+    });
+    switch (res.status) {
+        case HTTPStatus.OK:
+            return { errors: null, data: await res.json() };
+        default:
+            return { data: null, errors: { failure: "Failed to fetch unmet-demand" } };
+    }
+};

@@ -211,10 +211,17 @@ export interface IErrors {
 // realm types
 export type RealmSlug = string;
 
+export enum RealmPopulation {
+    na = "n/a",
+    medium = "medium",
+    high = "high",
+    full = "full",
+}
+
 export interface IRealm {
     regionName: string;
     type: string;
-    population: string;
+    population: RealmPopulation;
     queue: boolean;
     status: boolean;
     name: string;
