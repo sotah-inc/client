@@ -51,6 +51,7 @@ interface IState {
 }
 
 enum TopOpenKey {
+    summary = "summary",
     pricelists = "pricelists",
     professions = "professions",
 }
@@ -101,10 +102,17 @@ export class PricelistTree extends React.Component<Props, IState> {
     }
 
     public render() {
-        const { authLevel } = this.props;
+        const { authLevel, currentRealm } = this.props;
         const { topOpenMap } = this.state;
 
         const nodes: ITreeNode[] = [];
+        if (currentRealm !== null) {
+            nodes.push({
+                id: `top-summary`,
+                isSelected: this.isSummarySelected(),
+                label: `${currentRealm!.name} Summary`,
+            });
+        }
 
         // optionally appending custom-pricelists
         if (authLevel === AuthLevel.authenticated) {
@@ -142,6 +150,12 @@ export class PricelistTree extends React.Component<Props, IState> {
                 </div>
             </div>
         );
+    }
+
+    private isSummarySelected() {
+        const { selectedList, selectedProfession } = this.props;
+
+        return selectedList === null && selectedProfession === null;
     }
 
     private getProfessionNodes() {
@@ -380,7 +394,14 @@ export class PricelistTree extends React.Component<Props, IState> {
     }
 
     private onTopNodeClick(id: TopOpenKey) {
+        const { resetProfessionsSelections } = this.props;
         const { topOpenMap } = this.state;
+
+        if (id === TopOpenKey.summary) {
+            resetProfessionsSelections();
+
+            return;
+        }
 
         this.setState({ topOpenMap: { ...topOpenMap, [id]: !topOpenMap[id] } });
     }
