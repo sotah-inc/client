@@ -1,9 +1,8 @@
 import * as React from "react";
 
-import { NonIdealState } from "@blueprintjs/core";
-
 import { LastModified } from "@app/components/util";
 import { PricelistPanelContainer } from "@app/containers/App/PriceLists/PricelistTree/PricelistPanel";
+import { RealmSummaryPanelContainer } from "@app/containers/App/PriceLists/PricelistTree/TreeContent/RealmSummaryPanel";
 import { IRealm } from "@app/types/global";
 import { IPricelist } from "@app/types/price-lists";
 
@@ -19,13 +18,7 @@ export class TreeContent extends React.Component<Props> {
         const { selectedList } = this.props;
 
         if (selectedList === null) {
-            return (
-                <NonIdealState
-                    title="Pricelists"
-                    icon="list"
-                    description="Please select a profession to view pricelists."
-                />
-            );
+            return <RealmSummaryPanelContainer />;
         }
 
         return (

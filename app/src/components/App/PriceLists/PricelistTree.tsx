@@ -102,15 +102,15 @@ export class PricelistTree extends React.Component<Props, IState> {
     }
 
     public render() {
-        const { authLevel, currentRealm } = this.props;
+        const { authLevel, currentRealm, currentRegion } = this.props;
         const { topOpenMap } = this.state;
 
         const nodes: ITreeNode[] = [];
-        if (currentRealm !== null) {
+        if (currentRegion !== null && currentRealm !== null) {
             nodes.push({
                 id: `top-summary`,
                 isSelected: this.isSummarySelected(),
-                label: `${currentRealm!.name} Summary`,
+                label: `${currentRegion.name.toUpperCase()}-${currentRealm!.name} Summary`,
             });
         }
 
