@@ -13,7 +13,7 @@ import {
     IPricelist,
     ISelectExpansionPayload,
 } from "@app/types/price-lists";
-import { didRealmChange, getItemIconUrl } from "@app/util";
+import { getItemIconUrl } from "@app/util";
 
 export interface IStateProps {
     pricelists: IPricelist[];
@@ -64,35 +64,35 @@ export class PricelistTree extends React.Component<Props, IState> {
         },
     };
 
-    public componentDidUpdate(prevProps: Props) {
+    public componentDidMount() {
         const {
-            getProfessionPricelistsLevel,
-            expansions,
-            changeSelectedExpansion,
             currentRegion,
             currentRealm,
             authLevel,
-            profile,
-            refreshPricelists,
             fetchUserPreferencesLevel,
+            refreshPricelists,
+            profile,
         } = this.props;
-
-        const shouldSelectFirstExpansion =
-            prevProps.getProfessionPricelistsLevel === GetProfessionPricelistsLevel.fetching &&
-            getProfessionPricelistsLevel === GetProfessionPricelistsLevel.success;
-        if (shouldSelectFirstExpansion) {
-            changeSelectedExpansion({ expansion: expansions[0] });
-        }
 
         if (currentRegion !== null && currentRealm !== null) {
             const hasFinishedLoading =
                 authLevel === AuthLevel.authenticated &&
                 fetchUserPreferencesLevel === FetchUserPreferencesLevel.success;
             if (hasFinishedLoading) {
-                const shouldRefreshPricelists = didRealmChange(prevProps.currentRealm, currentRealm);
-                if (shouldRefreshPricelists) {
-                    refreshPricelists({ token: profile!.token });
-                }
+                refreshPricelists({ token: profile!.token });
+            }
+        }
+    }
+
+    public componentDidUpdate(prevProps: Props) {
+        const { authLevel, fetchUserPreferencesLevel, refreshPricelists, profile, currentRealm } = this.props;
+
+        if (prevProps.currentRealm === null && currentRealm !== null) {
+            const hasFinishedLoading =
+                authLevel === AuthLevel.authenticated &&
+                fetchUserPreferencesLevel === FetchUserPreferencesLevel.success;
+            if (hasFinishedLoading) {
+                refreshPricelists({ token: profile!.token });
             }
         }
     }
