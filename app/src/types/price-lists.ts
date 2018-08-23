@@ -20,6 +20,9 @@ export interface IPriceListsState {
     professionPricelists: IExpansionProfessionPricelistMap;
     getProfessionPricelistsLevel: GetProfessionPricelistsLevel;
     selectedExpansion: IExpansion | null;
+    getUnmetDemandLevel: GetUnmetDemandLevel;
+    unmetDemandItems: ItemsMap;
+    unmetDemandProfessionPricelists: IProfessionPricelist[];
 }
 
 export interface IExpansionProfessionPricelistMap {
@@ -60,6 +63,12 @@ export enum GetProfessionPricelistsLevel {
     failure,
 }
 export enum DeletePricelistLevel {
+    initial,
+    fetching,
+    success,
+    failure,
+}
+export enum GetUnmetDemandLevel {
     initial,
     fetching,
     success,
@@ -107,6 +116,7 @@ export const defaultPriceListsState: IPriceListsState = {
     entryCreateLevel: EntryCreateLevel.initial,
     getPricelistsLevel: GetPricelistsLevel.initial,
     getProfessionPricelistsLevel: GetProfessionPricelistsLevel.initial,
+    getUnmetDemandLevel: GetUnmetDemandLevel.initial,
     isAddEntryDialogOpen: false,
     isAddListDialogOpen: false,
     isDeleteListDialogOpen: false,
@@ -117,6 +127,8 @@ export const defaultPriceListsState: IPriceListsState = {
     selectedExpansion: null,
     selectedList: null,
     selectedProfession: null,
+    unmetDemandItems: {},
+    unmetDemandProfessionPricelists: [],
     updatePricelistErrors: {},
     updatePricelistLevel: MutatePricelistLevel.initial,
 };

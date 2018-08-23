@@ -6,6 +6,7 @@ import {
     ReceiveDeleteProfessionPricelist,
     ReceiveGetPricelists,
     ReceiveGetProfessionPricelists,
+    ReceiveGetUnmetDemand,
     ReceiveUpdatePricelist,
 } from "@app/actions/price-lists";
 import { getPricelistIndex, getProfessionPricelistIndex } from "@app/reducers/helper";
@@ -14,6 +15,7 @@ import {
     DeletePricelistLevel,
     GetPricelistsLevel,
     GetProfessionPricelistsLevel,
+    GetUnmetDemandLevel,
     IExpansionProfessionPricelistMap,
     IPricelist,
     IPriceListsState,
@@ -310,6 +312,31 @@ const handlers: IKindHandlers<IPriceListsState, PriceListsActions> = {
                     ...state,
                     getProfessionPricelistsLevel: GetProfessionPricelistsLevel.fetching,
                     professionPricelists: {},
+                };
+            },
+        },
+    },
+    unmetdemand: {
+        get: {
+            receive: (state: IPriceListsState, action: ReturnType<typeof ReceiveGetUnmetDemand>) => {
+                if (action.payload === null) {
+                    return {
+                        ...state,
+                        getUnmetDemandLevel: GetUnmetDemandLevel.failure,
+                    };
+                }
+
+                return {
+                    ...state,
+                    getUnmetDemandLevel: GetUnmetDemandLevel.success,
+                    unmetDemandItems: action.payload!.data!.items,
+                    unmetDemandProfessionPricelists: action.payload!.data!.professionPricelists,
+                };
+            },
+            request: (state: IPriceListsState) => {
+                return {
+                    ...state,
+                    getUnmetDemandLevel: GetUnmetDemandLevel.fetching,
                 };
             },
         },
