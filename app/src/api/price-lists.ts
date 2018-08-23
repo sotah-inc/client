@@ -236,6 +236,7 @@ export interface IGetUnmetDemandRequestOptions {
 export interface IGetUnmetDemandResponse {
     data: {
         items: ItemsMap;
+        professionPricelists: IProfessionPricelist[];
     } | null;
     errors: IErrors | null;
 }
