@@ -1,6 +1,6 @@
 import { apiEndpoint } from "@app/api";
 import { IQueryAuctionResult } from "@app/types/auction";
-import { InventoryType, IRealm, IRegion, Item, ItemQuality, ItemStat } from "@app/types/global";
+import { IExpansion, InventoryType, IRealm, IRegion, Item, ItemQuality, ItemStat } from "@app/types/global";
 
 export const qualityToColorClass = (quality: ItemQuality): string => {
     switch (quality) {
@@ -148,4 +148,14 @@ export const didRealmChange = (prevRealm: IRealm | null, currentRealm: IRealm): 
     }
 
     return true;
+};
+
+export const getPrimaryExpansion = (expansions: IExpansion[]) => {
+    return expansions.reduce((previousValue, currentValue) => {
+        if (currentValue.primary) {
+            return currentValue;
+        }
+
+        return previousValue;
+    }, expansions[0]);
 };

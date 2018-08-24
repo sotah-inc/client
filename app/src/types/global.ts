@@ -305,7 +305,7 @@ export interface IProfession {
 export interface IProfessionPricelist {
     id: number;
     pricelist_id: number;
-    profession: ProfessionName;
+    name: ProfessionName;
     pricelist?: IPricelist;
     expansion: ExpansionName;
 }

@@ -3,6 +3,7 @@ import * as React from "react";
 import { Classes, Intent, ITreeNode, Spinner, Tree } from "@blueprintjs/core";
 
 import { IGetPricelistsOptions, IGetProfessionPricelistsRequestOptions } from "@app/api/price-lists";
+import { ProfessionIcon } from "@app/components/util/ProfessionIcon";
 import { TreeContentContainer } from "@app/containers/App/PriceLists/PricelistTree/TreeContent";
 import { PricelistIconContainer } from "@app/containers/util/PricelistIcon";
 import { IExpansion, IProfession, IProfile, IRealm, IRegion, ItemsMap } from "@app/types/global";
@@ -164,21 +165,13 @@ export class PricelistTree extends React.Component<Props, IState> {
         return professions.map(v => this.getProfessionNode(v));
     }
 
-    private renderProfessionIcon(v: IProfession) {
-        if (v.icon_url.length === 0) {
-            return;
-        }
-
-        return <img src={v.icon_url} className="item-icon" />;
-    }
-
     private getProfessionNode(v: IProfession) {
         const { selectedProfession, getProfessionPricelistsLevel } = this.props;
 
         const isSelected = selectedProfession !== null && selectedProfession.name === v.name;
         const result: ITreeNode = {
             className: "profession-node",
-            icon: this.renderProfessionIcon(v),
+            icon: <ProfessionIcon profession={v} />,
             id: `profession-${v.name}`,
             isSelected,
             label: v.label,

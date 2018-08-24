@@ -12,9 +12,9 @@ import {
 import { IStoreState } from "@app/types";
 
 const mapStateToProps = (state: IStoreState): IStateProps => {
-    const { expansions } = state.Main;
-    const { unmetDemandItems, unmetDemandProfessionPricelists } = state.PriceLists;
-    return { expansions, unmetDemandItems, unmetDemandProfessionPricelists };
+    const { expansions, professions } = state.Main;
+    const { unmetDemandItems, unmetDemandProfessionPricelists, getUnmetDemandLevel } = state.PriceLists;
+    return { expansions, getUnmetDemandLevel, professions, unmetDemandItems, unmetDemandProfessionPricelists };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<Actions>): IDispatchProps => {

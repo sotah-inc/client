@@ -1,18 +1,29 @@
 import * as React from "react";
 
-import { Callout, Card, Classes, H2, H5, HTMLTable } from "@blueprintjs/core";
+import { Callout, Card, Classes, H5, HTMLTable, Intent, NonIdealState, Spinner } from "@blueprintjs/core";
 
 import { IGetUnmetDemandRequestOptions } from "@app/api/price-lists";
+import { ProfessionIcon } from "@app/components/util/ProfessionIcon";
 import { ItemPopoverContainer } from "@app/containers/util/ItemPopover";
 import { PricelistIconContainer } from "@app/containers/util/PricelistIcon";
-import { IExpansion, IProfessionPricelist, IRealm, IRegion, ItemsMap, RealmPopulation } from "@app/types/global";
-import { IPricelistEntry } from "@app/types/price-lists";
-import { qualityToColorClass } from "@app/util";
+import {
+    IExpansion,
+    IProfession,
+    IProfessionPricelist,
+    IRealm,
+    IRegion,
+    ItemsMap,
+    RealmPopulation,
+} from "@app/types/global";
+import { GetUnmetDemandLevel, IPricelist, IPricelistEntry } from "@app/types/price-lists";
+import { didRealmChange, getPrimaryExpansion, qualityToColorClass } from "@app/util";
 
 export interface IStateProps {
     expansions: IExpansion[];
     unmetDemandItems: ItemsMap;
     unmetDemandProfessionPricelists: IProfessionPricelist[];
+    professions: IProfession[];
+    getUnmetDemandLevel: GetUnmetDemandLevel;
 }
 
 export interface IDispatchProps {
@@ -26,35 +37,36 @@ export interface IOwnProps {
 
 export type Props = Readonly<IStateProps & IDispatchProps & IOwnProps>;
 
+interface ICollapsedResultItem {
+    entry: IPricelistEntry;
+    professionPricelist: IProfessionPricelist;
+}
+
 export class RealmSummaryPanel extends React.Component<Props> {
     public componentDidMount() {
-        const { refreshUnmetDemand, expansions, region, realm } = this.props;
-
-        const primaryExpansion = expansions.reduce((previousValue, currentValue) => {
-            if (currentValue.primary) {
-                return currentValue;
-            }
-
-            return previousValue;
-        }, expansions[0]);
+        const { refreshUnmetDemand, region, realm, expansions } = this.props;
 
         refreshUnmetDemand({
-            expansion: primaryExpansion.name,
+            expansion: getPrimaryExpansion(expansions).name,
             realm: realm.slug,
             region: region.name,
         });
     }
 
+    public componentDidUpdate(prevProps: Props) {
+        const { refreshUnmetDemand, region, realm, expansions } = this.props;
+
+        if (didRealmChange(prevProps.realm, realm)) {
+            refreshUnmetDemand({
+                expansion: getPrimaryExpansion(expansions).name,
+                realm: realm.slug,
+                region: region.name,
+            });
+        }
+    }
+
     public render() {
-        const { realm, region, expansions, unmetDemandProfessionPricelists } = this.props;
-
-        const primaryExpansion = expansions.reduce((previousValue, currentValue) => {
-            if (currentValue.primary) {
-                return currentValue;
-            }
-
-            return previousValue;
-        }, expansions[0]);
+        const { realm, region, expansions } = this.props;
 
         let population = realm.population;
         if (population === RealmPopulation.na) {
@@ -65,32 +77,62 @@ export class RealmSummaryPanel extends React.Component<Props> {
             <>
                 <Callout style={{ marginBottom: "10px" }}>
                     <H5>Summary</H5>
-                    <p>
+                    <p style={{ marginBottom: 0 }}>
                         {region.name.toUpperCase()}-{realm.name}
                         is a <em>{population} population</em> realm
                     </p>
                 </Callout>
                 <Card>
-                    <H5>Unmet Demand for {primaryExpansion.label} Professions</H5>
-                    {unmetDemandProfessionPricelists.map((v, i) => this.renderUnmetItemsTable(i, v))}
+                    <H5>Unmet Demand for {getPrimaryExpansion(expansions).label} Professions</H5>
+                    {this.renderUnmetDemand()}
                 </Card>
             </>
         );
     }
 
-    private renderUnmetItemsTable(index: number, professionPricelist: IProfessionPricelist) {
-        const { unmetDemandItems } = this.props;
+    private renderUnmetDemand() {
+        const { getUnmetDemandLevel } = this.props;
 
-        const entries = professionPricelist.pricelist!.pricelist_entries!.filter(v => v.item_id in unmetDemandItems);
+        switch (getUnmetDemandLevel) {
+            case GetUnmetDemandLevel.success:
+                return this.renderUnmetDemandSuccess();
+            default:
+                return (
+                    <NonIdealState
+                        title="Loading"
+                        icon={<Spinner className={Classes.LARGE} intent={Intent.PRIMARY} />}
+                    />
+                );
+        }
+    }
 
-        console.log(professionPricelist.pricelist);
+    private renderUnmetDemandSuccess() {
+        const { realm, region, unmetDemandProfessionPricelists } = this.props;
+
+        const collapsedResult: ICollapsedResultItem[] = unmetDemandProfessionPricelists.reduce(
+            (outer: ICollapsedResultItem[], professionPricelist) => [
+                ...outer,
+                ...professionPricelist.pricelist!.pricelist_entries!.reduce(
+                    (inner: ICollapsedResultItem[], entry) => [...inner, { professionPricelist, entry }],
+                    [],
+                ),
+            ],
+            [],
+        );
+
+        if (collapsedResult.length === 0) {
+            return (
+                <Callout intent={Intent.SUCCESS}>
+                    All pricelists are fulfilled for {region.name.toUpperCase()}-{realm.name}!
+                </Callout>
+            );
+        }
 
         return (
-            <div key={index}>
-                <H2 className="pricelist-table-heading">
-                    <PricelistIconContainer pricelist={professionPricelist.pricelist!} />
-                    {professionPricelist.pricelist!.name}
-                </H2>
+            <>
+                <Callout intent={Intent.PRIMARY}>
+                    These items have <strong>0</strong> auctions posted on {region.name.toUpperCase()}-{realm.name}.
+                </Callout>
                 <HTMLTable
                     className={`${Classes.HTML_TABLE} ${Classes.HTML_TABLE_BORDERED} ${
                         Classes.SMALL
@@ -99,17 +141,27 @@ export class RealmSummaryPanel extends React.Component<Props> {
                     <thead>
                         <tr>
                             <th>Item</th>
+                            <th>Profession</th>
+                            <th>Pricelist</th>
                         </tr>
                     </thead>
-                    <tbody>{entries.map((v, i) => this.renderEntry(i, v))}</tbody>
+                    <tbody>{collapsedResult.map((v, i) => this.renderItemRow(i, v))}</tbody>
                 </HTMLTable>
-            </div>
+            </>
         );
     }
 
-    private renderEntry(index: number, entry: IPricelistEntry) {
-        const { unmetDemandItems } = this.props;
+    private renderItemRow(index: number, resultItem: ICollapsedResultItem) {
+        const { unmetDemandItems, professions } = this.props;
 
+        const { professionPricelist, entry } = resultItem;
+        const profession: IProfession | null = professions.reduce((currentValue: IProfession | null, v) => {
+            if (currentValue !== null) {
+                return currentValue;
+            }
+
+            return v.name === professionPricelist.name ? v : null;
+        }, null);
         const { item_id, quantity_modifier } = entry;
         const item = unmetDemandItems[item_id];
 
@@ -121,7 +173,29 @@ export class RealmSummaryPanel extends React.Component<Props> {
                         itemTextFormatter={itemText => `${itemText} \u00D7${quantity_modifier}`}
                     />
                 </td>
+                <td>{this.renderProfession(profession)}</td>
+                <td>{this.renderPricelistCell(professionPricelist.pricelist!)}</td>
             </tr>
+        );
+    }
+
+    private renderProfession(profession: IProfession | null) {
+        if (profession === null) {
+            return;
+        }
+
+        return (
+            <>
+                <ProfessionIcon profession={profession} /> {profession.label}
+            </>
+        );
+    }
+
+    private renderPricelistCell(pricelist: IPricelist) {
+        return (
+            <>
+                <PricelistIconContainer pricelist={pricelist} /> {pricelist.name}
+            </>
         );
     }
 }
