@@ -107,9 +107,9 @@ export class RealmSummaryPanel extends React.Component<Props> {
     }
 
     private renderUnmetDemandSuccess() {
-        const { realm, region, unmetDemandProfessionPricelists } = this.props;
+        const { realm, region, unmetDemandProfessionPricelists, unmetDemandItems } = this.props;
 
-        const collapsedResult: ICollapsedResultItem[] = unmetDemandProfessionPricelists.reduce(
+        let collapsedResult: ICollapsedResultItem[] = unmetDemandProfessionPricelists.reduce(
             (outer: ICollapsedResultItem[], professionPricelist) => [
                 ...outer,
                 ...professionPricelist.pricelist!.pricelist_entries!.reduce(
@@ -119,6 +119,7 @@ export class RealmSummaryPanel extends React.Component<Props> {
             ],
             [],
         );
+        collapsedResult = collapsedResult.filter(v => v.entry.item_id in unmetDemandItems);
 
         if (collapsedResult.length === 0) {
             return (
