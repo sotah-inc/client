@@ -163,16 +163,13 @@ export class RealmSummaryPanel extends React.Component<Props> {
 
             return v.name === professionPricelist.name ? v : null;
         }, null);
-        const { item_id, quantity_modifier } = entry;
+        const { item_id } = entry;
         const item = unmetDemandItems[item_id];
 
         return (
             <tr key={index}>
                 <td className={qualityToColorClass(item.quality)}>
-                    <ItemPopoverContainer
-                        item={item}
-                        itemTextFormatter={itemText => `${itemText} \u00D7${quantity_modifier}`}
-                    />
+                    <ItemPopoverContainer item={item} />
                 </td>
                 <td>{this.renderProfession(profession)}</td>
                 <td>{this.renderPricelistCell(professionPricelist.pricelist!)}</td>
