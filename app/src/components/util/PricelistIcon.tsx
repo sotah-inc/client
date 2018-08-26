@@ -19,21 +19,21 @@ export class PricelistIcon extends React.Component<Props> {
         const { items, pricelist } = this.props;
 
         if (!pricelist.pricelist_entries) {
-            return;
+            return null;
         }
 
         if (pricelist.pricelist_entries.length === 0) {
-            return;
+            return null;
         }
 
         const itemId = pricelist.pricelist_entries[0].item_id;
         if (!(itemId in items)) {
-            return;
+            return null;
         }
 
         const itemIconUrl = getItemIconUrl(items[itemId]);
         if (itemIconUrl === null) {
-            return;
+            return null;
         }
 
         return <img src={itemIconUrl} className="item-icon" />;
