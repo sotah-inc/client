@@ -241,6 +241,12 @@ export interface IRealms {
 export interface IUser {
     id: number;
     email: string;
+    level: UserLevel;
+}
+
+export enum UserLevel {
+    Admin = 60,
+    Regular = 5,
 }
 
 export interface IProfile {

@@ -15,7 +15,7 @@ import {
 
 import { RealmToggleContainer } from "@app/containers/util/RealmToggle";
 import { RegionToggleContainer } from "@app/containers/util/RegionToggle";
-import { IProfession, IProfile, IRealm, IRegion } from "@app/types/global";
+import { IProfession, IProfile, IRealm, IRegion, UserLevel } from "@app/types/global";
 import { AuthLevel } from "@app/types/main";
 import { IPricelist } from "@app/types/price-lists";
 
@@ -66,7 +66,7 @@ export class ActionBar extends React.Component<Props> {
         } = this.props;
 
         let canMutateEntry = authLevel === AuthLevel.authenticated && selectedList !== null;
-        if (selectedProfession !== null && profile !== null && profile.user.id !== 1) {
+        if (selectedProfession !== null && profile !== null && profile.user.level !== UserLevel.Admin) {
             canMutateEntry = false;
         }
 
@@ -105,7 +105,7 @@ export class ActionBar extends React.Component<Props> {
             return <Button icon="plus" text={createListText} disabled={true} />;
         }
 
-        if (selectedProfession !== null && profile.user.id !== 1) {
+        if (selectedProfession !== null && profile.user.level !== UserLevel.Admin) {
             return (
                 <Tooltip content="You are not authorized to manage profession pricelists!" position={Position.RIGHT}>
                     <Button icon="plus" text={createListText} disabled={true} />
