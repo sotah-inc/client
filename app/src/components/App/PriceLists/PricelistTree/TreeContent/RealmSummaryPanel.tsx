@@ -182,7 +182,7 @@ export class RealmSummaryPanel extends React.Component<Props> {
 
     private renderProfession(profession: IProfession | null) {
         if (profession === null) {
-            return;
+            return null;
         }
 
         return (
