@@ -8,6 +8,7 @@ import { CreateEntryFormFormContainer } from "@app/form-containers/App/PriceList
 import { ListFormFormContainer } from "@app/form-containers/App/PriceLists/util/ListForm";
 import { IErrors, Item, ItemId, ItemsMap } from "@app/types/global";
 import { IPricelistEntry, ListDialogStep, MutatePricelistLevel } from "@app/types/price-lists";
+import { qualityToColorClass } from "@app/util";
 
 interface IOnCompleteOptions {
     name: string;
@@ -249,9 +250,13 @@ export class ListDialog extends React.Component<Props, State> {
     }
 
     private renderEntry(index: number, entry: IPricelistEntry) {
+        const item = this.getItem(entry.item_id);
+
         return (
             <tr key={index}>
-                <td>{this.renderItemPopover(this.getItem(entry.item_id))}</td>
+                <td className={item === null ? "" : qualityToColorClass(item!.quality)}>
+                    {this.renderItemPopover(item)}
+                </td>
                 <td>x{entry.quantity_modifier}</td>
                 <td style={{ textAlign: "center" }}>
                     <Button minimal={true} icon="delete" onClick={() => this.removeEntryAtIndex(index)} />
