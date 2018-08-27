@@ -110,7 +110,7 @@ export class PricelistTree extends React.Component<Props, IState> {
         }
 
         if (selectedProfession !== null && selectedProfession !== prevProps.selectedProfession) {
-            refreshProfessionPricelists({ profession: selectedProfession!.name });
+            refreshProfessionPricelists({ profession: selectedProfession.name });
         }
     }
 
