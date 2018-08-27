@@ -8,6 +8,7 @@ import {
     CHANGE_SELECTED_EXPANSION,
     CHANGE_SELECTED_LIST,
     CHANGE_SELECTED_PROFESSION,
+    NAVIGATE_PROFESSIONNODE,
     PriceListsActions,
     RESET_PROFESSIONS_SELECTIONS,
 } from "@app/actions/price-lists";
@@ -24,6 +25,13 @@ export const priceLists = (state: State, action: PriceListsActions): State => {
     }
 
     switch (action.type) {
+        case NAVIGATE_PROFESSIONNODE:
+            return {
+                ...state,
+                selectedExpansion: action.payload.expansion,
+                selectedList: action.payload.pricelist,
+                selectedProfession: action.payload.profession,
+            };
         case CHANGE_ENTRY_CREATELEVEL:
             return { ...state, entryCreateLevel: action.payload };
         case CHANGE_SELECTED_LIST:

@@ -2,6 +2,7 @@ import * as React from "react";
 
 import { Callout, Card, Classes, H5, HTMLTable, Intent, NonIdealState, Spinner } from "@blueprintjs/core";
 
+import { IProfessionNode } from "@app/actions/price-lists";
 import { IGetUnmetDemandRequestOptions } from "@app/api/price-lists";
 import { ProfessionIcon } from "@app/components/util/ProfessionIcon";
 import { ItemPopoverContainer } from "@app/containers/util/ItemPopover";
@@ -14,6 +15,7 @@ import {
     IRegion,
     ItemId,
     ItemsMap,
+    ProfessionName,
     RealmPopulation,
 } from "@app/types/global";
 import { GetUnmetDemandLevel, IPricelist, IPricelistEntry } from "@app/types/price-lists";
@@ -30,6 +32,7 @@ export interface IStateProps {
 
 export interface IDispatchProps {
     refreshUnmetDemand: (opts: IGetUnmetDemandRequestOptions) => void;
+    navigateProfessionNode: (node: IProfessionNode) => void;
 }
 
 export interface IOwnProps {
@@ -89,6 +92,20 @@ export class RealmSummaryPanel extends React.Component<Props> {
                 </Card>
             </>
         );
+    }
+
+    public onPricelistClick(pricelist: IPricelist, professionName: ProfessionName) {
+        const { expansions, professions, navigateProfessionNode } = this.props;
+
+        const profession: IProfession = professions.reduce((currentValue, v) => {
+            if (v.name === professionName) {
+                return v;
+            }
+
+            return currentValue;
+        }, professions[0]);
+
+        navigateProfessionNode({ expansion: getPrimaryExpansion(expansions), pricelist, profession });
     }
 
     private renderUnmetDemand() {
@@ -192,7 +209,7 @@ export class RealmSummaryPanel extends React.Component<Props> {
                     <ItemPopoverContainer item={item} />
                 </td>
                 <td>{this.renderProfession(profession)}</td>
-                <td>{this.renderPricelistCell(professionPricelist.pricelist!)}</td>
+                <td>{this.renderPricelistCell(professionPricelist.pricelist!, professionPricelist.name)}</td>
             </tr>
         );
     }
@@ -209,11 +226,11 @@ export class RealmSummaryPanel extends React.Component<Props> {
         );
     }
 
-    private renderPricelistCell(pricelist: IPricelist) {
+    private renderPricelistCell(pricelist: IPricelist, profession: ProfessionName) {
         return (
-            <>
+            <a onClick={() => this.onPricelistClick(pricelist, profession)}>
                 <PricelistIconContainer pricelist={pricelist} /> {pricelist.name}
-            </>
+            </a>
         );
     }
 }

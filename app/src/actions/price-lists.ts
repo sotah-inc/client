@@ -22,7 +22,7 @@ import {
     IGetUnmetDemandResponse,
     updatePricelist,
 } from "@app/api/price-lists";
-import { IProfession, ItemsMap } from "@app/types/global";
+import { IExpansion, IProfession, ItemsMap } from "@app/types/global";
 import {
     EntryCreateLevel,
     IPricelist,
@@ -178,6 +178,15 @@ export const FetchGetUnmetDemand = (opts: IGetUnmetDemandRequestOptions) => {
     };
 };
 
+export interface IProfessionNode {
+    pricelist: IPricelist;
+    expansion: IExpansion;
+    profession: IProfession;
+}
+
+export const NAVIGATE_PROFESSIONNODE = "NAVIGATE_PROFESSIONNODE";
+export const NavigateProfessionNode = (payload: IProfessionNode) => createAction(NAVIGATE_PROFESSIONNODE, payload);
+
 export const PriceListsActions = {
     AppendItems,
     ChangeEntryCreateLevel,
@@ -188,6 +197,7 @@ export const PriceListsActions = {
     ChangeSelectedExpansion,
     ChangeSelectedList,
     ChangeSelectedProfession,
+    NavigateProfessionNode,
     ReceiveCreatePricelist,
     ReceiveCreateProfessionPricelist,
     ReceiveDeletePricelist,

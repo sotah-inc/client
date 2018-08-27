@@ -1,7 +1,7 @@
 import { connect, Dispatch } from "react-redux";
 
 import { Actions } from "@app/actions";
-import { FetchGetUnmetDemand } from "@app/actions/price-lists";
+import { FetchGetUnmetDemand, IProfessionNode, NavigateProfessionNode } from "@app/actions/price-lists";
 import { IGetUnmetDemandRequestOptions } from "@app/api/price-lists";
 import {
     IDispatchProps,
@@ -19,6 +19,7 @@ const mapStateToProps = (state: IStoreState): IStateProps => {
 
 const mapDispatchToProps = (dispatch: Dispatch<Actions>): IDispatchProps => {
     return {
+        navigateProfessionNode: (node: IProfessionNode) => dispatch(NavigateProfessionNode(node)),
         refreshUnmetDemand: (opts: IGetUnmetDemandRequestOptions) => dispatch(FetchGetUnmetDemand(opts)),
     };
 };
