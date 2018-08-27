@@ -228,9 +228,11 @@ export class RealmSummaryPanel extends React.Component<Props> {
 
     private renderPricelistCell(pricelist: IPricelist, profession: ProfessionName) {
         return (
-            <a onClick={() => this.onPricelistClick(pricelist, profession)}>
-                <PricelistIconContainer pricelist={pricelist} /> {pricelist.name}
-            </a>
+            <>
+                <PricelistIconContainer pricelist={pricelist} />
+                &nbsp;
+                <a onClick={() => this.onPricelistClick(pricelist, profession)}>{pricelist.name}</a>
+            </>
         );
     }
 }
