@@ -167,20 +167,12 @@ const handlers: IKindHandlers<IPriceListsState, PriceListsActions> = {
             receive: (state: IPriceListsState, action: ReturnType<typeof ReceiveGetPricelists>) => {
                 const items: ItemsMap = { ...state.items, ...action.payload.items };
                 const pricelists = action.payload.pricelists;
-                const selectedList: IPricelist | null = (() => {
-                    if (pricelists.length === 0) {
-                        return null;
-                    }
-
-                    return pricelists[0];
-                })();
 
                 return {
                     ...state,
                     getPricelistsLevel: GetPricelistsLevel.success,
                     items,
                     pricelists,
-                    selectedList,
                 };
             },
             request: (state: IPriceListsState) => {
