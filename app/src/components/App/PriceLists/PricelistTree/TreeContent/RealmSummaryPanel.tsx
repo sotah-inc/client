@@ -109,7 +109,7 @@ export class RealmSummaryPanel extends React.Component<Props> {
     }
 
     private renderUnmetDemandSuccess() {
-        const { realm, region, unmetDemandProfessionPricelists, unmetDemandItemIds } = this.props;
+        const { realm, region, unmetDemandProfessionPricelists, unmetDemandItemIds, items } = this.props;
 
         let collapsedResult: ICollapsedResultItem[] = unmetDemandProfessionPricelists.reduce(
             (outer: ICollapsedResultItem[], professionPricelist) => [
@@ -122,6 +122,25 @@ export class RealmSummaryPanel extends React.Component<Props> {
             [],
         );
         collapsedResult = collapsedResult.filter(v => unmetDemandItemIds.indexOf(v.entry.item_id) > -1);
+        collapsedResult = collapsedResult.sort((a, b) => {
+            if (a.professionPricelist.name !== b.professionPricelist.name) {
+                return a.professionPricelist.name > b.professionPricelist.name ? 1 : -1;
+            }
+
+            if (a.professionPricelist.pricelist!.name !== b.professionPricelist.pricelist!.name) {
+                return a.professionPricelist.pricelist!.name > b.professionPricelist.pricelist!.name ? 1 : -1;
+            }
+
+            const aItemValue: string =
+                a.entry.item_id in items ? items[a.entry.item_id].name : a.entry.item_id.toString();
+            const bItemValue: string =
+                b.entry.item_id in items ? items[b.entry.item_id].name : b.entry.item_id.toString();
+            if (aItemValue !== bItemValue) {
+                return aItemValue > bItemValue ? 1 : -1;
+            }
+
+            return 0;
+        });
 
         if (collapsedResult.length === 0) {
             return (
