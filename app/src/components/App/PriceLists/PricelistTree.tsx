@@ -86,7 +86,15 @@ export class PricelistTree extends React.Component<Props, IState> {
     }
 
     public componentDidUpdate(prevProps: Props) {
-        const { authLevel, fetchUserPreferencesLevel, refreshPricelists, profile, currentRealm } = this.props;
+        const {
+            authLevel,
+            fetchUserPreferencesLevel,
+            refreshPricelists,
+            profile,
+            currentRealm,
+            selectedProfession,
+            refreshProfessionPricelists,
+        } = this.props;
 
         const shouldRefreshPricelists =
             (prevProps.currentRealm === null && currentRealm !== null) ||
@@ -99,6 +107,10 @@ export class PricelistTree extends React.Component<Props, IState> {
             if (hasFinishedLoading) {
                 refreshPricelists({ token: profile!.token });
             }
+        }
+
+        if (selectedProfession !== null && selectedProfession !== prevProps.selectedProfession) {
+            refreshProfessionPricelists({ profession: selectedProfession!.name });
         }
     }
 
@@ -356,13 +368,7 @@ export class PricelistTree extends React.Component<Props, IState> {
     }
 
     private onProfessionNodeClick(id: string) {
-        const {
-            professions,
-            changeSelectedProfession,
-            refreshProfessionPricelists,
-            selectedProfession,
-            resetProfessionsSelections,
-        } = this.props;
+        const { professions, changeSelectedProfession, selectedProfession, resetProfessionsSelections } = this.props;
 
         const profession = professions.reduce((result, v) => {
             if (result !== null) {
@@ -383,7 +389,6 @@ export class PricelistTree extends React.Component<Props, IState> {
         }
 
         changeSelectedProfession(profession);
-        refreshProfessionPricelists({ profession: profession!.name });
     }
 
     private onTopNodeClick(id: TopOpenKey) {
