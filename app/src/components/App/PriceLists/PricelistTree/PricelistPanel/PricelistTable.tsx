@@ -109,16 +109,18 @@ export class PricelistTable extends React.Component<Props, State> {
 
         let bid: number = 0;
         let buyout: number = 0;
+        let volume: number = 0;
         if (item_id in pricelistMap) {
             bid = pricelistMap[item_id].bid;
             buyout = pricelistMap[item_id].buyout;
+            volume = pricelistMap[item_id].volume;
         }
 
         const item = this.getItem(item_id);
         if (item === null) {
             return (
                 <tr key={index}>
-                    <td colSpan={3}>
+                    <td colSpan={4}>
                         <Spinner intent={Intent.WARNING} />
                     </td>
                 </tr>
@@ -139,6 +141,7 @@ export class PricelistTable extends React.Component<Props, State> {
                 <td>
                     <Currency amount={buyout * quantity_modifier} />
                 </td>
+                <td>{volume}</td>
             </tr>
         );
     }
@@ -197,6 +200,7 @@ export class PricelistTable extends React.Component<Props, State> {
                             <th>Item</th>
                             <th>Bid</th>
                             <th>Buyout</th>
+                            <th>Volume</th>
                         </tr>
                     </thead>
                     <tbody>{entries.map((v, i) => this.renderEntry(i, v))}</tbody>

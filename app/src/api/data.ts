@@ -176,6 +176,7 @@ export interface IPriceListMap {
     [key: number]: {
         bid: number;
         buyout: number;
+        volume: number;
     };
 }
 
