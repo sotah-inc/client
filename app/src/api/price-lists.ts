@@ -4,6 +4,7 @@ import {
     ExpansionName,
     IErrors,
     IProfessionPricelist,
+    ItemId,
     ItemsMap,
     ProfessionName,
     RealmSlug,
@@ -237,6 +238,7 @@ export interface IGetUnmetDemandResponse {
     data: {
         items: ItemsMap;
         professionPricelists: IProfessionPricelist[];
+        unmetItemIds: ItemId[];
     } | null;
     errors: IErrors | null;
 }

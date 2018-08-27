@@ -12,6 +12,7 @@ import {
     IProfessionPricelist,
     IRealm,
     IRegion,
+    ItemId,
     ItemsMap,
     RealmPopulation,
 } from "@app/types/global";
@@ -20,10 +21,11 @@ import { didRealmChange, getPrimaryExpansion, qualityToColorClass } from "@app/u
 
 export interface IStateProps {
     expansions: IExpansion[];
-    unmetDemandItems: ItemsMap;
+    unmetDemandItemIds: ItemId[];
     unmetDemandProfessionPricelists: IProfessionPricelist[];
     professions: IProfession[];
     getUnmetDemandLevel: GetUnmetDemandLevel;
+    items: ItemsMap;
 }
 
 export interface IDispatchProps {
@@ -107,7 +109,7 @@ export class RealmSummaryPanel extends React.Component<Props> {
     }
 
     private renderUnmetDemandSuccess() {
-        const { realm, region, unmetDemandProfessionPricelists, unmetDemandItems } = this.props;
+        const { realm, region, unmetDemandProfessionPricelists, unmetDemandItemIds } = this.props;
 
         let collapsedResult: ICollapsedResultItem[] = unmetDemandProfessionPricelists.reduce(
             (outer: ICollapsedResultItem[], professionPricelist) => [
@@ -119,7 +121,7 @@ export class RealmSummaryPanel extends React.Component<Props> {
             ],
             [],
         );
-        collapsedResult = collapsedResult.filter(v => v.entry.item_id in unmetDemandItems);
+        collapsedResult = collapsedResult.filter(v => unmetDemandItemIds.indexOf(v.entry.item_id) > -1);
 
         if (collapsedResult.length === 0) {
             return (
@@ -153,7 +155,7 @@ export class RealmSummaryPanel extends React.Component<Props> {
     }
 
     private renderItemRow(index: number, resultItem: ICollapsedResultItem) {
-        const { unmetDemandItems, professions } = this.props;
+        const { items, professions } = this.props;
 
         const { professionPricelist, entry } = resultItem;
         const profession: IProfession | null = professions.reduce((currentValue: IProfession | null, v) => {
@@ -164,7 +166,7 @@ export class RealmSummaryPanel extends React.Component<Props> {
             return v.name === professionPricelist.name ? v : null;
         }, null);
         const { item_id } = entry;
-        const item = unmetDemandItems[item_id];
+        const item = items[item_id];
 
         return (
             <tr key={index}>

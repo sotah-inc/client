@@ -21,7 +21,7 @@ export interface IPriceListsState {
     getProfessionPricelistsLevel: GetProfessionPricelistsLevel;
     selectedExpansion: IExpansion | null;
     getUnmetDemandLevel: GetUnmetDemandLevel;
-    unmetDemandItems: ItemsMap;
+    unmetDemandItemIds: ItemId[];
     unmetDemandProfessionPricelists: IProfessionPricelist[];
 }
 
@@ -127,7 +127,7 @@ export const defaultPriceListsState: IPriceListsState = {
     selectedExpansion: null,
     selectedList: null,
     selectedProfession: null,
-    unmetDemandItems: {},
+    unmetDemandItemIds: [],
     unmetDemandProfessionPricelists: [],
     updatePricelistErrors: {},
     updatePricelistLevel: MutatePricelistLevel.initial,

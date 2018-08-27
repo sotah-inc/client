@@ -322,7 +322,7 @@ const handlers: IKindHandlers<IPriceListsState, PriceListsActions> = {
                     ...state,
                     getUnmetDemandLevel: GetUnmetDemandLevel.success,
                     items: { ...state.items, ...action.payload!.data!.items },
-                    unmetDemandItems: action.payload!.data!.items,
+                    unmetDemandItemIds: action.payload!.data!.unmetItemIds,
                     unmetDemandProfessionPricelists: action.payload!.data!.professionPricelists,
                 };
             },
