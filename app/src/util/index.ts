@@ -4,6 +4,8 @@ import { IExpansion, InventoryType, IRealm, IRegion, Item, ItemQuality, ItemStat
 
 export const qualityToColorClass = (quality: ItemQuality): string => {
     switch (quality) {
+        case ItemQuality.Legendary:
+            return "legendary-text";
         case ItemQuality.Epic:
             return "epic-text";
         case ItemQuality.Rare:
