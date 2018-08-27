@@ -80,8 +80,7 @@ export class RealmSummaryPanel extends React.Component<Props> {
                 <Callout style={{ marginBottom: "10px" }}>
                     <H5>Summary</H5>
                     <p style={{ marginBottom: 0 }}>
-                        {region.name.toUpperCase()}-{realm.name}
-                        is a <em>{population} population</em> realm
+                        {region.name.toUpperCase()}-{realm.name} is a <em>{population} population</em> realm
                     </p>
                 </Callout>
                 <Card>
