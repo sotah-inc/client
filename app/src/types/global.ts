@@ -192,7 +192,7 @@ export interface IOwner {
 
 // auction types
 export interface IAuction {
-    item: Item;
+    itemId: ItemId;
     owner: OwnerName;
     ownerRealm: string;
     bid: number;

@@ -7,8 +7,8 @@ import { IStoreState } from "@app/types";
 import { IQueryAuctionResult } from "@app/types/auction";
 
 const mapStateToProps = (state: IStoreState): IStateProps => {
-    const { auctions, selectedQueryAuctionResults } = state.Auction;
-    return { auctions, selectedItems: selectedQueryAuctionResults };
+    const { auctions, selectedQueryAuctionResults, items } = state.Auction;
+    return { auctions, selectedItems: selectedQueryAuctionResults, items };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<Actions>): IDispatchProps => {

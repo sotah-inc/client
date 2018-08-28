@@ -72,6 +72,7 @@ export interface IGetAuctionsOptions {
 export interface IAuctionsResponse {
     auctions: IAuction[] | null;
     total: number;
+    items: ItemsMap;
 }
 
 export const getAuctions = async (opts: IGetAuctionsOptions): Promise<IAuctionsResponse | null> => {

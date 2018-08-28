@@ -7,7 +7,7 @@ import { SortToggleContainer } from "@app/containers/App/AuctionList/SortToggle"
 import { ItemPopoverContainer } from "@app/containers/util/ItemPopover";
 
 import { IQueryAuctionResult, SortKind } from "@app/types/auction";
-import { IAuction, Item } from "@app/types/global";
+import { IAuction, Item, ItemsMap } from "@app/types/global";
 import { getSelectedResultIndex, qualityToColorClass } from "@app/util";
 
 import "./AuctionTable.scss";
@@ -17,6 +17,7 @@ type ListAuction = IAuction | null;
 export interface IStateProps {
     auctions: ListAuction[];
     selectedItems: IQueryAuctionResult[];
+    items: ItemsMap;
 }
 
 export interface IDispatchProps {
@@ -58,7 +59,9 @@ export class AuctionTable extends React.Component<Props> {
     }
 
     public renderAuction(auction: IAuction | null, index: number) {
-        if (auction === null) {
+        const { items } = this.props;
+
+        if (auction === null || !(auction.itemId in items)) {
             return (
                 <tr key={index}>
                     <td>---</td>
@@ -71,9 +74,11 @@ export class AuctionTable extends React.Component<Props> {
             );
         }
 
+        const item = items[auction.itemId];
+
         return (
             <tr key={index}>
-                <td className={qualityToColorClass(auction.item.quality)}>{this.renderItemPopover(auction.item)}</td>
+                <td className={qualityToColorClass(item.quality)}>{this.renderItemPopover(item)}</td>
                 <td className="quantity-container">{auction.quantity}</td>
                 <td className="currency-container">
                     <Currency amount={auction.buyout} />
