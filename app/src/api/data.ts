@@ -199,3 +199,34 @@ export const getPriceList = async (opts: IGetPriceListOptions): Promise<IGetPric
 
     return res.json();
 };
+
+interface IGetPriceListHistoryOptions extends IGetPriceListOptions {
+    regionName: string;
+    realmSlug: string;
+    itemIds: ItemId[];
+}
+
+export interface IPricelistHistoryMap {
+    [key: number]: IPriceListMap;
+}
+
+interface IGetPriceListHistoryResponse {
+    history: IPricelistHistoryMap;
+    items: ItemsMap;
+}
+
+export const getPriceListHistory = async (
+    opts: IGetPriceListHistoryOptions,
+): Promise<IGetPriceListHistoryResponse | null> => {
+    const { regionName, realmSlug, itemIds } = opts;
+    const res = await fetch(`${apiEndpoint}/region/${regionName}/realm/${realmSlug}/price-list-history`, {
+        body: JSON.stringify({ item_ids: itemIds }),
+        headers: new Headers({ "content-type": "application/json" }),
+        method: "POST",
+    });
+    if (res.status !== HTTPStatus.OK) {
+        return null;
+    }
+
+    return res.json();
+};

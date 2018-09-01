@@ -2,7 +2,7 @@ import * as React from "react";
 
 import { Classes, H2, HTMLTable, Intent, NonIdealState, Spinner } from "@blueprintjs/core";
 
-import { getPriceList, IPriceListMap } from "@app/api/data";
+import { getPriceList, getPriceListHistory, IPricelistHistoryMap, IPriceListMap } from "@app/api/data";
 import { Currency } from "@app/components/util";
 import { ItemPopoverContainer } from "@app/containers/util/ItemPopover";
 import { PricelistIconContainer } from "@app/containers/util/PricelistIcon";
@@ -25,6 +25,7 @@ type Props = Readonly<IStateProps & IOwnProps>;
 type State = Readonly<{
     getPriceListLevel: GetPriceListLevel;
     pricelistMap: IPriceListMap;
+    pricelistHistoryMap: IPricelistHistoryMap;
     itemsMap: ItemsMap;
 }>;
 
@@ -32,6 +33,7 @@ export class PricelistTable extends React.Component<Props, State> {
     public state: State = {
         getPriceListLevel: GetPriceListLevel.initial,
         itemsMap: {},
+        pricelistHistoryMap: {},
         pricelistMap: {},
     };
 
@@ -85,12 +87,24 @@ export class PricelistTable extends React.Component<Props, State> {
         const { list, region, realm } = this.props;
 
         const itemIds = list.pricelist_entries!.map(v => v.item_id);
-        const data = await getPriceList({
+
+        const pricelistData = await getPriceList({
             itemIds,
             realmSlug: realm.slug,
             regionName: region.name,
         });
-        if (data === null) {
+        if (pricelistData === null) {
+            this.setState({ getPriceListLevel: GetPriceListLevel.failure });
+
+            return;
+        }
+
+        const pricelistHistoryData = await getPriceListHistory({
+            itemIds,
+            realmSlug: realm.slug,
+            regionName: region.name,
+        });
+        if (pricelistHistoryData === null) {
             this.setState({ getPriceListLevel: GetPriceListLevel.failure });
 
             return;
@@ -98,8 +112,9 @@ export class PricelistTable extends React.Component<Props, State> {
 
         this.setState({
             getPriceListLevel: GetPriceListLevel.success,
-            itemsMap: data.items,
-            pricelistMap: data.price_list,
+            itemsMap: { ...pricelistData.items },
+            pricelistHistoryMap: { ...pricelistHistoryData.history },
+            pricelistMap: { ...pricelistData.price_list },
         });
     }
 
