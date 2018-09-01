@@ -173,12 +173,14 @@ interface IGetPriceListOptions {
     itemIds: ItemId[];
 }
 
+export interface IPrices {
+    bid: number;
+    buyout: number;
+    volume: number;
+}
+
 export interface IPriceListMap {
-    [key: number]: {
-        bid: number;
-        buyout: number;
-        volume: number;
-    };
+    [itemId: number]: IPrices;
 }
 
 interface IGetPriceListResponse {
@@ -206,8 +208,12 @@ interface IGetPriceListHistoryOptions extends IGetPriceListOptions {
     itemIds: ItemId[];
 }
 
+export interface ITimestampPricesMap {
+    [unixTimestamp: number]: IPrices;
+}
+
 export interface IPricelistHistoryMap {
-    [key: number]: IPriceListMap;
+    [itemId: number]: ITimestampPricesMap;
 }
 
 interface IGetPriceListHistoryResponse {

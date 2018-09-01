@@ -1,14 +1,29 @@
 import * as React from "react";
 
 import { Classes, H2, HTMLTable, Intent, NonIdealState, Spinner } from "@blueprintjs/core";
+import * as moment from "moment";
+import { Legend, Line, LineChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
 
-import { getPriceList, getPriceListHistory, IPricelistHistoryMap, IPriceListMap } from "@app/api/data";
+import {
+    getPriceList,
+    getPriceListHistory,
+    IPricelistHistoryMap,
+    IPriceListMap,
+    ITimestampPricesMap,
+} from "@app/api/data";
 import { Currency } from "@app/components/util";
 import { ItemPopoverContainer } from "@app/containers/util/ItemPopover";
 import { PricelistIconContainer } from "@app/containers/util/PricelistIcon";
 import { IRealm, IRegion, ItemId, ItemsMap } from "@app/types/global";
 import { GetPriceListLevel, IPricelist, IPricelistEntry } from "@app/types/price-lists";
-import { didRealmChange, didRegionChange, qualityToColorClass } from "@app/util";
+import {
+    currencyToText,
+    didRealmChange,
+    didRegionChange,
+    getColor,
+    qualityToColorClass,
+    unixTimestampToText,
+} from "@app/util";
 
 export interface IStateProps {
     items: ItemsMap;
@@ -18,6 +33,11 @@ export interface IOwnProps {
     list: IPricelist;
     region: IRegion;
     realm: IRealm;
+}
+
+interface ILineItem {
+    name: number;
+    [key: string]: number;
 }
 
 type Props = Readonly<IStateProps & IOwnProps>;
@@ -176,9 +196,33 @@ export class PricelistTable extends React.Component<Props, State> {
         return null;
     }
 
+    private renderLine(index: number, itemId: ItemId) {
+        let name: string = itemId.toString();
+        const item = this.getItem(itemId);
+        if (item !== null) {
+            name = item.name;
+        }
+
+        return (
+            <Line
+                key={index}
+                name={name}
+                type="step"
+                dataKey={`${itemId}_buyout`}
+                stroke={getColor(index)}
+                dot={false}
+                isAnimationActive={false}
+            />
+        );
+    }
+
+    private renderLines(data: IPricelistHistoryMap) {
+        return Object.keys(data).map((itemIdKey: string, index: number) => this.renderLine(index, Number(itemIdKey)));
+    }
+
     private renderTable() {
         const { list, items } = this.props;
-        const { pricelistMap } = this.state;
+        const { pricelistMap, pricelistHistoryMap } = this.state;
 
         const entries = [...list.pricelist_entries!].sort((a, b) => {
             const aItem = items[a.item_id];
@@ -201,12 +245,50 @@ export class PricelistTable extends React.Component<Props, State> {
             return aResult > bResult ? -1 : 1;
         });
 
+        const data: ILineItem[] = Object.keys(pricelistHistoryMap).reduce(
+            (dataPreviousValue: ILineItem[], itemIdKey: string) => {
+                const itemPricelistHistory: ITimestampPricesMap = pricelistHistoryMap[itemIdKey];
+                const itemId = Number(itemIdKey);
+
+                return Object.keys(itemPricelistHistory).reduce((previousValue: ILineItem[], unixTimestampKey) => {
+                    const unixTimestamp = Number(unixTimestampKey);
+                    const prices = itemPricelistHistory[unixTimestamp];
+
+                    previousValue.push({ name: unixTimestamp, [`${itemId}_buyout`]: prices.buyout });
+
+                    return previousValue;
+                }, dataPreviousValue);
+            },
+            [],
+        );
+
+        const now = moment().unix();
+        const twoWeeksAgo = now - 60 * 60 * 24 * 14;
+        const ticks = Array.from(Array(7)).map((_, i) => {
+            return twoWeeksAgo + i * 60 * 60 * 24 * 2;
+        });
+
         return (
             <>
                 <H2 className="pricelist-table-heading">
                     <PricelistIconContainer pricelist={list} />
                     {list.name}
                 </H2>
+                <ResponsiveContainer width="100%" height={250}>
+                    <LineChart data={data}>
+                        <XAxis
+                            dataKey="name"
+                            tickFormatter={unixTimestampToText}
+                            domain={[twoWeeksAgo, now]}
+                            type="number"
+                            ticks={ticks}
+                            tick={{ fill: "#fff" }}
+                        />
+                        <YAxis tickFormatter={currencyToText} domain={[0, "auto"]} tick={{ fill: "#fff" }} />
+                        <Legend />
+                        {this.renderLines(pricelistHistoryMap)}
+                    </LineChart>
+                </ResponsiveContainer>
                 <HTMLTable
                     className={`${Classes.HTML_TABLE} ${Classes.HTML_TABLE_BORDERED} ${Classes.SMALL} price-list-table`}
                 >

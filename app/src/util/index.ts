@@ -1,6 +1,48 @@
+import * as moment from "moment";
+
 import { apiEndpoint } from "@app/api";
 import { IQueryAuctionResult } from "@app/types/auction";
 import { IExpansion, InventoryType, IRealm, IRegion, Item, ItemQuality, ItemStat } from "@app/types/global";
+
+export const currencyToText = (amount: number): string => {
+    if (amount === 0) {
+        return "0g";
+    }
+
+    const copper = Math.floor(amount % 100);
+    amount = amount / 100;
+    const silver = Math.floor(amount % 100);
+    const gold = Math.floor(amount / 100);
+
+    const copperOutput = copper > 0 ? `${copper.toFixed()}c` : null;
+    const silverOutput = silver > 0 ? `${silver.toFixed()}s` : null;
+    const goldOutput = gold > 0 ? `${Number(gold.toFixed(0)).toLocaleString()}g` : null;
+    const output = [goldOutput, silverOutput, copperOutput].filter(v => v !== null).join(" ");
+
+    return output;
+};
+
+export const unixTimestampToText = (unixTimestamp: number): string => {
+    const date = new Date(unixTimestamp * 1000);
+    return moment(date).format("MMM d");
+};
+
+export const getColor = (index: number): string => {
+    const choices = [
+        "#2965CC",
+        "#29A634",
+        "#D99E0B",
+        "#D13913",
+        "#8F398F",
+        "#00B3A4",
+        "#DB2C6F",
+        "#9BBF30",
+        "#96622D",
+        "#7157D9",
+    ];
+
+    return choices[index % choices.length];
+};
 
 export const qualityToColorClass = (quality: ItemQuality): string => {
     switch (quality) {
