@@ -2,7 +2,7 @@ import * as React from "react";
 
 import { Classes, H2, HTMLTable, Intent, NonIdealState, Spinner } from "@blueprintjs/core";
 import * as moment from "moment";
-import { Legend, Line, LineChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
+import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
 
 import {
     getPriceList,
@@ -207,7 +207,6 @@ export class PricelistTable extends React.Component<Props, State> {
             <Line
                 key={index}
                 name={name}
-                type="step"
                 dataKey={`${itemId}_buyout`}
                 stroke={getColor(index)}
                 dot={false}
@@ -254,7 +253,7 @@ export class PricelistTable extends React.Component<Props, State> {
                     const unixTimestamp = Number(unixTimestampKey);
                     const prices = itemPricelistHistory[unixTimestamp];
 
-                    previousValue.push({ name: unixTimestamp, [`${itemId}_buyout`]: prices.buyout });
+                    previousValue.push({ name: unixTimestamp, [`${itemId}_buyout`]: prices.buyout / 10 / 10 });
 
                     return previousValue;
                 }, dataPreviousValue);
@@ -276,6 +275,7 @@ export class PricelistTable extends React.Component<Props, State> {
                 </H2>
                 <ResponsiveContainer width="100%" height={250}>
                     <LineChart data={data}>
+                        <CartesianGrid vertical={false} strokeWidth={0.25} strokeOpacity={0.25} />
                         <XAxis
                             dataKey="name"
                             tickFormatter={unixTimestampToText}
@@ -284,7 +284,14 @@ export class PricelistTable extends React.Component<Props, State> {
                             ticks={ticks}
                             tick={{ fill: "#fff" }}
                         />
-                        <YAxis tickFormatter={currencyToText} domain={[0, "auto"]} tick={{ fill: "#fff" }} />
+                        <YAxis
+                            tickFormatter={v => currencyToText(v * 10 * 10)}
+                            domain={[100, dataMax => Math.pow(10, Math.ceil(Math.log10(dataMax)))]}
+                            tick={{ fill: "#fff" }}
+                            scale="log"
+                            allowDataOverflow={true}
+                            mirror={true}
+                        />
                         <Legend />
                         {this.renderLines(pricelistHistoryMap)}
                     </LineChart>
