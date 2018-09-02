@@ -24,7 +24,7 @@ export const currencyToText = (amount: number): string => {
 
 export const unixTimestampToText = (unixTimestamp: number): string => {
     const date = new Date(unixTimestamp * 1000);
-    return moment(date).format("MMM d");
+    return moment(date).format("MMM D");
 };
 
 export const getColor = (index: number): string => {
