@@ -210,7 +210,8 @@ export class PricelistTable extends React.Component<Props, State> {
                 dataKey={`${itemId}_buyout`}
                 stroke={getColor(index)}
                 dot={false}
-                isAnimationActive={false}
+                animationEasing={"ease-in-out"}
+                animationDuration={500}
             />
         );
     }
