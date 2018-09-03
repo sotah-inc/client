@@ -262,10 +262,19 @@ export class PricelistTable extends React.Component<Props, State> {
             [],
         );
 
-        const now = moment().unix();
-        const twoWeeksAgo = now - 60 * 60 * 24 * 14;
-        const ticks = Array.from(Array(7)).map((_, i) => {
-            return twoWeeksAgo + i * 60 * 60 * 24 * 2;
+        const twoWeeksAgoDate = moment().subtract(14, "days");
+        const roundedTwoWeeksAgoDate = twoWeeksAgoDate
+            .subtract(twoWeeksAgoDate.hours(), "hours")
+            .subtract(twoWeeksAgoDate.minutes(), "minutes")
+            .subtract(twoWeeksAgoDate.seconds(), "seconds");
+        const nowDate = moment().add(1, "days");
+        const roundedNowDate = nowDate
+            .subtract(nowDate.hours(), "hours")
+            .subtract(nowDate.minutes(), "minutes")
+            .subtract(nowDate.seconds(), "seconds");
+
+        const ticks = Array.from(Array(8)).map((_, i) => {
+            return roundedTwoWeeksAgoDate.unix() + i * 60 * 60 * 24 * 2;
         });
 
         return (
@@ -280,7 +289,7 @@ export class PricelistTable extends React.Component<Props, State> {
                         <XAxis
                             dataKey="name"
                             tickFormatter={unixTimestampToText}
-                            domain={[twoWeeksAgo - 60 * 60 * 24, now + 60 * 60 * 24]}
+                            domain={[roundedTwoWeeksAgoDate.unix() - 60 * 60 * 24, roundedNowDate.unix()]}
                             type="number"
                             ticks={ticks}
                             tick={{ fill: "#fff" }}
