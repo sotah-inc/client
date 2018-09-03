@@ -12,6 +12,8 @@ import {
     ItemId,
     ItemsMap,
     OwnerName,
+    RealmSlug,
+    RegionName,
 } from "../types/global";
 import { apiEndpoint } from "./index";
 
@@ -227,6 +229,43 @@ export const getPriceListHistory = async (
     const { regionName, realmSlug, itemIds } = opts;
     const res = await fetch(`${apiEndpoint}/region/${regionName}/realm/${realmSlug}/price-list-history`, {
         body: JSON.stringify({ item_ids: itemIds }),
+        headers: new Headers({ "content-type": "application/json" }),
+        method: "POST",
+    });
+    if (res.status !== HTTPStatus.OK) {
+        return null;
+    }
+
+    return res.json();
+};
+
+export interface IQueryOwnersByItemsOptions {
+    regionName: RegionName;
+    realmSlug: RealmSlug;
+    items: ItemId[];
+}
+
+export interface IOwnerItemsOwnership {
+    owned_value: number;
+    owned_volume: number;
+}
+
+export interface IOwnerItemsOwnershipMap {
+    [ownerName: string]: IOwnerItemsOwnership;
+}
+
+export interface IQueryOwnersByItemsResponse {
+    total_value: number;
+    total_volume: number;
+    ownership: IOwnerItemsOwnershipMap;
+}
+
+export const queryOwnersByItems = async (
+    opts: IQueryOwnersByItemsOptions,
+): Promise<IQueryOwnersByItemsResponse | null> => {
+    const { regionName, realmSlug, items } = opts;
+    const res = await fetch(`${apiEndpoint}/region/${regionName}/realm/${realmSlug}/query-owner-items`, {
+        body: JSON.stringify({ items }),
         headers: new Headers({ "content-type": "application/json" }),
         method: "POST",
     });

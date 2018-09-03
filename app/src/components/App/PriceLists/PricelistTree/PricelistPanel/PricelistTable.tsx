@@ -1,20 +1,23 @@
 import * as React from "react";
 
-import { Classes, H2, HTMLTable, Intent, NonIdealState, Spinner } from "@blueprintjs/core";
+import { Classes, H2, H4, HTMLTable, Intent, NonIdealState, Spinner } from "@blueprintjs/core";
 import * as moment from "moment";
 import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
 
 import {
     getPriceList,
     getPriceListHistory,
+    IOwnerItemsOwnership,
+    IOwnerItemsOwnershipMap,
     IPricelistHistoryMap,
     IPriceListMap,
     ITimestampPricesMap,
+    queryOwnersByItems,
 } from "@app/api/data";
 import { Currency } from "@app/components/util";
 import { ItemPopoverContainer } from "@app/containers/util/ItemPopover";
 import { PricelistIconContainer } from "@app/containers/util/PricelistIcon";
-import { IRealm, IRegion, ItemId, ItemsMap } from "@app/types/global";
+import { IRealm, IRegion, ItemId, ItemsMap, OwnerName } from "@app/types/global";
 import { GetPriceListLevel, IPricelist, IPricelistEntry } from "@app/types/price-lists";
 import {
     currencyToText,
@@ -47,12 +50,14 @@ type State = Readonly<{
     pricelistMap: IPriceListMap;
     pricelistHistoryMap: IPricelistHistoryMap;
     itemsMap: ItemsMap;
+    ownership: IOwnerItemsOwnershipMap;
 }>;
 
 export class PricelistTable extends React.Component<Props, State> {
     public state: State = {
         getPriceListLevel: GetPriceListLevel.initial,
         itemsMap: {},
+        ownership: {},
         pricelistHistoryMap: {},
         pricelistMap: {},
     };
@@ -130,9 +135,21 @@ export class PricelistTable extends React.Component<Props, State> {
             return;
         }
 
+        const ownersOwnership = await queryOwnersByItems({
+            items: itemIds,
+            realmSlug: realm.slug,
+            regionName: region.name,
+        });
+        if (ownersOwnership === null) {
+            this.setState({ getPriceListLevel: GetPriceListLevel.failure });
+
+            return;
+        }
+
         this.setState({
             getPriceListLevel: GetPriceListLevel.success,
             itemsMap: { ...pricelistData.items },
+            ownership: ownersOwnership.ownership,
             pricelistHistoryMap: { ...pricelistHistoryData.history },
             pricelistMap: { ...pricelistData.price_list },
         });
@@ -220,30 +237,8 @@ export class PricelistTable extends React.Component<Props, State> {
         return Object.keys(data).map((itemIdKey: string, index: number) => this.renderLine(index, Number(itemIdKey)));
     }
 
-    private renderTable() {
-        const { list, items } = this.props;
-        const { pricelistMap, pricelistHistoryMap } = this.state;
-
-        const entries = [...list.pricelist_entries!].sort((a, b) => {
-            const aItem = items[a.item_id];
-            const bItem = items[b.item_id];
-
-            let aResult = 0;
-            if (a.item_id in pricelistMap) {
-                aResult = pricelistMap[a.item_id].buyout * a.quantity_modifier;
-            }
-
-            let bResult = 0;
-            if (b.item_id in pricelistMap) {
-                bResult = pricelistMap[b.item_id].buyout * b.quantity_modifier;
-            }
-
-            if (aResult === bResult && aItem && bItem) {
-                return aItem.normalized_name > bItem.normalized_name ? 1 : -1;
-            }
-
-            return aResult > bResult ? -1 : 1;
-        });
+    private renderGraph() {
+        const { pricelistHistoryMap } = this.state;
 
         const data: ILineItem[] = Object.keys(pricelistHistoryMap).reduce(
             (dataPreviousValue: ILineItem[], itemIdKey: string) => {
@@ -282,10 +277,7 @@ export class PricelistTable extends React.Component<Props, State> {
 
         return (
             <>
-                <H2 className="pricelist-table-heading">
-                    <PricelistIconContainer pricelist={list} />
-                    {list.name}
-                </H2>
+                <H4>Price History</H4>
                 <ResponsiveContainer width="100%" height={250}>
                     <LineChart data={data}>
                         <CartesianGrid vertical={false} strokeWidth={0.25} strokeOpacity={0.25} />
@@ -319,6 +311,38 @@ export class PricelistTable extends React.Component<Props, State> {
                         {this.renderLines(pricelistHistoryMap)}
                     </LineChart>
                 </ResponsiveContainer>
+            </>
+        );
+    }
+
+    private renderItems() {
+        const { list, items } = this.props;
+        const { pricelistMap } = this.state;
+
+        const entries = [...list.pricelist_entries!].sort((a, b) => {
+            const aItem = items[a.item_id];
+            const bItem = items[b.item_id];
+
+            let aResult = 0;
+            if (a.item_id in pricelistMap) {
+                aResult = pricelistMap[a.item_id].buyout * a.quantity_modifier;
+            }
+
+            let bResult = 0;
+            if (b.item_id in pricelistMap) {
+                bResult = pricelistMap[b.item_id].buyout * b.quantity_modifier;
+            }
+
+            if (aResult === bResult && aItem && bItem) {
+                return aItem.normalized_name > bItem.normalized_name ? 1 : -1;
+            }
+
+            return aResult > bResult ? -1 : 1;
+        });
+
+        return (
+            <>
+                <H4>Current Prices</H4>
                 <HTMLTable
                     className={`${Classes.HTML_TABLE} ${Classes.HTML_TABLE_BORDERED} ${Classes.SMALL} price-list-table`}
                 >
@@ -332,6 +356,69 @@ export class PricelistTable extends React.Component<Props, State> {
                     </thead>
                     <tbody>{entries.map((v, i) => this.renderEntry(i, v))}</tbody>
                 </HTMLTable>
+            </>
+        );
+    }
+
+    private renderOwnershipRow(index: number, owner: OwnerName, ownership: IOwnerItemsOwnership) {
+        return (
+            <tr key={index}>
+                <td>{owner}</td>
+                <td>
+                    <Currency amount={ownership.owned_value} />
+                </td>
+                <td>{ownership.owned_volume}</td>
+            </tr>
+        );
+    }
+
+    private renderOwners() {
+        const { ownership } = this.state;
+
+        const sortedOwnerNames = Object.keys(ownership).sort((a, b) => {
+            const aValue = ownership[a];
+            const bValue = ownership[b];
+
+            if (aValue.owned_value === bValue.owned_value) {
+                return a > b ? 1 : -1;
+            }
+
+            return aValue.owned_value > bValue.owned_value ? -1 : 1;
+        });
+
+        return (
+            <>
+                <H4>Current Sellers</H4>
+                <HTMLTable
+                    className={`${Classes.HTML_TABLE} ${Classes.HTML_TABLE_BORDERED} ${Classes.SMALL} ownership-table`}
+                >
+                    <thead>
+                        <tr>
+                            <th>Owner</th>
+                            <th>Value</th>
+                            <th>Volume</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {sortedOwnerNames.map((owner, i) => this.renderOwnershipRow(i, owner, ownership[owner]))}
+                    </tbody>
+                </HTMLTable>
+            </>
+        );
+    }
+
+    private renderTable() {
+        const { list } = this.props;
+
+        return (
+            <>
+                <H2 className="pricelist-table-heading">
+                    <PricelistIconContainer pricelist={list} />
+                    {list.name}
+                </H2>
+                {this.renderGraph()}
+                {this.renderItems()}
+                {this.renderOwners()}
             </>
         );
     }
