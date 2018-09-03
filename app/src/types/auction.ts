@@ -70,8 +70,8 @@ export enum QueryAuctionsLevel {
 }
 
 export interface IQueryAuctionResult {
-    item: Item;
-    owner: IOwner;
+    item: Item | null;
+    owner: IOwner | null;
     target: string;
     rank: number;
 }

@@ -128,9 +128,9 @@ export class QueryAuctionsFilter extends React.Component<Props> {
     private renderItemRendererTextContent(result: IQueryAuctionResult) {
         const { item, owner } = result;
 
-        if (item.id > 0) {
-            return this.renderItemAsItemRendererText(result.item);
-        } else if (owner.name !== "") {
+        if (item !== null) {
+            return this.renderItemAsItemRendererText(item);
+        } else if (owner !== null) {
             return owner.name;
         }
 
@@ -153,10 +153,10 @@ export class QueryAuctionsFilter extends React.Component<Props> {
         let className = modifiers.active ? Classes.ACTIVE : "";
 
         let label = "n/a";
-        if (item.name !== "") {
+        if (item !== null) {
             label = `#${item.id}`;
-            className = `${className} ${qualityToColorClass(result.item.quality)}`;
-        } else if (owner.name !== "") {
+            className = `${className} ${qualityToColorClass(item.quality)}`;
+        } else if (owner !== null) {
             label = "Owner";
         }
 
@@ -234,9 +234,9 @@ export class QueryAuctionsFilter extends React.Component<Props> {
     private inputValueRenderer(result: IQueryAuctionResult): string {
         const { item, owner } = result;
 
-        if (item.id > 0) {
+        if (item !== null) {
             return getItemTextValue(item);
-        } else if (owner.name !== "") {
+        } else if (owner !== null) {
             return owner.name;
         }
 

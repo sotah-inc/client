@@ -177,9 +177,9 @@ export class AuctionList extends React.Component<Props> {
         }
 
         const ownerFilters: OwnerName[] = selectedQueryAuctionResults
-            .filter(v => v.owner.name !== "")
-            .map(v => v.owner.name);
-        const itemFilters: ItemId[] = selectedQueryAuctionResults.filter(v => v.item.name !== "").map(v => v.item.id);
+            .filter(v => v.owner !== null)
+            .map(v => v.owner!.name);
+        const itemFilters: ItemId[] = selectedQueryAuctionResults.filter(v => v.item !== null).map(v => v.item!.id);
         refreshAuctions({
             count: auctionsPerPage,
             itemFilters,

@@ -146,22 +146,22 @@ export const getSelectedResultIndex = (result: IQueryAuctionResult, selectedItem
     for (let i = 0; i < selectedItems.length; i++) {
         const selectedItem = selectedItems[i];
 
-        if (selectedItem.item.id > 0) {
-            if (result.owner.name !== "") {
+        if (selectedItem.item !== null) {
+            if (result.owner !== null) {
                 continue;
             }
 
-            if (result.item.id === selectedItem.item.id) {
+            if (result.item !== null && result.item.id === selectedItem.item.id) {
                 return Number(i);
             }
         }
 
-        if (selectedItem.owner.name !== "") {
-            if (result.item.id > 0) {
+        if (selectedItem.owner !== null) {
+            if (result.item !== null) {
                 continue;
             }
 
-            if (result.owner.name === selectedItem.owner.name) {
+            if (result.owner !== null && result.owner.name === selectedItem.owner.name) {
                 return Number(i);
             }
         }
