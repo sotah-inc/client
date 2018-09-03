@@ -277,20 +277,22 @@ export class ListDialog extends React.Component<Props, State> {
 
         if (entries.length > 0) {
             return (
-                <HTMLTable
-                    className={`${Classes.HTML_TABLE} ${Classes.HTML_TABLE_BORDERED} ${
-                        Classes.SMALL
-                    } list-dialog-table`}
-                >
-                    <thead>
-                        <tr>
-                            <th>Item</th>
-                            <th>Quantity</th>
-                            <th>&nbsp;</th>
-                        </tr>
-                    </thead>
-                    <tbody>{entries.map((v, i) => this.renderEntry(i, v))}</tbody>
-                </HTMLTable>
+                <div style={{ maxHeight: "300px", overflow: "auto" }}>
+                    <HTMLTable
+                        className={`${Classes.HTML_TABLE} ${Classes.HTML_TABLE_BORDERED} ${
+                            Classes.SMALL
+                        } list-dialog-table`}
+                    >
+                        <thead>
+                            <tr>
+                                <th>Item</th>
+                                <th>Quantity</th>
+                                <th>&nbsp;</th>
+                            </tr>
+                        </thead>
+                        <tbody>{entries.map((v, i) => this.renderEntry(i, v))}</tbody>
+                    </HTMLTable>
+                </div>
             );
         }
 
