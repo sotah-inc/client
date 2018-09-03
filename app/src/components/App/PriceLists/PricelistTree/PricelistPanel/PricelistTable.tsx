@@ -263,17 +263,20 @@ export class PricelistTable extends React.Component<Props, State> {
         );
 
         const twoWeeksAgoDate = moment().subtract(14, "days");
-        const roundedTwoWeeksAgoDate = twoWeeksAgoDate
+        const roundedTwoWeeksAgoDate = moment()
+            .subtract(16, "days")
             .subtract(twoWeeksAgoDate.hours(), "hours")
             .subtract(twoWeeksAgoDate.minutes(), "minutes")
             .subtract(twoWeeksAgoDate.seconds(), "seconds");
         const nowDate = moment().add(1, "days");
-        const roundedNowDate = nowDate
+        const roundedNowDate = moment()
+            .add(1, "days")
             .subtract(nowDate.hours(), "hours")
             .subtract(nowDate.minutes(), "minutes")
-            .subtract(nowDate.seconds(), "seconds");
+            .subtract(nowDate.seconds(), "seconds")
+            .add(12, "hours");
 
-        const ticks = Array.from(Array(8)).map((_, i) => {
+        const ticks = Array.from(Array(9)).map((_, i) => {
             return roundedTwoWeeksAgoDate.unix() + i * 60 * 60 * 24 * 2;
         });
 
@@ -289,7 +292,7 @@ export class PricelistTable extends React.Component<Props, State> {
                         <XAxis
                             dataKey="name"
                             tickFormatter={unixTimestampToText}
-                            domain={[roundedTwoWeeksAgoDate.unix() - 60 * 60 * 24, roundedNowDate.unix()]}
+                            domain={[roundedTwoWeeksAgoDate.unix(), roundedNowDate.unix()]}
                             type="number"
                             ticks={ticks}
                             tick={{ fill: "#fff" }}
@@ -300,6 +303,7 @@ export class PricelistTable extends React.Component<Props, State> {
                             tick={{ fill: "#fff" }}
                             scale="log"
                             allowDataOverflow={true}
+                            mirror={true}
                         />
                         <Legend />
                         {this.renderLines(pricelistHistoryMap)}
