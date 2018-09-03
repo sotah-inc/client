@@ -296,11 +296,10 @@ export class PricelistTable extends React.Component<Props, State> {
                         />
                         <YAxis
                             tickFormatter={v => currencyToText(v * 10 * 10)}
-                            domain={[100, dataMax => Math.pow(10, Math.ceil(Math.log10(dataMax)))]}
+                            domain={[1, dataMax => Math.pow(10, Math.ceil(Math.log10(dataMax)))]}
                             tick={{ fill: "#fff" }}
                             scale="log"
                             allowDataOverflow={true}
-                            mirror={true}
                         />
                         <Legend />
                         {this.renderLines(pricelistHistoryMap)}
