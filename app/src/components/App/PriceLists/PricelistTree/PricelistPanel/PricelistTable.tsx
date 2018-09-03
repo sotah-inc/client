@@ -280,7 +280,7 @@ export class PricelistTable extends React.Component<Props, State> {
                         <XAxis
                             dataKey="name"
                             tickFormatter={unixTimestampToText}
-                            domain={[twoWeeksAgo, now]}
+                            domain={[twoWeeksAgo - 60 * 60 * 24, now + 60 * 60 * 24]}
                             type="number"
                             ticks={ticks}
                             tick={{ fill: "#fff" }}
