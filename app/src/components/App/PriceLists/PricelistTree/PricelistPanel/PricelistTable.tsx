@@ -299,7 +299,17 @@ export class PricelistTable extends React.Component<Props, State> {
                         />
                         <YAxis
                             tickFormatter={v => currencyToText(v * 10 * 10)}
-                            domain={[1, dataMax => Math.pow(10, Math.ceil(Math.log10(dataMax)))]}
+                            domain={[
+                                dataMin => {
+                                    const result = Math.pow(10, Math.floor(Math.log10(dataMin)));
+                                    if (result === 0) {
+                                        return 10;
+                                    }
+
+                                    return result;
+                                },
+                                dataMax => Math.pow(10, Math.ceil(Math.log10(dataMax)) + 1),
+                            ]}
                             tick={{ fill: "#fff" }}
                             scale="log"
                             allowDataOverflow={true}
