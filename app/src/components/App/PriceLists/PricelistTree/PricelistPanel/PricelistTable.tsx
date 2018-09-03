@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { Classes, H2, H4, HTMLTable, Intent, NonIdealState, Spinner } from "@blueprintjs/core";
+import { Callout, Classes, H2, H4, HTMLTable, Intent, NonIdealState, Spinner } from "@blueprintjs/core";
 import * as moment from "moment";
 import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
 
@@ -389,6 +389,7 @@ export class PricelistTable extends React.Component<Props, State> {
         return (
             <>
                 <H4>Current Sellers</H4>
+                <Callout intent={Intent.PRIMARY}>This data is only a subset of each sellers auctions.</Callout>
                 <HTMLTable
                     className={`${Classes.HTML_TABLE} ${Classes.HTML_TABLE_BORDERED} ${Classes.SMALL} ownership-table`}
                 >
