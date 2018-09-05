@@ -2,16 +2,22 @@ import * as React from "react";
 
 import { Classes, H4, HTMLTable, Intent, Spinner } from "@blueprintjs/core";
 
-import { IPriceListMap } from "@app/api/data";
+import { IGetPriceListOptions, IPriceListMap } from "@app/api/data";
 import { Currency } from "@app/components/util";
 import { ItemPopoverContainer } from "@app/containers/util/ItemPopover";
 import { IRealm, IRegion, ItemId, ItemsMap } from "@app/types/global";
+import { FetchLevel } from "@app/types/main";
 import { IPricelist, IPricelistEntry } from "@app/types/price-lists";
-import { qualityToColorClass } from "@app/util";
+import { didRealmChange, didRegionChange, qualityToColorClass } from "@app/util";
 
 export interface IStateProps {
     items: ItemsMap;
+    getPricelistLevel: FetchLevel;
     pricelistMap: IPriceListMap;
+}
+
+export interface IDispatchProps {
+    reloadPrices: (opts: IGetPriceListOptions) => void;
 }
 
 export interface IOwnProps {
@@ -20,10 +26,80 @@ export interface IOwnProps {
     realm: IRealm;
 }
 
-type Props = Readonly<IStateProps & IOwnProps>;
+type Props = Readonly<IStateProps & IDispatchProps & IOwnProps>;
 
 export class PricelistTable extends React.Component<Props> {
+    public componentDidMount() {
+        const { reloadPrices, region, realm, list } = this.props;
+
+        const itemIds = list.pricelist_entries!.map(v => v.item_id);
+
+        reloadPrices({
+            itemIds,
+            realmSlug: realm.slug,
+            regionName: region.name,
+        });
+    }
+
+    public componentDidUpdate(prevProps: Props) {
+        const { reloadPrices, region, realm, getPricelistLevel, list } = this.props;
+
+        const itemIds = list.pricelist_entries!.map(v => v.item_id);
+
+        switch (getPricelistLevel) {
+            case FetchLevel.success:
+                const shouldReloadPrices =
+                    didRegionChange(prevProps.region, region) ||
+                    didRealmChange(prevProps.realm, realm) ||
+                    prevProps.list.id !== list.id;
+                if (shouldReloadPrices) {
+                    reloadPrices({
+                        itemIds,
+                        realmSlug: realm.slug,
+                        regionName: region.name,
+                    });
+                }
+            default:
+                break;
+        }
+    }
+
     public render() {
+        return (
+            <>
+                <H4>Current Prices</H4>
+                {this.renderContent()}
+            </>
+        );
+    }
+
+    private getItem(itemId: ItemId) {
+        const { items } = this.props;
+
+        if (itemId in items) {
+            return items[itemId];
+        }
+
+        return null;
+    }
+
+    private renderContent() {
+        const { getPricelistLevel } = this.props;
+
+        switch (getPricelistLevel) {
+            case FetchLevel.fetching:
+                return <Spinner intent={Intent.PRIMARY} />;
+            case FetchLevel.failure:
+                return <Spinner intent={Intent.DANGER} value={1} />;
+            case FetchLevel.success:
+                return this.renderTable();
+            case FetchLevel.initial:
+            default:
+                return <Spinner intent={Intent.NONE} value={1} />;
+        }
+    }
+
+    private renderTable() {
         const { list, items, pricelistMap } = this.props;
 
         const entries = [...list.pricelist_entries!].sort((a, b) => {
@@ -48,33 +124,20 @@ export class PricelistTable extends React.Component<Props> {
         });
 
         return (
-            <>
-                <H4>Current Prices</H4>
-                <HTMLTable
-                    className={`${Classes.HTML_TABLE} ${Classes.HTML_TABLE_BORDERED} ${Classes.SMALL} price-list-table`}
-                >
-                    <thead>
-                        <tr>
-                            <th>Item</th>
-                            <th>Bid</th>
-                            <th>Buyout</th>
-                            <th>Volume</th>
-                        </tr>
-                    </thead>
-                    <tbody>{entries.map((v, i) => this.renderEntry(i, v))}</tbody>
-                </HTMLTable>
-            </>
+            <HTMLTable
+                className={`${Classes.HTML_TABLE} ${Classes.HTML_TABLE_BORDERED} ${Classes.SMALL} price-list-table`}
+            >
+                <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th>Bid</th>
+                        <th>Buyout</th>
+                        <th>Volume</th>
+                    </tr>
+                </thead>
+                <tbody>{entries.map((v, i) => this.renderEntry(i, v))}</tbody>
+            </HTMLTable>
         );
-    }
-
-    private getItem(itemId: ItemId) {
-        const { items } = this.props;
-
-        if (itemId in items) {
-            return items[itemId];
-        }
-
-        return null;
     }
 
     private renderEntry(index: number, entry: IPricelistEntry) {
