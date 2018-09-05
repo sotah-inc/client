@@ -31,6 +31,13 @@ export interface IMainState {
     fetchBootLevel: FetchBootLevel;
 }
 
+export enum FetchLevel {
+    initial,
+    fetching,
+    success,
+    failure,
+}
+
 export enum FetchPingLevel {
     initial,
     fetching,

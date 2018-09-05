@@ -1,5 +1,7 @@
+import { IOwnerItemsOwnershipMap, IPricelistHistoryMap, IPriceListMap } from "@app/api/data";
 import { IUpdatePricelistRequest, IUpdatePricelistResponse } from "@app/api/price-lists";
 import { IErrors, IExpansion, IProfession, IProfessionPricelist, ItemId, ItemsMap } from "./global";
+import { FetchLevel } from "./main";
 
 export interface IPriceListsState {
     pricelists: IPricelist[];
@@ -23,6 +25,12 @@ export interface IPriceListsState {
     getUnmetDemandLevel: GetUnmetDemandLevel;
     unmetDemandItemIds: ItemId[];
     unmetDemandProfessionPricelists: IProfessionPricelist[];
+    getPricelistLevel: FetchLevel;
+    pricelistMap: IPriceListMap;
+    getPricelistHistoryLevel: FetchLevel;
+    pricelistHistoryMap: IPricelistHistoryMap;
+    getItemsOwnershipLevel: FetchLevel;
+    itemsOwnershipMap: IOwnerItemsOwnershipMap;
 }
 
 export interface IExpansionProfessionPricelistMap {
@@ -114,6 +122,9 @@ export const defaultPriceListsState: IPriceListsState = {
     createPricelistLevel: MutatePricelistLevel.initial,
     deletePricelistLevel: DeletePricelistLevel.initial,
     entryCreateLevel: EntryCreateLevel.initial,
+    getItemsOwnershipLevel: FetchLevel.initial,
+    getPricelistHistoryLevel: FetchLevel.initial,
+    getPricelistLevel: FetchLevel.initial,
     getPricelistsLevel: GetPricelistsLevel.initial,
     getProfessionPricelistsLevel: GetProfessionPricelistsLevel.initial,
     getUnmetDemandLevel: GetUnmetDemandLevel.initial,
@@ -122,6 +133,9 @@ export const defaultPriceListsState: IPriceListsState = {
     isDeleteListDialogOpen: false,
     isEditListDialogOpen: false,
     items: [],
+    itemsOwnershipMap: {},
+    pricelistHistoryMap: {},
+    pricelistMap: {},
     pricelists: [],
     professionPricelists: {},
     selectedExpansion: null,

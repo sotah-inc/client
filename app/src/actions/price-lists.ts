@@ -1,6 +1,14 @@
 import { Dispatch } from "redux";
 
 import {
+    getPriceList,
+    getPriceListHistory,
+    IGetPriceListHistoryOptions,
+    IGetPriceListHistoryResponse,
+    IGetPriceListOptions,
+    IGetPriceListResponse,
+} from "@app/api/data";
+import {
     createPricelist,
     createProfessionPricelist,
     deletePricelist,
@@ -187,6 +195,32 @@ export interface IProfessionNode {
 export const NAVIGATE_PROFESSIONNODE = "NAVIGATE_PROFESSIONNODE";
 export const NavigateProfessionNode = (payload: IProfessionNode) => createAction(NAVIGATE_PROFESSIONNODE, payload);
 
+export const REQUEST_GET_PRICELIST = "REQUEST_GET_PRICELIST";
+export const RequestGetPricelist = () => createAction(REQUEST_GET_PRICELIST);
+export const RECEIVE_GET_PRICELIST = "RECEIVE_GET_PRICELIST";
+export const ReceiveGetPricelist = (payload: IGetPriceListResponse | null) =>
+    createAction(RECEIVE_GET_PRICELIST, payload);
+type FetchGetPricelist = ReturnType<typeof RequestGetPricelist | typeof ReceiveGetPricelist>;
+export const FetchGetPricelist = (opts: IGetPriceListOptions) => {
+    return async (dispatch: Dispatch<FetchGetPricelist>) => {
+        dispatch(RequestGetPricelist());
+        dispatch(ReceiveGetPricelist(await getPriceList(opts)));
+    };
+};
+
+export const REQUEST_GET_PRICELISTHISTORY = "REQUEST_GET_PRICELISTHISTORY";
+export const RequestGetPricelistHistory = () => createAction(REQUEST_GET_PRICELISTHISTORY);
+export const RECEIVE_GET_PRICELISTHISTORY = "RECEIVE_GET_PRICELISTHISTORY";
+export const ReceiveGetPricelistHistory = (payload: IGetPriceListHistoryResponse | null) =>
+    createAction(RECEIVE_GET_PRICELISTHISTORY, payload);
+type FetchGetPricelistHistory = ReturnType<typeof RequestGetPricelistHistory | typeof ReceiveGetPricelistHistory>;
+export const FetchGetPricelistHistory = (opts: IGetPriceListHistoryOptions) => {
+    return async (dispatch: Dispatch<FetchGetPricelistHistory>) => {
+        dispatch(RequestGetPricelistHistory());
+        dispatch(ReceiveGetPricelistHistory(await getPriceListHistory(opts)));
+    };
+};
+
 export const PriceListsActions = {
     AppendItems,
     ChangeEntryCreateLevel,
@@ -202,6 +236,8 @@ export const PriceListsActions = {
     ReceiveCreateProfessionPricelist,
     ReceiveDeletePricelist,
     ReceiveDeleteProfessionPricelist,
+    ReceiveGetPricelist,
+    ReceiveGetPricelistHistory,
     ReceiveGetPricelists,
     ReceiveGetProfessionPricelists,
     ReceiveGetUnmetDemand,
@@ -210,6 +246,8 @@ export const PriceListsActions = {
     RequestCreateProfessionPricelist,
     RequestDeletePricelist,
     RequestDeleteProfessionPricelist,
+    RequestGetPricelist,
+    RequestGetPricelistHistory,
     RequestGetPricelists,
     RequestGetProfessionPricelists,
     RequestGetUnmetDemand,

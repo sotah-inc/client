@@ -89,6 +89,14 @@ const handlers: IKindHandlers<IPriceListsState, PriceListsActions> = {
                 return { ...state, deletePricelistLevel: DeletePricelistLevel.fetching };
             },
         },
+        get: {
+            receive: (state: IPriceListsState): IPriceListsState => {
+                return { ...state };
+            },
+            request: (state: IPriceListsState): IPriceListsState => {
+                return { ...state };
+            },
+        },
         update: {
             receive: (state: IPriceListsState, action: ReturnType<typeof ReceiveUpdatePricelist>) => {
                 if (action.payload.response.errors !== null) {

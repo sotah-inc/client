@@ -169,7 +169,7 @@ interface IResponseItemClass {
     subclasses: IResponseSubItemClass[];
 }
 
-interface IGetPriceListOptions {
+export interface IGetPriceListOptions {
     regionName: string;
     realmSlug: string;
     itemIds: ItemId[];
@@ -185,7 +185,7 @@ export interface IPriceListMap {
     [itemId: number]: IPrices;
 }
 
-interface IGetPriceListResponse {
+export interface IGetPriceListResponse {
     price_list: IPriceListMap;
     items: ItemsMap;
 }
@@ -204,7 +204,7 @@ export const getPriceList = async (opts: IGetPriceListOptions): Promise<IGetPric
     return res.json();
 };
 
-interface IGetPriceListHistoryOptions extends IGetPriceListOptions {
+export interface IGetPriceListHistoryOptions extends IGetPriceListOptions {
     regionName: string;
     realmSlug: string;
     itemIds: ItemId[];
@@ -218,7 +218,7 @@ export interface IPricelistHistoryMap {
     [itemId: number]: ITimestampPricesMap;
 }
 
-interface IGetPriceListHistoryResponse {
+export interface IGetPriceListHistoryResponse {
     history: IPricelistHistoryMap;
     items: ItemsMap;
 }
