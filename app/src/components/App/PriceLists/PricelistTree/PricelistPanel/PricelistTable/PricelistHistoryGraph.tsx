@@ -4,25 +4,71 @@ import { H4 } from "@blueprintjs/core";
 import * as moment from "moment";
 import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
 
-import { IPricelistHistoryMap, ITimestampPricesMap } from "@app/api/data";
+import { IGetPriceListHistoryOptions, IPricelistHistoryMap, ITimestampPricesMap } from "@app/api/data";
 import { IRealm, IRegion, ItemId, ItemsMap } from "@app/types/global";
-import { currencyToText, getColor, unixTimestampToText } from "@app/util";
+import { FetchLevel } from "@app/types/main";
+import { IPricelist } from "@app/types/price-lists";
+import { currencyToText, didRealmChange, didRegionChange, getColor, unixTimestampToText } from "@app/util";
 
 export interface IStateProps {
     items: ItemsMap;
     pricelistHistoryMap: IPricelistHistoryMap;
+    getPricelistHistoryLevel: FetchLevel;
+}
+
+export interface IDispatchProps {
+    reloadPricelistHistory: (opts: IGetPriceListHistoryOptions) => void;
+}
+
+export interface IOwnProps {
     region: IRegion;
     realm: IRealm;
+    list: IPricelist;
 }
 
 interface ILineItem {
     name: number;
-    [key: string]: number;
+    [dataKey: string]: number;
 }
 
-type Props = Readonly<IStateProps>;
+type Props = Readonly<IStateProps & IDispatchProps & IOwnProps>;
 
 export class PricelistHistoryGraph extends React.Component<Props> {
+    public componentDidMount() {
+        const { region, realm, reloadPricelistHistory, list } = this.props;
+
+        const itemIds = list.pricelist_entries!.map(v => v.item_id);
+
+        reloadPricelistHistory({
+            itemIds,
+            realmSlug: realm.slug,
+            regionName: region.name,
+        });
+    }
+
+    public componentDidUpdate(prevProps: Props) {
+        const { reloadPricelistHistory, region, realm, getPricelistHistoryLevel, list } = this.props;
+
+        const itemIds = list.pricelist_entries!.map(v => v.item_id);
+
+        switch (getPricelistHistoryLevel) {
+            case FetchLevel.success:
+                const shouldReloadPrices =
+                    didRegionChange(prevProps.region, region) ||
+                    didRealmChange(prevProps.realm, realm) ||
+                    prevProps.list.id !== list.id;
+                if (shouldReloadPrices) {
+                    reloadPricelistHistory({
+                        itemIds,
+                        realmSlug: realm.slug,
+                        regionName: region.name,
+                    });
+                }
+            default:
+                break;
+        }
+    }
+
     public render() {
         const { pricelistHistoryMap } = this.props;
 

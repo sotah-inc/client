@@ -5,6 +5,7 @@ import {
     ReceiveDeletePricelist,
     ReceiveDeleteProfessionPricelist,
     ReceiveGetPricelist,
+    ReceiveGetPricelistHistory,
     ReceiveGetPricelists,
     ReceiveGetProfessionPricelists,
     ReceiveGetUnmetDemand,
@@ -178,6 +179,24 @@ const handlers: IKindHandlers<IPriceListsState, PriceListsActions> = {
             },
             request: (state: IPriceListsState) => {
                 return { ...state, updatePricelistLevel: MutatePricelistLevel.fetching };
+            },
+        },
+    },
+    pricelisthistory: {
+        get: {
+            receive: (state: IPriceListsState, action: ReturnType<typeof ReceiveGetPricelistHistory>) => {
+                if (action.payload === null) {
+                    return { ...state, getPricelistHistoryLevel: FetchLevel.failure };
+                }
+
+                return {
+                    ...state,
+                    getPricelistHistoryLevel: FetchLevel.success,
+                    pricelistHistoryMap: action.payload.history,
+                };
+            },
+            request: (state: IPriceListsState) => {
+                return { ...state, getPricelistHistoryLevel: FetchLevel.fetching };
             },
         },
     },
