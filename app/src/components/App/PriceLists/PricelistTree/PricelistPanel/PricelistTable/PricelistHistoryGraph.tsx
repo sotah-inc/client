@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { H4 } from "@blueprintjs/core";
+import { H4, Intent, Spinner } from "@blueprintjs/core";
 import * as moment from "moment";
 import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
 
@@ -70,7 +70,28 @@ export class PricelistHistoryGraph extends React.Component<Props> {
     }
 
     public render() {
-        const { pricelistHistoryMap } = this.props;
+        return (
+            <>
+                <H4>Price History</H4>
+                {this.renderContent()}
+            </>
+        );
+    }
+
+    private renderContent() {
+        const { pricelistHistoryMap, getPricelistHistoryLevel } = this.props;
+
+        switch (getPricelistHistoryLevel) {
+            case FetchLevel.fetching:
+                return <Spinner intent={Intent.PRIMARY} />;
+            case FetchLevel.failure:
+                return <Spinner intent={Intent.DANGER} value={1} />;
+            case FetchLevel.success:
+                break;
+            case FetchLevel.initial:
+            default:
+                return <Spinner intent={Intent.NONE} value={1} />;
+        }
 
         const data: ILineItem[] = Object.keys(pricelistHistoryMap).reduce(
             (dataPreviousValue: ILineItem[], itemIdKey: string) => {
@@ -108,42 +129,39 @@ export class PricelistHistoryGraph extends React.Component<Props> {
         });
 
         return (
-            <>
-                <H4>Price History</H4>
-                <ResponsiveContainer width="100%" height={250}>
-                    <LineChart data={data}>
-                        <CartesianGrid vertical={false} strokeWidth={0.25} strokeOpacity={0.25} />
-                        <XAxis
-                            dataKey="name"
-                            tickFormatter={unixTimestampToText}
-                            domain={[roundedTwoWeeksAgoDate.unix(), roundedNowDate.unix()]}
-                            type="number"
-                            ticks={ticks}
-                            tick={{ fill: "#fff" }}
-                        />
-                        <YAxis
-                            tickFormatter={v => currencyToText(v * 10 * 10)}
-                            domain={[
-                                dataMin => {
-                                    const result = Math.pow(10, Math.floor(Math.log10(dataMin)));
-                                    if (result === 0) {
-                                        return 10;
-                                    }
+            <ResponsiveContainer width="100%" height={250}>
+                <LineChart data={data}>
+                    <CartesianGrid vertical={false} strokeWidth={0.25} strokeOpacity={0.25} />
+                    <XAxis
+                        dataKey="name"
+                        tickFormatter={unixTimestampToText}
+                        domain={[roundedTwoWeeksAgoDate.unix(), roundedNowDate.unix()]}
+                        type="number"
+                        ticks={ticks}
+                        tick={{ fill: "#fff" }}
+                    />
+                    <YAxis
+                        tickFormatter={v => currencyToText(v * 10 * 10)}
+                        domain={[
+                            dataMin => {
+                                const result = Math.pow(10, Math.floor(Math.log10(dataMin)));
+                                if (result === 0) {
+                                    return 10;
+                                }
 
-                                    return result;
-                                },
-                                dataMax => Math.pow(10, Math.ceil(Math.log10(dataMax)) + 1),
-                            ]}
-                            tick={{ fill: "#fff" }}
-                            scale="log"
-                            allowDataOverflow={true}
-                            mirror={true}
-                        />
-                        <Legend />
-                        {this.renderLines(pricelistHistoryMap)}
-                    </LineChart>
-                </ResponsiveContainer>
-            </>
+                                return result;
+                            },
+                            dataMax => Math.pow(10, Math.ceil(Math.log10(dataMax)) + 1),
+                        ]}
+                        tick={{ fill: "#fff" }}
+                        scale="log"
+                        allowDataOverflow={true}
+                        mirror={true}
+                    />
+                    <Legend />
+                    {this.renderLines(pricelistHistoryMap)}
+                </LineChart>
+            </ResponsiveContainer>
         );
     }
 
