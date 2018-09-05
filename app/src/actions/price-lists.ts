@@ -225,7 +225,7 @@ export const FetchGetPricelistHistory = (opts: IGetPriceListHistoryOptions) => {
 };
 
 export const REQUEST_GET_ITEMSOWNERSHIP = "REQUEST_GET_ITEMSOWNERSHIP";
-export const RequestGetItemsOwnership = () => createAction(REQUEST_GET_PRICELISTHISTORY);
+export const RequestGetItemsOwnership = () => createAction(REQUEST_GET_ITEMSOWNERSHIP);
 export const RECEIVE_GET_ITEMSOWNERSHIP = "RECEIVE_GET_ITEMSOWNERSHIP";
 export const ReceiveGetItemsOwnership = (payload: IQueryOwnersByItemsResponse | null) =>
     createAction(RECEIVE_GET_ITEMSOWNERSHIP, payload);
