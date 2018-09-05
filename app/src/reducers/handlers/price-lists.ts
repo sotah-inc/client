@@ -4,6 +4,7 @@ import {
     ReceiveCreateProfessionPricelist,
     ReceiveDeletePricelist,
     ReceiveDeleteProfessionPricelist,
+    ReceiveGetItemsOwnership,
     ReceiveGetPricelist,
     ReceiveGetPricelistHistory,
     ReceiveGetPricelists,
@@ -28,6 +29,24 @@ import {
 import { IKindHandlers, Runner } from "./index";
 
 const handlers: IKindHandlers<IPriceListsState, PriceListsActions> = {
+    itemsownership: {
+        get: {
+            receive: (state: IPriceListsState, action: ReturnType<typeof ReceiveGetItemsOwnership>) => {
+                if (action.payload === null) {
+                    return { ...state, getItemsOwnershipLevel: FetchLevel.failure };
+                }
+
+                return {
+                    ...state,
+                    getItemsOwnershipLevel: FetchLevel.success,
+                    itemsOwnershipMap: action.payload.ownership,
+                };
+            },
+            request: (state: IPriceListsState) => {
+                return { ...state, getItemsOwnershipLevel: FetchLevel.fetching };
+            },
+        },
+    },
     pricelist: {
         create: {
             receive: (state: IPriceListsState, action: ReturnType<typeof ReceiveCreatePricelist>) => {

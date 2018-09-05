@@ -7,6 +7,9 @@ import {
     IGetPriceListHistoryResponse,
     IGetPriceListOptions,
     IGetPriceListResponse,
+    IQueryOwnersByItemsOptions,
+    IQueryOwnersByItemsResponse,
+    queryOwnersByItems,
 } from "@app/api/data";
 import {
     createPricelist,
@@ -221,6 +224,19 @@ export const FetchGetPricelistHistory = (opts: IGetPriceListHistoryOptions) => {
     };
 };
 
+export const REQUEST_GET_ITEMSOWNERSHIP = "REQUEST_GET_ITEMSOWNERSHIP";
+export const RequestGetItemsOwnership = () => createAction(REQUEST_GET_PRICELISTHISTORY);
+export const RECEIVE_GET_ITEMSOWNERSHIP = "RECEIVE_GET_ITEMSOWNERSHIP";
+export const ReceiveGetItemsOwnership = (payload: IQueryOwnersByItemsResponse | null) =>
+    createAction(RECEIVE_GET_ITEMSOWNERSHIP, payload);
+type FetchGetItemsOwnership = ReturnType<typeof RequestGetItemsOwnership | typeof ReceiveGetItemsOwnership>;
+export const FetchGetItemsOwnership = (opts: IQueryOwnersByItemsOptions) => {
+    return async (dispatch: Dispatch<FetchGetItemsOwnership>) => {
+        dispatch(RequestGetItemsOwnership());
+        dispatch(ReceiveGetItemsOwnership(await queryOwnersByItems(opts)));
+    };
+};
+
 export const PriceListsActions = {
     AppendItems,
     ChangeEntryCreateLevel,
@@ -236,6 +252,7 @@ export const PriceListsActions = {
     ReceiveCreateProfessionPricelist,
     ReceiveDeletePricelist,
     ReceiveDeleteProfessionPricelist,
+    ReceiveGetItemsOwnership,
     ReceiveGetPricelist,
     ReceiveGetPricelistHistory,
     ReceiveGetPricelists,
@@ -246,6 +263,7 @@ export const PriceListsActions = {
     RequestCreateProfessionPricelist,
     RequestDeletePricelist,
     RequestDeleteProfessionPricelist,
+    RequestGetItemsOwnership,
     RequestGetPricelist,
     RequestGetPricelistHistory,
     RequestGetPricelists,

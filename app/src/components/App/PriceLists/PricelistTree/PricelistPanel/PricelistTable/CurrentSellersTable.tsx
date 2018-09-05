@@ -2,19 +2,32 @@ import * as React from "react";
 
 import { Callout, Classes, H4, HTMLTable, Intent } from "@blueprintjs/core";
 
-import { IOwnerItemsOwnership, IOwnerItemsOwnershipMap } from "@app/api/data";
+import { IOwnerItemsOwnership, IOwnerItemsOwnershipMap, IQueryOwnersByItemsOptions } from "@app/api/data";
 import { Currency } from "@app/components/util";
-import { OwnerName } from "@app/types/global";
+import { IRealm, IRegion, OwnerName } from "@app/types/global";
+import { FetchLevel } from "@app/types/main";
+import { IPricelist } from "@app/types/price-lists";
 
 export interface IStateProps {
-    ownership: IOwnerItemsOwnershipMap;
+    itemsOwnershipMap: IOwnerItemsOwnershipMap;
+    getItemsOwnershipLevel: FetchLevel;
 }
 
-type Props = Readonly<IStateProps>;
+export interface IDispatchProps {
+    queryOwnersByItems: (opts: IQueryOwnersByItemsOptions) => void;
+}
 
-export class PricelistTable extends React.Component<Props> {
+export interface IOwnProps {
+    list: IPricelist;
+    region: IRegion;
+    realm: IRealm;
+}
+
+type Props = Readonly<IStateProps & IDispatchProps & IOwnProps>;
+
+export class CurrentSellersTable extends React.Component<Props> {
     public render() {
-        const { ownership } = this.props;
+        const { itemsOwnershipMap: ownership } = this.props;
 
         const sortedOwnerNames = Object.keys(ownership).sort((a, b) => {
             const aValue = ownership[a];
