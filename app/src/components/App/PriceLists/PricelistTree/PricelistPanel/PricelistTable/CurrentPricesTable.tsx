@@ -28,7 +28,7 @@ export interface IOwnProps {
 
 type Props = Readonly<IStateProps & IDispatchProps & IOwnProps>;
 
-export class PricelistTable extends React.Component<Props> {
+export class CurrentPricesTable extends React.Component<Props> {
     public componentDidMount() {
         const { reloadPrices, region, realm, list } = this.props;
 

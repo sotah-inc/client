@@ -5,28 +5,19 @@ import * as moment from "moment";
 import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
 
 import {
-    getPriceList,
     getPriceListHistory,
     IOwnerItemsOwnership,
     IOwnerItemsOwnershipMap,
     IPricelistHistoryMap,
-    IPriceListMap,
     ITimestampPricesMap,
     queryOwnersByItems,
 } from "@app/api/data";
 import { Currency } from "@app/components/util";
-import { ItemPopoverContainer } from "@app/containers/util/ItemPopover";
+import { CurrentPricesTableContainer } from "@app/containers/App/PriceLists/PricelistTree/PricelistPanel/PricelistTable/CurrentPricesTable";
 import { PricelistIconContainer } from "@app/containers/util/PricelistIcon";
 import { IRealm, IRegion, ItemId, ItemsMap, OwnerName } from "@app/types/global";
-import { GetPriceListLevel, IPricelist, IPricelistEntry } from "@app/types/price-lists";
-import {
-    currencyToText,
-    didRealmChange,
-    didRegionChange,
-    getColor,
-    qualityToColorClass,
-    unixTimestampToText,
-} from "@app/util";
+import { GetPriceListLevel, IPricelist } from "@app/types/price-lists";
+import { currencyToText, didRealmChange, didRegionChange, getColor, unixTimestampToText } from "@app/util";
 
 export interface IStateProps {
     items: ItemsMap;
@@ -47,19 +38,15 @@ type Props = Readonly<IStateProps & IOwnProps>;
 
 type State = Readonly<{
     getPriceListLevel: GetPriceListLevel;
-    pricelistMap: IPriceListMap;
     pricelistHistoryMap: IPricelistHistoryMap;
-    itemsMap: ItemsMap;
     ownership: IOwnerItemsOwnershipMap;
 }>;
 
 export class PricelistTable extends React.Component<Props, State> {
     public state: State = {
         getPriceListLevel: GetPriceListLevel.initial,
-        itemsMap: {},
         ownership: {},
         pricelistHistoryMap: {},
-        pricelistMap: {},
     };
 
     public async componentDidMount() {
@@ -113,17 +100,6 @@ export class PricelistTable extends React.Component<Props, State> {
 
         const itemIds = list.pricelist_entries!.map(v => v.item_id);
 
-        const pricelistData = await getPriceList({
-            itemIds,
-            realmSlug: realm.slug,
-            regionName: region.name,
-        });
-        if (pricelistData === null) {
-            this.setState({ getPriceListLevel: GetPriceListLevel.failure });
-
-            return;
-        }
-
         const pricelistHistoryData = await getPriceListHistory({
             itemIds,
             realmSlug: realm.slug,
@@ -148,66 +124,16 @@ export class PricelistTable extends React.Component<Props, State> {
 
         this.setState({
             getPriceListLevel: GetPriceListLevel.success,
-            itemsMap: { ...pricelistData.items },
             ownership: ownersOwnership.ownership,
             pricelistHistoryMap: { ...pricelistHistoryData.history },
-            pricelistMap: { ...pricelistData.price_list },
         });
-    }
-
-    private renderEntry(index: number, entry: IPricelistEntry) {
-        const { pricelistMap } = this.state;
-        const { item_id, quantity_modifier } = entry;
-
-        let bid: number = 0;
-        let buyout: number = 0;
-        let volume: number = 0;
-        if (item_id in pricelistMap) {
-            bid = pricelistMap[item_id].bid;
-            buyout = pricelistMap[item_id].buyout;
-            volume = pricelistMap[item_id].volume;
-        }
-
-        const item = this.getItem(item_id);
-        if (item === null) {
-            return (
-                <tr key={index}>
-                    <td colSpan={4}>
-                        <Spinner intent={Intent.WARNING} />
-                    </td>
-                </tr>
-            );
-        }
-
-        return (
-            <tr key={index}>
-                <td className={qualityToColorClass(item.quality)}>
-                    <ItemPopoverContainer
-                        item={item}
-                        itemTextFormatter={itemText => `${itemText} \u00D7${quantity_modifier}`}
-                    />
-                </td>
-                <td>
-                    <Currency amount={bid * quantity_modifier} />
-                </td>
-                <td>
-                    <Currency amount={buyout * quantity_modifier} />
-                </td>
-                <td>{volume}</td>
-            </tr>
-        );
     }
 
     private getItem(itemId: ItemId) {
         const { items } = this.props;
-        const { itemsMap } = this.state;
 
         if (itemId in items) {
             return items[itemId];
-        }
-
-        if (itemId in itemsMap) {
-            return itemsMap[itemId];
         }
 
         return null;
@@ -315,51 +241,6 @@ export class PricelistTable extends React.Component<Props, State> {
         );
     }
 
-    private renderItems() {
-        const { list, items } = this.props;
-        const { pricelistMap } = this.state;
-
-        const entries = [...list.pricelist_entries!].sort((a, b) => {
-            const aItem = items[a.item_id];
-            const bItem = items[b.item_id];
-
-            let aResult = 0;
-            if (a.item_id in pricelistMap) {
-                aResult = pricelistMap[a.item_id].buyout * a.quantity_modifier;
-            }
-
-            let bResult = 0;
-            if (b.item_id in pricelistMap) {
-                bResult = pricelistMap[b.item_id].buyout * b.quantity_modifier;
-            }
-
-            if (aResult === bResult && aItem && bItem) {
-                return aItem.normalized_name > bItem.normalized_name ? 1 : -1;
-            }
-
-            return aResult > bResult ? -1 : 1;
-        });
-
-        return (
-            <>
-                <H4>Current Prices</H4>
-                <HTMLTable
-                    className={`${Classes.HTML_TABLE} ${Classes.HTML_TABLE_BORDERED} ${Classes.SMALL} price-list-table`}
-                >
-                    <thead>
-                        <tr>
-                            <th>Item</th>
-                            <th>Bid</th>
-                            <th>Buyout</th>
-                            <th>Volume</th>
-                        </tr>
-                    </thead>
-                    <tbody>{entries.map((v, i) => this.renderEntry(i, v))}</tbody>
-                </HTMLTable>
-            </>
-        );
-    }
-
     private renderOwnershipRow(index: number, owner: OwnerName, ownership: IOwnerItemsOwnership) {
         return (
             <tr key={index}>
@@ -409,7 +290,7 @@ export class PricelistTable extends React.Component<Props, State> {
     }
 
     private renderTable() {
-        const { list } = this.props;
+        const { list, region, realm } = this.props;
 
         return (
             <>
@@ -418,7 +299,7 @@ export class PricelistTable extends React.Component<Props, State> {
                     {list.name}
                 </H2>
                 {this.renderGraph()}
-                {this.renderItems()}
+                {<CurrentPricesTableContainer list={list} region={region} realm={realm} />}
                 {this.renderOwners()}
             </>
         );
