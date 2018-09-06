@@ -1,9 +1,9 @@
 import * as React from "react";
 
-import { Callout, Classes, H4, HTMLTable, Intent, Spinner } from "@blueprintjs/core";
+import { Callout, Classes, H4, HTMLTable, Intent, Navbar, NavbarGroup, Spinner } from "@blueprintjs/core";
 
 import { IOwnerItemsOwnership, IOwnerItemsOwnershipMap, IQueryOwnersByItemsOptions } from "@app/api/data";
-import { Currency } from "@app/components/util";
+import { Currency, Pagination } from "@app/components/util";
 import { IRealm, IRegion, OwnerName } from "@app/types/global";
 import { FetchLevel } from "@app/types/main";
 import { IPricelist } from "@app/types/price-lists";
@@ -26,7 +26,15 @@ export interface IOwnProps {
 
 type Props = Readonly<IStateProps & IDispatchProps & IOwnProps>;
 
-export class CurrentSellersTable extends React.Component<Props> {
+type State = Readonly<{
+    currentPage: number;
+}>;
+
+const resultsPerPage = 5;
+
+export class CurrentSellersTable extends React.Component<Props & State> {
+    public state: State = { currentPage: 0 };
+
     public componentDidMount() {
         const { region, realm, queryOwnersByItems, list } = this.props;
 
@@ -71,8 +79,26 @@ export class CurrentSellersTable extends React.Component<Props> {
         );
     }
 
+    private getPageCount() {
+        const { itemsOwnershipMap } = this.props;
+
+        const totalResults = Object.keys(itemsOwnershipMap).length;
+
+        let pageCount = 0;
+        if (totalResults > 0) {
+            pageCount = totalResults / resultsPerPage - 1;
+            const remainder = totalResults % resultsPerPage;
+            if (remainder > 0) {
+                pageCount = (totalResults - remainder) / resultsPerPage;
+            }
+        }
+
+        return pageCount;
+    }
+
     private renderContent() {
         const { getItemsOwnershipLevel, itemsOwnershipMap: ownership } = this.props;
+        const { currentPage } = this.state;
 
         switch (getItemsOwnershipLevel) {
             case FetchLevel.fetching:
@@ -86,7 +112,7 @@ export class CurrentSellersTable extends React.Component<Props> {
                 return <Spinner intent={Intent.NONE} value={1} />;
         }
 
-        const sortedOwnerNames = Object.keys(ownership).sort((a, b) => {
+        let sortedOwnerNames = Object.keys(ownership).sort((a, b) => {
             const aValue = ownership[a];
             const bValue = ownership[b];
 
@@ -96,10 +122,25 @@ export class CurrentSellersTable extends React.Component<Props> {
 
             return aValue.owned_value > bValue.owned_value ? -1 : 1;
         });
+        sortedOwnerNames = sortedOwnerNames.slice(currentPage * resultsPerPage, (currentPage + 1) * resultsPerPage);
+
+        const pageCount = this.getPageCount();
 
         return (
             <>
-                <Callout intent={Intent.PRIMARY}>This data is only a subset of each sellers auctions.</Callout>
+                <Callout intent={Intent.PRIMARY}>
+                    This data is only a subset of each sellers auctions relevant to the current list.
+                </Callout>
+                <Navbar style={{ marginTop: "10px" }}>
+                    <NavbarGroup>
+                        <Pagination
+                            currentPage={currentPage}
+                            onPageChange={v => this.setState({ currentPage: v })}
+                            pageCount={pageCount}
+                            pagesShown={5}
+                        />
+                    </NavbarGroup>
+                </Navbar>
                 <HTMLTable
                     className={`${Classes.HTML_TABLE} ${Classes.HTML_TABLE_BORDERED} ${Classes.SMALL} ownership-table`}
                 >
@@ -114,6 +155,9 @@ export class CurrentSellersTable extends React.Component<Props> {
                         {sortedOwnerNames.map((owner, i) => this.renderOwnershipRow(i, owner, ownership[owner]))}
                     </tbody>
                 </HTMLTable>
+                <p style={{ textAlign: "center" }}>
+                    Page {currentPage + 1} of {pageCount + 1}
+                </p>
             </>
         );
     }
