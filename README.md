@@ -14,3 +14,4 @@
 - [x] Use [Blueprint's tslint rules](https://www.npmjs.com/package/@blueprintjs/tslint-config)
 - [x] Upgrade to Blueprint 3
 - [ ] Use [moving-averages](https://github.com/kaelzhang/moving-averages) for graph smoothing.
+- [ ] Use [emojione](https://www.npmjs.com/package/emojione) for emojis.
