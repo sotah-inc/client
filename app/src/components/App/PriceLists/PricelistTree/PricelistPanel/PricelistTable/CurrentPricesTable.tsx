@@ -108,12 +108,12 @@ export class CurrentPricesTable extends React.Component<Props> {
 
             let aResult = 0;
             if (a.item_id in pricelistMap) {
-                aResult = pricelistMap[a.item_id].buyout * a.quantity_modifier;
+                aResult = pricelistMap[a.item_id].min_buyout_per * a.quantity_modifier;
             }
 
             let bResult = 0;
             if (b.item_id in pricelistMap) {
-                bResult = pricelistMap[b.item_id].buyout * b.quantity_modifier;
+                bResult = pricelistMap[b.item_id].min_buyout_per * b.quantity_modifier;
             }
 
             if (aResult === bResult && aItem && bItem) {
@@ -130,7 +130,6 @@ export class CurrentPricesTable extends React.Component<Props> {
                 <thead>
                     <tr>
                         <th>Item</th>
-                        <th>Bid</th>
                         <th>Buyout</th>
                         <th>Volume</th>
                     </tr>
@@ -144,12 +143,10 @@ export class CurrentPricesTable extends React.Component<Props> {
         const { pricelistMap } = this.props;
         const { item_id, quantity_modifier } = entry;
 
-        let bid: number = 0;
         let buyout: number = 0;
         let volume: number = 0;
         if (item_id in pricelistMap) {
-            bid = pricelistMap[item_id].bid;
-            buyout = pricelistMap[item_id].buyout;
+            buyout = pricelistMap[item_id].min_buyout_per;
             volume = pricelistMap[item_id].volume;
         }
 
@@ -171,9 +168,6 @@ export class CurrentPricesTable extends React.Component<Props> {
                         item={item}
                         itemTextFormatter={itemText => `${itemText} \u00D7${quantity_modifier}`}
                     />
-                </td>
-                <td>
-                    <Currency amount={bid * quantity_modifier} />
                 </td>
                 <td>
                     <Currency amount={buyout * quantity_modifier} />

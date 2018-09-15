@@ -179,7 +179,7 @@ export class PricelistHistoryGraph extends React.Component<Props, State> {
 
                     previousValue.push({
                         name: unixTimestamp,
-                        [`${itemId}_buyout`]: prices.buyout / 10 / 10,
+                        [`${itemId}_buyout`]: prices.min_buyout_per / 10 / 10,
                         [`${itemId}_volume`]: prices.volume,
                     });
 
