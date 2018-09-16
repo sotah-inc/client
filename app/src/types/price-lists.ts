@@ -1,4 +1,5 @@
 import {
+    IItemMarketPrices,
     IItemPriceLimits,
     IOwnerItemsOwnershipMap,
     IPriceLimits,
@@ -39,6 +40,7 @@ export interface IPriceListsState {
     itemsOwnershipMap: IOwnerItemsOwnershipMap;
     itemsPriceLimits: IItemPriceLimits;
     overallPriceLimits: IPriceLimits;
+    itemsMarketPrices: IItemMarketPrices;
 }
 
 export interface IExpansionProfessionPricelistMap {
@@ -141,6 +143,7 @@ export const defaultPriceListsState: IPriceListsState = {
     isDeleteListDialogOpen: false,
     isEditListDialogOpen: false,
     items: [],
+    itemsMarketPrices: {},
     itemsOwnershipMap: {},
     itemsPriceLimits: {},
     overallPriceLimits: { lower: 0, upper: 0 },

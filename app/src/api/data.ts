@@ -229,11 +229,16 @@ export interface IItemPriceLimits {
     [itemId: number]: IPriceLimits;
 }
 
+export interface IItemMarketPrices {
+    [itemId: number]: number;
+}
+
 export interface IGetPriceListHistoryResponse {
     history: IPricelistHistoryMap;
     items: ItemsMap;
     itemPriceLimits: IItemPriceLimits;
     overallPriceLimits: IPriceLimits;
+    itemMarketPrices: IItemMarketPrices;
 }
 
 export const getPriceListHistory = async (
