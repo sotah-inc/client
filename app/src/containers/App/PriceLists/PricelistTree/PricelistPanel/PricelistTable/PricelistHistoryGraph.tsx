@@ -19,7 +19,13 @@ const mapStateToProps = (state: IStoreState): IStateProps => {
         itemsPriceLimits,
         overallPriceLimits,
     } = state.PriceLists;
-    return { getPricelistHistoryLevel, items, pricelistHistoryMap, itemsPriceLimits, overallPriceLimits };
+    return {
+        getPricelistHistoryLevel,
+        items,
+        itemsPriceLimits,
+        overallPriceLimits,
+        pricelistHistoryMap,
+    };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<Actions>): IDispatchProps => {
