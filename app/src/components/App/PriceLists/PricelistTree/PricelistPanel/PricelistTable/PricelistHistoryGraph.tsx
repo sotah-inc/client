@@ -142,7 +142,7 @@ export class PricelistHistoryGraph extends React.Component<Props, State> {
                 return (
                     <YAxis
                         tickFormatter={v => currencyToText(v * 10 * 10)}
-                        domain={[overallPriceLimits.lower, overallPriceLimits.upper]}
+                        domain={[overallPriceLimits.lower / 10 / 10, overallPriceLimits.upper / 10 / 10]}
                         tick={{ fill: "#fff" }}
                         scale="log"
                         allowDataOverflow={true}
