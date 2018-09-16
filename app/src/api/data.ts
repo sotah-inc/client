@@ -220,9 +220,20 @@ export interface IPricelistHistoryMap {
     [itemId: number]: ITimestampPricesMap;
 }
 
+export interface IPriceLimits {
+    lower: number;
+    upper: number;
+}
+
+export interface IItemPriceLimits {
+    [itemId: number]: IPriceLimits;
+}
+
 export interface IGetPriceListHistoryResponse {
     history: IPricelistHistoryMap;
     items: ItemsMap;
+    itemPriceLimits: IItemPriceLimits;
+    overallPriceLimits: IPriceLimits;
 }
 
 export const getPriceListHistory = async (

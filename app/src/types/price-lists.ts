@@ -1,4 +1,10 @@
-import { IOwnerItemsOwnershipMap, IPricelistHistoryMap, IPriceListMap } from "@app/api/data";
+import {
+    IItemPriceLimits,
+    IOwnerItemsOwnershipMap,
+    IPriceLimits,
+    IPricelistHistoryMap,
+    IPriceListMap,
+} from "@app/api/data";
 import { IUpdatePricelistRequest, IUpdatePricelistResponse } from "@app/api/price-lists";
 import { IErrors, IExpansion, IProfession, IProfessionPricelist, ItemId, ItemsMap } from "./global";
 import { FetchLevel } from "./main";
@@ -31,6 +37,8 @@ export interface IPriceListsState {
     pricelistHistoryMap: IPricelistHistoryMap;
     getItemsOwnershipLevel: FetchLevel;
     itemsOwnershipMap: IOwnerItemsOwnershipMap;
+    itemsPriceLimits: IItemPriceLimits;
+    overallPriceLimits: IPriceLimits;
 }
 
 export interface IExpansionProfessionPricelistMap {
@@ -134,6 +142,8 @@ export const defaultPriceListsState: IPriceListsState = {
     isEditListDialogOpen: false,
     items: [],
     itemsOwnershipMap: {},
+    itemsPriceLimits: {},
+    overallPriceLimits: { lower: 0, upper: 0 },
     pricelistHistoryMap: {},
     pricelistMap: {},
     pricelists: [],

@@ -211,6 +211,8 @@ const handlers: IKindHandlers<IPriceListsState, PriceListsActions> = {
                 return {
                     ...state,
                     getPricelistHistoryLevel: FetchLevel.success,
+                    itemsPriceLimits: action.payload.itemPriceLimits,
+                    overallPriceLimits: action.payload.overallPriceLimits,
                     pricelistHistoryMap: action.payload.history,
                 };
             },

@@ -4,7 +4,13 @@ import { H4, Intent, Spinner, Tab, Tabs } from "@blueprintjs/core";
 import * as moment from "moment";
 import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
 
-import { IGetPriceListHistoryOptions, IPricelistHistoryMap, ITimestampPricesMap } from "@app/api/data";
+import {
+    IGetPriceListHistoryOptions,
+    IItemPriceLimits,
+    IPriceLimits,
+    IPricelistHistoryMap,
+    ITimestampPricesMap,
+} from "@app/api/data";
 import { IRealm, IRegion, ItemId, ItemsMap } from "@app/types/global";
 import { FetchLevel } from "@app/types/main";
 import { IPricelist } from "@app/types/price-lists";
@@ -14,6 +20,8 @@ export interface IStateProps {
     items: ItemsMap;
     pricelistHistoryMap: IPricelistHistoryMap;
     getPricelistHistoryLevel: FetchLevel;
+    itemsPriceLimits: IItemPriceLimits;
+    overallPriceLimits: IPriceLimits;
 }
 
 export interface IDispatchProps {
@@ -104,6 +112,7 @@ export class PricelistHistoryGraph extends React.Component<Props, State> {
     }
 
     private renderYAxis() {
+        const { overallPriceLimits } = this.props;
         const { currentTabKind } = this.state;
 
         switch (currentTabKind) {
@@ -133,17 +142,7 @@ export class PricelistHistoryGraph extends React.Component<Props, State> {
                 return (
                     <YAxis
                         tickFormatter={v => currencyToText(v * 10 * 10)}
-                        domain={[
-                            dataMin => {
-                                const result = Math.pow(10, Math.floor(Math.log10(dataMin)));
-                                if (result === 0) {
-                                    return 10;
-                                }
-
-                                return result;
-                            },
-                            dataMax => Math.pow(10, Math.ceil(Math.log10(dataMax))),
-                        ]}
+                        domain={[overallPriceLimits.lower, overallPriceLimits.upper]}
                         tick={{ fill: "#fff" }}
                         scale="log"
                         allowDataOverflow={true}
