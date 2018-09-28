@@ -9,7 +9,8 @@ WORKDIR /srv/app
 RUN npm install -s \
   && npm run -s build \
   && rm -rf ./node_modules \
-  && npm install -s --only=production
+  && npm install -s --only=production \
+  && npm cache clean --force
 
 
 # running
