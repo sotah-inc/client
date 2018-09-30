@@ -12,7 +12,7 @@ export interface IStateProps {
     user: IUser | null;
 }
 
-export interface IOwnProps extends RouteComponentProps<Props> {}
+export interface IOwnProps extends RouteComponentProps<{}> {}
 
 export type Props = Readonly<IStateProps & IOwnProps>;
 

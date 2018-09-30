@@ -3,7 +3,7 @@ import * as React from "react";
 import { Button, IconName } from "@blueprintjs/core";
 import { RouteComponentProps } from "react-router-dom";
 
-export interface IProps extends RouteComponentProps<IProps> {
+export interface IProps extends RouteComponentProps<{}> {
     icon: IconName;
     text: string;
     destination: string;
