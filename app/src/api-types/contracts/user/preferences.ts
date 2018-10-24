@@ -1,5 +1,5 @@
-import { IPreferenceJson } from "../../../types/entities";
-import { realmSlug, regionName } from "../../../types/region";
+import { IPreferenceJson } from "../../entities";
+import { realmSlug, regionName } from "../../region";
 
 export interface IGetPreferencesResponse {
     preference: IPreferenceJson;

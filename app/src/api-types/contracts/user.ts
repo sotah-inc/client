@@ -1,4 +1,4 @@
-import { IUserJson } from "../../types/entities";
+import { IUserJson } from "../entities";
 
 export interface ICreateUserRequest {
     email: string;

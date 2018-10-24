@@ -1,18 +1,12 @@
-import { ProfessionPricelist } from "../../entities/profession-pricelist";
-import { SortDirection, SortKind } from "../../types";
-import { IAuction, IOwner, OwnerName } from "../../types/auction";
-import { ExpansionName, IExpansion } from "../../types/expansion";
-import { IItem, IItemsMap, ItemId } from "../../types/item";
-import { IItemClass } from "../../types/item-class";
-import {
-    IItemMarketPrices,
-    IItemPriceLimits,
-    IPriceLimits,
-    IPricelistHistoryMap,
-    IPriceListMap,
-} from "../../types/pricelist";
-import { IProfession } from "../../types/profession";
-import { IRealm, IRegion, realmSlug, regionName } from "../../types/region";
+import { IAuction, IOwner, OwnerName } from "../auction";
+import { IProfessionPricelistJson } from "../entities";
+import { ExpansionName, IExpansion } from "../expansion";
+import { SortDirection, SortKind } from "../index";
+import { IItem, IItemsMap, ItemId } from "../item";
+import { IItemClass } from "../item-class";
+import { IItemMarketPrices, IItemPriceLimits, IPriceLimits, IPricelistHistoryMap, IPriceListMap } from "../pricelist";
+import { IProfession } from "../profession";
+import { IRealm, IRegion, realmSlug, regionName } from "../region";
 
 export type IGetRegionsResponse = IRegion[];
 
@@ -137,11 +131,11 @@ export interface IGetUnmetDemandRequest {
 
 export interface IGetUnmetDemandResponse {
     items: IItemsMap;
-    professionPricelists: ProfessionPricelist[];
+    professionPricelists: IProfessionPricelistJson[];
     unmetItemIds: ItemId[];
 }
 
 export interface IGetProfessionPricelistsResponse {
-    profession_pricelists: ProfessionPricelist[];
+    profession_pricelists: IProfessionPricelistJson[];
     items: IItemsMap;
 }

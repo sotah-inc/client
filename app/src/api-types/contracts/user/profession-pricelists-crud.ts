@@ -1,8 +1,6 @@
-import { Pricelist } from "../../../entities/pricelist";
-import { PricelistEntry } from "../../../entities/pricelist-entry";
-import { ProfessionPricelist } from "../../../entities/profession-pricelist";
-import { ExpansionName } from "../../../types/expansion";
-import { ProfessionName } from "../../../types/profession";
+import { IPricelistEntryJson, IPricelistJson, IProfessionPricelistJson } from "../../entities";
+import { ExpansionName } from "../../expansion";
+import { ProfessionName } from "../../profession";
 
 export interface ICreateProfessionPricelistRequest {
     pricelist: {
@@ -18,7 +16,7 @@ export interface ICreateProfessionPricelistRequest {
 }
 
 export interface ICreateProfessionPricelistResponse {
-    entries: PricelistEntry[];
-    pricelist: Pricelist;
-    profession_pricelist: ProfessionPricelist;
+    entries: IPricelistEntryJson[];
+    pricelist: IPricelistJson;
+    profession_pricelist: IProfessionPricelistJson;
 }
