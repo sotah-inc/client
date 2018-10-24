@@ -98,8 +98,6 @@ export interface IQueryItemsResponse {
 }
 
 export interface IGetPricelistRequest {
-    region_name: regionName;
-    realm_slug: realmSlug;
     item_ids: ItemId[];
 }
 
