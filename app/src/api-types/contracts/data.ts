@@ -6,7 +6,7 @@ import { IItem, IItemsMap, ItemId } from "../item";
 import { IItemClass } from "../item-class";
 import { IItemMarketPrices, IItemPriceLimits, IPriceLimits, IPricelistHistoryMap, IPriceListMap } from "../pricelist";
 import { IProfession } from "../profession";
-import { IRealm, IRegion, realmSlug, regionName } from "../region";
+import { IRealm, IRegion } from "../region";
 
 export type IGetRegionsResponse = IRegion[];
 
@@ -21,7 +21,7 @@ export interface IGetBootResponse {
     professions: IProfession[];
 }
 
-interface IStatusRealm extends IRealm {
+export interface IStatusRealm extends IRealm {
     regionName: string;
 }
 
@@ -69,8 +69,6 @@ export interface IQueryAuctionsResponse {
 }
 
 export interface IQueryOwnerItemsRequest {
-    region_name: regionName;
-    realm_slug: realmSlug;
     items: ItemId[];
 }
 
@@ -106,11 +104,9 @@ export interface IGetPricelistResponse {
 }
 
 export interface IGetPricelistHistoriesRequest {
-    region_name: regionName;
-    realm_slug: realmSlug;
     item_ids: ItemId[];
-    lower_bounds: number;
-    upper_bounds: number;
+    lower_bounds?: number;
+    upper_bounds?: number;
 }
 
 export interface IGetPricelistHistoriesResponse {
