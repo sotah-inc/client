@@ -1,21 +1,28 @@
 import * as HTTPStatus from "http-status";
 
-import { IQueryAuctionResult, SortDirection, SortKind } from "../types/auction";
 import {
-    IAuction,
-    IExpansion,
-    IOwner,
-    IProfession,
-    IQueryItemResult,
-    IRealm,
-    IRegion,
-    ItemId,
-    ItemsMap,
-    OwnerName,
-    RealmSlug,
-    RegionName,
-} from "../types/global";
-import { apiEndpoint } from "./index";
+    IGetAuctionsRequest,
+    IGetAuctionsResponse,
+    IGetBootResponse,
+    IGetOwnersRequest,
+    IGetOwnersResponse,
+    IGetPricelistHistoriesRequest,
+    IGetPricelistHistoriesResponse,
+    IGetPricelistRequest,
+    IGetPricelistResponse,
+    IGetRealmsResponse,
+    IGetRegionsResponse,
+    IQueryAuctionsRequest,
+    IQueryAuctionsResponse,
+    IQueryItemsRequest,
+    IQueryItemsResponse,
+    IQueryOwnerItemsRequest,
+    IQueryOwnerItemsResponse,
+    IStatusRealm,
+} from "../api-types/contracts/data";
+import { SortDirection, SortKind } from "../types/auction";
+import { ItemId, OwnerName, RealmSlug, RegionName } from "../types/global";
+import { apiEndpoint, gather } from "./index";
 
 export const getPing = async (): Promise<boolean> => {
     try {
@@ -26,38 +33,35 @@ export const getPing = async (): Promise<boolean> => {
     }
 };
 
-export const getRegions = async (): Promise<IRegion[] | null> => {
-    const res = await fetch(`${apiEndpoint}/regions`);
-    if (res.status !== HTTPStatus.OK) {
+export const getRegions = async (): Promise<IGetRegionsResponse | null> => {
+    const { body, status } = await gather<null, IGetRegionsResponse>({ url: `${apiEndpoint}/regions` });
+    if (status !== HTTPStatus.OK) {
         return null;
     }
 
-    return res.json();
+    return body;
 };
 
-export interface IBootResponse {
-    regions: IRegion[];
-    item_classes: IResponseItemClass[];
-    expansions: IExpansion[];
-    professions: IProfession[];
-}
-
-export const getBoot = async (): Promise<IBootResponse | null> => {
-    const res = await fetch(`${apiEndpoint}/boot`);
-    if (res.status !== HTTPStatus.OK) {
+export const getBoot = async (): Promise<IGetBootResponse | null> => {
+    const { body, status } = await gather<null, IGetBootResponse>({
+        url: `${apiEndpoint}/boot`,
+    });
+    if (status !== HTTPStatus.OK) {
         return null;
     }
 
-    return res.json();
+    return body;
 };
 
-export const getStatus = async (regionName: string): Promise<IRealm[] | null> => {
-    const res = await fetch(`${apiEndpoint}/region/${regionName}/realms`);
-    if (res.status !== HTTPStatus.OK) {
+export const getStatus = async (regionName: string): Promise<IStatusRealm[] | null> => {
+    const { body, status } = await gather<null, IGetRealmsResponse>({
+        url: `${apiEndpoint}/region/${regionName}/realms`,
+    });
+    if (status !== HTTPStatus.OK) {
         return null;
     }
 
-    return (await res.json()).realms;
+    return body.realms;
 };
 
 export interface IGetAuctionsOptions {
@@ -71,24 +75,18 @@ export interface IGetAuctionsOptions {
     itemFilters: ItemId[];
 }
 
-export interface IAuctionsResponse {
-    auctions: IAuction[] | null;
-    total: number;
-    items: ItemsMap;
-}
-
-export const getAuctions = async (opts: IGetAuctionsOptions): Promise<IAuctionsResponse | null> => {
+export const getAuctions = async (opts: IGetAuctionsOptions): Promise<IGetAuctionsResponse | null> => {
     const { regionName, realmSlug, page, count, sortDirection, sortKind, ownerFilters, itemFilters } = opts;
-    const res = await fetch(`${apiEndpoint}/region/${regionName}/realm/${realmSlug}/auctions`, {
-        body: JSON.stringify({ page, count, sortDirection, sortKind, ownerFilters, itemFilters }),
-        headers: new Headers({ "content-type": "application/json" }),
+    const { body, status } = await gather<IGetAuctionsRequest, IGetAuctionsResponse>({
+        body: { page, count, sortDirection, sortKind, ownerFilters, itemFilters },
         method: "POST",
+        url: `${apiEndpoint}/region/${regionName}/realm/${realmSlug}/auctions`,
     });
-    if (res.status !== HTTPStatus.OK) {
+    if (status !== HTTPStatus.OK) {
         return null;
     }
 
-    return res.json();
+    return body;
 };
 
 export interface IGetOwnersOptions {
@@ -97,39 +95,31 @@ export interface IGetOwnersOptions {
     query: string;
 }
 
-export interface IOwnersResponse {
-    owners: IOwner[];
-}
-
-export const getOwners = async (opts: IGetOwnersOptions): Promise<IOwnersResponse | null> => {
+export const getOwners = async (opts: IGetOwnersOptions): Promise<IGetOwnersResponse | null> => {
     const { regionName, realmSlug, query } = opts;
-    const res = await fetch(`${apiEndpoint}/region/${regionName}/realm/${realmSlug}/owners`, {
-        body: JSON.stringify({ query }),
-        headers: new Headers({ "content-type": "application/json" }),
+    const { body, status } = await gather<IGetOwnersRequest, IGetOwnersResponse>({
+        body: { query },
         method: "POST",
+        url: `${apiEndpoint}/region/${regionName}/realm/${realmSlug}/owners`,
     });
-    if (res.status !== HTTPStatus.OK) {
+    if (status !== HTTPStatus.OK) {
         return null;
     }
 
-    return res.json();
+    return body;
 };
 
-export interface ItemsResponse {
-    items: IQueryItemResult[];
-}
-
-export const getItems = async (query: string): Promise<ItemsResponse | null> => {
-    const res = await fetch(`${apiEndpoint}/items`, {
-        body: JSON.stringify({ query }),
-        headers: new Headers({ "content-type": "application/json" }),
+export const getItems = async (query: string): Promise<IQueryItemsResponse | null> => {
+    const { body, status } = await gather<IQueryItemsRequest, IQueryItemsResponse>({
+        body: { query },
         method: "POST",
+        url: `${apiEndpoint}/items`,
     });
-    if (res.status !== HTTPStatus.OK) {
+    if (status !== HTTPStatus.OK) {
         return null;
     }
 
-    return res.json();
+    return body;
 };
 
 export interface IQueryAuctionsOptions {
@@ -138,36 +128,19 @@ export interface IQueryAuctionsOptions {
     query: string;
 }
 
-export type AuctionsQueryItems = IQueryAuctionResult[];
-
-export interface IAuctionsQueryResponse {
-    items: AuctionsQueryItems;
-}
-
-export const queryAuctions = async (opts: IQueryAuctionsOptions): Promise<IAuctionsQueryResponse | null> => {
+export const queryAuctions = async (opts: IQueryAuctionsOptions): Promise<IQueryAuctionsResponse | null> => {
     const { regionName, realmSlug, query } = opts;
-    const res = await fetch(`${apiEndpoint}/region/${regionName}/realm/${realmSlug}/query-auctions`, {
-        body: JSON.stringify({ query }),
-        headers: new Headers({ "content-type": "application/json" }),
+    const { body, status } = await gather<IQueryAuctionsRequest, IQueryAuctionsResponse>({
+        body: { query },
         method: "POST",
+        url: `${apiEndpoint}/region/${regionName}/realm/${realmSlug}/query-auctions`,
     });
-    if (res.status !== HTTPStatus.OK) {
+    if (status !== HTTPStatus.OK) {
         return null;
     }
 
-    return res.json();
+    return body;
 };
-
-interface IResponseSubItemClass {
-    subclass: number;
-    name: string;
-}
-
-interface IResponseItemClass {
-    class: number;
-    name: string;
-    subclasses: IResponseSubItemClass[];
-}
 
 export interface IGetPriceListOptions {
     regionName: string;
@@ -175,35 +148,18 @@ export interface IGetPriceListOptions {
     itemIds: ItemId[];
 }
 
-export interface IPrices {
-    min_buyout_per: number;
-    max_buyout_per: number;
-    average_buyout_per: number;
-    median_buyout_per: number;
-    volume: number;
-}
-
-export interface IPriceListMap {
-    [itemId: number]: IPrices;
-}
-
-export interface IGetPriceListResponse {
-    price_list: IPriceListMap;
-    items: ItemsMap;
-}
-
-export const getPriceList = async (opts: IGetPriceListOptions): Promise<IGetPriceListResponse | null> => {
+export const getPriceList = async (opts: IGetPriceListOptions): Promise<IGetPricelistResponse | null> => {
     const { regionName, realmSlug, itemIds } = opts;
-    const res = await fetch(`${apiEndpoint}/region/${regionName}/realm/${realmSlug}/price-list`, {
-        body: JSON.stringify({ item_ids: itemIds }),
-        headers: new Headers({ "content-type": "application/json" }),
+    const { body, status } = await gather<IGetPricelistRequest, IGetPricelistResponse>({
+        body: { item_ids: itemIds },
         method: "POST",
+        url: `${apiEndpoint}/region/${regionName}/realm/${realmSlug}/price-list`,
     });
-    if (res.status !== HTTPStatus.OK) {
+    if (status !== HTTPStatus.OK) {
         return null;
     }
 
-    return res.json();
+    return body;
 };
 
 export interface IGetPriceListHistoryOptions extends IGetPriceListOptions {
@@ -212,49 +168,20 @@ export interface IGetPriceListHistoryOptions extends IGetPriceListOptions {
     itemIds: ItemId[];
 }
 
-export interface ITimestampPricesMap {
-    [unixTimestamp: number]: IPrices;
-}
-
-export interface IPricelistHistoryMap {
-    [itemId: number]: ITimestampPricesMap;
-}
-
-export interface IPriceLimits {
-    lower: number;
-    upper: number;
-}
-
-export interface IItemPriceLimits {
-    [itemId: number]: IPriceLimits;
-}
-
-export interface IItemMarketPrices {
-    [itemId: number]: number;
-}
-
-export interface IGetPriceListHistoryResponse {
-    history: IPricelistHistoryMap;
-    items: ItemsMap;
-    itemPriceLimits: IItemPriceLimits;
-    overallPriceLimits: IPriceLimits;
-    itemMarketPrices: IItemMarketPrices;
-}
-
 export const getPriceListHistory = async (
     opts: IGetPriceListHistoryOptions,
-): Promise<IGetPriceListHistoryResponse | null> => {
+): Promise<IGetPricelistHistoriesResponse | null> => {
     const { regionName, realmSlug, itemIds } = opts;
-    const res = await fetch(`${apiEndpoint}/region/${regionName}/realm/${realmSlug}/price-list-history`, {
-        body: JSON.stringify({ item_ids: itemIds }),
-        headers: new Headers({ "content-type": "application/json" }),
+    const { body, status } = await gather<IGetPricelistHistoriesRequest, IGetPricelistHistoriesResponse>({
+        body: { item_ids: itemIds },
         method: "POST",
+        url: `${apiEndpoint}/region/${regionName}/realm/${realmSlug}/price-list-history`,
     });
-    if (res.status !== HTTPStatus.OK) {
+    if (status !== HTTPStatus.OK) {
         return null;
     }
 
-    return res.json();
+    return body;
 };
 
 export interface IQueryOwnersByItemsOptions {
@@ -263,33 +190,18 @@ export interface IQueryOwnersByItemsOptions {
     items: ItemId[];
 }
 
-export interface IOwnerItemsOwnership {
-    owned_value: number;
-    owned_volume: number;
-}
-
-export interface IOwnerItemsOwnershipMap {
-    [ownerName: string]: IOwnerItemsOwnership;
-}
-
-export interface IQueryOwnersByItemsResponse {
-    total_value: number;
-    total_volume: number;
-    ownership: IOwnerItemsOwnershipMap;
-}
-
 export const queryOwnersByItems = async (
     opts: IQueryOwnersByItemsOptions,
-): Promise<IQueryOwnersByItemsResponse | null> => {
+): Promise<IQueryOwnerItemsResponse | null> => {
     const { regionName, realmSlug, items } = opts;
-    const res = await fetch(`${apiEndpoint}/region/${regionName}/realm/${realmSlug}/query-owner-items`, {
-        body: JSON.stringify({ items }),
-        headers: new Headers({ "content-type": "application/json" }),
+    const { body, status } = await gather<IQueryOwnerItemsRequest, IQueryOwnerItemsResponse>({
+        body: { items },
         method: "POST",
+        url: `${apiEndpoint}/region/${regionName}/realm/${realmSlug}/query-owner-items`,
     });
-    if (res.status !== HTTPStatus.OK) {
+    if (status !== HTTPStatus.OK) {
         return null;
     }
 
-    return res.json();
+    return body;
 };
