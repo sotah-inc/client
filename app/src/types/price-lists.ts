@@ -1,5 +1,5 @@
 import { IUpdatePricelistRequest, IUpdatePricelistResponse } from "@app/api-types/contracts/user/pricelist-crud";
-import { IProfessionPricelistJson } from "@app/api-types/entities";
+import { IPricelistJson, IProfessionPricelistJson } from "@app/api-types/entities";
 import { IExpansion } from "@app/api-types/expansion";
 import { IItemsMap, ItemId } from "@app/api-types/item";
 import {
@@ -14,25 +14,25 @@ import { IErrors } from "./global";
 import { FetchLevel } from "./main";
 
 export interface IPriceListsState {
-    pricelists: IPricelist[];
-    createPricelistLevel: MutatePricelistLevel;
+    pricelists: IPricelistJson[];
+    createPricelistLevel: FetchLevel;
     createPricelistErrors: IErrors;
-    updatePricelistLevel: MutatePricelistLevel;
+    updatePricelistLevel: FetchLevel;
     updatePricelistErrors: IErrors;
-    entryCreateLevel: EntryCreateLevel;
-    selectedList: IPricelist | null;
+    entryCreateLevel: FetchLevel;
+    selectedList: IPricelistJson | null;
     isAddListDialogOpen: boolean;
     isEditListDialogOpen: boolean;
     isDeleteListDialogOpen: boolean;
     isAddEntryDialogOpen: boolean;
-    getPricelistsLevel: GetPricelistsLevel;
+    getPricelistsLevel: FetchLevel;
     items: IItemsMap;
-    deletePricelistLevel: DeletePricelistLevel;
+    deletePricelistLevel: FetchLevel;
     selectedProfession: IProfession | null;
     professionPricelists: IExpansionProfessionPricelistMap;
-    getProfessionPricelistsLevel: GetProfessionPricelistsLevel;
+    getProfessionPricelistsLevel: FetchLevel;
     selectedExpansion: IExpansion | null;
-    getUnmetDemandLevel: GetUnmetDemandLevel;
+    getUnmetDemandLevel: FetchLevel;
     unmetDemandItemIds: ItemId[];
     unmetDemandProfessionPricelists: IProfessionPricelistJson[];
     getPricelistLevel: FetchLevel;
@@ -62,60 +62,6 @@ export enum ListDialogStep {
     entry,
     finish,
 }
-export enum EntryCreateLevel {
-    initial,
-    success,
-    failure,
-}
-export enum MutatePricelistLevel {
-    initial,
-    fetching,
-    success,
-    failure,
-}
-export enum GetPriceListLevel {
-    initial,
-    success,
-    failure,
-}
-export enum GetPricelistsLevel {
-    initial,
-    fetching,
-    success,
-    failure,
-}
-export enum GetProfessionPricelistsLevel {
-    initial,
-    fetching,
-    success,
-    failure,
-}
-export enum DeletePricelistLevel {
-    initial,
-    fetching,
-    success,
-    failure,
-}
-export enum GetUnmetDemandLevel {
-    initial,
-    fetching,
-    success,
-    failure,
-}
-
-export interface IPricelist {
-    id: number;
-    user_id: number;
-    name: string;
-    pricelist_entries?: IPricelistEntry[];
-}
-
-export interface IPricelistEntry {
-    id?: number;
-    pricelist_id?: number;
-    item_id: ItemId;
-    quantity_modifier: number;
-}
 
 interface IUpdatePricelistMeta {
     isAddEntryDialogOpen?: boolean;
@@ -134,20 +80,20 @@ export interface IUpdatePricelistResponseOptions {
 
 export interface ISelectExpansionPayload {
     expansion: IExpansion;
-    jumpTo?: IPricelist | null;
+    jumpTo?: IPricelistJson | null;
 }
 
 export const defaultPriceListsState: IPriceListsState = {
     createPricelistErrors: {},
-    createPricelistLevel: MutatePricelistLevel.initial,
-    deletePricelistLevel: DeletePricelistLevel.initial,
-    entryCreateLevel: EntryCreateLevel.initial,
+    createPricelistLevel: FetchLevel.initial,
+    deletePricelistLevel: FetchLevel.initial,
+    entryCreateLevel: FetchLevel.initial,
     getItemsOwnershipLevel: FetchLevel.initial,
     getPricelistHistoryLevel: FetchLevel.initial,
     getPricelistLevel: FetchLevel.initial,
-    getPricelistsLevel: GetPricelistsLevel.initial,
-    getProfessionPricelistsLevel: GetProfessionPricelistsLevel.initial,
-    getUnmetDemandLevel: GetUnmetDemandLevel.initial,
+    getPricelistsLevel: FetchLevel.initial,
+    getProfessionPricelistsLevel: FetchLevel.initial,
+    getUnmetDemandLevel: FetchLevel.initial,
     isAddEntryDialogOpen: false,
     isAddListDialogOpen: false,
     isDeleteListDialogOpen: false,
@@ -167,5 +113,5 @@ export const defaultPriceListsState: IPriceListsState = {
     unmetDemandItemIds: [],
     unmetDemandProfessionPricelists: [],
     updatePricelistErrors: {},
-    updatePricelistLevel: MutatePricelistLevel.initial,
+    updatePricelistLevel: FetchLevel.initial,
 };
