@@ -1,7 +1,5 @@
 import * as HTTPStatus from "http-status";
 
-import { SortDirection, SortKind } from "@app/api-types";
-import { OwnerName } from "@app/api-types/auction";
 import {
     IGetAuctionsRequest,
     IGetAuctionsResponse,
@@ -69,18 +67,13 @@ export const getStatus = async (regionName: RegionName): Promise<IStatusRealm[] 
 export interface IGetAuctionsOptions {
     regionName: string;
     realmSlug: string;
-    page: number;
-    count: number;
-    sortDirection: SortDirection;
-    sortKind: SortKind;
-    ownerFilters: OwnerName[];
-    itemFilters: ItemId[];
+    request: IGetAuctionsRequest;
 }
 
 export const getAuctions = async (opts: IGetAuctionsOptions): Promise<IGetAuctionsResponse | null> => {
-    const { regionName, realmSlug, page, count, sortDirection, sortKind, ownerFilters, itemFilters } = opts;
+    const { regionName, realmSlug, request } = opts;
     const { body, status } = await gather<IGetAuctionsRequest, IGetAuctionsResponse>({
-        body: { page, count, sortDirection, sortKind, ownerFilters, itemFilters },
+        body: request,
         method: "POST",
         url: `${apiEndpoint}/region/${regionName}/realm/${realmSlug}/auctions`,
     });
