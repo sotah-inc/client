@@ -183,21 +183,23 @@ export const getProfessionPricelists = async (profession: ProfessionName): Promi
     }
 };
 
+export interface IGetUnmetDemandOptions {
+    region: RegionName;
+    realm: RealmSlug;
+    request: IGetUnmetDemandRequest;
+}
+
 export interface IGetUnmetDemandResult {
     data: IGetUnmetDemandResponse | null;
     errors: IErrorResponse | null;
 }
 
-export const getUnmetDemand = async (
-    region: RegionName,
-    realm: RealmSlug,
-    request: IGetUnmetDemandRequest,
-): Promise<IGetUnmetDemandResult> => {
+export const getUnmetDemand = async (opts: IGetUnmetDemandOptions): Promise<IGetUnmetDemandResult> => {
     const { body, status } = await gather<IGetUnmetDemandRequest, IGetUnmetDemandResponse | IErrorResponse>({
-        body: request,
+        body: opts.request,
         headers: new Headers({ "content-type": "application/json" }),
         method: "POST",
-        url: `${apiEndpoint}/region/${region}/realm/${realm}/unmet-demand`,
+        url: `${apiEndpoint}/region/${opts.region}/realm/${opts.realm}/unmet-demand`,
     });
     switch (status) {
         case HTTPStatus.OK:
