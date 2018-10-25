@@ -1,56 +1,65 @@
 import * as HTTPStatus from "http-status";
 
-import { IErrors, IUser, IUserPreferences, RealmSlug, RegionName } from "../types/global";
-import { apiEndpoint } from "./index";
+import { IErrorResponse, IValidationErrorResponse } from "@app/api-types/contracts";
+import { ICreateUserRequest, ICreateUserResponse, ILoginRequest, ILoginResponse } from "@app/api-types/contracts/user";
+import {
+    ICreatePreferencesRequest,
+    ICreatePreferencesResponse,
+    IGetPreferencesResponse,
+    IUpdatePreferencesRequest,
+    IUpdatePreferencesResponse,
+} from "@app/api-types/contracts/user/preferences";
+import { IPreferenceJson, IUserJson } from "@app/api-types/entities";
+import { apiEndpoint, gather } from "./index";
 
-interface IRegisterUserResponse {
-    profile: {
-        user: IUser;
-        token: string;
-    } | null;
-    errors: IErrors | null;
+interface IRegisterUserResult {
+    data: ICreateUserResponse | null;
+    errors: IValidationErrorResponse | null;
 }
 
-export const registerUser = async (email: string, password: string): Promise<IRegisterUserResponse> => {
-    const res = await fetch(`${apiEndpoint}/users`, {
-        body: JSON.stringify({ email, password }),
-        headers: new Headers({ "content-type": "application/json" }),
+export const registerUser = async (email: string, password: string): Promise<IRegisterUserResult> => {
+    const { body, status } = await gather<ICreateUserRequest, ICreateUserResponse | IValidationErrorResponse>({
+        body: { email, password },
         method: "POST",
+        url: `${apiEndpoint}/users`,
     });
-    switch (res.status) {
+    switch (status) {
         case HTTPStatus.CREATED:
-            return { profile: await res.json(), errors: null };
+            return { errors: null, data: body as ICreateUserResponse };
         case HTTPStatus.BAD_REQUEST:
-            return { errors: await res.json(), profile: null };
+            return { errors: body as IValidationErrorResponse, data: null };
         case HTTPStatus.INTERNAL_SERVER_ERROR:
-            return { errors: { email: "There was a server error." }, profile: null };
+            return { errors: { email: "There was a server error." }, data: null };
         default:
-            return { errors: { email: "There was an unknown error." }, profile: null };
+            return { errors: { email: "There was an unknown error." }, data: null };
     }
 };
 
-export type LoginUserResponse = IRegisterUserResponse;
+interface ILoginResult {
+    data: ILoginResponse | null;
+    errors: IValidationErrorResponse | null;
+}
 
-export const loginUser = async (email: string, password: string): Promise<LoginUserResponse> => {
-    const res = await fetch(`${apiEndpoint}/login`, {
-        body: JSON.stringify({ email, password }),
-        headers: new Headers({ "content-type": "application/json" }),
+export const loginUser = async (email: string, password: string): Promise<ILoginResult> => {
+    const { body, status } = await gather<ILoginRequest, ILoginResponse | IValidationErrorResponse>({
+        body: { email, password },
         method: "POST",
+        url: `${apiEndpoint}/login`,
     });
-    switch (res.status) {
+    switch (status) {
         case HTTPStatus.OK:
-            return { profile: await res.json(), errors: null };
+            return { errors: null, data: body as ILoginResponse };
         case HTTPStatus.BAD_REQUEST:
-            return { errors: await res.json(), profile: null };
+            return { errors: body as IValidationErrorResponse, data: null };
         case HTTPStatus.INTERNAL_SERVER_ERROR:
-            return { errors: { email: "There was a server error." }, profile: null };
+            return { errors: { email: "There was a server error." }, data: null };
         default:
-            return { errors: { email: "There was an unknown error." }, profile: null };
+            return { errors: { email: "There was an unknown error." }, data: null };
     }
 };
 
 export interface IReloadUserResponse {
-    user: IUser | null;
+    user: IUserJson | null;
     error: string | null;
 }
 
@@ -69,20 +78,20 @@ export const reloadUser = async (token: string): Promise<IReloadUserResponse> =>
     return { user: await res.json(), error: null };
 };
 
-export interface IGetPreferencesResponse {
-    preference: IUserPreferences | null;
+export interface IGetPreferencesResult {
+    preference: IPreferenceJson | null;
     error: string | null;
 }
 
-export const getPreferences = async (token: string): Promise<IGetPreferencesResponse> => {
-    const res = await fetch(`${apiEndpoint}/user/preferences`, {
+export const getPreferences = async (token: string): Promise<IGetPreferencesResult> => {
+    const { body, status } = await gather<null, IGetPreferencesResponse>({
         headers: new Headers({
             Authorization: `Bearer ${token}`,
             "content-type": "application/json",
         }),
-        method: "GET",
+        url: `${apiEndpoint}/user/preferences`,
     });
-    switch (res.status) {
+    switch (status) {
         case HTTPStatus.UNAUTHORIZED:
             return { error: "Unauthorized", preference: null };
         case HTTPStatus.NOT_FOUND:
@@ -91,57 +100,58 @@ export const getPreferences = async (token: string): Promise<IGetPreferencesResp
             break;
     }
 
-    return { preference: (await res.json()).preference, error: null };
+    return { preference: body.preference, error: null };
 };
 
-export interface ICreatePreferencesRequestBody {
-    current_region?: RegionName;
-    current_realm?: RealmSlug;
-}
-
-interface ICreatePreferencesResponse {
-    preference: IUserPreferences | null;
+interface ICreatePreferencesResult {
+    preference: IPreferenceJson | null;
     error: string | null;
 }
 
 export const createPreferences = async (
     token: string,
-    body: ICreatePreferencesRequestBody,
-): Promise<ICreatePreferencesResponse> => {
-    const res = await fetch(`${apiEndpoint}/user/preferences`, {
-        body: JSON.stringify(body),
+    request: ICreatePreferencesRequest,
+): Promise<ICreatePreferencesResult> => {
+    const { body, status } = await gather<
+        ICreatePreferencesRequest,
+        ICreatePreferencesResponse | IErrorResponse | IValidationErrorResponse
+    >({
+        body: request,
         headers: new Headers({
             Authorization: `Bearer ${token}`,
             "content-type": "application/json",
         }),
         method: "POST",
+        url: `${apiEndpoint}/user/preferences`,
     });
-    if (res.status === HTTPStatus.UNAUTHORIZED) {
+    if (status === HTTPStatus.UNAUTHORIZED) {
         return { error: "Unauthorized", preference: null };
     }
 
-    return { preference: (await res.json()).preference, error: null };
+    return { preference: (body as ICreatePreferencesResponse).preference, error: null };
 };
 
-export type UpdatePreferencesRequestBody = ICreatePreferencesRequestBody;
-
-export type UpdatePreferencesResponse = ICreatePreferencesResponse;
+export interface IUpdatePreferencesResult {
+    data: IPreferenceJson | null;
+    error: string | null;
+}
 
 export const updatePreferences = async (
     token: string,
-    body: UpdatePreferencesRequestBody,
-): Promise<UpdatePreferencesResponse> => {
-    const res = await fetch(`${apiEndpoint}/user/preferences`, {
-        body: JSON.stringify(body),
+    request: IUpdatePreferencesRequest,
+): Promise<IUpdatePreferencesResult> => {
+    const { body, status } = await gather<IUpdatePreferencesRequest, IUpdatePreferencesResponse>({
+        body: request,
         headers: new Headers({
             Authorization: `Bearer ${token}`,
             "content-type": "application/json",
         }),
         method: "PUT",
+        url: `${apiEndpoint}/user/preferences`,
     });
-    if (res.status === HTTPStatus.UNAUTHORIZED) {
-        return { error: "Unauthorized", preference: null };
+    if (status === HTTPStatus.UNAUTHORIZED) {
+        return { error: "Unauthorized", data: null };
     }
 
-    return { preference: (await res.json()).preference, error: null };
+    return { data: body.preference, error: null };
 };
