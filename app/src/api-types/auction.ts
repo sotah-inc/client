@@ -1,5 +1,5 @@
 import { ItemId } from "./item";
-import { realmSlug } from "./region";
+import { RealmSlug } from "./region";
 
 export type OwnerName = string;
 
@@ -10,7 +10,7 @@ export interface IOwner {
 
 export interface IAuctionRealm {
     name: string;
-    slug: realmSlug;
+    slug: RealmSlug;
 }
 
 export interface IAuction {

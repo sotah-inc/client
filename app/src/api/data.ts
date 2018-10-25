@@ -1,6 +1,7 @@
 import * as HTTPStatus from "http-status";
 
 import { SortDirection, SortKind } from "@app/api-types";
+import { OwnerName } from "@app/api-types/auction";
 import {
     IGetAuctionsRequest,
     IGetAuctionsResponse,
@@ -21,7 +22,8 @@ import {
     IQueryOwnerItemsResponse,
     IStatusRealm,
 } from "@app/api-types/contracts/data";
-import { ItemId, OwnerName, RealmSlug, RegionName } from "@app/types/global";
+import { ItemId } from "@app/api-types/item";
+import { RealmSlug, RegionName } from "@app/api-types/region";
 import { apiEndpoint, gather } from "./index";
 
 export const getPing = async (): Promise<boolean> => {
@@ -53,7 +55,7 @@ export const getBoot = async (): Promise<IGetBootResponse | null> => {
     return body;
 };
 
-export const getStatus = async (regionName: string): Promise<IStatusRealm[] | null> => {
+export const getStatus = async (regionName: RegionName): Promise<IStatusRealm[] | null> => {
     const { body, status } = await gather<null, IGetRealmsResponse>({
         url: `${apiEndpoint}/region/${regionName}/realms`,
     });

@@ -1,5 +1,5 @@
 import { IPreferenceJson } from "../../entities";
-import { realmSlug, regionName } from "../../region";
+import { RealmSlug, RegionName } from "../../region";
 
 export interface IGetPreferencesResponse {
     preference: IPreferenceJson;
@@ -8,8 +8,8 @@ export interface IGetPreferencesResponse {
 export interface ICreatePreferencesRequest {
     id?: number;
     user_id: number;
-    current_region: regionName | null;
-    current_realm: realmSlug | null;
+    current_region: RegionName | null;
+    current_realm: RealmSlug | null;
 }
 
 export type ICreatePreferencesResponse = IGetPreferencesResponse;

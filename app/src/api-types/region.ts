@@ -1,7 +1,7 @@
-export type regionName = string;
+export type RegionName = string;
 
 export interface IRegion {
-    name: regionName;
+    name: RegionName;
     hostname: string;
 }
 
@@ -9,7 +9,7 @@ export interface IStatus {
     realms: IRealm[];
 }
 
-export type realmSlug = string;
+export type RealmSlug = string;
 
 export interface IRealm {
     type: string;
@@ -17,10 +17,10 @@ export interface IRealm {
     queue: boolean;
     status: boolean;
     name: string;
-    slug: realmSlug;
+    slug: RealmSlug;
     battlegroup: string;
     locale: string;
     timezone: string;
-    connected_realms: realmSlug[];
+    connected_realms: RealmSlug[];
     last_modified: number;
 }

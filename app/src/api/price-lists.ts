@@ -18,7 +18,7 @@ import {
     ICreateProfessionPricelistResponse,
 } from "@app/api-types/contracts/user/profession-pricelists-crud";
 import { ProfessionName } from "@app/api-types/profession";
-import { realmSlug, regionName } from "@app/api-types/region";
+import { RealmSlug, RegionName } from "@app/api-types/region";
 import { apiEndpoint, gather } from "./index";
 
 export interface ICreatePricelistResult {
@@ -189,8 +189,8 @@ export interface IGetUnmetDemandResult {
 }
 
 export const getUnmetDemand = async (
-    region: regionName,
-    realm: realmSlug,
+    region: RegionName,
+    realm: RealmSlug,
     request: IGetUnmetDemandRequest,
 ): Promise<IGetUnmetDemandResult> => {
     const { body, status } = await gather<IGetUnmetDemandRequest, IGetUnmetDemandResponse | IErrorResponse>({
