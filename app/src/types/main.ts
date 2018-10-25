@@ -7,20 +7,20 @@ import {
     IRegion,
     IRegions,
     ItemClasses,
-    IUserPreferences,
 } from "./global";
+import { IPreferenceJson } from "@app/api-types/entities";
 
 export interface IMainState {
-    fetchPingLevel: FetchPingLevel;
+    fetchPingLevel: FetchLevel;
     profile: IProfile | null;
-    userPreferences: IUserPreferences | null;
-    fetchUserPreferencesLevel: FetchUserPreferencesLevel;
+    userPreferences: IPreferenceJson | null;
+    fetchUserPreferencesLevel: FetchLevel;
     preloadedToken: string;
     isRegistered: boolean;
     isLoggedIn: boolean;
     regions: IRegions;
     currentRegion: IRegion | null;
-    fetchRealmLevel: FetchRealmLevel;
+    fetchRealmLevel: FetchLevel;
     realms: IRealms;
     currentRealm: IRealm | null;
     authLevel: AuthLevel;
@@ -28,42 +28,14 @@ export interface IMainState {
     expansions: IExpansion[];
     professions: IProfession[];
     itemClasses: ItemClasses;
-    fetchBootLevel: FetchBootLevel;
+    fetchBootLevel: FetchLevel;
 }
 
 export enum FetchLevel {
     initial,
-    fetching,
-    success,
-    failure,
-}
-
-export enum FetchPingLevel {
-    initial,
-    fetching,
-    success,
-    failure,
-}
-
-export enum FetchBootLevel {
-    initial,
     prompted,
     fetching,
-    success,
-    failure,
-}
-
-export enum FetchRealmLevel {
-    initial,
-    prompted,
-    fetching,
-    success,
-    failure,
-}
-
-export enum FetchUserPreferencesLevel {
-    initial,
-    fetching,
+    refetching,
     success,
     failure,
 }
@@ -79,10 +51,10 @@ export const defaultMainState: IMainState = {
     currentRealm: null,
     currentRegion: null,
     expansions: [],
-    fetchBootLevel: FetchBootLevel.initial,
-    fetchPingLevel: FetchPingLevel.initial,
-    fetchRealmLevel: FetchRealmLevel.initial,
-    fetchUserPreferencesLevel: FetchUserPreferencesLevel.initial,
+    fetchBootLevel: FetchLevel.initial,
+    fetchPingLevel: FetchLevel.initial,
+    fetchRealmLevel: FetchLevel.initial,
+    fetchUserPreferencesLevel: FetchLevel.initial,
     isLoggedIn: false,
     isLoginDialogOpen: false,
     isRegistered: false,

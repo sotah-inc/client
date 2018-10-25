@@ -48,6 +48,25 @@ export enum ItemBind {
     bindOnEquip,
 }
 
+export enum ItemClassClasses {
+    Consumable = 0,
+    Container = 1,
+    Weapon = 2,
+    Gem = 3,
+    Armor = 4,
+    Reagent = 5,
+    Projectile = 6,
+    Tradeskill = 7,
+    Recipe = 9,
+    Quiver = 11,
+    Quest = 12,
+    Key = 13,
+    Misc = 15,
+    Glyph = 16,
+    Battlepet = 17,
+    WowToken = 18,
+}
+
 type ItemClassClass = number;
 
 type SubItemClassClass = number;
@@ -93,6 +112,29 @@ interface IItemWeaponInfo {
     dps: number;
 }
 
+export enum ItemStat {
+    Agi = 3,
+    Str = 4,
+    Int = 5,
+    Stam = 7,
+    Dodge = 13,
+    Parry = 14,
+    Crit = 32,
+    PvPResil = 35,
+    Haste = 36,
+    Vers = 40,
+    Mastery = 49,
+    FireResist = 51,
+    ShadowResist = 54,
+    NatResist = 55,
+    PvpPow = 57,
+    AgiOrStr = 72,
+    AgiOrInt = 73,
+    StrOrInt = 74,
+}
+
+export const SecondaryItemStats: ItemStat[] = [ItemStat.Crit, ItemStat.PvPResil, ItemStat.Haste];
+
 interface IItemBonusStat {
     stat: number;
     amount: number;
@@ -113,7 +155,7 @@ export interface IItem {
     armor: number;
     maxDurability: number;
     sellPrice: number;
-    itemSpells: IItemSpell[];
+    itemSpells: IItemSpell[] | null;
     equippable: boolean;
     stackable: number;
     weaponInfo: IItemWeaponInfo;

@@ -1,28 +1,22 @@
 import { SortDirection, SortKind } from "@app/api-types";
-import { IAuction, IOwner } from "@app/api-types/auction";
-import { IItem, IItemsMap } from "@app/api-types/item";
+import { IAuction } from "@app/api-types/auction";
+import { IQueryAuctionsItem } from "@app/api-types/contracts/data";
+import { IItemsMap } from "@app/api-types/item";
+import { FetchLevel } from "@app/types/main";
 
 export interface IAuctionState {
-    fetchAuctionsLevel: FetchAuctionsLevel;
+    fetchAuctionsLevel: FetchLevel;
     auctions: IAuction[];
     currentPage: number;
     auctionsPerPage: number;
     totalResults: number;
     sortDirection: SortDirection;
     sortKind: SortKind;
-    queryAuctionsLevel: QueryAuctionsLevel;
-    queryAuctionResults: IQueryAuctionResult[];
-    selectedQueryAuctionResults: IQueryAuctionResult[];
+    queryAuctionsLevel: FetchLevel;
+    queryAuctionResults: IQueryAuctionsItem[];
+    selectedQueryAuctionResults: IQueryAuctionsItem[];
     activeSelect: boolean;
     items: IItemsMap;
-}
-
-export enum FetchAuctionsLevel {
-    initial,
-    fetching,
-    refetching,
-    success,
-    failure,
 }
 
 export interface ISortChangeOptions {
@@ -30,46 +24,15 @@ export interface ISortChangeOptions {
     sortDirection: SortDirection;
 }
 
-export enum FetchOwnersLevel {
-    initial,
-    fetching,
-    refetching,
-    success,
-    failure,
-}
-
-export enum FetchItemsLevel {
-    initial,
-    fetching,
-    refetching,
-    success,
-    failure,
-}
-
-export enum QueryAuctionsLevel {
-    initial,
-    fetching,
-    refetching,
-    success,
-    failure,
-}
-
-export interface IQueryAuctionResult {
-    item: IItem | null;
-    owner: IOwner | null;
-    target: string;
-    rank: number;
-}
-
 export const defaultAuctionState: IAuctionState = {
     activeSelect: true,
     auctions: [],
     auctionsPerPage: 10,
     currentPage: 0,
-    fetchAuctionsLevel: FetchAuctionsLevel.initial,
+    fetchAuctionsLevel: FetchLevel.initial,
     items: {},
     queryAuctionResults: [],
-    queryAuctionsLevel: QueryAuctionsLevel.initial,
+    queryAuctionsLevel: FetchLevel.initial,
     selectedQueryAuctionResults: [],
     sortDirection: SortDirection.none,
     sortKind: SortKind.none,

@@ -87,12 +87,14 @@ export interface IQueryItemsRequest {
     query: string;
 }
 
+export interface IQueryItemsItem {
+    item: IItem;
+    target: string;
+    rank: number;
+}
+
 export interface IQueryItemsResponse {
-    items: Array<{
-        item: IItem;
-        target: string;
-        rank: number;
-    }>;
+    items: IQueryItemsItem[];
 }
 
 export interface IGetPricelistRequest {

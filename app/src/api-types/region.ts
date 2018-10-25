@@ -11,9 +11,17 @@ export interface IStatus {
 
 export type RealmSlug = string;
 
+export enum RealmPopulation {
+    na = "n/a",
+    medium = "medium",
+    high = "high",
+    full = "full",
+}
+
 export interface IRealm {
+    regionName: RegionName;
     type: string;
-    population: string;
+    population: RealmPopulation;
     queue: boolean;
     status: boolean;
     name: string;
