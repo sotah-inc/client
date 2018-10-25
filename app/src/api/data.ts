@@ -1,6 +1,6 @@
 import * as HTTPStatus from "http-status";
 
-import { SortDirection, SortKind } from "../api-types";
+import { SortDirection, SortKind } from "@app/api-types";
 import {
     IGetAuctionsRequest,
     IGetAuctionsResponse,
@@ -20,8 +20,8 @@ import {
     IQueryOwnerItemsRequest,
     IQueryOwnerItemsResponse,
     IStatusRealm,
-} from "../api-types/contracts/data";
-import { ItemId, OwnerName, RealmSlug, RegionName } from "../types/global";
+} from "@app/api-types/contracts/data";
+import { ItemId, OwnerName, RealmSlug, RegionName } from "@app/types/global";
 import { apiEndpoint, gather } from "./index";
 
 export const getPing = async (): Promise<boolean> => {
