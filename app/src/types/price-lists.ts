@@ -1,13 +1,16 @@
+import { IUpdatePricelistRequest, IUpdatePricelistResponse } from "@app/api-types/contracts/user/pricelist-crud";
+import { IProfessionPricelistJson } from "@app/api-types/entities";
+import { IExpansion } from "@app/api-types/expansion";
+import { IItemsMap, ItemId } from "@app/api-types/item";
 import {
     IItemMarketPrices,
     IItemPriceLimits,
-    IOwnerItemsOwnershipMap,
     IPriceLimits,
     IPricelistHistoryMap,
     IPriceListMap,
-} from "@app/api/data";
-import { IUpdatePricelistRequest, IUpdatePricelistResponse } from "@app/api/price-lists";
-import { IErrors, IExpansion, IProfession, IProfessionPricelist, ItemId, ItemsMap } from "./global";
+} from "@app/api-types/pricelist";
+import { IProfession } from "@app/api-types/profession";
+import { IErrors } from "./global";
 import { FetchLevel } from "./main";
 
 export interface IPriceListsState {
@@ -23,7 +26,7 @@ export interface IPriceListsState {
     isDeleteListDialogOpen: boolean;
     isAddEntryDialogOpen: boolean;
     getPricelistsLevel: GetPricelistsLevel;
-    items: ItemsMap;
+    items: IItemsMap;
     deletePricelistLevel: DeletePricelistLevel;
     selectedProfession: IProfession | null;
     professionPricelists: IExpansionProfessionPricelistMap;
@@ -31,7 +34,7 @@ export interface IPriceListsState {
     selectedExpansion: IExpansion | null;
     getUnmetDemandLevel: GetUnmetDemandLevel;
     unmetDemandItemIds: ItemId[];
-    unmetDemandProfessionPricelists: IProfessionPricelist[];
+    unmetDemandProfessionPricelists: IProfessionPricelistJson[];
     getPricelistLevel: FetchLevel;
     pricelistMap: IPriceListMap;
     getPricelistHistoryLevel: FetchLevel;
@@ -43,8 +46,15 @@ export interface IPriceListsState {
     itemsMarketPrices: IItemMarketPrices;
 }
 
+export interface IOwnerItemsOwnershipMap {
+    [ownerName: string]: {
+        owned_value: number;
+        owned_volume: number;
+    };
+}
+
 export interface IExpansionProfessionPricelistMap {
-    [key: string]: IProfessionPricelist[];
+    [key: string]: IProfessionPricelistJson[];
 }
 
 export enum ListDialogStep {

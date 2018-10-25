@@ -1,4 +1,6 @@
-import { IAuction, IOwner, Item, ItemsMap } from "./global";
+import { SortDirection, SortKind } from "@app/api-types";
+import { IAuction, IOwner } from "@app/api-types/auction";
+import { IItem, IItemsMap } from "@app/api-types/item";
 
 export interface IAuctionState {
     fetchAuctionsLevel: FetchAuctionsLevel;
@@ -12,7 +14,7 @@ export interface IAuctionState {
     queryAuctionResults: IQueryAuctionResult[];
     selectedQueryAuctionResults: IQueryAuctionResult[];
     activeSelect: boolean;
-    items: ItemsMap;
+    items: IItemsMap;
 }
 
 export enum FetchAuctionsLevel {
@@ -21,23 +23,6 @@ export enum FetchAuctionsLevel {
     refetching,
     success,
     failure,
-}
-
-export enum SortDirection {
-    none,
-    up,
-    down,
-}
-
-export enum SortKind {
-    none,
-    item,
-    quantity,
-    bid,
-    buyout,
-    buyoutPer,
-    auctions,
-    owner,
 }
 
 export interface ISortChangeOptions {
@@ -70,7 +55,7 @@ export enum QueryAuctionsLevel {
 }
 
 export interface IQueryAuctionResult {
-    item: Item | null;
+    item: IItem | null;
     owner: IOwner | null;
     target: string;
     rank: number;

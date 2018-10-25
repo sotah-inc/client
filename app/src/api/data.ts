@@ -1,5 +1,6 @@
 import * as HTTPStatus from "http-status";
 
+import { SortDirection, SortKind } from "../api-types";
 import {
     IGetAuctionsRequest,
     IGetAuctionsResponse,
@@ -20,7 +21,6 @@ import {
     IQueryOwnerItemsResponse,
     IStatusRealm,
 } from "../api-types/contracts/data";
-import { SortDirection, SortKind } from "../types/auction";
 import { ItemId, OwnerName, RealmSlug, RegionName } from "../types/global";
 import { apiEndpoint, gather } from "./index";
 
