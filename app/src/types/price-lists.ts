@@ -1,3 +1,4 @@
+import { IQueryOwnerItemsMap } from "@app/api-types/contracts/data";
 import { IUpdatePricelistRequest, IUpdatePricelistResponse } from "@app/api-types/contracts/user/pricelist-crud";
 import { IPricelistJson, IProfessionPricelistJson } from "@app/api-types/entities";
 import { IExpansion } from "@app/api-types/expansion";
@@ -40,17 +41,10 @@ export interface IPriceListsState {
     getPricelistHistoryLevel: FetchLevel;
     pricelistHistoryMap: IPricelistHistoryMap;
     getItemsOwnershipLevel: FetchLevel;
-    itemsOwnershipMap: IOwnerItemsOwnershipMap;
+    itemsOwnershipMap: IQueryOwnerItemsMap;
     itemsPriceLimits: IItemPriceLimits;
     overallPriceLimits: IPriceLimits;
     itemsMarketPrices: IItemMarketPrices;
-}
-
-export interface IOwnerItemsOwnershipMap {
-    [ownerName: string]: {
-        owned_value: number;
-        owned_volume: number;
-    };
 }
 
 export interface IExpansionProfessionPricelistMap {
