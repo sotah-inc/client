@@ -103,7 +103,7 @@ export const getPreferences = async (token: string): Promise<IGetPreferencesResu
     return { preference: body.preference, error: null };
 };
 
-interface ICreatePreferencesResult {
+export interface ICreatePreferencesResult {
     preference: IPreferenceJson | null;
     error: string | null;
 }
