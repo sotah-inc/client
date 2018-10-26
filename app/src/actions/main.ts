@@ -1,18 +1,21 @@
 import { Dispatch } from "redux";
 
-import { getBoot, getPing, getStatus, IBootResponse } from "../api/data";
+import { IGetBootResponse } from "@app/api-types/contracts/data";
+import { ICreatePreferencesRequest, IUpdatePreferencesRequest } from "@app/api-types/contracts/user/preferences";
+import { IRealm, IRegion } from "@app/api-types/region";
+import { getBoot, getPing, getStatus } from "@app/api/data";
 import {
     createPreferences,
     getPreferences,
-    ICreatePreferencesRequestBody,
-    IGetPreferencesResponse,
+    ICreatePreferencesResult,
+    IGetPreferencesResult,
     IReloadUserResponse,
+    IUpdatePreferencesResult,
     reloadUser,
     updatePreferences,
-    UpdatePreferencesRequestBody,
-} from "../api/user";
-import { IProfile, IRealm, IRegion } from "../types/global";
-import { AuthLevel } from "../types/main";
+} from "@app/api/user";
+import { IProfile } from "@app/types/global";
+import { AuthLevel } from "@app/types/main";
 import { ActionsUnion, createAction } from "./helpers";
 
 export const REQUEST_PING = "REQUEST_PING";
@@ -51,7 +54,7 @@ export const ChangeAuthLevel = (payload: AuthLevel) => createAction(CHANGE_AUTH_
 export const REQUEST_USER_PREFERENCES = "REQUEST_USER_PREFERENCES";
 export const RECEIVE_USER_PREFERENCES = "RECEIVE_USER_PREFERENCES";
 const RequestUserPreferences = () => createAction(REQUEST_USER_PREFERENCES);
-const ReceiveUserPreferences = (payload: IGetPreferencesResponse) => createAction(RECEIVE_USER_PREFERENCES, payload);
+const ReceiveUserPreferences = (payload: IGetPreferencesResult) => createAction(RECEIVE_USER_PREFERENCES, payload);
 type FetchUserPreferencesType = ReturnType<typeof RequestUserPreferences | typeof ReceiveUserPreferences>;
 export const FetchUserPreferences = (token: string) => {
     return async (dispatch: Dispatch<FetchUserPreferencesType>) => {
@@ -63,12 +66,12 @@ export const FetchUserPreferences = (token: string) => {
 export const REQUEST_USER_PREFERENCES_CREATE = "REQUEST_USER_PREFERENCES_CREATE";
 export const RECEIVE_USER_PREFERENCES_CREATE = "RECEIVE_USER_PREFERENCES_CREATE";
 const RequestUserPreferencesCreate = () => createAction(REQUEST_USER_PREFERENCES_CREATE);
-const ReceiveUserPreferencesCreate = (payload: IGetPreferencesResponse) =>
+const ReceiveUserPreferencesCreate = (payload: ICreatePreferencesResult) =>
     createAction(RECEIVE_USER_PREFERENCES_CREATE, payload);
 type FetchUserPreferencesCreateType = ReturnType<
     typeof RequestUserPreferencesCreate | typeof ReceiveUserPreferencesCreate
 >;
-export const FetchUserPreferencesCreate = (token: string, body: ICreatePreferencesRequestBody) => {
+export const FetchUserPreferencesCreate = (token: string, body: ICreatePreferencesRequest) => {
     return async (dispatch: Dispatch<FetchUserPreferencesCreateType>) => {
         dispatch(RequestUserPreferencesCreate());
         dispatch(ReceiveUserPreferencesCreate(await createPreferences(token, body)));
@@ -78,12 +81,12 @@ export const FetchUserPreferencesCreate = (token: string, body: ICreatePreferenc
 export const REQUEST_USER_PREFERENCES_UPDATE = "REQUEST_USER_PREFERENCES_UPDATE";
 export const RECEIVE_USER_PREFERENCES_UPDATE = "RECEIVE_USER_PREFERENCES_UPDATE";
 const RequestUserPreferencesUpdate = () => createAction(REQUEST_USER_PREFERENCES_UPDATE);
-const ReceiveUserPreferencesUpdate = (payload: IGetPreferencesResponse) =>
+const ReceiveUserPreferencesUpdate = (payload: IUpdatePreferencesResult) =>
     createAction(RECEIVE_USER_PREFERENCES_UPDATE, payload);
 type FetchUserPreferencesUpdateType = ReturnType<
     typeof RequestUserPreferencesUpdate | typeof ReceiveUserPreferencesUpdate
 >;
-export const FetchUserPreferencesUpdate = (token: string, body: UpdatePreferencesRequestBody) => {
+export const FetchUserPreferencesUpdate = (token: string, body: IUpdatePreferencesRequest) => {
     return async (dispatch: Dispatch<FetchUserPreferencesUpdateType>) => {
         dispatch(RequestUserPreferencesUpdate());
         dispatch(ReceiveUserPreferencesUpdate(await updatePreferences(token, body)));
@@ -93,7 +96,7 @@ export const FetchUserPreferencesUpdate = (token: string, body: UpdatePreference
 export const REQUEST_BOOT = "REQUEST_BOOT";
 export const RECEIVE_BOOT = "RECEIVE_BOOT";
 const RequestBoot = () => createAction(REQUEST_BOOT);
-const ReceiveBoot = (payload: IBootResponse | null) => createAction(RECEIVE_BOOT, payload);
+const ReceiveBoot = (payload: IGetBootResponse | null) => createAction(RECEIVE_BOOT, payload);
 type FetchBootType = ReturnType<typeof RequestBoot | typeof ReceiveBoot>;
 export const FetchBoot = () => {
     return async (dispatch: Dispatch<FetchBootType>) => {
