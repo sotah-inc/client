@@ -22,6 +22,7 @@ export interface IPricelistJson {
 
 export interface IProfessionPricelistJson {
     id: number;
+    pricelist: IPricelistJson;
     name: ProfessionName;
     expansion: ExpansionName;
 }

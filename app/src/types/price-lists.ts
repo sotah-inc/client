@@ -1,5 +1,5 @@
 import { IQueryOwnerItemsMap } from "@app/api-types/contracts/data";
-import { IUpdatePricelistRequest, IUpdatePricelistResponse } from "@app/api-types/contracts/user/pricelist-crud";
+import { IUpdatePricelistRequest } from "@app/api-types/contracts/user/pricelist-crud";
 import { IPricelistJson, IProfessionPricelistJson } from "@app/api-types/entities";
 import { IExpansion } from "@app/api-types/expansion";
 import { IItemsMap, ItemId } from "@app/api-types/item";
@@ -11,6 +11,7 @@ import {
     IPriceListMap,
 } from "@app/api-types/pricelist";
 import { IProfession } from "@app/api-types/profession";
+import { IUpdatePricelistResult } from "@app/api/price-lists";
 import { IErrors } from "./global";
 import { FetchLevel } from "./main";
 
@@ -68,7 +69,7 @@ export interface IUpdatePricelistRequestOptions {
 }
 
 export interface IUpdatePricelistResponseOptions {
-    response: IUpdatePricelistResponse;
+    result: IUpdatePricelistResult;
     meta: IUpdatePricelistMeta;
 }
 

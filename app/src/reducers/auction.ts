@@ -11,8 +11,9 @@ import {
     REQUEST_AUCTIONS_QUERY,
     SORT_CHANGE,
 } from "@app/actions/auction";
-import { defaultAuctionState, FetchAuctionsLevel, IAuctionState, QueryAuctionsLevel } from "@app/types/auction";
-import { IAuction } from "@app/types/global";
+import { IAuction } from "@app/api-types/auction";
+import { defaultAuctionState, IAuctionState } from "@app/types/auction";
+import { FetchLevel } from "@app/types/main";
 
 type State = Readonly<IAuctionState> | undefined;
 
@@ -24,13 +25,11 @@ export const auction = (state: State, action: AuctionActions): State => {
     switch (action.type) {
         case REQUEST_AUCTIONS:
             const requestFetchAuctionsLevel =
-                state.fetchAuctionsLevel === FetchAuctionsLevel.initial
-                    ? FetchAuctionsLevel.fetching
-                    : FetchAuctionsLevel.refetching;
+                state.fetchAuctionsLevel === FetchLevel.initial ? FetchLevel.fetching : FetchLevel.refetching;
             return { ...state, fetchAuctionsLevel: requestFetchAuctionsLevel };
         case RECEIVE_AUCTIONS:
             if (action.payload === null) {
-                return { ...state, fetchAuctionsLevel: FetchAuctionsLevel.failure };
+                return { ...state, fetchAuctionsLevel: FetchLevel.failure };
             }
 
             let auctions: IAuction[] = [];
@@ -41,7 +40,7 @@ export const auction = (state: State, action: AuctionActions): State => {
             return {
                 ...state,
                 auctions,
-                fetchAuctionsLevel: FetchAuctionsLevel.success,
+                fetchAuctionsLevel: FetchLevel.success,
                 items: { ...action.payload.items },
                 totalResults: action.payload.total,
             };
@@ -54,19 +53,17 @@ export const auction = (state: State, action: AuctionActions): State => {
             return { ...state, currentPage: defaultAuctionState.currentPage, sortDirection, sortKind };
         case REQUEST_AUCTIONS_QUERY:
             const queryAuctionsLevel =
-                state.queryAuctionsLevel === QueryAuctionsLevel.initial
-                    ? QueryAuctionsLevel.fetching
-                    : QueryAuctionsLevel.refetching;
+                state.queryAuctionsLevel === FetchLevel.initial ? FetchLevel.fetching : FetchLevel.refetching;
             return { ...state, queryAuctionsLevel };
         case RECEIVE_AUCTIONS_QUERY:
             if (action.payload === null) {
-                return { ...state, queryAuctionsLevel: QueryAuctionsLevel.failure };
+                return { ...state, queryAuctionsLevel: FetchLevel.failure };
             }
 
             return {
                 ...state,
                 queryAuctionResults: action.payload.items,
-                queryAuctionsLevel: QueryAuctionsLevel.success,
+                queryAuctionsLevel: FetchLevel.success,
             };
         case ADD_AUCTIONS_QUERY:
             return {

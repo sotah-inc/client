@@ -6,5 +6,5 @@ export interface ISubItemClass {
 export interface IItemClass {
     class: number;
     name: string;
-    subclasses: ISubItemClass[];
+    subClasses: ISubItemClass[];
 }

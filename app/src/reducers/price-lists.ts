@@ -12,8 +12,9 @@ import {
     PriceListsActions,
     RESET_PROFESSIONS_SELECTIONS,
 } from "@app/actions/price-lists";
-import { Item } from "@app/types/global";
-import { defaultPriceListsState, IPricelist, IPriceListsState } from "@app/types/price-lists";
+import { IPricelistJson } from "@app/api-types/entities";
+import { IItem } from "@app/api-types/item";
+import { defaultPriceListsState, IPriceListsState } from "@app/types/price-lists";
 import { runners } from "./handlers";
 import { getFirstExpansionPricelist } from "./helper";
 
@@ -38,7 +39,7 @@ export const priceLists = (state: State, action: PriceListsActions): State => {
             let isProfessionPricelist = false;
             for (const expansionName of Object.keys(state.professionPricelists)) {
                 for (const v of state.professionPricelists[expansionName]) {
-                    if (v.pricelist_id === action.payload.id) {
+                    if (v.pricelist.id === action.payload.id) {
                         isProfessionPricelist = true;
 
                         break;
@@ -64,13 +65,13 @@ export const priceLists = (state: State, action: PriceListsActions): State => {
         case APPEND_ITEMS:
             const appendingItems = { ...state.items };
             for (const itemId of Object.keys(action.payload)) {
-                const item: Item = action.payload[itemId];
+                const item: IItem = action.payload[itemId];
                 appendingItems[item.id] = item;
             }
 
             return { ...state, items: appendingItems };
         case CHANGE_SELECTED_EXPANSION:
-            let expansionSelectedList: IPricelist | null = null;
+            let expansionSelectedList: IPricelistJson | null = null;
             if (action.payload.jumpTo) {
                 expansionSelectedList = action.payload.jumpTo;
             } else {
