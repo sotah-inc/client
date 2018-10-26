@@ -1,14 +1,8 @@
-import {
-    IExpansion,
-    IProfession,
-    IProfile,
-    IRealm,
-    IRealms,
-    IRegion,
-    IRegions,
-    ItemClasses,
-} from "./global";
 import { IPreferenceJson } from "@app/api-types/entities";
+import { IExpansion } from "@app/api-types/expansion";
+import { IProfession } from "@app/api-types/profession";
+import { IRealm, IRegion } from "@app/api-types/region";
+import { IProfile, IRealms, IRegions, ItemClasses } from "./global";
 
 export interface IMainState {
     fetchPingLevel: FetchLevel;
