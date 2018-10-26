@@ -96,11 +96,6 @@ export const getPricelists = async (token: string): Promise<IGetPricelistsRespon
     return body;
 };
 
-export interface IDeletePricelistRequestOptions {
-    token: string;
-    id: number;
-}
-
 export const deletePricelist = async (token: string, id: number): Promise<number | null> => {
     const { status } = await gather<null, null>({
         headers: new Headers({
