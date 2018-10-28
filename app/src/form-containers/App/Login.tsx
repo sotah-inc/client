@@ -15,7 +15,7 @@ interface IFormProps {
 
 const config: WithFormikConfig<IFormProps, IFormValues> = {
     handleSubmit: async (values, { setSubmitting, setErrors, props }) => {
-        const { profile, errors } = await loginUser(values.email, values.password);
+        const { data, errors } = await loginUser(values.email, values.password);
         if (errors !== null) {
             setErrors(errors);
             setSubmitting(false);
@@ -24,7 +24,7 @@ const config: WithFormikConfig<IFormProps, IFormValues> = {
         }
 
         setSubmitting(false);
-        props.onUserLogin(profile!);
+        props.onUserLogin(data!);
     },
     mapPropsToValues: (_: IFormProps) => {
         return {

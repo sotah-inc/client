@@ -13,7 +13,7 @@ interface IFormProps {
 
 const config: WithFormikConfig<IFormProps, IFormValues> = {
     handleSubmit: async (values, { setSubmitting, setErrors, props }) => {
-        const { profile, errors } = await registerUser(values.email, values.password);
+        const { data, errors } = await registerUser(values.email, values.password);
         if (errors !== null) {
             setErrors(errors);
             setSubmitting(false);
@@ -22,7 +22,7 @@ const config: WithFormikConfig<IFormProps, IFormValues> = {
         }
 
         setSubmitting(false);
-        props.onUserRegister(profile!);
+        props.onUserRegister(data!);
     },
     mapPropsToValues: (_: IFormProps) => {
         return {
