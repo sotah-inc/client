@@ -17,4 +17,5 @@ export interface ILoginRequest {
 
 export interface ILoginResponse {
     token: string;
+    user: IUserJson;
 }
