@@ -2,7 +2,7 @@ import { IPreferenceJson } from "@app/api-types/entities";
 import { IExpansion } from "@app/api-types/expansion";
 import { IProfession } from "@app/api-types/profession";
 import { IRealm, IRegion } from "@app/api-types/region";
-import { IProfile, IRealms, IRegions, ItemClasses } from "./global";
+import { IItemClasses, IProfile, IRealms, IRegions } from "./global";
 
 export interface IMainState {
     fetchPingLevel: FetchLevel;
@@ -21,7 +21,7 @@ export interface IMainState {
     isLoginDialogOpen: boolean;
     expansions: IExpansion[];
     professions: IProfession[];
-    itemClasses: ItemClasses;
+    itemClasses: IItemClasses;
     fetchBootLevel: FetchLevel;
 }
 

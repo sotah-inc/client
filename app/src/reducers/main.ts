@@ -17,7 +17,7 @@ import {
     USER_REGISTER,
 } from "@app/actions/main";
 import { IRealm, IRegion } from "@app/api-types/region";
-import { IRealms, IRegions, ISubItemClasses, ItemClasses } from "@app/types/global";
+import { IItemClasses, IRealms, IRegions, ISubItemClasses } from "@app/types/global";
 import { AuthLevel, defaultMainState, FetchLevel, IMainState } from "@app/types/main";
 
 type State = Readonly<IMainState> | undefined;
@@ -130,16 +130,16 @@ export const main = (state: State, action: MainActions): State => {
                 {},
             );
 
-            const bootItemClasses: ItemClasses = {};
+            const bootItemClasses: IItemClasses = {};
             for (const itemClass of action.payload.item_classes) {
                 const subClasses: ISubItemClasses = {};
-                for (const subItemClass of itemClass.subclasses) {
+                for (const subItemClass of itemClass.subClasses) {
                     subClasses[subItemClass.subclass] = subItemClass;
                 }
                 bootItemClasses[itemClass.class] = {
                     class: itemClass.class,
                     name: itemClass.name,
-                    subClasses: itemClass.subclasses,
+                    subClasses: itemClass.subClasses,
                     subClassesMap: subClasses,
                 };
             }
