@@ -26,7 +26,7 @@ export interface ISubItemClasses {
     [key: number]: ISubItemClass;
 }
 
-export interface ItemClasses {
+export interface IItemClasses {
     [key: number]: IItemClassWithSub;
 }
 
