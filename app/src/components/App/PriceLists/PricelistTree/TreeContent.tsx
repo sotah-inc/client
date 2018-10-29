@@ -2,16 +2,16 @@ import * as React from "react";
 
 import { Classes, Intent, NonIdealState, Spinner } from "@blueprintjs/core";
 
+import { IPricelistJson } from "@app/api-types/entities";
+import { IRealm, IRegion } from "@app/api-types/region";
 import { LastModified } from "@app/components/util";
 import { PricelistPanelContainer } from "@app/containers/App/PriceLists/PricelistTree/PricelistPanel";
 import { RealmSummaryPanelContainer } from "@app/containers/App/PriceLists/PricelistTree/TreeContent/RealmSummaryPanel";
-import { IRealm, IRegion } from "@app/types/global";
-import { IPricelist } from "@app/types/price-lists";
 
 export interface IStateProps {
     currentRegion: IRegion | null;
     currentRealm: IRealm | null;
-    selectedList: IPricelist | null;
+    selectedList: IPricelistJson | null;
 }
 
 export type Props = Readonly<IStateProps>;

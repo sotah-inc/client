@@ -4,21 +4,22 @@ import { H4, Intent, Spinner, Tab, Tabs } from "@blueprintjs/core";
 import * as moment from "moment";
 import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
 
+import { IPricelistJson } from "@app/api-types/entities";
+import { IItemsMap, ItemId } from "@app/api-types/item";
 import {
-    IGetPriceListHistoryOptions,
     IItemPriceLimits,
+    IItemPricelistHistoryMap,
     IPriceLimits,
     IPricelistHistoryMap,
-    ITimestampPricesMap,
-} from "@app/api/data";
-import { IRealm, IRegion, ItemId, ItemsMap } from "@app/types/global";
+} from "@app/api-types/pricelist";
+import { IRealm, IRegion } from "@app/api-types/region";
+import { IGetPriceListHistoryOptions } from "@app/api/data";
 import { FetchLevel } from "@app/types/main";
-import { IPricelist } from "@app/types/price-lists";
 import { currencyToText, didRealmChange, didRegionChange, getColor, unixTimestampToText } from "@app/util";
 
 export interface IStateProps {
-    items: ItemsMap;
-    pricelistHistoryMap: IPricelistHistoryMap;
+    items: IItemsMap;
+    pricelistHistoryMap: IItemPricelistHistoryMap;
     getPricelistHistoryLevel: FetchLevel;
     itemsPriceLimits: IItemPriceLimits;
     overallPriceLimits: IPriceLimits;
@@ -31,7 +32,7 @@ export interface IDispatchProps {
 export interface IOwnProps {
     region: IRegion;
     realm: IRealm;
-    list: IPricelist;
+    list: IPricelistJson;
 }
 
 interface ILineItem {
@@ -169,7 +170,7 @@ export class PricelistHistoryGraph extends React.Component<Props, State> {
 
         const data: ILineItem[] = Object.keys(pricelistHistoryMap).reduce(
             (dataPreviousValue: ILineItem[], itemIdKey: string) => {
-                const itemPricelistHistory: ITimestampPricesMap = pricelistHistoryMap[itemIdKey];
+                const itemPricelistHistory: IPricelistHistoryMap = pricelistHistoryMap[itemIdKey];
                 const itemId = Number(itemIdKey);
 
                 return Object.keys(itemPricelistHistory).reduce((previousValue: ILineItem[], unixTimestampKey) => {
@@ -268,7 +269,7 @@ export class PricelistHistoryGraph extends React.Component<Props, State> {
         );
     }
 
-    private renderLines(data: IPricelistHistoryMap) {
+    private renderLines(data: IItemPricelistHistoryMap) {
         return Object.keys(data).map((itemIdKey: string, index: number) => this.renderLine(index, Number(itemIdKey)));
     }
 }

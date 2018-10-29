@@ -2,9 +2,10 @@ import * as React from "react";
 
 import { Button, Classes, NonIdealState } from "@blueprintjs/core";
 
+import { IPricelistJson } from "@app/api-types/entities";
+import { IItem } from "@app/api-types/item";
+import { IRealm, IRegion } from "@app/api-types/region";
 import { PricelistTableContainer } from "@app/containers/App/PriceLists/PricelistTree/PricelistPanel/PricelistTable";
-import { IRealm, IRegion, Item } from "@app/types/global";
-import { IPricelist } from "@app/types/price-lists";
 
 export interface IStateProps {
     currentRegion: IRegion | null;
@@ -17,12 +18,12 @@ export interface IDispatchProps {
 }
 
 export interface IOwnProps {
-    list: IPricelist;
+    list: IPricelistJson;
 }
 
 export interface IFormValues {
     quantity: number;
-    item: Item | null;
+    item: IItem | null;
 }
 
 export type Props = Readonly<IStateProps & IDispatchProps & IOwnProps>;

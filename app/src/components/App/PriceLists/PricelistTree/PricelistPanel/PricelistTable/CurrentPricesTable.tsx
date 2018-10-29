@@ -2,16 +2,18 @@ import * as React from "react";
 
 import { Classes, H4, HTMLTable, Intent, Spinner } from "@blueprintjs/core";
 
-import { IGetPriceListOptions, IPriceListMap } from "@app/api/data";
+import { IPricelistEntryJson, IPricelistJson } from "@app/api-types/entities";
+import { IItemsMap, ItemId } from "@app/api-types/item";
+import { IPriceListMap } from "@app/api-types/pricelist";
+import { IRealm, IRegion } from "@app/api-types/region";
+import { IGetPriceListOptions } from "@app/api/data";
 import { Currency } from "@app/components/util";
 import { ItemPopoverContainer } from "@app/containers/util/ItemPopover";
-import { IRealm, IRegion, ItemId, ItemsMap } from "@app/types/global";
 import { FetchLevel } from "@app/types/main";
-import { IPricelist, IPricelistEntry } from "@app/types/price-lists";
 import { didRealmChange, didRegionChange, qualityToColorClass } from "@app/util";
 
 export interface IStateProps {
-    items: ItemsMap;
+    items: IItemsMap;
     getPricelistLevel: FetchLevel;
     pricelistMap: IPriceListMap;
 }
@@ -21,7 +23,7 @@ export interface IDispatchProps {
 }
 
 export interface IOwnProps {
-    list: IPricelist;
+    list: IPricelistJson;
     region: IRegion;
     realm: IRealm;
 }
@@ -139,7 +141,7 @@ export class CurrentPricesTable extends React.Component<Props> {
         );
     }
 
-    private renderEntry(index: number, entry: IPricelistEntry) {
+    private renderEntry(index: number, entry: IPricelistEntryJson) {
         const { pricelistMap } = this.props;
         const { item_id, quantity_modifier } = entry;
 

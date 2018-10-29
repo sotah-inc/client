@@ -2,19 +2,20 @@ import * as React from "react";
 
 import { H2 } from "@blueprintjs/core";
 
+import { IPricelistJson } from "@app/api-types/entities";
+import { IItemsMap } from "@app/api-types/item";
+import { IRealm, IRegion } from "@app/api-types/region";
 import { CurrentPricesTableContainer } from "@app/containers/App/PriceLists/PricelistTree/PricelistPanel/PricelistTable/CurrentPricesTable";
 import { CurrentSellersTableContainer } from "@app/containers/App/PriceLists/PricelistTree/PricelistPanel/PricelistTable/CurrentSellersTable";
 import { PricelistHistoryGraphContainer } from "@app/containers/App/PriceLists/PricelistTree/PricelistPanel/PricelistTable/PricelistHistoryGraph";
 import { PricelistIconContainer } from "@app/containers/util/PricelistIcon";
-import { IRealm, IRegion, ItemsMap } from "@app/types/global";
-import { IPricelist } from "@app/types/price-lists";
 
 export interface IStateProps {
-    items: ItemsMap;
+    items: IItemsMap;
 }
 
 export interface IOwnProps {
-    list: IPricelist;
+    list: IPricelistJson;
     region: IRegion;
     realm: IRealm;
 }

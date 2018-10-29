@@ -2,15 +2,17 @@ import * as React from "react";
 
 import { Callout, Classes, H4, HTMLTable, Intent, Navbar, NavbarGroup, Spinner } from "@blueprintjs/core";
 
-import { IOwnerItemsOwnership, IOwnerItemsOwnershipMap, IQueryOwnersByItemsOptions } from "@app/api/data";
+import { OwnerName } from "@app/api-types/auction";
+import { IQueryOwnerItem, IQueryOwnerItemsMap } from "@app/api-types/contracts/data";
+import { IPricelistJson } from "@app/api-types/entities";
+import { IRealm, IRegion } from "@app/api-types/region";
+import { IQueryOwnersByItemsOptions } from "@app/api/data";
 import { Currency, Pagination } from "@app/components/util";
-import { IRealm, IRegion, OwnerName } from "@app/types/global";
 import { FetchLevel } from "@app/types/main";
-import { IPricelist } from "@app/types/price-lists";
 import { didRealmChange, didRegionChange } from "@app/util";
 
 export interface IStateProps {
-    itemsOwnershipMap: IOwnerItemsOwnershipMap;
+    itemsOwnershipMap: IQueryOwnerItemsMap;
     getItemsOwnershipLevel: FetchLevel;
 }
 
@@ -19,7 +21,7 @@ export interface IDispatchProps {
 }
 
 export interface IOwnProps {
-    list: IPricelist;
+    list: IPricelistJson;
     region: IRegion;
     realm: IRealm;
 }
@@ -162,7 +164,7 @@ export class CurrentSellersTable extends React.Component<Props & State> {
         );
     }
 
-    private renderOwnershipRow(index: number, owner: OwnerName, ownership: IOwnerItemsOwnership) {
+    private renderOwnershipRow(index: number, owner: OwnerName, ownership: IQueryOwnerItem) {
         return (
             <tr key={index}>
                 <td>{owner}</td>
