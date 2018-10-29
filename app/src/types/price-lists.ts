@@ -6,8 +6,8 @@ import { IItemsMap, ItemId } from "@app/api-types/item";
 import {
     IItemMarketPrices,
     IItemPriceLimits,
+    IItemPricelistHistoryMap,
     IPriceLimits,
-    IPricelistHistoryMap,
     IPriceListMap,
 } from "@app/api-types/pricelist";
 import { IProfession } from "@app/api-types/profession";
@@ -40,7 +40,7 @@ export interface IPriceListsState {
     getPricelistLevel: FetchLevel;
     pricelistMap: IPriceListMap;
     getPricelistHistoryLevel: FetchLevel;
-    pricelistHistoryMap: IPricelistHistoryMap;
+    pricelistHistoryMap: IItemPricelistHistoryMap;
     getItemsOwnershipLevel: FetchLevel;
     itemsOwnershipMap: IQueryOwnerItemsMap;
     itemsPriceLimits: IItemPriceLimits;
