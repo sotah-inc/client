@@ -135,7 +135,7 @@ export enum ItemStat {
 
 export const SecondaryItemStats: ItemStat[] = [ItemStat.Crit, ItemStat.PvPResil, ItemStat.Haste];
 
-interface IItemBonusStat {
+export interface IItemBonusStat {
     stat: number;
     amount: number;
 }
