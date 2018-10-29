@@ -25,24 +25,26 @@ import {
 } from "@blueprintjs/select";
 import { debounce } from "lodash";
 
+import { IQueryAuctionsItem } from "@app/api-types/contracts/data";
+import { IItem } from "@app/api-types/item";
+import { IRealm, IRegion } from "@app/api-types/region";
 import { IQueryAuctionsOptions } from "@app/api/data";
-import { IQueryAuctionResult, QueryAuctionsLevel } from "@app/types/auction";
-import { IRealm, IRegion, Item } from "@app/types/global";
+import { FetchLevel } from "@app/types/main";
 import { getItemIconUrl, getItemTextValue, getSelectedResultIndex, qualityToColorClass } from "@app/util";
 
-const QueryAuctionResultSuggest = Suggest.ofType<IQueryAuctionResult>();
+const QueryAuctionResultSuggest = Suggest.ofType<IQueryAuctionsItem>();
 
 export interface IStateProps {
-    queryAuctionsLevel: QueryAuctionsLevel;
+    queryAuctionsLevel: FetchLevel;
     currentRegion: IRegion | null;
     currentRealm: IRealm | null;
-    items: IQueryAuctionResult[];
-    selectedItems: IQueryAuctionResult[];
+    items: IQueryAuctionsItem[];
+    selectedItems: IQueryAuctionsItem[];
     activeSelect: boolean;
 }
 
 export interface IDispatchProps {
-    onAuctionsQuerySelect: (aqResult: IQueryAuctionResult) => void;
+    onAuctionsQuerySelect: (aqResult: IQueryAuctionsItem) => void;
     onAuctionsQueryDeselect: (index: number) => void;
     refreshAuctionsQuery: (opts: IQueryAuctionsOptions) => void;
     activeSelectChange: (v: boolean) => void;
@@ -57,8 +59,8 @@ export class QueryAuctionsFilter extends React.Component<Props> {
         const { queryAuctionsLevel, items, activeSelect } = this.props;
 
         switch (queryAuctionsLevel) {
-            case QueryAuctionsLevel.success:
-            case QueryAuctionsLevel.refetching:
+            case FetchLevel.success:
+            case FetchLevel.refetching:
                 return (
                     <>
                         <Navbar>
@@ -90,11 +92,11 @@ export class QueryAuctionsFilter extends React.Component<Props> {
                         {this.renderSelectedItems()}
                     </>
                 );
-            case QueryAuctionsLevel.failure:
+            case FetchLevel.failure:
                 return <Spinner className={Classes.SMALL} intent={Intent.DANGER} value={1} />;
-            case QueryAuctionsLevel.initial:
+            case FetchLevel.initial:
                 return <Spinner className={Classes.SMALL} intent={Intent.NONE} value={1} />;
-            case QueryAuctionsLevel.fetching:
+            case FetchLevel.fetching:
             default:
                 return <Spinner className={Classes.SMALL} intent={Intent.PRIMARY} />;
         }
@@ -106,11 +108,11 @@ export class QueryAuctionsFilter extends React.Component<Props> {
         activeSelectChange(!activeSelect);
     }
 
-    private itemPredicate: ItemPredicate<IQueryAuctionResult> = (_query: string, result: IQueryAuctionResult) => {
+    private itemPredicate: ItemPredicate<IQueryAuctionsItem> = (_query: string, result: IQueryAuctionsItem) => {
         return result.rank > -1;
     };
 
-    private renderItemAsItemRendererText(item: Item) {
+    private renderItemAsItemRendererText(item: IItem) {
         const itemText = getItemTextValue(item);
         const itemIconUrl = getItemIconUrl(item);
 
@@ -125,7 +127,7 @@ export class QueryAuctionsFilter extends React.Component<Props> {
         );
     }
 
-    private renderItemRendererTextContent(result: IQueryAuctionResult) {
+    private renderItemRendererTextContent(result: IQueryAuctionsItem) {
         const { item, owner } = result;
 
         if (item !== null) {
@@ -137,12 +139,12 @@ export class QueryAuctionsFilter extends React.Component<Props> {
         return "n/a";
     }
 
-    private renderItemRendererText(result: IQueryAuctionResult) {
+    private renderItemRendererText(result: IQueryAuctionsItem) {
         return <span className="qaf-menu-item">{this.renderItemRendererTextContent(result)}</span>;
     }
 
-    private itemRenderer: ItemRenderer<IQueryAuctionResult> = (
-        result: IQueryAuctionResult,
+    private itemRenderer: ItemRenderer<IQueryAuctionsItem> = (
+        result: IQueryAuctionsItem,
         { handleClick, modifiers, index }: IItemRendererProps,
     ) => {
         if (!modifiers.matchesPredicate) {
@@ -172,8 +174,8 @@ export class QueryAuctionsFilter extends React.Component<Props> {
         );
     };
 
-    private itemListRenderer: ItemListRenderer<IQueryAuctionResult> = (
-        params: IItemListRendererProps<IQueryAuctionResult>,
+    private itemListRenderer: ItemListRenderer<IQueryAuctionsItem> = (
+        params: IItemListRendererProps<IQueryAuctionsItem>,
     ) => {
         const { items, itemsParentRef, renderItem } = params;
         const renderedItems = items.map(renderItem).filter(renderedItem => renderedItem !== null);
@@ -200,7 +202,7 @@ export class QueryAuctionsFilter extends React.Component<Props> {
         );
     };
 
-    private onItemSelect(result: IQueryAuctionResult) {
+    private onItemSelect(result: IQueryAuctionsItem) {
         const { onAuctionsQueryDeselect, onAuctionsQuerySelect } = this.props;
 
         if (this.isResultSelected(result)) {
@@ -222,16 +224,16 @@ export class QueryAuctionsFilter extends React.Component<Props> {
         });
     }
 
-    private isResultSelected(result: IQueryAuctionResult) {
+    private isResultSelected(result: IQueryAuctionsItem) {
         return this.getSelectedResultIndex(result) > -1;
     }
 
-    private getSelectedResultIndex(result: IQueryAuctionResult): number {
+    private getSelectedResultIndex(result: IQueryAuctionsItem): number {
         const selectedItems = this.props.selectedItems;
         return getSelectedResultIndex(result, selectedItems);
     }
 
-    private inputValueRenderer(result: IQueryAuctionResult): string {
+    private inputValueRenderer(result: IQueryAuctionsItem): string {
         const { item, owner } = result;
 
         if (item !== null) {
@@ -243,7 +245,7 @@ export class QueryAuctionsFilter extends React.Component<Props> {
         return "n/a";
     }
 
-    private renderSelectedItem(index: number, result: IQueryAuctionResult) {
+    private renderSelectedItem(index: number, result: IQueryAuctionsItem) {
         const { onAuctionsQueryDeselect } = this.props;
 
         return (

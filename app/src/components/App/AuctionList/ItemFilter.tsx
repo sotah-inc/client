@@ -10,21 +10,22 @@ import {
     Suggest,
 } from "@blueprintjs/select";
 
-import { FetchItemsLevel } from "@app/types/auction";
-import { IRealm, IRegion, Item } from "@app/types/global";
+import { IItem } from "@app/api-types/item";
+import { IRealm, IRegion } from "@app/api-types/region";
+import { FetchLevel } from "@app/types/main";
 
-const ItemFilterSuggest = Suggest.ofType<Item>();
+const ItemFilterSuggest = Suggest.ofType<IItem>();
 
 export interface IStateProps {
-    fetchItemsLevel: FetchItemsLevel;
-    items: Item[];
-    itemFilter: Item | null;
+    fetchItemsLevel: FetchLevel;
+    items: IItem[];
+    itemFilter: IItem | null;
     currentRegion: IRegion | null;
     currentRealm: IRealm | null;
 }
 
 export interface IDispatchProps {
-    onItemFilterChange: (item: Item | null) => void;
+    onItemFilterChange: (item: IItem | null) => void;
     refreshItems: (query: string) => void;
 }
 
@@ -41,12 +42,12 @@ export class ItemFilter extends React.Component<Props, State> {
         timerId: null,
     };
 
-    public itemPredicate: ItemPredicate<Item> = (query: string, item: Item) => {
+    public itemPredicate: ItemPredicate<IItem> = (query: string, item: IItem) => {
         query = query.toLowerCase();
         return item.name.toLowerCase().indexOf(query) >= 0;
     };
 
-    public itemRenderer: ItemRenderer<Item> = (item: Item, { handleClick, modifiers, index }: IItemRendererProps) => {
+    public itemRenderer: ItemRenderer<IItem> = (item: IItem, { handleClick, modifiers, index }: IItemRendererProps) => {
         if (!modifiers.matchesPredicate) {
             return null;
         }
@@ -64,7 +65,7 @@ export class ItemFilter extends React.Component<Props, State> {
         );
     };
 
-    public itemListRenderer: ItemListRenderer<Item> = (params: IItemListRendererProps<Item>) => {
+    public itemListRenderer: ItemListRenderer<IItem> = (params: IItemListRendererProps<IItem>) => {
         const { items, itemsParentRef, renderItem } = params;
         const renderedItems = items.map(renderItem).filter(renderedItem => renderedItem !== null);
         if (renderedItems.length === 0) {
@@ -90,7 +91,7 @@ export class ItemFilter extends React.Component<Props, State> {
         );
     };
 
-    public onFilterSet(item: Item) {
+    public onFilterSet(item: IItem) {
         this.setState({ itemFilterValue: item.name });
         this.props.onItemFilterChange(item);
     }
@@ -123,8 +124,8 @@ export class ItemFilter extends React.Component<Props, State> {
         const canClearFilter = itemFilterValue !== null && itemFilterValue !== "";
 
         switch (fetchItemsLevel) {
-            case FetchItemsLevel.success:
-            case FetchItemsLevel.refetching:
+            case FetchLevel.success:
+            case FetchLevel.refetching:
                 return (
                     <ControlGroup>
                         <ItemFilterSuggest
@@ -144,11 +145,11 @@ export class ItemFilter extends React.Component<Props, State> {
                         />
                     </ControlGroup>
                 );
-            case FetchItemsLevel.failure:
+            case FetchLevel.failure:
                 return <Spinner className={Classes.SMALL} intent={Intent.DANGER} value={1} />;
-            case FetchItemsLevel.initial:
+            case FetchLevel.initial:
                 return <Spinner className={Classes.SMALL} intent={Intent.NONE} value={1} />;
-            case FetchItemsLevel.fetching:
+            case FetchLevel.fetching:
             default:
                 return <Spinner className={Classes.SMALL} intent={Intent.PRIMARY} />;
         }

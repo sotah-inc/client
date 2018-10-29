@@ -3,13 +3,13 @@ import * as React from "react";
 import { Alignment, ButtonGroup, Classes, Navbar, NavbarDivider, NavbarGroup, NavbarHeading } from "@blueprintjs/core";
 import { RouteComponentProps } from "react-router-dom";
 
+import { IUserJson } from "@app/api-types/entities";
 import { LoginContainer } from "@app/containers/App/Login";
 import { RegisterContainer } from "@app/containers/App/Register";
 import { LinkButtonRouteContainer } from "@app/route-containers/util/LinkButton";
-import { IUser } from "@app/types/global";
 
 export interface IStateProps {
-    user: IUser | null;
+    user: IUserJson | null;
 }
 
 export interface IOwnProps extends RouteComponentProps<{}> {}

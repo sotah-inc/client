@@ -11,6 +11,12 @@ import {
 } from "@blueprintjs/core";
 import * as React from "react";
 
+import { SortDirection, SortKind } from "@app/api-types";
+import { IAuction, OwnerName } from "@app/api-types/auction";
+import { IQueryAuctionsItem } from "@app/api-types/contracts/data";
+import { IPreferenceJson } from "@app/api-types/entities";
+import { ItemId } from "@app/api-types/item";
+import { IRealm, IRegion } from "@app/api-types/region";
 import { IGetAuctionsOptions, IQueryAuctionsOptions } from "@app/api/data";
 import { LastModified, Pagination } from "@app/components/util";
 import { AuctionTableContainer } from "@app/containers/App/AuctionList/AuctionTable";
@@ -18,15 +24,7 @@ import { CountToggleContainer } from "@app/containers/App/AuctionList/CountToggl
 import { QueryAuctionsFilterContainer } from "@app/containers/App/AuctionList/QueryAuctionsFilter";
 import { RealmToggleContainer } from "@app/containers/util/RealmToggle";
 import { RegionToggleContainer } from "@app/containers/util/RegionToggle";
-import {
-    FetchAuctionsLevel,
-    IQueryAuctionResult,
-    QueryAuctionsLevel,
-    SortDirection,
-    SortKind,
-} from "@app/types/auction";
-import { IAuction, IRealm, IRegion, ItemId, IUserPreferences, OwnerName } from "@app/types/global";
-import { AuthLevel, FetchUserPreferencesLevel } from "@app/types/main";
+import { AuthLevel, FetchLevel } from "@app/types/main";
 import { didRealmChange } from "@app/util";
 
 type ListAuction = IAuction | null;
@@ -34,18 +32,18 @@ type ListAuction = IAuction | null;
 export interface IStateProps {
     currentRegion: IRegion | null;
     currentRealm: IRealm | null;
-    fetchAuctionsLevel: FetchAuctionsLevel;
+    fetchAuctionsLevel: FetchLevel;
     auctions: ListAuction[];
     currentPage: number;
     auctionsPerPage: number;
     totalResults: number;
     sortKind: SortKind;
     sortDirection: SortDirection;
-    queryAuctionsLevel: QueryAuctionsLevel;
-    selectedQueryAuctionResults: IQueryAuctionResult[];
+    queryAuctionsLevel: FetchLevel;
+    selectedQueryAuctionResults: IQueryAuctionsItem[];
     authLevel: AuthLevel;
-    fetchUserPreferencesLevel: FetchUserPreferencesLevel;
-    userPreferences: IUserPreferences | null;
+    fetchUserPreferencesLevel: FetchLevel;
+    userPreferences: IPreferenceJson | null;
     activeSelect: boolean;
 }
 
@@ -61,7 +59,7 @@ export class AuctionList extends React.Component<Props> {
     public componentDidMount() {
         const { fetchAuctionsLevel, refreshAuctionsQuery, currentRegion, currentRealm } = this.props;
 
-        if (fetchAuctionsLevel === FetchAuctionsLevel.initial) {
+        if (fetchAuctionsLevel === FetchLevel.initial) {
             if (currentRegion !== null && currentRealm !== null) {
                 this.refreshAuctions();
                 refreshAuctionsQuery({
@@ -104,14 +102,14 @@ export class AuctionList extends React.Component<Props> {
                 didSqaResultsChange ||
                 didActiveSelectChange;
             const shouldRefreshAuctions =
-                fetchAuctionsLevel === FetchAuctionsLevel.initial ||
-                (fetchAuctionsLevel === FetchAuctionsLevel.success && didOptionsChange);
+                fetchAuctionsLevel === FetchLevel.initial ||
+                (fetchAuctionsLevel === FetchLevel.success && didOptionsChange);
 
             if (shouldRefreshAuctions) {
                 if (authLevel === AuthLevel.unauthenticated) {
                     this.refreshAuctions();
                 } else if (authLevel === AuthLevel.authenticated) {
-                    if (fetchUserPreferencesLevel === FetchUserPreferencesLevel.success) {
+                    if (fetchUserPreferencesLevel === FetchLevel.success) {
                         this.refreshAuctions();
                     }
                 }
@@ -130,21 +128,21 @@ export class AuctionList extends React.Component<Props> {
 
     public render() {
         switch (this.props.fetchAuctionsLevel) {
-            case FetchAuctionsLevel.initial:
+            case FetchLevel.initial:
                 return (
                     <NonIdealState
                         title="Loading"
                         icon={<Spinner className={Classes.LARGE} intent={Intent.NONE} value={0} />}
                     />
                 );
-            case FetchAuctionsLevel.fetching:
+            case FetchLevel.fetching:
                 return (
                     <NonIdealState
                         title="Loading"
                         icon={<Spinner className={Classes.LARGE} intent={Intent.PRIMARY} />}
                     />
                 );
-            case FetchAuctionsLevel.failure:
+            case FetchLevel.failure:
                 return (
                     <NonIdealState
                         title="Fetch auctions failure"
@@ -152,8 +150,8 @@ export class AuctionList extends React.Component<Props> {
                         icon="error"
                     />
                 );
-            case FetchAuctionsLevel.refetching:
-            case FetchAuctionsLevel.success:
+            case FetchLevel.refetching:
+            case FetchLevel.success:
                 return this.renderAuctions();
             default:
                 return <>You should never see this!</>;
@@ -181,20 +179,22 @@ export class AuctionList extends React.Component<Props> {
             .map(v => v.owner!.name);
         const itemFilters: ItemId[] = selectedQueryAuctionResults.filter(v => v.item !== null).map(v => v.item!.id);
         refreshAuctions({
-            count: auctionsPerPage,
-            itemFilters,
-            ownerFilters,
-            page: currentPage,
             realmSlug: currentRealm.slug,
             regionName: currentRegion.name,
-            sortDirection,
-            sortKind,
+            request: {
+                count: auctionsPerPage,
+                itemFilters,
+                ownerFilters,
+                page: currentPage,
+                sortDirection,
+                sortKind,
+            },
         });
     }
 
     private renderRefetchingSpinner() {
         const { fetchAuctionsLevel } = this.props;
-        if (fetchAuctionsLevel !== FetchAuctionsLevel.refetching) {
+        if (fetchAuctionsLevel !== FetchLevel.refetching) {
             return null;
         }
 

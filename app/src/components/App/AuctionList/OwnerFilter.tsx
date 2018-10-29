@@ -10,14 +10,15 @@ import {
     Suggest,
 } from "@blueprintjs/select";
 
+import { IOwner, OwnerName } from "@app/api-types/auction";
+import { IRealm, IRegion } from "@app/api-types/region";
 import { IGetOwnersOptions } from "@app/api/data";
-import { FetchOwnersLevel } from "@app/types/auction";
-import { IOwner, IRealm, IRegion, OwnerName } from "@app/types/global";
+import { FetchLevel } from "@app/types/main";
 
 const OwnerFilterSuggest = Suggest.ofType<IOwner>();
 
 export interface IStateProps {
-    fetchOwnersLevel: FetchOwnersLevel;
+    fetchOwnersLevel: FetchLevel;
     owners: IOwner[];
     ownerFilter: OwnerName | null;
     currentRegion: IRegion | null;
@@ -136,8 +137,8 @@ export class OwnerFilter extends React.Component<Props, State> {
         const canClearFilter = ownerFilterValue !== null && ownerFilterValue !== "";
 
         switch (fetchOwnersLevel) {
-            case FetchOwnersLevel.success:
-            case FetchOwnersLevel.refetching:
+            case FetchLevel.success:
+            case FetchLevel.refetching:
                 return (
                     <ControlGroup>
                         <OwnerFilterSuggest
@@ -157,11 +158,11 @@ export class OwnerFilter extends React.Component<Props, State> {
                         />
                     </ControlGroup>
                 );
-            case FetchOwnersLevel.failure:
+            case FetchLevel.failure:
                 return <Spinner className={Classes.SMALL} intent={Intent.DANGER} value={1} />;
-            case FetchOwnersLevel.initial:
+            case FetchLevel.initial:
                 return <Spinner className={Classes.SMALL} intent={Intent.NONE} value={1} />;
-            case FetchOwnersLevel.fetching:
+            case FetchLevel.fetching:
             default:
                 return <Spinner className={Classes.SMALL} intent={Intent.PRIMARY} />;
         }

@@ -3,7 +3,8 @@ import * as React from "react";
 import { Button, Classes } from "@blueprintjs/core";
 import { IconName, IconNames } from "@blueprintjs/icons";
 
-import { ISortChangeOptions, SortDirection, SortKind } from "@app/types/auction";
+import { SortDirection, SortKind } from "@app/api-types";
+import { ISortChangeOptions } from "@app/types/auction";
 
 export interface IStateProps {
     currentSortDirection: SortDirection;

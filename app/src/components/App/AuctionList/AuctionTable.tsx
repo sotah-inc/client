@@ -6,8 +6,10 @@ import { Currency } from "@app/components/util";
 import { SortToggleContainer } from "@app/containers/App/AuctionList/SortToggle";
 import { ItemPopoverContainer } from "@app/containers/util/ItemPopover";
 
-import { IQueryAuctionResult, SortKind } from "@app/types/auction";
-import { IAuction, Item, ItemsMap } from "@app/types/global";
+import { SortKind } from "@app/api-types";
+import { IAuction } from "@app/api-types/auction";
+import { IQueryAuctionsItem } from "@app/api-types/contracts/data";
+import { IItem, IItemsMap } from "@app/api-types/item";
 import { getSelectedResultIndex, qualityToColorClass } from "@app/util";
 
 import "./AuctionTable.scss";
@@ -16,31 +18,31 @@ type ListAuction = IAuction | null;
 
 export interface IStateProps {
     auctions: ListAuction[];
-    selectedItems: IQueryAuctionResult[];
-    items: ItemsMap;
+    selectedItems: IQueryAuctionsItem[];
+    items: IItemsMap;
 }
 
 export interface IDispatchProps {
-    onAuctionsQuerySelect: (aqResult: IQueryAuctionResult) => void;
+    onAuctionsQuerySelect: (aqResult: IQueryAuctionsItem) => void;
     onAuctionsQueryDeselect: (index: number) => void;
 }
 
 type Props = Readonly<IStateProps & IDispatchProps>;
 
 export class AuctionTable extends React.Component<Props> {
-    public isResultSelected(result: IQueryAuctionResult) {
+    public isResultSelected(result: IQueryAuctionsItem) {
         return this.getSelectedResultIndex(result) > -1;
     }
 
-    public getSelectedResultIndex(result: IQueryAuctionResult): number {
+    public getSelectedResultIndex(result: IQueryAuctionsItem): number {
         const selectedItems = this.props.selectedItems;
         return getSelectedResultIndex(result, selectedItems);
     }
 
-    public onItemClick(item: Item) {
-        const result: IQueryAuctionResult = {
+    public onItemClick(item: IItem) {
+        const result: IQueryAuctionsItem = {
             item,
-            owner: { name: "" },
+            owner: { name: "", normalized_name: "" },
             rank: 0,
             target: "",
         };
@@ -54,7 +56,7 @@ export class AuctionTable extends React.Component<Props> {
         this.props.onAuctionsQuerySelect(result);
     }
 
-    public renderItemPopover(item: Item) {
+    public renderItemPopover(item: IItem) {
         return <ItemPopoverContainer item={item} onItemClick={() => this.onItemClick(item)} />;
     }
 
