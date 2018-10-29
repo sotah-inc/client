@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { IProfession } from "@app/types/global";
+import { IProfession } from "@app/api-types/profession";
 
 interface IProps {
     profession: IProfession;

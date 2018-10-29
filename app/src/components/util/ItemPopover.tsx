@@ -2,16 +2,16 @@ import * as React from "react";
 
 import { Popover, PopoverInteractionKind, Position } from "@blueprintjs/core";
 
-import { Currency } from "@app/components/util";
 import {
+    IItem,
+    IItemBonusStat,
     InventoryType,
-    Item,
     ItemBind,
-    ItemBonusStat,
     ItemClassClasses,
-    ItemClasses,
     ItemSpellTrigger,
-} from "@app/types/global";
+} from "@app/api-types/item";
+import { Currency } from "@app/components/util";
+import { IItemClasses } from "@app/types/global";
 import {
     getItemIconUrl,
     getItemTextValue,
@@ -23,11 +23,11 @@ import {
 import "./ItemPopover.scss";
 
 export interface IStateProps {
-    itemClasses: ItemClasses;
+    itemClasses: IItemClasses;
 }
 
 export interface IOwnProps {
-    item: Item;
+    item: IItem;
 
     onItemClick?: () => void;
     itemTextFormatter?: (itemText: string) => string;
@@ -43,7 +43,7 @@ export class ItemPopover extends React.Component<Props> {
         },
     };
 
-    public renderItemLevel(item: Item) {
+    public renderItemLevel(item: IItem) {
         const exludedItemClasses = [ItemClassClasses.Consumable, ItemClassClasses.Battlepet];
         if (exludedItemClasses.indexOf(item.itemClass) > -1) {
             return;
@@ -52,7 +52,7 @@ export class ItemPopover extends React.Component<Props> {
         return <li className="item-level">Item level {item.itemLevel}</li>;
     }
 
-    public renderBind(item: Item) {
+    public renderBind(item: IItem) {
         switch (item.itemBind) {
             case ItemBind.bindOnPickup:
                 return <li>Binds when picked up</li>;
@@ -64,7 +64,7 @@ export class ItemPopover extends React.Component<Props> {
         }
     }
 
-    public renderClass(item: Item) {
+    public renderClass(item: IItem) {
         const { itemClasses } = this.props;
 
         if (!(item.itemClass in itemClasses)) {
@@ -80,7 +80,7 @@ export class ItemPopover extends React.Component<Props> {
         return `${iClass.name} (#${item.itemClass}) - ${iSubClass.name}`;
     }
 
-    public renderOnUseContent(item: Item) {
+    public renderOnUseContent(item: IItem) {
         const onUseSpells = item.itemSpells!.filter(v => v.trigger === ItemSpellTrigger.OnUse);
         const [onUseSpell] = onUseSpells;
 
@@ -105,7 +105,7 @@ export class ItemPopover extends React.Component<Props> {
         }
     }
 
-    public renderOnUse(item: Item) {
+    public renderOnUse(item: IItem) {
         if (item.itemSpells === null) {
             return;
         }
@@ -122,7 +122,7 @@ export class ItemPopover extends React.Component<Props> {
         return <li className="on-use">Use: {this.renderOnUseContent(item)}</li>;
     }
 
-    public renderRequiredLevel(item: Item) {
+    public renderRequiredLevel(item: IItem) {
         if (item.requiredLevel === 0) {
             return;
         }
@@ -130,7 +130,7 @@ export class ItemPopover extends React.Component<Props> {
         return <li>Requires Level {item.requiredLevel}</li>;
     }
 
-    public renderInventoryType(item: Item) {
+    public renderInventoryType(item: IItem) {
         const { itemClasses } = this.props;
 
         switch (item.inventoryType) {
@@ -159,7 +159,7 @@ export class ItemPopover extends React.Component<Props> {
         }
     }
 
-    public renderLevel(item: Item) {
+    public renderLevel(item: IItem) {
         if (item.armor === 0) {
             return;
         }
@@ -167,7 +167,7 @@ export class ItemPopover extends React.Component<Props> {
         return <li>{item.armor} Armor</li>;
     }
 
-    public renderDurability(item: Item) {
+    public renderDurability(item: IItem) {
         if (item.maxDurability === 0) {
             return;
         }
@@ -179,7 +179,7 @@ export class ItemPopover extends React.Component<Props> {
         );
     }
 
-    public renderSellPrice(item: Item) {
+    public renderSellPrice(item: IItem) {
         if (item.sellPrice === 0) {
             return;
         }
@@ -191,7 +191,7 @@ export class ItemPopover extends React.Component<Props> {
         );
     }
 
-    public renderStackable(item: Item) {
+    public renderStackable(item: IItem) {
         if (item.stackable <= 1) {
             return;
         }
@@ -199,7 +199,7 @@ export class ItemPopover extends React.Component<Props> {
         return <li>Max Stack: {item.stackable}</li>;
     }
 
-    public renderWeaponInfo(item: Item) {
+    public renderWeaponInfo(item: IItem) {
         if (item.weaponInfo.dps === 0) {
             return;
         }
@@ -222,7 +222,7 @@ export class ItemPopover extends React.Component<Props> {
         );
     }
 
-    public renderItemStat(stat: ItemBonusStat, index: number) {
+    public renderItemStat(stat: IItemBonusStat, index: number) {
         return (
             <li key={index}>
                 +{stat.amount} {itemStatToString(stat.stat)}
@@ -230,7 +230,7 @@ export class ItemPopover extends React.Component<Props> {
         );
     }
 
-    public renderStats(item: Item) {
+    public renderStats(item: IItem) {
         const statItemClasses = [ItemClassClasses.Weapon, ItemClassClasses.Armor];
         if (statItemClasses.indexOf(item.itemClass) === -1) {
             return;
@@ -243,7 +243,7 @@ export class ItemPopover extends React.Component<Props> {
         return item.bonusStats.map((v, i) => this.renderItemStat(v, i));
     }
 
-    public renderDescription(item: Item) {
+    public renderDescription(item: IItem) {
         if (item.description.length === 0) {
             return;
         }
@@ -251,7 +251,7 @@ export class ItemPopover extends React.Component<Props> {
         return <li className="description">"{item.description}"</li>;
     }
 
-    public renderCraftingReagent(item: Item) {
+    public renderCraftingReagent(item: IItem) {
         if (item.itemClass !== ItemClassClasses.Tradeskill) {
             return;
         }
@@ -264,7 +264,7 @@ export class ItemPopover extends React.Component<Props> {
         );
     }
 
-    public renderData(item: Item) {
+    public renderData(item: IItem) {
         return (
             <>
                 {this.renderItemLevel(item)}
@@ -283,7 +283,7 @@ export class ItemPopover extends React.Component<Props> {
         );
     }
 
-    public renderPopoverContent(item: Item) {
+    public renderPopoverContent(item: IItem) {
         const itemTextClass = qualityToColorClass(item.quality);
         const itemIconUrl = getItemIconUrl(item);
         const itemText = getItemTextValue(item);
@@ -346,7 +346,7 @@ export class ItemPopover extends React.Component<Props> {
         return itemTextFormatter(itemText);
     }
 
-    public renderDisplay(item: Item) {
+    public renderDisplay(item: IItem) {
         const itemText = this.itemTextFormatter(getItemTextValue(item));
         const itemIconUrl = getItemIconUrl(item);
         if (itemIconUrl === null) {
@@ -360,7 +360,7 @@ export class ItemPopover extends React.Component<Props> {
         );
     }
 
-    public renderPopoverTarget(item: Item) {
+    public renderPopoverTarget(item: IItem) {
         return <div className="item-icon-container">{this.renderDisplay(item)}</div>;
     }
 

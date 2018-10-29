@@ -2,20 +2,18 @@ import * as React from "react";
 
 import { Button, Classes, H6, Intent, Menu, MenuItem, Popover, Position, Spinner } from "@blueprintjs/core";
 
-import { ICreatePreferencesRequestBody, UpdatePreferencesRequestBody } from "@app/api/user";
-import { IRegion, IRegions } from "@app/types/global";
-import { FetchBootLevel } from "@app/types/main";
+import { IRegion } from "@app/api-types/region";
+import { IRegions } from "@app/types/global";
+import { FetchLevel } from "@app/types/main";
 
 export interface IStateProps {
     currentRegion: IRegion | null;
     regions: IRegions;
-    fetchBootLevel: FetchBootLevel;
+    fetchBootLevel: FetchLevel;
 }
 
 export interface IDispatchProps {
     onRegionChange: (region: IRegion) => void;
-    createUserPreferences: (token: string, body: ICreatePreferencesRequestBody) => void;
-    updateUserPreferences: (token: string, body: UpdatePreferencesRequestBody) => void;
 }
 
 type Props = Readonly<IStateProps & IDispatchProps>;
@@ -55,7 +53,7 @@ export class RegionToggle extends React.Component<Props> {
         const { currentRegion, fetchBootLevel } = this.props;
 
         switch (fetchBootLevel) {
-            case FetchBootLevel.success:
+            case FetchLevel.success:
                 return (
                     <Popover
                         content={this.renderMenu(this.props.regions)}
@@ -63,11 +61,11 @@ export class RegionToggle extends React.Component<Props> {
                         position={Position.BOTTOM_RIGHT}
                     />
                 );
-            case FetchBootLevel.failure:
+            case FetchLevel.failure:
                 return <Spinner className={Classes.SMALL} intent={Intent.DANGER} value={1} />;
-            case FetchBootLevel.initial:
+            case FetchLevel.initial:
                 return <Spinner className={Classes.SMALL} intent={Intent.NONE} value={1} />;
-            case FetchBootLevel.fetching:
+            case FetchLevel.fetching:
             default:
                 return <Spinner className={Classes.SMALL} intent={Intent.PRIMARY} />;
         }

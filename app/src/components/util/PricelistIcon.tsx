@@ -1,15 +1,15 @@
 import * as React from "react";
 
-import { ItemsMap } from "@app/types/global";
-import { IPricelist } from "@app/types/price-lists";
+import { IPricelistJson } from "@app/api-types/entities";
+import { IItemsMap } from "@app/api-types/item";
 import { getItemIconUrl } from "@app/util";
 
 export interface IStateProps {
-    items: ItemsMap;
+    items: IItemsMap;
 }
 
 export interface IOwnProps {
-    pricelist: IPricelist;
+    pricelist: IPricelistJson;
 }
 
 type Props = Readonly<IStateProps & IOwnProps>;

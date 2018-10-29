@@ -3,27 +3,29 @@ import * as React from "react";
 import { Classes, Intent } from "@blueprintjs/core";
 import { RouteComponentProps } from "react-router-dom";
 
+import { IPreferenceJson } from "@app/api-types/entities";
+import { IRealm, IRegion } from "@app/api-types/region";
 import { Content } from "@app/components/App/Content";
 import { TopbarRouteContainer } from "@app/route-containers/App/Topbar";
-import { IProfile, IRealm, IRegion, IUserPreferences } from "@app/types/global";
-import { AuthLevel, FetchBootLevel, FetchPingLevel, FetchRealmLevel, FetchUserPreferencesLevel } from "@app/types/main";
+import { IProfile } from "@app/types/global";
+import { AuthLevel, FetchLevel } from "@app/types/main";
 import { didRegionChange } from "@app/util";
 import { AppToaster } from "@app/util/toasters";
 
 import "./App.scss";
 
 export interface IStateProps {
-    fetchPingLevel: FetchPingLevel;
+    fetchPingLevel: FetchLevel;
     currentRegion: IRegion | null;
-    fetchRealmLevel: FetchRealmLevel;
+    fetchRealmLevel: FetchLevel;
     currentRealm: IRealm | null;
     preloadedToken: string;
     authLevel: AuthLevel;
     isLoginDialogOpen: boolean;
-    fetchUserPreferencesLevel: FetchUserPreferencesLevel;
-    userPreferences: IUserPreferences | null;
+    fetchUserPreferencesLevel: FetchLevel;
+    userPreferences: IPreferenceJson | null;
     profile: IProfile | null;
-    fetchBootLevel: FetchBootLevel;
+    fetchBootLevel: FetchLevel;
 }
 
 export interface IDispatchProps {
@@ -75,7 +77,7 @@ export class App extends React.Component<Props, State> {
         } = this.props;
 
         if (preloadedToken.length > 0 && this.didHandleUnauth === false) {
-            if (fetchBootLevel === FetchBootLevel.success) {
+            if (fetchBootLevel === FetchLevel.success) {
                 this.didHandleUnauth = true;
 
                 AppToaster.show({
@@ -94,12 +96,12 @@ export class App extends React.Component<Props, State> {
 
         if (currentRegion !== null) {
             switch (fetchRealmLevel) {
-                case FetchRealmLevel.initial:
-                case FetchRealmLevel.prompted:
+                case FetchLevel.initial:
+                case FetchLevel.prompted:
                     refreshRealms(currentRegion);
 
                     break;
-                case FetchRealmLevel.success:
+                case FetchLevel.success:
                     if (didRegionChange(prevProps.currentRegion, currentRegion)) {
                         refreshRealms(currentRegion);
                     }
@@ -132,7 +134,7 @@ export class App extends React.Component<Props, State> {
                     message: "You are logged in.",
                 });
 
-                if (fetchUserPreferencesLevel === FetchUserPreferencesLevel.initial) {
+                if (fetchUserPreferencesLevel === FetchLevel.initial) {
                     loadUserPreferences(profile!.token);
                 }
             }
@@ -140,7 +142,7 @@ export class App extends React.Component<Props, State> {
 
         if (prevProps.fetchUserPreferencesLevel !== fetchUserPreferencesLevel) {
             switch (fetchUserPreferencesLevel) {
-                case FetchUserPreferencesLevel.failure:
+                case FetchLevel.failure:
                     AppToaster.show({
                         icon: "user",
                         intent: Intent.WARNING,
@@ -148,7 +150,7 @@ export class App extends React.Component<Props, State> {
                     });
 
                     break;
-                case FetchUserPreferencesLevel.success:
+                case FetchLevel.success:
                     if (userPreferences === null) {
                         AppToaster.show({
                             icon: "user",
@@ -167,11 +169,11 @@ export class App extends React.Component<Props, State> {
 
         if (currentRegion !== null) {
             switch (fetchRealmLevel) {
-                case FetchRealmLevel.prompted:
+                case FetchLevel.prompted:
                     refreshRealms(currentRegion);
 
                     break;
-                case FetchRealmLevel.success:
+                case FetchLevel.success:
                     if (didRegionChange(prevProps.currentRegion, currentRegion)) {
                         refreshRealms(currentRegion);
                     }
@@ -201,9 +203,9 @@ export class App extends React.Component<Props, State> {
         }
 
         switch (fetchPingLevel) {
-            case FetchPingLevel.success:
+            case FetchLevel.success:
                 switch (fetchBootLevel) {
-                    case FetchBootLevel.initial:
+                    case FetchLevel.initial:
                         if (authLevel === AuthLevel.unauthenticated) {
                             const initialToastKey = AppToaster.show({
                                 icon: "info-sign",
@@ -216,7 +218,7 @@ export class App extends React.Component<Props, State> {
                         }
 
                         break;
-                    case FetchBootLevel.prompted:
+                    case FetchLevel.prompted:
                         const promptedToastKey = AppToaster.show({
                             icon: "info-sign",
                             intent: Intent.NONE,
@@ -227,8 +229,8 @@ export class App extends React.Component<Props, State> {
                         boot();
 
                         break;
-                    case FetchBootLevel.failure:
-                        if (prevProps.fetchBootLevel === FetchBootLevel.fetching) {
+                    case FetchLevel.failure:
+                        if (prevProps.fetchBootLevel === FetchLevel.fetching) {
                             AppToaster.show({
                                 icon: "info-sign",
                                 intent: Intent.DANGER,
@@ -237,7 +239,7 @@ export class App extends React.Component<Props, State> {
                         }
 
                         break;
-                    case FetchBootLevel.success:
+                    case FetchLevel.success:
                         if (prevProps.fetchBootLevel !== fetchBootLevel) {
                             if (regionToastKey.length > 0) {
                                 setTimeout(() => AppToaster.dismiss(regionToastKey), 5 * 100);
@@ -269,13 +271,13 @@ export class App extends React.Component<Props, State> {
     public render() {
         const { fetchPingLevel } = this.props;
         switch (fetchPingLevel) {
-            case FetchPingLevel.initial:
+            case FetchLevel.initial:
                 return <>Welcome!</>;
-            case FetchPingLevel.fetching:
+            case FetchLevel.fetching:
                 return <>Connecting...</>;
-            case FetchPingLevel.failure:
+            case FetchLevel.failure:
                 return <>Could not connect!</>;
-            case FetchPingLevel.success:
+            case FetchLevel.success:
                 return this.renderConnected();
             default:
                 return <>You should never see this!</>;

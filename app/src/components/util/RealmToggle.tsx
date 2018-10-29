@@ -10,9 +10,11 @@ import {
     Select,
 } from "@blueprintjs/select";
 
-import { ICreatePreferencesRequestBody, UpdatePreferencesRequestBody } from "@app/api/user";
-import { IProfile, IRealm, IRealms, IRegion, IUserPreferences } from "@app/types/global";
-import { AuthLevel, FetchRealmLevel } from "@app/types/main";
+import { ICreatePreferencesRequest, IUpdatePreferencesRequest } from "@app/api-types/contracts/user/preferences";
+import { IPreferenceJson } from "@app/api-types/entities";
+import { IRealm, IRegion } from "@app/api-types/region";
+import { IProfile, IRealms } from "@app/types/global";
+import { AuthLevel, FetchLevel } from "@app/types/main";
 import { didRealmChange } from "@app/util";
 
 const RealmToggleSelect = Select.ofType<IRealm>();
@@ -20,17 +22,19 @@ const RealmToggleSelect = Select.ofType<IRealm>();
 export interface IStateProps {
     realms: IRealms;
     currentRealm: IRealm | null;
-    fetchRealmLevel: FetchRealmLevel;
-    userPreferences: IUserPreferences | null;
+    fetchRealmLevel: FetchLevel;
+    userPreferences: IPreferenceJson | null;
     authLevel: AuthLevel;
     profile: IProfile | null;
     currentRegion: IRegion | null;
 }
 
+type persistUserPreferencesFunc = (token: string, body: ICreatePreferencesRequest | IUpdatePreferencesRequest) => void;
+
 export interface IDispatchProps {
     onRealmChange: (realm: IRealm) => void;
-    createUserPreferences: (token: string, body: ICreatePreferencesRequestBody) => void;
-    updateUserPreferences: (token: string, body: UpdatePreferencesRequestBody) => void;
+    createUserPreferences: (token: string, body: ICreatePreferencesRequest) => void;
+    updateUserPreferences: (token: string, body: IUpdatePreferencesRequest) => void;
 }
 
 type Props = Readonly<IStateProps & IDispatchProps>;
@@ -48,10 +52,13 @@ export class RealmToggle extends React.Component<Props> {
         } = this.props;
 
         if (authLevel === AuthLevel.authenticated && currentRealm !== null && currentRegion !== null) {
-            let persistUserPreferences = createUserPreferences;
-            if (userPreferences !== null) {
-                persistUserPreferences = updateUserPreferences;
-            }
+            const persistUserPreferences: persistUserPreferencesFunc = (() => {
+                if (userPreferences !== null) {
+                    return updateUserPreferences;
+                }
+
+                return createUserPreferences;
+            })();
 
             if (didRealmChange(prevProps.currentRealm, currentRealm)) {
                 persistUserPreferences(profile!.token, {
@@ -107,7 +114,7 @@ export class RealmToggle extends React.Component<Props> {
         const { realms, onRealmChange, currentRealm, fetchRealmLevel } = this.props;
 
         switch (fetchRealmLevel) {
-            case FetchRealmLevel.success:
+            case FetchLevel.success:
                 const items = Object.keys(realms).map(realmName => realms[realmName]);
                 let highlightedRealm = items[0];
                 if (currentRealm !== null) {
@@ -127,11 +134,11 @@ export class RealmToggle extends React.Component<Props> {
                         <Button text={highlightedRealm.name} rightIcon="double-caret-vertical" />
                     </RealmToggleSelect>
                 );
-            case FetchRealmLevel.failure:
+            case FetchLevel.failure:
                 return <Spinner className={Classes.SMALL} intent={Intent.DANGER} value={1} />;
-            case FetchRealmLevel.initial:
+            case FetchLevel.initial:
                 return <Spinner className={Classes.SMALL} intent={Intent.NONE} value={1} />;
-            case FetchRealmLevel.fetching:
+            case FetchLevel.fetching:
             default:
                 return <Spinner className={Classes.SMALL} intent={Intent.PRIMARY} />;
         }
