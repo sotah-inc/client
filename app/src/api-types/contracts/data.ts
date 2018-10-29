@@ -113,6 +113,7 @@ export interface IGetPricelistRequest {
 
 export interface IGetPricelistResponse {
     price_list: IPriceListMap;
+    items: IItemsMap;
 }
 
 export interface IGetPricelistHistoriesRequest {
