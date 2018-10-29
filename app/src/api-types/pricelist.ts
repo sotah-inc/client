@@ -10,6 +10,10 @@ export interface IPriceListMap {
     [itemId: number]: IPrices;
 }
 
+export interface IItemPricelistHistoryMap {
+    [itemId: number]: IPricelistHistoryMap;
+}
+
 export interface IPricelistHistoryMap {
     [unixTimestamp: number]: IPrices;
 }

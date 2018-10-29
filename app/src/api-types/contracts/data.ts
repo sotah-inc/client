@@ -4,7 +4,13 @@ import { ExpansionName, IExpansion } from "../expansion";
 import { SortDirection, SortKind } from "../index";
 import { IItem, IItemsMap, ItemId } from "../item";
 import { IItemClass } from "../item-class";
-import { IItemMarketPrices, IItemPriceLimits, IPriceLimits, IPricelistHistoryMap, IPriceListMap } from "../pricelist";
+import {
+    IItemMarketPrices,
+    IItemPriceLimits,
+    IItemPricelistHistoryMap,
+    IPriceLimits,
+    IPriceListMap,
+} from "../pricelist";
 import { IProfession } from "../profession";
 import { IRealm, IRegion } from "../region";
 
@@ -72,11 +78,13 @@ export interface IQueryOwnerItemsRequest {
     items: ItemId[];
 }
 
+export interface IQueryOwnerItem {
+    owned_value: number;
+    owned_volume: number;
+}
+
 export interface IQueryOwnerItemsMap {
-    [ownerName: string]: {
-        owned_value: number;
-        owned_volume: number;
-    };
+    [ownerName: string]: IQueryOwnerItem;
 }
 
 export interface IQueryOwnerItemsResponse {
@@ -114,9 +122,7 @@ export interface IGetPricelistHistoriesRequest {
 }
 
 export interface IGetPricelistHistoriesResponse {
-    history: {
-        [itemId: number]: IPricelistHistoryMap;
-    };
+    history: IItemPricelistHistoryMap;
     items: IItemsMap;
     itemPriceLimits: IItemPriceLimits;
     overallPriceLimits: IPriceLimits;
