@@ -3,17 +3,17 @@ import * as React from "react";
 import { Button, FormGroup, H5, Intent } from "@blueprintjs/core";
 import { FormikProps } from "formik";
 
+import { IPricelistEntryJson } from "@app/api-types/entities";
+import { IItem } from "@app/api-types/item";
 import { DialogActions, DialogBody, ItemInput } from "@app/components/util";
 import { Generator as FormFieldGenerator } from "@app/components/util/FormField";
-import { Item } from "@app/types/global";
-import { IPricelistEntry } from "@app/types/price-lists";
 import { getItemIconUrl, getItemTextValue, qualityToColorClass } from "@app/util";
 
 import "./CreateEntryForm.scss";
 
 export interface IOwnProps {
-    onComplete: (entry: IPricelistEntry, item: Item) => void;
-    onItemSelect?: (item: Item) => void;
+    onComplete: (entry: IPricelistEntryJson, item: IItem) => void;
+    onItemSelect?: (item: IItem) => void;
 
     isSubmitDisabled?: boolean;
     externalItemError?: string;
@@ -21,7 +21,7 @@ export interface IOwnProps {
 
 export interface IFormValues {
     quantity: number;
-    item: Item | null;
+    item: IItem | null;
 }
 
 export type Props = Readonly<IOwnProps & FormikProps<IFormValues>>;
@@ -107,7 +107,7 @@ export class CreateEntryForm extends React.Component<Props> {
         return null;
     }
 
-    private onItemSelect(item: Item) {
+    private onItemSelect(item: IItem) {
         const { setFieldValue, onItemSelect, setFieldTouched } = this.props;
 
         setFieldValue("item", item);
@@ -117,7 +117,7 @@ export class CreateEntryForm extends React.Component<Props> {
         }
     }
 
-    private renderSelectedItem(item: Item | null) {
+    private renderSelectedItem(item: IItem | null) {
         if (item === null) {
             return (
                 <p>
