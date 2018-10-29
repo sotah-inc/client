@@ -94,7 +94,7 @@ export class EditListDialog extends React.Component<Props, State> {
         updatePricelist({
             id: selectedList!.id,
             meta: { isEditListDialogOpen: false },
-            request: { entries, pricelist: { ...selectedList!, name } },
+            request: { entries, pricelist: { name } },
             token: profile!.token,
         });
         appendItems(items);
