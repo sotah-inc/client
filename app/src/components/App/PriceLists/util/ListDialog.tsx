@@ -2,12 +2,15 @@ import * as React from "react";
 
 import { Button, Classes, Dialog, HTMLTable, Intent } from "@blueprintjs/core";
 
+import { IPricelistEntryJson } from "@app/api-types/entities";
+import { IItem, IItemsMap, ItemId } from "@app/api-types/item";
 import { DialogActions, DialogBody, ErrorList, PanelHeader } from "@app/components/util";
 import { ItemPopoverContainer } from "@app/containers/util/ItemPopover";
 import { CreateEntryFormFormContainer } from "@app/form-containers/App/PriceLists/util/CreateEntryForm";
 import { ListFormFormContainer } from "@app/form-containers/App/PriceLists/util/ListForm";
-import { IErrors, Item, ItemId, ItemsMap } from "@app/types/global";
-import { IPricelistEntry, ListDialogStep, MutatePricelistLevel } from "@app/types/price-lists";
+import { IErrors } from "@app/types/global";
+import { FetchLevel } from "@app/types/main";
+import { ListDialogStep } from "@app/types/price-lists";
 import { qualityToColorClass } from "@app/util";
 
 interface IOnCompleteOptions {
@@ -17,21 +20,21 @@ interface IOnCompleteOptions {
         item_id: number;
         quantity_modifier: number;
     }>;
-    items: ItemsMap;
+    items: IItemsMap;
 }
 
 export interface IStateProps {
-    items: ItemsMap;
+    items: IItemsMap;
 }
 
 export interface IOwnProps {
     isOpen: boolean;
     title: string;
     mutationErrors: IErrors;
-    mutatePricelistLevel: MutatePricelistLevel;
+    mutatePricelistLevel: FetchLevel;
     resetTrigger: number;
     defaultName?: string;
-    defaultEntries?: IPricelistEntry[];
+    defaultEntries?: IPricelistEntryJson[];
 
     onClose: () => void;
     onComplete: (opts: IOnCompleteOptions) => void;
@@ -42,8 +45,8 @@ export type Props = Readonly<IOwnProps & IStateProps>;
 type State = Readonly<{
     listDialogStep: ListDialogStep;
     listName: string;
-    entries: IPricelistEntry[];
-    entriesItems: ItemsMap;
+    entries: IPricelistEntryJson[];
+    entriesItems: IItemsMap;
     entryFormError: string;
 }>;
 
@@ -62,7 +65,7 @@ export class ListDialog extends React.Component<Props, State> {
         if (defaultName) {
             listName = defaultName;
         }
-        let entries: IPricelistEntry[] = [];
+        let entries: IPricelistEntryJson[] = [];
         if (defaultEntries) {
             entries = defaultEntries;
         }
@@ -177,7 +180,7 @@ export class ListDialog extends React.Component<Props, State> {
         );
     }
 
-    private onCreateEntryFormComplete(v: IPricelistEntry, item: Item) {
+    private onCreateEntryFormComplete(v: IPricelistEntryJson, item: IItem) {
         const entriesItems = this.state.entriesItems;
         entriesItems[item.id] = item;
         this.setState({ entriesItems: { ...entriesItems } });
@@ -188,7 +191,7 @@ export class ListDialog extends React.Component<Props, State> {
         });
     }
 
-    private onCreateEntryFormItemSelect(item: Item) {
+    private onCreateEntryFormItemSelect(item: IItem) {
         const { entries } = this.state;
 
         for (const entry of entries) {
@@ -241,7 +244,7 @@ export class ListDialog extends React.Component<Props, State> {
         return null;
     }
 
-    private renderItemPopover(item: Item | null) {
+    private renderItemPopover(item: IItem | null) {
         if (item === null) {
             return;
         }
@@ -249,7 +252,7 @@ export class ListDialog extends React.Component<Props, State> {
         return <ItemPopoverContainer item={item} />;
     }
 
-    private renderEntry(index: number, entry: IPricelistEntry) {
+    private renderEntry(index: number, entry: IPricelistEntryJson) {
         const item = this.getItem(entry.item_id);
 
         return (
@@ -324,7 +327,7 @@ export class ListDialog extends React.Component<Props, State> {
                     <Button
                         text={`Finish "${listName}"`}
                         intent={Intent.PRIMARY}
-                        disabled={mutatePricelistLevel === MutatePricelistLevel.fetching || entries.length === 0}
+                        disabled={mutatePricelistLevel === FetchLevel.fetching || entries.length === 0}
                         onClick={() => this.onFinishClick()}
                         icon="edit"
                     />
