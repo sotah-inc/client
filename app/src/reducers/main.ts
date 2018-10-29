@@ -109,10 +109,13 @@ export const main = (state: State, action: MainActions): State => {
                 return { ...state, fetchBootLevel: FetchLevel.failure };
             }
 
-            let bootCurrentRegion: IRegion | null = action.payload.regions[0];
-            if (state.userPreferences !== null) {
+            const bootCurrentRegion: IRegion = (() => {
+                if (state.userPreferences === null) {
+                    return action.payload.regions[0];
+                }
+
                 const { current_region: preferredRegionName } = state.userPreferences;
-                bootCurrentRegion = action.payload.regions.reduce((result, v) => {
+                const foundRegion: IRegion | null = action.payload.regions.reduce((result: IRegion | null, v) => {
                     if (result !== null) {
                         return result;
                     }
@@ -123,7 +126,13 @@ export const main = (state: State, action: MainActions): State => {
 
                     return null;
                 }, null);
-            }
+
+                if (foundRegion === null) {
+                    return action.payload.regions[0];
+                }
+
+                return foundRegion;
+            })();
 
             const bootRegions: IRegions = action.payload.regions.reduce(
                 (result, region) => ({ ...result, [region.name]: region }),
