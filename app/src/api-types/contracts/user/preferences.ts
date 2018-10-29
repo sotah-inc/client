@@ -7,7 +7,6 @@ export interface IGetPreferencesResponse {
 
 export interface ICreatePreferencesRequest {
     id?: number;
-    user_id: number;
     current_region: RegionName | null;
     current_realm: RealmSlug | null;
 }
