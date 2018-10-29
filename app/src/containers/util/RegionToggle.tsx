@@ -2,10 +2,10 @@ import { connect, Dispatch } from "react-redux";
 
 import { Actions } from "@app/actions";
 import { FetchUserPreferencesCreate, FetchUserPreferencesUpdate, RegionChange } from "@app/actions/main";
-import { ICreatePreferencesRequestBody, UpdatePreferencesRequestBody } from "@app/api/user";
+import { ICreatePreferencesRequest, IUpdatePreferencesRequest } from "@app/api-types/contracts/user/preferences";
+import { IRegion } from "@app/api-types/region";
 import { IDispatchProps, IStateProps, RegionToggle } from "@app/components/util/RegionToggle";
 import { IStoreState } from "@app/types";
-import { IRegion } from "@app/types/global";
 
 const mapStateToProps = (state: IStoreState): IStateProps => {
     const { regions, currentRegion, fetchBootLevel } = state.Main;
@@ -18,10 +18,10 @@ const mapStateToProps = (state: IStoreState): IStateProps => {
 
 const mapDispatchToProps = (dispatch: Dispatch<Actions>): IDispatchProps => {
     return {
-        createUserPreferences: (token: string, body: ICreatePreferencesRequestBody) =>
+        createUserPreferences: (token: string, body: ICreatePreferencesRequest) =>
             dispatch(FetchUserPreferencesCreate(token, body)),
         onRegionChange: (region: IRegion) => dispatch(RegionChange(region)),
-        updateUserPreferences: (token: string, body: UpdatePreferencesRequestBody) =>
+        updateUserPreferences: (token: string, body: IUpdatePreferencesRequest) =>
             dispatch(FetchUserPreferencesUpdate(token, body)),
     };
 };

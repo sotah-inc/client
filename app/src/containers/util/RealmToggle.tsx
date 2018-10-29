@@ -2,10 +2,10 @@ import { connect, Dispatch } from "react-redux";
 
 import { Actions } from "@app/actions";
 import { FetchUserPreferencesCreate, FetchUserPreferencesUpdate, RealmChange } from "@app/actions/main";
-import { ICreatePreferencesRequestBody, UpdatePreferencesRequestBody } from "@app/api/user";
+import { ICreatePreferencesRequest, IUpdatePreferencesRequest } from "@app/api-types/contracts/user/preferences";
+import { IRealm } from "@app/api-types/region";
 import { IDispatchProps, IStateProps, RealmToggle } from "@app/components/util/RealmToggle";
 import { IStoreState } from "@app/types";
-import { IRealm } from "@app/types/global";
 
 const mapStateToProps = (state: IStoreState): IStateProps => {
     const { realms, currentRealm, fetchRealmLevel, userPreferences, authLevel, profile, currentRegion } = state.Main;
@@ -22,10 +22,10 @@ const mapStateToProps = (state: IStoreState): IStateProps => {
 
 const mapDispatchToProps = (dispatch: Dispatch<Actions>): IDispatchProps => {
     return {
-        createUserPreferences: (token: string, body: ICreatePreferencesRequestBody) =>
+        createUserPreferences: (token: string, body: ICreatePreferencesRequest) =>
             dispatch(FetchUserPreferencesCreate(token, body)),
         onRealmChange: (realm: IRealm) => dispatch(RealmChange(realm)),
-        updateUserPreferences: (token: string, body: UpdatePreferencesRequestBody) =>
+        updateUserPreferences: (token: string, body: IUpdatePreferencesRequest) =>
             dispatch(FetchUserPreferencesUpdate(token, body)),
     };
 };

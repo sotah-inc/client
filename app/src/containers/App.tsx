@@ -10,9 +10,9 @@ import {
     FetchUserPreferences,
     FetchUserReload,
 } from "@app/actions/main";
+import { IRegion } from "@app/api-types/region";
 import { App, IDispatchProps, IOwnProps, IStateProps } from "@app/components/App";
 import { IStoreState } from "@app/types";
-import { IRegion } from "@app/types/global";
 import { AuthLevel } from "@app/types/main";
 
 const mapStateToProps = (state: IStoreState): IStateProps => {
