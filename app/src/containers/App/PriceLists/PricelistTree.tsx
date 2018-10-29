@@ -9,11 +9,11 @@ import {
     FetchGetProfessionPricelists,
     ResetProfessionsSelections,
 } from "@app/actions/price-lists";
-import { IGetPricelistsOptions, IGetProfessionPricelistsRequestOptions } from "@app/api/price-lists";
+import { IPricelistJson } from "@app/api-types/entities";
+import { IProfession, ProfessionName } from "@app/api-types/profession";
 import { IDispatchProps, IStateProps, PricelistTree } from "@app/components/App/PriceLists/PricelistTree";
 import { IStoreState } from "@app/types";
-import { IProfession } from "@app/types/global";
-import { IPricelist, ISelectExpansionPayload } from "@app/types/price-lists";
+import { ISelectExpansionPayload } from "@app/types/price-lists";
 
 const mapStateToProps = (state: IStoreState): IStateProps => {
     const {
@@ -55,11 +55,10 @@ const mapStateToProps = (state: IStoreState): IStateProps => {
 const mapDispatchToProps = (dispatch: Dispatch<Actions>): IDispatchProps => {
     return {
         changeSelectedExpansion: (v: ISelectExpansionPayload) => dispatch(ChangeSelectedExpansion(v)),
-        changeSelectedList: (selectedList: IPricelist) => dispatch(ChangeSelectedList(selectedList)),
+        changeSelectedList: (selectedList: IPricelistJson) => dispatch(ChangeSelectedList(selectedList)),
         changeSelectedProfession: (profession: IProfession) => dispatch(ChangeSelectedProfession(profession)),
-        refreshPricelists: (opts: IGetPricelistsOptions) => dispatch(FetchGetPricelists(opts)),
-        refreshProfessionPricelists: (opts: IGetProfessionPricelistsRequestOptions) =>
-            dispatch(FetchGetProfessionPricelists(opts)),
+        refreshPricelists: (token: string) => dispatch(FetchGetPricelists(token)),
+        refreshProfessionPricelists: (profession: ProfessionName) => dispatch(FetchGetProfessionPricelists(profession)),
         resetProfessionsSelections: () => dispatch(ResetProfessionsSelections()),
     };
 };

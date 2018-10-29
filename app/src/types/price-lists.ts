@@ -66,6 +66,8 @@ interface IUpdatePricelistMeta {
 export interface IUpdatePricelistRequestOptions {
     request: IUpdatePricelistRequest;
     meta: IUpdatePricelistMeta;
+    token: string;
+    id: number;
 }
 
 export interface IUpdatePricelistResponseOptions {

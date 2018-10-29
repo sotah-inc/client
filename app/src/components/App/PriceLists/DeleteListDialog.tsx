@@ -2,23 +2,24 @@ import * as React from "react";
 
 import { Button, Callout, Dialog, Intent } from "@blueprintjs/core";
 
-import { IDeletePricelistRequestOptions, IDeleteProfessionPricelistRequestOptions } from "@app/api/price-lists";
+import { IPricelistJson } from "@app/api-types/entities";
+import { IProfession } from "@app/api-types/profession";
 import { DialogActions, DialogBody } from "@app/components/util";
-import { IProfession, IProfile } from "@app/types/global";
-import { DeletePricelistLevel, IPricelist } from "@app/types/price-lists";
+import { IProfile } from "@app/types/global";
+import { FetchLevel } from "@app/types/main";
 
 export interface IStateProps {
-    selectedList: IPricelist | null;
+    selectedList: IPricelistJson | null;
     profile: IProfile | null;
     isDeleteListDialogOpen: boolean;
-    deletePricelistLevel: DeletePricelistLevel;
+    deletePricelistLevel: FetchLevel;
     selectedProfession: IProfession | null;
 }
 
 export interface IDispatchProps {
     changeIsDeleteListDialogOpen: (isDialogOpen: boolean) => void;
-    deletePricelist: (opts: IDeletePricelistRequestOptions) => void;
-    deleteProfessionPricelist: (opts: IDeleteProfessionPricelistRequestOptions) => void;
+    deletePricelist: (token: string, id: number) => void;
+    deleteProfessionPricelist: (token: string, id: number) => void;
 }
 
 export type Props = Readonly<IStateProps & IDispatchProps>;
@@ -51,7 +52,7 @@ export class DeleteListDialog extends React.Component<Props> {
                         icon="delete"
                         text={`Delete "${selectedList.name}"`}
                         onClick={() => this.onDialogConfirm()}
-                        disabled={deletePricelistLevel === DeletePricelistLevel.fetching}
+                        disabled={deletePricelistLevel === FetchLevel.fetching}
                     />
                 </DialogActions>
             </Dialog>
@@ -67,15 +68,9 @@ export class DeleteListDialog extends React.Component<Props> {
         const { selectedList, deletePricelist, profile, selectedProfession, deleteProfessionPricelist } = this.props;
 
         if (selectedProfession === null) {
-            deletePricelist({
-                id: selectedList!.id,
-                token: profile!.token,
-            });
+            deletePricelist(profile!.token, selectedList!.id);
         }
 
-        deleteProfessionPricelist({
-            id: selectedList!.id,
-            token: profile!.token,
-        });
+        deleteProfessionPricelist(profile!.token, selectedList!.id);
     }
 }

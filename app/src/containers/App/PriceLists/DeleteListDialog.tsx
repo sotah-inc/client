@@ -6,7 +6,6 @@ import {
     FetchDeletePricelist,
     FetchDeleteProfessionPricelist,
 } from "@app/actions/price-lists";
-import { IDeletePricelistRequestOptions, IDeleteProfessionPricelistRequestOptions } from "@app/api/price-lists";
 import { DeleteListDialog, IDispatchProps, IStateProps } from "@app/components/App/PriceLists/DeleteListDialog";
 import { IStoreState } from "@app/types";
 
@@ -25,9 +24,8 @@ const mapStateToProps = (state: IStoreState): IStateProps => {
 const mapDispatchToProps = (dispatch: Dispatch<Actions>): IDispatchProps => {
     return {
         changeIsDeleteListDialogOpen: (isDialogOpen: boolean) => dispatch(ChangeIsDeleteListDialogOpen(isDialogOpen)),
-        deletePricelist: (opts: IDeletePricelistRequestOptions) => dispatch(FetchDeletePricelist(opts)),
-        deleteProfessionPricelist: (opts: IDeleteProfessionPricelistRequestOptions) =>
-            dispatch(FetchDeleteProfessionPricelist(opts)),
+        deletePricelist: (token: string, id: number) => dispatch(FetchDeletePricelist(token, id)),
+        deleteProfessionPricelist: (token: string, id: number) => dispatch(FetchDeleteProfessionPricelist(token, id)),
     };
 };
 

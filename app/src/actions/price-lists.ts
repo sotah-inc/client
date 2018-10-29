@@ -62,13 +62,13 @@ export const RECEIVE_UPDATE_PRICELIST = "RECEIVE_UPDATE_PRICELIST";
 export const ReceiveUpdatePricelist = (payload: IUpdatePricelistResponseOptions) =>
     createAction(RECEIVE_UPDATE_PRICELIST, payload);
 type FetchUpdatePricelistType = ReturnType<typeof RequestUpdatePricelist | typeof ReceiveUpdatePricelist>;
-export const FetchUpdatePricelist = (token: string, id: number, opts: IUpdatePricelistRequestOptions) => {
+export const FetchUpdatePricelist = (opts: IUpdatePricelistRequestOptions) => {
     return async (dispatch: Dispatch<FetchUpdatePricelistType>) => {
         dispatch(RequestUpdatePricelist());
         dispatch(
             ReceiveUpdatePricelist({
                 meta: opts.meta,
-                result: await updatePricelist(token, id, opts.request),
+                result: await updatePricelist(opts.token, opts.id, opts.request),
             }),
         );
     };

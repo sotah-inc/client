@@ -2,9 +2,9 @@ import { connect, Dispatch } from "react-redux";
 
 import { Actions } from "@app/actions";
 import { AddAuctionsQuery, RemoveAuctionsQuery } from "@app/actions/auction";
+import { IQueryAuctionsItem } from "@app/api-types/contracts/data";
 import { AuctionTable, IDispatchProps, IStateProps } from "@app/components/App/AuctionList/AuctionTable";
 import { IStoreState } from "@app/types";
-import { IQueryAuctionResult } from "@app/types/auction";
 
 const mapStateToProps = (state: IStoreState): IStateProps => {
     const { auctions, selectedQueryAuctionResults, items } = state.Auction;
@@ -14,7 +14,7 @@ const mapStateToProps = (state: IStoreState): IStateProps => {
 const mapDispatchToProps = (dispatch: Dispatch<Actions>): IDispatchProps => {
     return {
         onAuctionsQueryDeselect: (index: number) => dispatch(RemoveAuctionsQuery(index)),
-        onAuctionsQuerySelect: (aqItem: IQueryAuctionResult) => dispatch(AddAuctionsQuery(aqItem)),
+        onAuctionsQuerySelect: (aqItem: IQueryAuctionsItem) => dispatch(AddAuctionsQuery(aqItem)),
     };
 };
 

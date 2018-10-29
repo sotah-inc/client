@@ -7,10 +7,11 @@ import {
     FetchCreatePricelist,
     FetchCreateProfessionPricelist,
 } from "@app/actions/price-lists";
-import { ICreatePricelistRequest, ICreateProfessionPricelistRequest } from "@app/api/price-lists";
+import { ICreatePricelistRequest } from "@app/api-types/contracts/user/pricelist-crud";
+import { ICreateProfessionPricelistRequest } from "@app/api-types/contracts/user/profession-pricelists-crud";
+import { IItemsMap } from "@app/api-types/item";
 import { CreateListDialog, IDispatchProps, IStateProps } from "@app/components/App/PriceLists/CreateListDialog";
 import { IStoreState } from "@app/types";
-import { ItemsMap } from "@app/types/global";
 
 const mapStateToProps = (state: IStoreState): IStateProps => {
     const { currentRegion, currentRealm, profile } = state.Main;
@@ -36,7 +37,7 @@ const mapStateToProps = (state: IStoreState): IStateProps => {
 
 const mapDispatchToProps = (dispatch: Dispatch<Actions>): IDispatchProps => {
     return {
-        appendItems: (items: ItemsMap) => dispatch(AppendItems(items)),
+        appendItems: (items: IItemsMap) => dispatch(AppendItems(items)),
         changeIsAddListDialogOpen: (isDialogOpen: boolean) => dispatch(ChangeIsAddListDialogOpen(isDialogOpen)),
         createPricelist: (token: string, request: ICreatePricelistRequest) =>
             dispatch(FetchCreatePricelist(token, request)),

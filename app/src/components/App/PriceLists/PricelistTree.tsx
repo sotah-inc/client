@@ -2,43 +2,42 @@ import * as React from "react";
 
 import { Classes, Intent, ITreeNode, Spinner, Tree } from "@blueprintjs/core";
 
-import { IGetPricelistsOptions, IGetProfessionPricelistsRequestOptions } from "@app/api/price-lists";
+import { IPricelistJson } from "@app/api-types/entities";
+import { IExpansion } from "@app/api-types/expansion";
+import { IItemsMap } from "@app/api-types/item";
+import { IProfession, ProfessionName } from "@app/api-types/profession";
+import { IRealm, IRegion } from "@app/api-types/region";
 import { ProfessionIcon } from "@app/components/util/ProfessionIcon";
 import { TreeContentContainer } from "@app/containers/App/PriceLists/PricelistTree/TreeContent";
 import { PricelistIconContainer } from "@app/containers/util/PricelistIcon";
-import { IExpansion, IProfession, IProfile, IRealm, IRegion, ItemsMap } from "@app/types/global";
-import { AuthLevel, FetchUserPreferencesLevel } from "@app/types/main";
-import {
-    GetProfessionPricelistsLevel,
-    IExpansionProfessionPricelistMap,
-    IPricelist,
-    ISelectExpansionPayload,
-} from "@app/types/price-lists";
+import { IProfile } from "@app/types/global";
+import { AuthLevel, FetchLevel } from "@app/types/main";
+import { IExpansionProfessionPricelistMap, ISelectExpansionPayload } from "@app/types/price-lists";
 
 export interface IStateProps {
-    pricelists: IPricelist[];
-    selectedList: IPricelist | null;
+    pricelists: IPricelistJson[];
+    selectedList: IPricelistJson | null;
     currentRegion: IRegion | null;
     currentRealm: IRealm | null;
     professions: IProfession[];
     selectedProfession: IProfession | null;
-    getProfessionPricelistsLevel: GetProfessionPricelistsLevel;
+    getProfessionPricelistsLevel: FetchLevel;
     professionPricelists: IExpansionProfessionPricelistMap;
     expansions: IExpansion[];
     selectedExpansion: IExpansion | null;
     authLevel: AuthLevel;
-    fetchUserPreferencesLevel: FetchUserPreferencesLevel;
+    fetchUserPreferencesLevel: FetchLevel;
     profile: IProfile | null;
-    items: ItemsMap;
+    items: IItemsMap;
 }
 
 export interface IDispatchProps {
-    changeSelectedList: (list: IPricelist) => void;
+    changeSelectedList: (list: IPricelistJson) => void;
     changeSelectedProfession: (profession: IProfession) => void;
-    refreshProfessionPricelists: (opts: IGetProfessionPricelistsRequestOptions) => void;
+    refreshProfessionPricelists: (profession: ProfessionName) => void;
     changeSelectedExpansion: (v: ISelectExpansionPayload) => void;
     resetProfessionsSelections: () => void;
-    refreshPricelists: (opts: IGetPricelistsOptions) => void;
+    refreshPricelists: (token: string) => void;
 }
 
 export type Props = Readonly<IStateProps & IDispatchProps>;
@@ -77,10 +76,9 @@ export class PricelistTree extends React.Component<Props, IState> {
 
         if (currentRegion !== null && currentRealm !== null) {
             const hasFinishedLoading =
-                authLevel === AuthLevel.authenticated &&
-                fetchUserPreferencesLevel === FetchUserPreferencesLevel.success;
+                authLevel === AuthLevel.authenticated && fetchUserPreferencesLevel === FetchLevel.success;
             if (hasFinishedLoading) {
-                refreshPricelists({ token: profile!.token });
+                refreshPricelists(profile!.token);
             }
         }
     }
@@ -98,19 +96,18 @@ export class PricelistTree extends React.Component<Props, IState> {
 
         const shouldRefreshPricelists =
             (prevProps.currentRealm === null && currentRealm !== null) ||
-            (prevProps.fetchUserPreferencesLevel === FetchUserPreferencesLevel.fetching &&
-                fetchUserPreferencesLevel === FetchUserPreferencesLevel.success);
+            (prevProps.fetchUserPreferencesLevel === FetchLevel.fetching &&
+                fetchUserPreferencesLevel === FetchLevel.success);
         if (shouldRefreshPricelists) {
             const hasFinishedLoading =
-                authLevel === AuthLevel.authenticated &&
-                fetchUserPreferencesLevel === FetchUserPreferencesLevel.success;
+                authLevel === AuthLevel.authenticated && fetchUserPreferencesLevel === FetchLevel.success;
             if (hasFinishedLoading) {
-                refreshPricelists({ token: profile!.token });
+                refreshPricelists(profile!.token);
             }
         }
 
         if (selectedProfession !== null && selectedProfession !== prevProps.selectedProfession) {
-            refreshProfessionPricelists({ profession: selectedProfession.name });
+            refreshProfessionPricelists(selectedProfession.name);
         }
     }
 
@@ -196,7 +193,7 @@ export class PricelistTree extends React.Component<Props, IState> {
         result.hasCaret = false;
 
         switch (getProfessionPricelistsLevel) {
-            case GetProfessionPricelistsLevel.initial:
+            case FetchLevel.initial:
                 result.childNodes = [
                     {
                         icon: <Spinner size={20} value={0} intent={Intent.NONE} />,
@@ -206,7 +203,7 @@ export class PricelistTree extends React.Component<Props, IState> {
                 ];
 
                 break;
-            case GetProfessionPricelistsLevel.fetching:
+            case FetchLevel.fetching:
                 result.childNodes = [
                     {
                         icon: <Spinner size={20} intent={Intent.PRIMARY} />,
@@ -216,7 +213,7 @@ export class PricelistTree extends React.Component<Props, IState> {
                 ];
 
                 break;
-            case GetProfessionPricelistsLevel.failure:
+            case FetchLevel.failure:
                 result.childNodes = [
                     {
                         icon: <Spinner size={20} intent={Intent.DANGER} value={1} />,
@@ -226,7 +223,7 @@ export class PricelistTree extends React.Component<Props, IState> {
                 ];
 
                 break;
-            case GetProfessionPricelistsLevel.success:
+            case FetchLevel.success:
                 result.childNodes = this.getExpansionNodes();
 
                 break;
@@ -289,7 +286,7 @@ export class PricelistTree extends React.Component<Props, IState> {
         return nodes;
     }
 
-    private getPricelistNode(v: IPricelist) {
+    private getPricelistNode(v: IPricelistJson) {
         const { selectedList } = this.props;
 
         const result: ITreeNode = {
@@ -355,7 +352,7 @@ export class PricelistTree extends React.Component<Props, IState> {
             }, null);
 
             for (const professionPricelist of professionPricelists[expansionName]) {
-                if (professionPricelist.pricelist_id.toString() === id) {
+                if (professionPricelist.pricelist.id.toString() === id) {
                     changeSelectedExpansion({
                         expansion: expansion!,
                         jumpTo: professionPricelist.pricelist!,
