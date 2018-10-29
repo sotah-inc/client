@@ -2,19 +2,17 @@ import * as React from "react";
 
 import { Dialog } from "@blueprintjs/core";
 
+import { IPricelistEntryJson, IPricelistJson } from "@app/api-types/entities";
+import { IItem } from "@app/api-types/item";
 import { CreateEntryFormFormContainer } from "@app/form-containers/App/PriceLists/util/CreateEntryForm";
-import { IProfile, Item } from "@app/types/global";
-import {
-    IPricelist,
-    IPricelistEntry,
-    IUpdatePricelistRequestOptions,
-    MutatePricelistLevel,
-} from "@app/types/price-lists";
+import { IProfile } from "@app/types/global";
+import { FetchLevel } from "@app/types/main";
+import { IUpdatePricelistRequestOptions } from "@app/types/price-lists";
 
 export interface IStateProps {
     isAddEntryDialogOpen: boolean;
-    updatePricelistLevel: MutatePricelistLevel;
-    selectedList: IPricelist | null;
+    updatePricelistLevel: FetchLevel;
+    selectedList: IPricelistJson | null;
     profile: IProfile | null;
 }
 
@@ -51,28 +49,29 @@ export class CreateEntryDialog extends React.Component<Props, IState> {
                 canOutsideClickClose={false}
             >
                 <CreateEntryFormFormContainer
-                    onComplete={(entry: IPricelistEntry) => this.onCreateEntryFormComplete(entry)}
+                    onComplete={(entry: IPricelistEntryJson) => this.onCreateEntryFormComplete(entry)}
                     onItemSelect={v => this.onCreateEntryFormItemSelect(v)}
-                    isSubmitDisabled={updatePricelistLevel === MutatePricelistLevel.fetching}
+                    isSubmitDisabled={updatePricelistLevel === FetchLevel.fetching}
                     externalItemError={entryFormError}
                 />
             </Dialog>
         );
     }
 
-    private onCreateEntryFormComplete(entry: IPricelistEntry) {
+    private onCreateEntryFormComplete(entry: IPricelistEntryJson) {
         const { selectedList, updatePricelist, profile } = this.props;
         updatePricelist({
+            id: selectedList!.id,
             meta: { isAddEntryDialogOpen: false },
             request: {
                 entries: [...selectedList!.pricelist_entries!, entry],
                 pricelist: selectedList!,
-                token: profile!.token,
             },
+            token: profile!.token,
         });
     }
 
-    private onCreateEntryFormItemSelect(item: Item) {
+    private onCreateEntryFormItemSelect(item: IItem) {
         const { selectedList } = this.props;
 
         for (const entry of selectedList!.pricelist_entries!) {

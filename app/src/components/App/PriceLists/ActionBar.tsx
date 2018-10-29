@@ -13,18 +13,20 @@ import {
     Tooltip,
 } from "@blueprintjs/core";
 
+import { IPricelistJson, UserLevel } from "@app/api-types/entities";
+import { IProfession } from "@app/api-types/profession";
+import { IRealm, IRegion } from "@app/api-types/region";
 import { RealmToggleContainer } from "@app/containers/util/RealmToggle";
 import { RegionToggleContainer } from "@app/containers/util/RegionToggle";
-import { IProfession, IProfile, IRealm, IRegion, UserLevel } from "@app/types/global";
+import { IProfile } from "@app/types/global";
 import { AuthLevel } from "@app/types/main";
-import { IPricelist } from "@app/types/price-lists";
 
 export interface IStateProps {
     currentRegion: IRegion | null;
     currentRealm: IRealm | null;
     isAddListDialogOpen: boolean;
     isAddEntryDialogOpen: boolean;
-    selectedList: IPricelist | null;
+    selectedList: IPricelistJson | null;
     selectedProfession: IProfession | null;
     authLevel: AuthLevel;
     profile: IProfile | null;

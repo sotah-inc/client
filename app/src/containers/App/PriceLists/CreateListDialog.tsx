@@ -14,7 +14,7 @@ import { CreateListDialog, IDispatchProps, IStateProps } from "@app/components/A
 import { IStoreState } from "@app/types";
 
 const mapStateToProps = (state: IStoreState): IStateProps => {
-    const { currentRegion, currentRealm, profile } = state.Main;
+    const { profile } = state.Main;
     const {
         isAddListDialogOpen,
         createPricelistLevel,
@@ -26,8 +26,6 @@ const mapStateToProps = (state: IStoreState): IStateProps => {
     return {
         createPricelistErrors,
         createPricelistLevel,
-        currentRealm,
-        currentRegion,
         isAddListDialogOpen,
         profile,
         selectedExpansion,

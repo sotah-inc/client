@@ -2,17 +2,19 @@ import * as React from "react";
 
 import { Intent } from "@blueprintjs/core";
 
-import { ICreatePricelistRequest, ICreateProfessionPricelistRequest } from "@app/api/price-lists";
+import { ICreatePricelistRequest } from "@app/api-types/contracts/user/pricelist-crud";
+import { ICreateProfessionPricelistRequest } from "@app/api-types/contracts/user/profession-pricelists-crud";
+import { IExpansion } from "@app/api-types/expansion";
+import { IItemsMap } from "@app/api-types/item";
+import { IProfession } from "@app/api-types/profession";
 import { ListDialogContainer } from "@app/containers/App/PriceLists/util/ListDialog";
-import { IErrors, IExpansion, IProfession, IProfile, IRealm, IRegion, ItemsMap } from "@app/types/global";
-import { MutatePricelistLevel } from "@app/types/price-lists";
+import { IErrors, IProfile } from "@app/types/global";
+import { FetchLevel } from "@app/types/main";
 import { AppToaster } from "@app/util/toasters";
 
 export interface IStateProps {
     isAddListDialogOpen: boolean;
-    currentRegion: IRegion | null;
-    currentRealm: IRealm | null;
-    createPricelistLevel: MutatePricelistLevel;
+    createPricelistLevel: FetchLevel;
     createPricelistErrors: IErrors;
     profile: IProfile | null;
     selectedProfession: IProfession | null;
@@ -20,7 +22,7 @@ export interface IStateProps {
 }
 
 export interface IDispatchProps {
-    appendItems: (items: ItemsMap) => void;
+    appendItems: (items: IItemsMap) => void;
     changeIsAddListDialogOpen: (isDialogOpen: boolean) => void;
     createPricelist: (token: string, request: ICreatePricelistRequest) => void;
     createProfessionPricelist: (token: string, request: ICreateProfessionPricelistRequest) => void;
@@ -43,7 +45,7 @@ export class CreateListDialog extends React.Component<Props, State> {
 
         if (prevProps.createPricelistLevel !== createPricelistLevel) {
             switch (createPricelistLevel) {
-                case MutatePricelistLevel.success:
+                case FetchLevel.success:
                     AppToaster.show({
                         icon: "info-sign",
                         intent: Intent.SUCCESS,
@@ -91,8 +93,6 @@ export class CreateListDialog extends React.Component<Props, State> {
             createPricelist,
             profile,
             appendItems,
-            currentRegion,
-            currentRealm,
             selectedProfession,
             createProfessionPricelist,
             selectedExpansion,
@@ -101,13 +101,13 @@ export class CreateListDialog extends React.Component<Props, State> {
         if (selectedProfession === null) {
             createPricelist(profile!.token, {
                 entries,
-                pricelist: { name, region: currentRegion!.name, realm: currentRealm!.slug },
+                pricelist: { name },
             });
         } else {
             createProfessionPricelist(profile!.token, {
                 entries,
                 expansion_name: selectedExpansion!.name,
-                pricelist: { name, region: currentRegion!.name, realm: currentRealm!.slug },
+                pricelist: { name },
                 profession_name: selectedProfession.name,
             });
         }
