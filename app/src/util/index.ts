@@ -1,8 +1,10 @@
 import * as moment from "moment";
 
 import { apiEndpoint } from "@app/api";
-import { IQueryAuctionResult } from "@app/types/auction";
-import { IExpansion, InventoryType, IRealm, IRegion, Item, ItemQuality, ItemStat } from "@app/types/global";
+import { IQueryAuctionsItem } from "@app/api-types/contracts/data";
+import { IExpansion } from "@app/api-types/expansion";
+import { IItem, InventoryType, ItemQuality, ItemStat } from "@app/api-types/item";
+import { IRealm, IRegion } from "@app/api-types/region";
 
 export const currencyToText = (amount: number): string => {
     if (amount === 0) {
@@ -62,7 +64,7 @@ export const qualityToColorClass = (quality: ItemQuality): string => {
     }
 };
 
-export const getItemIconUrl = (item: Item): string | null => {
+export const getItemIconUrl = (item: IItem): string | null => {
     if (item.icon_url !== "") {
         return item.icon_url;
     }
@@ -74,7 +76,7 @@ export const getItemIconUrl = (item: Item): string | null => {
     return `${apiEndpoint}/item-icons/${item.icon}.jpg`;
 };
 
-export const getItemTextValue = (item: Item): string => {
+export const getItemTextValue = (item: IItem): string => {
     if (item.name !== "") {
         return item.name;
     }
@@ -138,7 +140,7 @@ export const itemStatToString = (stat: ItemStat): string => {
     }
 };
 
-export const getSelectedResultIndex = (result: IQueryAuctionResult, selectedItems: IQueryAuctionResult[]): number => {
+export const getSelectedResultIndex = (result: IQueryAuctionsItem, selectedItems: IQueryAuctionsItem[]): number => {
     if (selectedItems.length === 0) {
         return -1;
     }
@@ -194,8 +196,8 @@ export const didRealmChange = (prevRealm: IRealm | null, currentRealm: IRealm): 
     return true;
 };
 
-export const getPrimaryExpansion = (expansions: IExpansion[]) => {
-    return expansions.reduce((previousValue, currentValue) => {
+export const getPrimaryExpansion = (expansions: IExpansion[]): IExpansion => {
+    return expansions.reduce((previousValue: IExpansion, currentValue: IExpansion) => {
         if (currentValue.primary) {
             return currentValue;
         }

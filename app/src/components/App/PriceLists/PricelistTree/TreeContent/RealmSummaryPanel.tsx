@@ -3,35 +3,29 @@ import * as React from "react";
 import { Callout, Card, Classes, H5, HTMLTable, Intent, NonIdealState, Spinner } from "@blueprintjs/core";
 
 import { IProfessionNode } from "@app/actions/price-lists";
-import { IGetUnmetDemandRequestOptions } from "@app/api/price-lists";
+import { IPricelistEntryJson, IPricelistJson, IProfessionPricelistJson } from "@app/api-types/entities";
+import { IExpansion } from "@app/api-types/expansion";
+import { IItemsMap, ItemId } from "@app/api-types/item";
+import { IProfession, ProfessionName } from "@app/api-types/profession";
+import { IRealm, IRegion, RealmPopulation } from "@app/api-types/region";
+import { IGetUnmetDemandOptions } from "@app/api/price-lists";
 import { ProfessionIcon } from "@app/components/util/ProfessionIcon";
 import { ItemPopoverContainer } from "@app/containers/util/ItemPopover";
 import { PricelistIconContainer } from "@app/containers/util/PricelistIcon";
-import {
-    IExpansion,
-    IProfession,
-    IProfessionPricelist,
-    IRealm,
-    IRegion,
-    ItemId,
-    ItemsMap,
-    ProfessionName,
-    RealmPopulation,
-} from "@app/types/global";
-import { GetUnmetDemandLevel, IPricelist, IPricelistEntry } from "@app/types/price-lists";
+import { FetchLevel } from "@app/types/main";
 import { didRealmChange, getPrimaryExpansion, qualityToColorClass } from "@app/util";
 
 export interface IStateProps {
     expansions: IExpansion[];
     unmetDemandItemIds: ItemId[];
-    unmetDemandProfessionPricelists: IProfessionPricelist[];
+    unmetDemandProfessionPricelists: IProfessionPricelistJson[];
     professions: IProfession[];
-    getUnmetDemandLevel: GetUnmetDemandLevel;
-    items: ItemsMap;
+    getUnmetDemandLevel: FetchLevel;
+    items: IItemsMap;
 }
 
 export interface IDispatchProps {
-    refreshUnmetDemand: (opts: IGetUnmetDemandRequestOptions) => void;
+    refreshUnmetDemand: (opts: IGetUnmetDemandOptions) => void;
     navigateProfessionNode: (node: IProfessionNode) => void;
 }
 
@@ -43,8 +37,8 @@ export interface IOwnProps {
 export type Props = Readonly<IStateProps & IDispatchProps & IOwnProps>;
 
 interface ICollapsedResultItem {
-    entry: IPricelistEntry;
-    professionPricelist: IProfessionPricelist;
+    entry: IPricelistEntryJson;
+    professionPricelist: IProfessionPricelistJson;
 }
 
 export class RealmSummaryPanel extends React.Component<Props> {
@@ -52,9 +46,11 @@ export class RealmSummaryPanel extends React.Component<Props> {
         const { refreshUnmetDemand, region, realm, expansions } = this.props;
 
         refreshUnmetDemand({
-            expansion: getPrimaryExpansion(expansions).name,
             realm: realm.slug,
             region: region.name,
+            request: {
+                expansion: getPrimaryExpansion(expansions).name,
+            },
         });
     }
 
@@ -63,9 +59,11 @@ export class RealmSummaryPanel extends React.Component<Props> {
 
         if (didRealmChange(prevProps.realm, realm)) {
             refreshUnmetDemand({
-                expansion: getPrimaryExpansion(expansions).name,
                 realm: realm.slug,
                 region: region.name,
+                request: {
+                    expansion: getPrimaryExpansion(expansions).name,
+                },
             });
         }
     }
@@ -94,7 +92,7 @@ export class RealmSummaryPanel extends React.Component<Props> {
         );
     }
 
-    public onPricelistClick(pricelist: IPricelist, professionName: ProfessionName) {
+    public onPricelistClick(pricelist: IPricelistJson, professionName: ProfessionName) {
         const { expansions, professions, navigateProfessionNode } = this.props;
 
         const profession: IProfession = professions.reduce((currentValue, v) => {
@@ -112,7 +110,7 @@ export class RealmSummaryPanel extends React.Component<Props> {
         const { getUnmetDemandLevel } = this.props;
 
         switch (getUnmetDemandLevel) {
-            case GetUnmetDemandLevel.success:
+            case FetchLevel.success:
                 return this.renderUnmetDemandSuccess();
             default:
                 return (
@@ -226,7 +224,7 @@ export class RealmSummaryPanel extends React.Component<Props> {
         );
     }
 
-    private renderPricelistCell(pricelist: IPricelist, profession: ProfessionName) {
+    private renderPricelistCell(pricelist: IPricelistJson, profession: ProfessionName) {
         return (
             <>
                 <PricelistIconContainer pricelist={pricelist} />
