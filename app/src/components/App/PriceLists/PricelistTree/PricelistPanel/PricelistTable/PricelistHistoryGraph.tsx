@@ -51,6 +51,8 @@ enum TabKind {
     volume = "volume",
 }
 
+const zeroGraphValue = 0.1;
+
 export class PricelistHistoryGraph extends React.Component<Props, State> {
     public state: State = {
         currentTabKind: TabKind.prices,
@@ -120,17 +122,33 @@ export class PricelistHistoryGraph extends React.Component<Props, State> {
             case TabKind.volume:
                 return (
                     <YAxis
-                        tickFormatter={v => Number(v).toLocaleString()}
+                        tickFormatter={v => {
+                            if (v === zeroGraphValue) {
+                                return 0;
+                            }
+
+                            return Number(v).toLocaleString();
+                        }}
                         domain={[
                             dataMin => {
+                                if (dataMin <= 1) {
+                                    return zeroGraphValue;
+                                }
+
                                 const result = Math.pow(10, Math.floor(Math.log10(dataMin)));
                                 if (result === 0) {
-                                    return 2;
+                                    return zeroGraphValue;
                                 }
 
                                 return result;
                             },
-                            dataMax => Math.pow(10, Math.ceil(Math.log10(dataMax))),
+                            dataMax => {
+                                if (dataMax <= 1) {
+                                    return 10;
+                                }
+
+                                return Math.pow(10, Math.ceil(Math.log10(dataMax)));
+                            },
                         ]}
                         tick={{ fill: "#fff" }}
                         scale="log"
@@ -143,17 +161,7 @@ export class PricelistHistoryGraph extends React.Component<Props, State> {
                 return (
                     <YAxis
                         tickFormatter={v => currencyToText(v * 10 * 10)}
-                        domain={[
-                            dataMin => {
-                                const result = overallPriceLimits.lower / 10 / 10;
-                                if (result === 0) {
-                                    return 2;
-                                }
-
-                                return result;
-                            },
-                            overallPriceLimits.upper / 10 / 10,
-                        ]}
+                        domain={[overallPriceLimits.lower / 10 / 10, overallPriceLimits.upper / 10 / 10]}
                         tick={{ fill: "#fff" }}
                         scale="log"
                         allowDataOverflow={true}
@@ -189,14 +197,14 @@ export class PricelistHistoryGraph extends React.Component<Props, State> {
 
                     const buyoutValue: number = (() => {
                         if (prices.min_buyout_per === 0) {
-                            return 0.000000001;
+                            return zeroGraphValue;
                         }
 
                         return prices.min_buyout_per / 10 / 10;
                     })();
                     const volumeValue: number = (() => {
                         if (prices.volume === 0) {
-                            return 0.000000001;
+                            return zeroGraphValue;
                         }
 
                         return prices.volume;
