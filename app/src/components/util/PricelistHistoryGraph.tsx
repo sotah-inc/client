@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { H4, Intent, Spinner, Tab, Tabs } from "@blueprintjs/core";
+import { Intent, Spinner, Tab, Tabs } from "@blueprintjs/core";
 import * as moment from "moment";
 import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
 
@@ -94,7 +94,6 @@ export class PricelistHistoryGraph extends React.Component<Props, State> {
 
         return (
             <>
-                <H4>History</H4>
                 <div style={{ marginBottom: "10px" }}>
                     <Tabs
                         id="history-tabs"

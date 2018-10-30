@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { H2 } from "@blueprintjs/core";
+import { H2, H4 } from "@blueprintjs/core";
 
 import { IPricelistJson } from "@app/api-types/entities";
 import { IItemsMap } from "@app/api-types/item";
@@ -34,6 +34,7 @@ export class PricelistTable extends React.Component<Props> {
                     <PricelistIconContainer pricelist={list} />
                     {list.name}
                 </H2>
+                <H4>History</H4>
                 {<PricelistHistoryGraphContainer itemIds={itemIds} region={region} realm={realm} />}
                 {<CurrentPricesTableContainer list={list} region={region} realm={realm} />}
                 {<CurrentSellersTableContainer list={list} region={region} realm={realm} />}
