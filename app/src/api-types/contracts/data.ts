@@ -4,13 +4,7 @@ import { ExpansionName, IExpansion } from "../expansion";
 import { SortDirection, SortKind } from "../index";
 import { IItem, IItemsMap, ItemId } from "../item";
 import { IItemClass } from "../item-class";
-import {
-    IItemMarketPrices,
-    IItemPriceLimits,
-    IItemPricelistHistoryMap,
-    IPriceLimits,
-    IPriceListMap,
-} from "../pricelist";
+import { IItemPriceLimits, IItemPricelistHistoryMap, IPriceLimits, IPriceListMap } from "../pricelist";
 import { IProfession } from "../profession";
 import { IRealm, IRegion } from "../region";
 
@@ -127,7 +121,6 @@ export interface IGetPricelistHistoriesResponse {
     items: IItemsMap;
     itemPriceLimits: IItemPriceLimits;
     overallPriceLimits: IPriceLimits;
-    itemMarketPrices: IItemMarketPrices;
 }
 
 export interface IGetUnmetDemandRequest {
