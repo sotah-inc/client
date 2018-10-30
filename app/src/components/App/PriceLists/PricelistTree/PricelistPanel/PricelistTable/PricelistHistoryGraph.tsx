@@ -4,7 +4,6 @@ import { H4, Intent, Spinner, Tab, Tabs } from "@blueprintjs/core";
 import * as moment from "moment";
 import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
 
-import { IPricelistJson } from "@app/api-types/entities";
 import { IItemsMap, ItemId } from "@app/api-types/item";
 import {
     IItemPriceLimits,
@@ -32,7 +31,7 @@ export interface IDispatchProps {
 export interface IOwnProps {
     region: IRegion;
     realm: IRealm;
-    list: IPricelistJson;
+    itemIds: ItemId[];
 }
 
 interface ILineItem {
@@ -59,9 +58,7 @@ export class PricelistHistoryGraph extends React.Component<Props, State> {
     };
 
     public componentDidMount() {
-        const { region, realm, reloadPricelistHistory, list } = this.props;
-
-        const itemIds = list.pricelist_entries!.map(v => v.item_id);
+        const { region, realm, reloadPricelistHistory, itemIds } = this.props;
 
         reloadPricelistHistory({
             itemIds,
@@ -71,16 +68,15 @@ export class PricelistHistoryGraph extends React.Component<Props, State> {
     }
 
     public componentDidUpdate(prevProps: Props) {
-        const { reloadPricelistHistory, region, realm, getPricelistHistoryLevel, list } = this.props;
-
-        const itemIds = list.pricelist_entries!.map(v => v.item_id);
+        const { reloadPricelistHistory, region, realm, getPricelistHistoryLevel, itemIds } = this.props;
 
         switch (getPricelistHistoryLevel) {
             case FetchLevel.success:
+                const newItemIds = itemIds.filter(v => prevProps.itemIds.indexOf(v) === -1);
                 const shouldReloadPrices =
                     didRegionChange(prevProps.region, region) ||
                     didRealmChange(prevProps.realm, realm) ||
-                    prevProps.list.id !== list.id;
+                    newItemIds.length > 0;
                 if (shouldReloadPrices) {
                     reloadPricelistHistory({
                         itemIds,

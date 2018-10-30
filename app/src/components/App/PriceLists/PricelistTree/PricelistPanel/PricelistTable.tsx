@@ -26,13 +26,15 @@ export class PricelistTable extends React.Component<Props> {
     public render() {
         const { list, region, realm } = this.props;
 
+        const itemIds = list.pricelist_entries.map(v => v.item_id);
+
         return (
             <>
                 <H2 className="pricelist-table-heading">
                     <PricelistIconContainer pricelist={list} />
                     {list.name}
                 </H2>
-                {<PricelistHistoryGraphContainer list={list} region={region} realm={realm} />}
+                {<PricelistHistoryGraphContainer itemIds={itemIds} region={region} realm={realm} />}
                 {<CurrentPricesTableContainer list={list} region={region} realm={realm} />}
                 {<CurrentSellersTableContainer list={list} region={region} realm={realm} />}
             </>
