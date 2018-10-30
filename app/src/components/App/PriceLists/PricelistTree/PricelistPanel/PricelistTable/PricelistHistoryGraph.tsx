@@ -4,7 +4,7 @@ import { H4, Intent, Spinner, Tab, Tabs } from "@blueprintjs/core";
 import * as moment from "moment";
 import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
 
-import { IPricelistEntryJson, IPricelistJson } from "@app/api-types/entities";
+import { IPricelistJson } from "@app/api-types/entities";
 import { IItemsMap, ItemId } from "@app/api-types/item";
 import {
     IItemPriceLimits,
@@ -172,7 +172,7 @@ export class PricelistHistoryGraph extends React.Component<Props, State> {
     }
 
     private renderContent() {
-        const { pricelistHistoryMap, getPricelistHistoryLevel, list } = this.props;
+        const { pricelistHistoryMap, getPricelistHistoryLevel } = this.props;
 
         switch (getPricelistHistoryLevel) {
             case FetchLevel.fetching:
@@ -190,27 +190,6 @@ export class PricelistHistoryGraph extends React.Component<Props, State> {
             (dataPreviousValue: ILineItem[], itemIdKey: string) => {
                 const itemPricelistHistory: IPricelistHistoryMap = pricelistHistoryMap[itemIdKey];
                 const itemId = Number(itemIdKey);
-                const entry: IPricelistEntryJson | null = list.pricelist_entries.reduce(
-                    (previousEntry: IPricelistEntryJson | null, currentEntry) => {
-                        if (previousEntry !== null) {
-                            return previousEntry;
-                        }
-
-                        if (currentEntry.item_id === itemId) {
-                            return currentEntry;
-                        }
-
-                        return previousEntry;
-                    },
-                    null,
-                );
-                const dataMultiplier: number = (() => {
-                    if (entry === null) {
-                        return 1;
-                    }
-
-                    return entry.quantity_modifier;
-                })();
 
                 return Object.keys(itemPricelistHistory).reduce((previousValue: ILineItem[], unixTimestampKey) => {
                     const unixTimestamp = Number(unixTimestampKey);
@@ -221,7 +200,7 @@ export class PricelistHistoryGraph extends React.Component<Props, State> {
                             return zeroGraphValue;
                         }
 
-                        return (prices.min_buyout_per / 10 / 10) * dataMultiplier;
+                        return prices.min_buyout_per / 10 / 10;
                     })();
                     const volumeValue: number = (() => {
                         if (prices.volume === 0) {
