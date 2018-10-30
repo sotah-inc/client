@@ -8,7 +8,7 @@ import {
     IOwnProps,
     IStateProps,
     PricelistHistoryGraph,
-} from "@app/components/App/PriceLists/PricelistTree/PricelistPanel/PricelistTable/PricelistHistoryGraph";
+} from "@app/components/util/PricelistHistoryGraph";
 import { IStoreState } from "@app/types";
 
 const mapStateToProps = (state: IStoreState): IStateProps => {

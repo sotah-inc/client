@@ -7,7 +7,7 @@ import { IItemsMap } from "@app/api-types/item";
 import { IRealm, IRegion } from "@app/api-types/region";
 import { CurrentPricesTableContainer } from "@app/containers/App/PriceLists/PricelistTree/PricelistPanel/PricelistTable/CurrentPricesTable";
 import { CurrentSellersTableContainer } from "@app/containers/App/PriceLists/PricelistTree/PricelistPanel/PricelistTable/CurrentSellersTable";
-import { PricelistHistoryGraphContainer } from "@app/containers/App/PriceLists/PricelistTree/PricelistPanel/PricelistTable/PricelistHistoryGraph";
+import { PricelistHistoryGraphContainer } from "@app/containers/util/PricelistHistoryGraph";
 import { PricelistIconContainer } from "@app/containers/util/PricelistIcon";
 
 export interface IStateProps {
