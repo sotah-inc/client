@@ -125,7 +125,7 @@ export class PricelistHistoryGraph extends React.Component<Props, State> {
                             dataMin => {
                                 const result = Math.pow(10, Math.floor(Math.log10(dataMin)));
                                 if (result === 0) {
-                                    return 1;
+                                    return 2;
                                 }
 
                                 return result;
@@ -143,7 +143,17 @@ export class PricelistHistoryGraph extends React.Component<Props, State> {
                 return (
                     <YAxis
                         tickFormatter={v => currencyToText(v * 10 * 10)}
-                        domain={[overallPriceLimits.lower / 10 / 10, overallPriceLimits.upper / 10 / 10]}
+                        domain={[
+                            dataMin => {
+                                const result = overallPriceLimits.lower / 10 / 10;
+                                if (result === 0) {
+                                    return 2;
+                                }
+
+                                return result;
+                            },
+                            overallPriceLimits.upper / 10 / 10,
+                        ]}
                         tick={{ fill: "#fff" }}
                         scale="log"
                         allowDataOverflow={true}
@@ -177,10 +187,25 @@ export class PricelistHistoryGraph extends React.Component<Props, State> {
                     const unixTimestamp = Number(unixTimestampKey);
                     const prices = itemPricelistHistory[unixTimestamp];
 
+                    const buyoutValue: number = (() => {
+                        if (prices.min_buyout_per === 0) {
+                            return 0.000000001;
+                        }
+
+                        return prices.min_buyout_per / 10 / 10;
+                    })();
+                    const volumeValue: number = (() => {
+                        if (prices.volume === 0) {
+                            return 0.000000001;
+                        }
+
+                        return prices.volume;
+                    })();
+
                     previousValue.push({
                         name: unixTimestamp,
-                        [`${itemId}_buyout`]: prices.min_buyout_per / 10 / 10,
-                        [`${itemId}_volume`]: prices.volume,
+                        [`${itemId}_buyout`]: buyoutValue,
+                        [`${itemId}_volume`]: volumeValue,
                     });
 
                     return previousValue;
