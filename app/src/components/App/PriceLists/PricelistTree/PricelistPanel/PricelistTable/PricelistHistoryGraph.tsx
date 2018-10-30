@@ -122,14 +122,7 @@ export class PricelistHistoryGraph extends React.Component<Props, State> {
                     <YAxis
                         tickFormatter={v => Number(v).toLocaleString()}
                         domain={[
-                            dataMin => {
-                                const result = Math.pow(10, Math.floor(Math.log10(dataMin)));
-                                if (result === 0) {
-                                    return 10;
-                                }
-
-                                return result;
-                            },
+                            dataMin => Math.pow(10, Math.floor(Math.log10(dataMin))),
                             dataMax => Math.pow(10, Math.ceil(Math.log10(dataMax))),
                         ]}
                         tick={{ fill: "#fff" }}
