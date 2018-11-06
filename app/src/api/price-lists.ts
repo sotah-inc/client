@@ -93,7 +93,7 @@ export const getPricelists = async (token: string): Promise<IGetPricelistsRespon
         url: `${apiEndpoint}/user/pricelists`,
     });
 
-    return body;
+    return body!;
 };
 
 export const deletePricelist = async (token: string, id: number): Promise<number | null> => {

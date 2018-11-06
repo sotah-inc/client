@@ -61,7 +61,7 @@ export const getStatus = async (regionName: RegionName): Promise<IStatusRealm[] 
         return null;
     }
 
-    return body.realms;
+    return body!.realms;
 };
 
 export interface IGetAuctionsOptions {
