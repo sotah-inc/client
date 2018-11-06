@@ -79,6 +79,7 @@ export class QueryAuctionsFilter extends React.Component<Props> {
                                     itemPredicate={this.itemPredicate}
                                     itemListRenderer={this.itemListRenderer}
                                 />
+                                <div style={{ marginLeft: "10px" }}>{this.renderRefetchingSpinner()}</div>
                             </NavbarGroup>
                             <NavbarGroup align={Alignment.RIGHT}>
                                 <Switch
@@ -100,6 +101,15 @@ export class QueryAuctionsFilter extends React.Component<Props> {
             default:
                 return <Spinner className={Classes.SMALL} intent={Intent.PRIMARY} />;
         }
+    }
+
+    private renderRefetchingSpinner() {
+        const { queryAuctionsLevel } = this.props;
+        if (queryAuctionsLevel !== FetchLevel.refetching) {
+            return null;
+        }
+
+        return <Spinner className={Classes.SMALL} intent={Intent.PRIMARY} />;
     }
 
     private onActiveChange() {
