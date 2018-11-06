@@ -13,7 +13,7 @@ export interface IGatherOptions<T> {
 
 export interface IGatherResult<T> {
     response: Response;
-    body: T;
+    body: T | null;
     status: number;
 }
 
@@ -34,8 +34,16 @@ export const gather = async <T, A>(opts: IGatherOptions<T>): Promise<IGatherResu
         method,
     });
 
+    const responseBody: A | null = await (async () => {
+        if (!("body" in response)) {
+            return null;
+        }
+
+        return (await response.json()) as A;
+    })();
+
     return {
-        body: (await response.json()) as A,
+        body: responseBody,
         response,
         status: response.status,
     };
