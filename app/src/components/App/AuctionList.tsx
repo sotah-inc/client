@@ -257,7 +257,7 @@ export class AuctionList extends React.Component<Props> {
                             pagesShown={5}
                             onPageChange={setCurrentPage}
                         />
-                        {this.renderRefetchingSpinner()}
+                        <div style={{ marginLeft: "10px" }}>{this.renderRefetchingSpinner()}</div>
                     </NavbarGroup>
                     <NavbarGroup align={Alignment.RIGHT}>
                         <ButtonGroup>
