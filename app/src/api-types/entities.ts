@@ -22,9 +22,9 @@ export interface IPricelistJson {
 
 export interface IProfessionPricelistJson {
     id: number;
-    pricelist: IPricelistJson;
     name: ProfessionName;
     expansion: ExpansionName;
+    pricelist: IPricelistJson;
 }
 
 export enum UserLevel {
@@ -36,4 +36,9 @@ export interface IUserJson {
     id: number;
     email: string;
     level: UserLevel;
+}
+
+export interface IPostJson {
+    id: number;
+    title: string;
 }
