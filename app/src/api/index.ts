@@ -35,11 +35,12 @@ export const gather = async <T, A>(opts: IGatherOptions<T>): Promise<IGatherResu
     });
 
     const responseBody: A | null = await (async () => {
-        if (!("body" in response)) {
+        const responseText = await response.text();
+        if (responseText.length === 0) {
             return null;
         }
 
-        return (await response.json()) as A;
+        return JSON.parse(responseText);
     })();
 
     return {
