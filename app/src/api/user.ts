@@ -84,7 +84,6 @@ export interface IGetPreferencesResult {
 }
 
 export const getPreferences = async (token: string): Promise<IGetPreferencesResult> => {
-    console.log("Fetching preferences");
     const { body, status } = await gather<null, IGetPreferencesResponse>({
         headers: new Headers({
             Authorization: `Bearer ${token}`,
@@ -96,8 +95,6 @@ export const getPreferences = async (token: string): Promise<IGetPreferencesResu
         case HTTPStatus.UNAUTHORIZED:
             return { error: "Unauthorized", preference: null };
         case HTTPStatus.NOT_FOUND:
-            console.log("Preferences not found");
-
             return { error: null, preference: null };
         default:
             break;
