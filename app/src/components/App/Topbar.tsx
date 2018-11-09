@@ -1,15 +1,6 @@
 import * as React from "react";
 
-import {
-    Alignment,
-    Button,
-    ButtonGroup,
-    Classes,
-    Navbar,
-    NavbarDivider,
-    NavbarGroup,
-    NavbarHeading,
-} from "@blueprintjs/core";
+import { Alignment, ButtonGroup, Classes, Navbar, NavbarDivider, NavbarGroup, NavbarHeading } from "@blueprintjs/core";
 import { RouteComponentProps } from "react-router-dom";
 
 import { IUserJson } from "@app/api-types/entities";
@@ -51,9 +42,14 @@ export class Topbar extends React.Component<Props> {
                             <LinkButtonRouteContainer
                                 destination="/content"
                                 buttonProps={{ icon: "manually-entered-data", text: "Content" }}
+                                prefix={true}
                             />
                             <NavbarDivider />
-                            <Button icon="chart">Data</Button>
+                            <LinkButtonRouteContainer
+                                destination="/data"
+                                buttonProps={{ icon: "chart", text: "Data" }}
+                                prefix={true}
+                            />
                             <NavbarDivider />
                             <ButtonGroup>
                                 <LinkButtonRouteContainer
