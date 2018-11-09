@@ -1,7 +1,7 @@
 @import "../vendor/blueprint-variables.scss";
 
 @media (min-width: 1050px) {
-    #topbar, #content {
+    #topbar, #subbar, #content {
         width: 1000px;
         margin: 0 auto;
     }

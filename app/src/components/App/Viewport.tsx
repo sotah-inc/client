@@ -13,8 +13,8 @@ export const Viewport: React.SFC = () => {
             <Switch>
                 <Route exact={true} path="/" component={RootRouteContainer} />
                 <Route exact={true} path="/content" component={ContentRouteContainer} />
-                <Route exact={true} path="/auctions" component={AuctionsListContainer} />
-                <Route exact={true} path="/price-lists" component={PriceListsContainer} />
+                <Route exact={true} path="/data/auctions" component={AuctionsListContainer} />
+                <Route exact={true} path="/data/price-lists" component={PriceListsContainer} />
                 <Route component={NotFound} />
             </Switch>
         </div>

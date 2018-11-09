@@ -16,21 +16,13 @@ export interface IOwnProps extends RouteComponentProps<{}> {}
 
 export type Props = Readonly<IStateProps & IOwnProps>;
 
+enum SubBarKind {
+    Unknown,
+    Content,
+    Data,
+}
+
 export class Topbar extends React.Component<Props> {
-    public renderUserInfo() {
-        const { user } = this.props;
-        if (user === null) {
-            return (
-                <ButtonGroup>
-                    <RegisterContainer />
-                    <LoginContainer />
-                </ButtonGroup>
-            );
-        }
-
-        return <LinkButtonRouteContainer destination="/profile" buttonProps={{ icon: "user", text: "Profile" }} />;
-    }
-
     public render() {
         return (
             <>
@@ -51,41 +43,89 @@ export class Topbar extends React.Component<Props> {
                                 prefix={true}
                             />
                             <NavbarDivider />
-                            <ButtonGroup>
-                                <LinkButtonRouteContainer
-                                    destination="/"
-                                    buttonProps={{ icon: "home", text: "Home" }}
-                                />
-                                <LinkButtonRouteContainer
-                                    destination="/auctions"
-                                    buttonProps={{ icon: "list", text: "Auctions" }}
-                                />
-                                <LinkButtonRouteContainer
-                                    destination="/price-lists"
-                                    buttonProps={{ icon: "list", text: "Price Lists" }}
-                                />
-                            </ButtonGroup>
-                            <NavbarDivider />
                             {this.renderUserInfo()}
                         </NavbarGroup>
                     </div>
                 </Navbar>
-                <Navbar className={Classes.DARK}>
-                    <div id="topbar">
-                        <NavbarGroup align={Alignment.LEFT}>
-                            <LinkButtonRouteContainer
-                                destination="/content/news"
-                                buttonProps={{ icon: "globe-network", text: "News", minimal: true }}
-                            />
-                            <NavbarDivider />
-                            <LinkButtonRouteContainer
-                                destination="/content/feed"
-                                buttonProps={{ icon: "feed", text: "Feed", minimal: true }}
-                            />
-                        </NavbarGroup>
-                    </div>
-                </Navbar>
+                {this.renderSubBar()}
             </>
         );
+    }
+
+    private renderSubBar() {
+        if (this.getSubBarKind() === SubBarKind.Unknown) {
+            return null;
+        }
+
+        return (
+            <Navbar className={Classes.DARK}>
+                <div id="subbar">
+                    <NavbarGroup align={Alignment.LEFT}>{this.renderSubBarItems()}</NavbarGroup>
+                </div>
+            </Navbar>
+        );
+    }
+
+    private getSubBarKind() {
+        const { location } = this.props;
+
+        if (location.pathname.startsWith("/content")) {
+            return SubBarKind.Content;
+        }
+
+        if (location.pathname.startsWith("/data")) {
+            return SubBarKind.Data;
+        }
+
+        return SubBarKind.Unknown;
+    }
+
+    private renderSubBarItems() {
+        switch (this.getSubBarKind()) {
+            case SubBarKind.Content:
+                return (
+                    <>
+                        <LinkButtonRouteContainer
+                            destination="/content/news"
+                            buttonProps={{ icon: "globe-network", text: "News", minimal: true }}
+                        />
+                        <NavbarDivider />
+                        <LinkButtonRouteContainer
+                            destination="/content/feed"
+                            buttonProps={{ icon: "feed", text: "Feed", minimal: true }}
+                        />
+                    </>
+                );
+            case SubBarKind.Data:
+                return (
+                    <>
+                        <LinkButtonRouteContainer
+                            destination="/data/auctions"
+                            buttonProps={{ icon: "dollar", text: "Auctions", minimal: true }}
+                        />
+                        <NavbarDivider />
+                        <LinkButtonRouteContainer
+                            destination="/data/price-lists"
+                            buttonProps={{ icon: "polygon-filter", text: "Professions", minimal: true }}
+                        />
+                    </>
+                );
+            default:
+                return null;
+        }
+    }
+
+    private renderUserInfo() {
+        const { user } = this.props;
+        if (user === null) {
+            return (
+                <ButtonGroup>
+                    <RegisterContainer />
+                    <LoginContainer />
+                </ButtonGroup>
+            );
+        }
+
+        return <LinkButtonRouteContainer destination="/profile" buttonProps={{ icon: "user", text: "Profile" }} />;
     }
 }
