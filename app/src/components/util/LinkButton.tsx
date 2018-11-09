@@ -6,12 +6,19 @@ import { RouteComponentProps } from "react-router-dom";
 export interface IProps extends RouteComponentProps<{}> {
     destination: string;
     buttonProps: IButtonProps;
+    prefix?: boolean;
 }
 
 export const LinkButton: React.SFC<IProps> = (props: IProps) => {
-    const { destination, location, history, buttonProps } = props;
+    const { destination, location, history, buttonProps, prefix } = props;
 
-    return (
-        <Button active={location.pathname === destination} onClick={() => history.push(destination)} {...buttonProps} />
-    );
+    const active: boolean = (() => {
+        if (typeof prefix === "undefined") {
+            return location.pathname === destination;
+        }
+
+        return location.pathname.startsWith(destination);
+    })();
+
+    return <Button active={active} onClick={() => history.push(destination)} {...buttonProps} />;
 };
