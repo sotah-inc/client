@@ -15,3 +15,4 @@
 - [x] Upgrade to Blueprint 3
 - [x] Use [moving-averages](https://github.com/kaelzhang/moving-averages) for graph smoothing.
 - [ ] Use [emojione](https://www.npmjs.com/package/emojione) for emojis.
+- [ ] USe [Mathjs](https://www.npmjs.com/package/mathjs) for evaluating expressions.
