@@ -5,7 +5,7 @@ import { RouteComponentProps } from "react-router-dom";
 
 import { IPreferenceJson } from "@app/api-types/entities";
 import { IRealm, IRegion } from "@app/api-types/region";
-import { Content } from "@app/components/App/Content";
+import { Viewport } from "@app/components/App/Viewport";
 import { TopbarRouteContainer } from "@app/route-containers/App/Topbar";
 import { IProfile } from "@app/types/global";
 import { AuthLevel, FetchLevel } from "@app/types/main";
@@ -263,7 +263,7 @@ export class App extends React.Component<Props, State> {
         return (
             <div id="app" className={`${Classes.DARK} dark-app`}>
                 <TopbarRouteContainer />
-                <Content />
+                <Viewport />
             </div>
         );
     }
