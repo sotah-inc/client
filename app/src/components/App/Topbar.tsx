@@ -1,6 +1,15 @@
 import * as React from "react";
 
-import { Alignment, ButtonGroup, Classes, Navbar, NavbarDivider, NavbarGroup, NavbarHeading } from "@blueprintjs/core";
+import {
+    Alignment,
+    ButtonGroup,
+    Classes,
+    Navbar,
+    NavbarDivider,
+    NavbarGroup,
+    NavbarHeading,
+    Tooltip,
+} from "@blueprintjs/core";
 import { RouteComponentProps } from "react-router-dom";
 
 import { IUserJson } from "@app/api-types/entities";
@@ -24,6 +33,43 @@ enum SubBarKind {
 
 export class Topbar extends React.Component<Props> {
     public render() {
+        const contentLink = (() => {
+            const out = (
+                <LinkButtonRouteContainer
+                    destination="/content"
+                    buttonProps={{ icon: "manually-entered-data", text: "Content" }}
+                    prefix={true}
+                />
+            );
+            if (this.getSubBarKind() === SubBarKind.Content) {
+                return out;
+            }
+
+            return (
+                <Tooltip content="News, your personal feed" inheritDarkTheme={true}>
+                    {out}
+                </Tooltip>
+            );
+        })();
+        const dataLink = (() => {
+            const out = (
+                <LinkButtonRouteContainer
+                    destination="/data"
+                    buttonProps={{ icon: "chart", text: "Data" }}
+                    prefix={true}
+                />
+            );
+            if (this.getSubBarKind() === SubBarKind.Data) {
+                return out;
+            }
+
+            return (
+                <Tooltip content="Auctions, professions" inheritDarkTheme={true}>
+                    {out}
+                </Tooltip>
+            );
+        })();
+
         return (
             <>
                 <Navbar className={Classes.DARK}>
@@ -31,17 +77,9 @@ export class Topbar extends React.Component<Props> {
                         <NavbarGroup align={Alignment.LEFT}>
                             <NavbarHeading>Sotah Client</NavbarHeading>
                             <NavbarDivider />
-                            <LinkButtonRouteContainer
-                                destination="/content"
-                                buttonProps={{ icon: "manually-entered-data", text: "Content" }}
-                                prefix={true}
-                            />
+                            {contentLink}
                             <NavbarDivider />
-                            <LinkButtonRouteContainer
-                                destination="/data"
-                                buttonProps={{ icon: "chart", text: "Data" }}
-                                prefix={true}
-                            />
+                            {dataLink}
                             <NavbarDivider />
                             {this.renderUserInfo()}
                         </NavbarGroup>
