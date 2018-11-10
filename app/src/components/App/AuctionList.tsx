@@ -10,6 +10,7 @@ import {
     Spinner,
 } from "@blueprintjs/core";
 import * as React from "react";
+import { RouteComponentProps } from "react-router";
 
 import { SortDirection, SortKind } from "@app/api-types";
 import { IAuction, OwnerName } from "@app/api-types/auction";
@@ -53,7 +54,9 @@ export interface IDispatchProps {
     refreshAuctionsQuery: (opts: IQueryAuctionsOptions) => void;
 }
 
-type Props = Readonly<IStateProps & IDispatchProps>;
+export interface IOwnProps extends RouteComponentProps<{}> {}
+
+type Props = Readonly<IStateProps & IDispatchProps & IOwnProps>;
 
 export class AuctionList extends React.Component<Props> {
     public componentDidMount() {

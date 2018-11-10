@@ -1,8 +1,8 @@
 import * as React from "react";
 import { Route, Switch } from "react-router-dom";
 
-import { AuctionsListContainer } from "@app/containers/App/AuctionList";
 import { PriceListsContainer } from "@app/containers/App/PriceLists";
+import { AuctionListRouteContainer } from "@app/route-containers/App/AuctionList";
 import { ContentRouteContainer } from "@app/route-containers/App/Content";
 import { DataRouteContainer } from "@app/route-containers/App/Data";
 import { RootRouteContainer } from "@app/route-containers/App/Root";
@@ -15,7 +15,7 @@ export const Viewport: React.SFC = () => {
                 <Route exact={true} path="/" component={RootRouteContainer} />
                 <Route exact={true} path="/content" component={ContentRouteContainer} />
                 <Route exact={true} path="/data" component={DataRouteContainer} />
-                <Route exact={true} path="/data/auctions" component={AuctionsListContainer} />
+                <Route exact={true} path="/data/auctions" component={AuctionListRouteContainer} />
                 <Route exact={true} path="/data/price-lists" component={PriceListsContainer} />
                 <Route component={NotFound} />
             </Switch>
