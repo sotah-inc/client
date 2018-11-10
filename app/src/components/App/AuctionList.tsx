@@ -62,71 +62,25 @@ export class AuctionList extends React.Component<Props> {
     public componentDidMount() {
         const { fetchAuctionsLevel, refreshAuctionsQuery, currentRegion, currentRealm } = this.props;
 
-        if (fetchAuctionsLevel === FetchLevel.initial) {
-            if (currentRegion !== null && currentRealm !== null) {
-                this.refreshAuctions();
-                refreshAuctionsQuery({
-                    query: "",
-                    realmSlug: currentRealm.slug,
-                    regionName: currentRegion.name,
-                });
-            }
+        if (fetchAuctionsLevel !== FetchLevel.initial) {
+            return;
         }
+
+        if (currentRegion === null || currentRealm === null) {
+            return;
+        }
+
+        this.refreshAuctions();
+        refreshAuctionsQuery({
+            query: "",
+            realmSlug: currentRealm.slug,
+            regionName: currentRegion.name,
+        });
     }
 
     public componentDidUpdate(prevProps: Props) {
-        const {
-            fetchAuctionsLevel,
-            currentRegion,
-            currentRealm,
-            currentPage,
-            auctionsPerPage,
-            sortDirection,
-            selectedQueryAuctionResults,
-            refreshAuctionsQuery,
-            authLevel,
-            fetchUserPreferencesLevel,
-            activeSelect,
-        } = this.props;
-
-        if (currentRegion !== null && currentRealm !== null) {
-            const didPageChange = currentPage !== prevProps.currentPage;
-            const didCountChange = auctionsPerPage !== prevProps.auctionsPerPage;
-            const didSortChange =
-                prevProps.sortDirection !== sortDirection || prevProps.sortKind !== this.props.sortKind;
-            const didSqaResultsChange =
-                activeSelect && prevProps.selectedQueryAuctionResults.length !== selectedQueryAuctionResults.length;
-            const didActiveSelectChange = prevProps.activeSelect !== activeSelect;
-            const didOptionsChange =
-                didRealmChange(prevProps.currentRealm, currentRealm) ||
-                didPageChange ||
-                didCountChange ||
-                didSortChange ||
-                didSqaResultsChange ||
-                didActiveSelectChange;
-            const shouldRefreshAuctions =
-                fetchAuctionsLevel === FetchLevel.initial ||
-                (fetchAuctionsLevel === FetchLevel.success && didOptionsChange);
-
-            if (shouldRefreshAuctions) {
-                if (authLevel === AuthLevel.unauthenticated) {
-                    this.refreshAuctions();
-                } else if (authLevel === AuthLevel.authenticated) {
-                    if (fetchUserPreferencesLevel === FetchLevel.success) {
-                        this.refreshAuctions();
-                    }
-                }
-            }
-
-            const shouldRefreshAuctionsQuery = didRealmChange(prevProps.currentRealm, currentRealm);
-            if (shouldRefreshAuctionsQuery) {
-                refreshAuctionsQuery({
-                    query: "",
-                    realmSlug: currentRealm.slug,
-                    regionName: currentRegion.name,
-                });
-            }
-        }
+        this.refreshAuctionsTrigger(prevProps);
+        this.refreshAuctionsQueryTrigger(prevProps);
     }
 
     public render() {
@@ -159,6 +113,103 @@ export class AuctionList extends React.Component<Props> {
             default:
                 return <>You should never see this!</>;
         }
+    }
+
+    private refreshAuctionsQueryTrigger(prevProps: Props) {
+        const { currentRegion, currentRealm, refreshAuctionsQuery } = this.props;
+
+        if (currentRegion === null || currentRealm === null) {
+            return;
+        }
+
+        if (!didRealmChange(prevProps.currentRealm, currentRealm)) {
+            return;
+        }
+
+        refreshAuctionsQuery({
+            query: "",
+            realmSlug: currentRealm.slug,
+            regionName: currentRegion.name,
+        });
+    }
+
+    private refreshAuctionsTrigger(prevProps: Props) {
+        const {
+            fetchAuctionsLevel,
+            currentRegion,
+            currentRealm,
+            currentPage,
+            auctionsPerPage,
+            sortDirection,
+            selectedQueryAuctionResults,
+            authLevel,
+            fetchUserPreferencesLevel,
+            activeSelect,
+        } = this.props;
+
+        if (currentRegion === null || currentRealm === null) {
+            return;
+        }
+
+        const didOptionsChange: boolean = (() => {
+            if (didRealmChange(prevProps.currentRealm, currentRealm)) {
+                return true;
+            }
+
+            if (currentPage !== prevProps.currentPage) {
+                return true;
+            }
+
+            if (auctionsPerPage !== prevProps.auctionsPerPage) {
+                return true;
+            }
+
+            if (prevProps.sortDirection !== sortDirection) {
+                return true;
+            }
+
+            if (prevProps.sortKind !== this.props.sortKind) {
+                return true;
+            }
+
+            if (activeSelect && prevProps.selectedQueryAuctionResults.length !== selectedQueryAuctionResults.length) {
+                return true;
+            }
+
+            if (prevProps.activeSelect !== activeSelect) {
+                return true;
+            }
+
+            return false;
+        })();
+
+        switch (fetchAuctionsLevel) {
+            case FetchLevel.initial:
+                break;
+            case FetchLevel.success:
+                if (!didOptionsChange) {
+                    return;
+                }
+
+                break;
+            default:
+                return;
+        }
+
+        switch (authLevel) {
+            case AuthLevel.unauthenticated:
+                break;
+            case AuthLevel.authenticated:
+                if (fetchUserPreferencesLevel !== FetchLevel.success) {
+                    return;
+                }
+
+                break;
+            default:
+                return;
+        }
+
+        this.refreshAuctions();
     }
 
     private refreshAuctions() {
