@@ -283,13 +283,9 @@ export class AuctionList extends React.Component<Props> {
     }
 
     private renderPricelistHistoryGraph() {
-        const { currentRegion, currentRealm, auctions, auctionsPerPage } = this.props;
+        const { currentRegion, currentRealm, auctions } = this.props;
 
         if (currentRegion === null || currentRealm === null) {
-            return null;
-        }
-
-        if (auctionsPerPage > 10) {
             return null;
         }
 
@@ -303,6 +299,10 @@ export class AuctionList extends React.Component<Props> {
 
                 return [...previous, current];
             }, []);
+
+        if (itemIds.length > 10) {
+            return null;
+        }
 
         return (
             <>
