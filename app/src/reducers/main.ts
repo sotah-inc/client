@@ -73,26 +73,42 @@ export const main = (state: State, action: MainActions): State => {
                 return { ...state, fetchRealmLevel: FetchLevel.failure };
             }
 
-            let currentRealm: IRealm | null = action.payload[0];
-            if (state.userPreferences !== null) {
+            const currentRealm: IRealm = (() => {
+                // optionally halting on blank user-preferences
+                if (state.userPreferences === null) {
+                    return action.payload[0];
+                }
+
                 const {
                     current_region: preferredRegionName,
                     current_realm: preferredRealmSlug,
                 } = state.userPreferences;
-                if (state.currentRegion!.name === preferredRegionName) {
-                    currentRealm = action.payload.reduce((result, v) => {
-                        if (result !== null) {
-                            return result;
-                        }
-
-                        if (v.slug === preferredRealmSlug) {
-                            return v;
-                        }
-
-                        return null;
-                    }, null);
+                // defaulting to first realm in list if region is different from preferred region
+                if (state.currentRegion!.name !== preferredRegionName) {
+                    return action.payload[0];
                 }
-            }
+
+                // gathering preferred realm
+                const foundRealm: IRealm | null = action.payload.reduce((result, v) => {
+                    if (result !== null) {
+                        return result;
+                    }
+
+                    if (v.slug === preferredRealmSlug) {
+                        return v;
+                    }
+
+                    return null;
+                }, null);
+
+                // optionally halting on realm non-match against preferred realm name
+                if (foundRealm === null) {
+                    return action.payload[0];
+                }
+
+                // dumping out preferred realm
+                return foundRealm;
+            })();
 
             const realms: IRealms = action.payload.reduce((result, realm) => ({ ...result, [realm.slug]: realm }), {});
 
