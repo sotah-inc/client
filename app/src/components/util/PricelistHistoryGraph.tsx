@@ -73,10 +73,12 @@ export class PricelistHistoryGraph extends React.Component<Props, State> {
         switch (getPricelistHistoryLevel) {
             case FetchLevel.success:
                 const newItemIds = itemIds.filter(v => prevProps.itemIds.indexOf(v) === -1);
+                const missingItemIds = prevProps.itemIds.filter(v => itemIds.indexOf(v) === -1);
                 const shouldReloadPrices =
                     didRegionChange(prevProps.region, region) ||
                     didRealmChange(prevProps.realm, realm) ||
-                    newItemIds.length > 0;
+                    newItemIds.length > 0 ||
+                    missingItemIds.length > 0;
                 if (shouldReloadPrices) {
                     reloadPricelistHistory({
                         itemIds,
