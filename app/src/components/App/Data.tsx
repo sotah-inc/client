@@ -15,6 +15,12 @@ export type Props = Readonly<IOwnProps & IStateProps>;
 
 export class Data extends React.Component<Props> {
     public render() {
-        return <Redirect to="/data/auctions" />;
+        const { currentRealm, currentRegion } = this.props;
+
+        if (currentRegion === null || currentRealm === null) {
+            return null;
+        }
+
+        return <Redirect to={`/data/auctions/${currentRegion.name}/${currentRealm.slug}`} />;
     }
 }

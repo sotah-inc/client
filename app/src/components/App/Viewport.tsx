@@ -15,7 +15,11 @@ export const Viewport: React.SFC = () => {
                 <Route exact={true} path="/" component={RootRouteContainer} />
                 <Route exact={true} path="/content" component={ContentRouteContainer} />
                 <Route exact={true} path="/data" component={DataRouteContainer} />
-                <Route exact={true} path="/data/auctions" component={AuctionListRouteContainer} />
+                <Route
+                    exact={true}
+                    path="/data/auctions/:region_name/:realm_slug"
+                    component={AuctionListRouteContainer}
+                />
                 <Route exact={true} path="/data/price-lists" component={PriceListsContainer} />
                 <Route component={NotFound} />
             </Switch>

@@ -2,6 +2,7 @@ import {
     Alignment,
     ButtonGroup,
     Classes,
+    H4,
     Intent,
     Navbar,
     NavbarDivider,
@@ -23,6 +24,7 @@ import { LastModified, Pagination } from "@app/components/util";
 import { AuctionTableContainer } from "@app/containers/App/AuctionList/AuctionTable";
 import { CountToggleContainer } from "@app/containers/App/AuctionList/CountToggle";
 import { QueryAuctionsFilterContainer } from "@app/containers/App/AuctionList/QueryAuctionsFilter";
+import { PricelistHistoryGraphContainer } from "@app/containers/util/PricelistHistoryGraph";
 import { RealmToggleContainer } from "@app/containers/util/RealmToggle";
 import { RegionToggleContainer } from "@app/containers/util/RegionToggle";
 import { AuthLevel, FetchLevel } from "@app/types/main";
@@ -256,14 +258,10 @@ export class AuctionList extends React.Component<Props> {
     }
 
     private renderAuctionsFooter() {
-        const { currentPage, currentRealm } = this.props;
-        const pageCount = this.getPageCount();
+        const { currentRealm } = this.props;
 
         return (
             <>
-                <p style={{ textAlign: "center" }}>
-                    Page {currentPage + 1} of {pageCount + 1}
-                </p>
                 <LastModified targetDate={new Date(currentRealm!.last_modified * 1000)} />
             </>
         );
@@ -284,6 +282,36 @@ export class AuctionList extends React.Component<Props> {
         return pageCount;
     }
 
+    private renderPricelistHistoryGraph() {
+        const { currentRegion, currentRealm, auctions, auctionsPerPage } = this.props;
+
+        if (currentRegion === null || currentRealm === null) {
+            return null;
+        }
+
+        if (auctionsPerPage > 10) {
+            return null;
+        }
+
+        const itemIds: ItemId[] = auctions
+            .filter(v => v !== null)
+            .map(v => v!.itemId)
+            .reduce((previous: ItemId[], current: ItemId) => {
+                if (previous.indexOf(current) > -1) {
+                    return previous;
+                }
+
+                return [...previous, current];
+            }, []);
+
+        return (
+            <>
+                <H4>History</H4>
+                <PricelistHistoryGraphContainer itemIds={itemIds} region={currentRegion} realm={currentRealm} />
+            </>
+        );
+    }
+
     private renderAuctions() {
         const { auctions, totalResults, auctionsPerPage, currentPage, setCurrentPage } = this.props;
 
@@ -300,6 +328,7 @@ export class AuctionList extends React.Component<Props> {
 
         return (
             <>
+                <H4>Search</H4>
                 <QueryAuctionsFilterContainer />
                 <Navbar>
                     <NavbarGroup align={Alignment.LEFT}>
@@ -320,7 +349,14 @@ export class AuctionList extends React.Component<Props> {
                         </ButtonGroup>
                     </NavbarGroup>
                 </Navbar>
+                <p style={{ textAlign: "center", margin: "10px auto" }}>
+                    Page {currentPage + 1} of {pageCount + 1}
+                </p>
                 <AuctionTableContainer />
+                <p style={{ textAlign: "center", margin: "10px auto" }}>
+                    Page {currentPage + 1} of {pageCount + 1}
+                </p>
+                {this.renderPricelistHistoryGraph()}
                 {this.renderAuctionsFooter()}
             </>
         );
