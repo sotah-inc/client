@@ -205,22 +205,24 @@ export class App extends React.Component<Props> {
     private handleUnauthBooted(prevProps: Props) {
         const { currentRegion, fetchRealmLevel, refreshRealms } = this.props;
 
-        if (currentRegion !== null) {
-            switch (fetchRealmLevel) {
-                case FetchLevel.initial:
-                case FetchLevel.prompted:
+        if (currentRegion === null) {
+            return;
+        }
+
+        switch (fetchRealmLevel) {
+            case FetchLevel.initial:
+            case FetchLevel.prompted:
+                refreshRealms(currentRegion);
+
+                return;
+            case FetchLevel.success:
+                if (didRegionChange(prevProps.currentRegion, currentRegion)) {
                     refreshRealms(currentRegion);
+                }
 
-                    return;
-                case FetchLevel.success:
-                    if (didRegionChange(prevProps.currentRegion, currentRegion)) {
-                        refreshRealms(currentRegion);
-                    }
-
-                    return;
-                default:
-                    return;
-            }
+                return;
+            default:
+                return;
         }
     }
 
@@ -305,21 +307,24 @@ export class App extends React.Component<Props> {
     private handleAuthBooted(prevProps: Props) {
         const { currentRegion, fetchRealmLevel, refreshRealms } = this.props;
 
-        if (currentRegion !== null) {
-            switch (fetchRealmLevel) {
-                case FetchLevel.prompted:
+        if (currentRegion === null) {
+            return;
+        }
+
+        switch (fetchRealmLevel) {
+            case FetchLevel.initial:
+            case FetchLevel.prompted:
+                refreshRealms(currentRegion);
+
+                break;
+            case FetchLevel.success:
+                if (didRegionChange(prevProps.currentRegion, currentRegion)) {
                     refreshRealms(currentRegion);
+                }
 
-                    break;
-                case FetchLevel.success:
-                    if (didRegionChange(prevProps.currentRegion, currentRegion)) {
-                        refreshRealms(currentRegion);
-                    }
-
-                    break;
-                default:
-                    break;
-            }
+                break;
+            default:
+                break;
         }
     }
 }
