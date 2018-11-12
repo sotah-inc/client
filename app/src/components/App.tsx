@@ -113,14 +113,6 @@ export class App extends React.Component<Props> {
 
         switch (authLevel) {
             case AuthLevel.unauthenticated:
-                if (prevProps.authLevel === AuthLevel.initial) {
-                    AppToaster.show({
-                        icon: "info-sign",
-                        intent: Intent.PRIMARY,
-                        message: "Unauthenticated user detected.",
-                    });
-                }
-
                 this.handleUnauth(prevProps);
 
                 return;
@@ -139,7 +131,7 @@ export class App extends React.Component<Props> {
 
                 return;
             case AuthLevel.initial:
-                if (preloadedToken.length === 0) {
+                if (preloadedToken.length === 0 || true) {
                     changeAuthLevel(AuthLevel.unauthenticated);
 
                     return;
@@ -173,12 +165,6 @@ export class App extends React.Component<Props> {
                 return;
             case FetchLevel.success:
                 if (prevProps.fetchBootLevel === FetchLevel.fetching) {
-                    AppToaster.show({
-                        icon: "info-sign",
-                        intent: Intent.SUCCESS,
-                        message: "Loaded regions.",
-                    });
-
                     if (preloadedToken.length > 0) {
                         AppToaster.show({
                             action: {
@@ -190,6 +176,7 @@ export class App extends React.Component<Props> {
                             icon: "info-sign",
                             intent: Intent.WARNING,
                             message: "Your session has expired.",
+                            timeout: 10 * 1000,
                         });
                     }
                 }
@@ -227,7 +214,7 @@ export class App extends React.Component<Props> {
     }
 
     private handleAuth(prevProps: Props) {
-        const { fetchUserPreferencesLevel, loadUserPreferences, profile, userPreferences } = this.props;
+        const { fetchUserPreferencesLevel, loadUserPreferences, profile } = this.props;
 
         switch (fetchUserPreferencesLevel) {
             case FetchLevel.initial:
@@ -245,22 +232,6 @@ export class App extends React.Component<Props> {
 
                 return;
             case FetchLevel.success:
-                if (prevProps.fetchUserPreferencesLevel === FetchLevel.fetching) {
-                    if (userPreferences === null) {
-                        AppToaster.show({
-                            icon: "user",
-                            intent: Intent.WARNING,
-                            message: "You have no preferences.",
-                        });
-                    } else {
-                        AppToaster.show({
-                            icon: "info-sign",
-                            intent: Intent.SUCCESS,
-                            message: "Loaded user preferences.",
-                        });
-                    }
-                }
-
                 this.handleAuthWithPreferences(prevProps);
 
                 return;
@@ -288,14 +259,6 @@ export class App extends React.Component<Props> {
 
                 return;
             case FetchLevel.success:
-                if (prevProps.fetchBootLevel === FetchLevel.fetching) {
-                    AppToaster.show({
-                        icon: "info-sign",
-                        intent: Intent.SUCCESS,
-                        message: "Loaded regions.",
-                    });
-                }
-
                 this.handleAuthBooted(prevProps);
 
                 return;
