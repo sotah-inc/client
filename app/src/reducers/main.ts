@@ -61,7 +61,6 @@ export const main = (state: State, action: MainActions): State => {
 
             return {
                 ...state,
-                fetchBootLevel: FetchLevel.prompted,
                 fetchUserPreferencesLevel: FetchLevel.success,
                 userPreferences: action.payload.preference,
             };

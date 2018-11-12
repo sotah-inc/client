@@ -42,230 +42,45 @@ export interface IOwnProps extends RouteComponentProps<{}> {}
 
 export type Props = Readonly<IStateProps & IDispatchProps & IOwnProps>;
 
-type State = Readonly<{
-    regionToastKey: string;
-}>;
-
-export class App extends React.Component<Props, State> {
-    public state: State = {
-        regionToastKey: "",
-    };
-
+export class App extends React.Component<Props> {
     public didHandleUnauth: boolean = false;
 
     public componentDidMount() {
-        const { onLoad, preloadedToken, reloadUser, changeAuthLevel } = this.props;
+        const { onLoad } = this.props;
 
+        // checking access to api with ping endpoint
         onLoad();
-
-        if (preloadedToken.length === 0) {
-            changeAuthLevel(AuthLevel.unauthenticated);
-        } else {
-            reloadUser(preloadedToken);
-        }
-    }
-
-    public handleUnauth(prevProps: Props) {
-        const {
-            isLoginDialogOpen,
-            changeIsLoginDialogOpen,
-            currentRegion,
-            fetchBootLevel,
-            fetchRealmLevel,
-            refreshRealms,
-            preloadedToken,
-        } = this.props;
-
-        if (preloadedToken.length > 0 && this.didHandleUnauth === false) {
-            if (fetchBootLevel === FetchLevel.success) {
-                this.didHandleUnauth = true;
-
-                AppToaster.show({
-                    action: {
-                        icon: "log-in",
-                        intent: Intent.PRIMARY,
-                        onClick: () => changeIsLoginDialogOpen(!isLoginDialogOpen),
-                        text: "Login",
-                    },
-                    icon: "info-sign",
-                    intent: Intent.WARNING,
-                    message: "Your session has expired.",
-                });
-            }
-        }
-
-        if (currentRegion !== null) {
-            switch (fetchRealmLevel) {
-                case FetchLevel.initial:
-                case FetchLevel.prompted:
-                    refreshRealms(currentRegion);
-
-                    break;
-                case FetchLevel.success:
-                    if (didRegionChange(prevProps.currentRegion, currentRegion)) {
-                        refreshRealms(currentRegion);
-                    }
-
-                    break;
-                default:
-                    break;
-            }
-        }
-    }
-
-    public handleAuth(prevProps: Props) {
-        const {
-            fetchUserPreferencesLevel,
-            loadUserPreferences,
-            profile,
-            userPreferences,
-            currentRegion,
-            fetchRealmLevel,
-            refreshRealms,
-            authLevel,
-        } = this.props;
-
-        if (prevProps.authLevel !== authLevel) {
-            const hasBeenAuthorized = [AuthLevel.unauthenticated, AuthLevel.initial].indexOf(prevProps.authLevel) > -1;
-            if (hasBeenAuthorized) {
-                AppToaster.show({
-                    icon: "user",
-                    intent: Intent.SUCCESS,
-                    message: "You are logged in.",
-                });
-
-                if (fetchUserPreferencesLevel === FetchLevel.initial) {
-                    loadUserPreferences(profile!.token);
-                }
-            }
-        }
-
-        if (prevProps.fetchUserPreferencesLevel !== fetchUserPreferencesLevel) {
-            switch (fetchUserPreferencesLevel) {
-                case FetchLevel.failure:
-                    AppToaster.show({
-                        icon: "user",
-                        intent: Intent.WARNING,
-                        message: "There was an error loading your preferences.",
-                    });
-
-                    break;
-                case FetchLevel.success:
-                    if (userPreferences === null) {
-                        AppToaster.show({
-                            icon: "user",
-                            intent: Intent.WARNING,
-                            message: "You have no preferences.",
-                        });
-
-                        break;
-                    }
-
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        if (currentRegion !== null) {
-            switch (fetchRealmLevel) {
-                case FetchLevel.prompted:
-                    refreshRealms(currentRegion);
-
-                    break;
-                case FetchLevel.success:
-                    if (didRegionChange(prevProps.currentRegion, currentRegion)) {
-                        refreshRealms(currentRegion);
-                    }
-
-                    break;
-                default:
-                    break;
-            }
-        }
     }
 
     public componentDidUpdate(prevProps: Props) {
-        const { fetchBootLevel, fetchPingLevel, boot, authLevel } = this.props;
-        const { regionToastKey } = this.state;
-
-        switch (authLevel) {
-            case AuthLevel.unauthenticated:
-                this.handleUnauth(prevProps);
-
-                break;
-            case AuthLevel.authenticated:
-                this.handleAuth(prevProps);
-
-                break;
-            default:
-                break;
-        }
+        const { fetchPingLevel } = this.props;
 
         switch (fetchPingLevel) {
-            case FetchLevel.success:
-                switch (fetchBootLevel) {
-                    case FetchLevel.initial:
-                        if (authLevel === AuthLevel.unauthenticated) {
-                            const initialToastKey = AppToaster.show({
-                                icon: "info-sign",
-                                intent: Intent.NONE,
-                                message: "Loading regions.",
-                            });
-                            this.setState({ regionToastKey: initialToastKey });
-
-                            boot();
-                        }
-
-                        break;
-                    case FetchLevel.prompted:
-                        const promptedToastKey = AppToaster.show({
-                            icon: "info-sign",
-                            intent: Intent.NONE,
-                            message: "Loading regions.",
-                        });
-                        this.setState({ regionToastKey: promptedToastKey });
-
-                        boot();
-
-                        break;
-                    case FetchLevel.failure:
-                        if (prevProps.fetchBootLevel === FetchLevel.fetching) {
-                            AppToaster.show({
-                                icon: "info-sign",
-                                intent: Intent.DANGER,
-                                message: "Failed to fetch regions.",
-                            });
-                        }
-
-                        break;
-                    case FetchLevel.success:
-                        if (prevProps.fetchBootLevel !== fetchBootLevel) {
-                            if (regionToastKey.length > 0) {
-                                setTimeout(() => AppToaster.dismiss(regionToastKey), 5 * 100);
-                            }
-
-                            this.setState({ regionToastKey: "" });
-                        }
-
-                        break;
-                    default:
-                        break;
+            case FetchLevel.failure:
+                if (prevProps.fetchPingLevel === FetchLevel.fetching) {
+                    AppToaster.show({
+                        icon: "warning-sign",
+                        intent: Intent.DANGER,
+                        message: "Could not connect to Sotah API.",
+                    });
                 }
 
-                break;
-            default:
-                break;
-        }
-    }
+                return;
+            case FetchLevel.success:
+                if (prevProps.fetchPingLevel === FetchLevel.fetching) {
+                    AppToaster.show({
+                        icon: "info-sign",
+                        intent: Intent.SUCCESS,
+                        message: "Connected to Sotah API.",
+                    });
+                }
 
-    public renderConnected() {
-        return (
-            <div id="app" className={`${Classes.DARK} dark-app`}>
-                <TopbarRouteContainer />
-                <Viewport />
-            </div>
-        );
+                this.handleFetchPingSuccess(prevProps);
+
+                return;
+            default:
+                return;
+        }
     }
 
     public render() {
@@ -281,6 +96,230 @@ export class App extends React.Component<Props, State> {
                 return this.renderConnected();
             default:
                 return <>You should never see this!</>;
+        }
+    }
+
+    private renderConnected() {
+        return (
+            <div id="app" className={`${Classes.DARK} dark-app`}>
+                <TopbarRouteContainer />
+                <Viewport />
+            </div>
+        );
+    }
+
+    private handleFetchPingSuccess(prevProps: Props) {
+        const { authLevel, preloadedToken, changeAuthLevel, reloadUser } = this.props;
+
+        switch (authLevel) {
+            case AuthLevel.unauthenticated:
+                if (prevProps.authLevel === AuthLevel.initial) {
+                    AppToaster.show({
+                        icon: "info-sign",
+                        intent: Intent.PRIMARY,
+                        message: "Unauthenticated user detected.",
+                    });
+                }
+
+                this.handleUnauth(prevProps);
+
+                return;
+            case AuthLevel.authenticated:
+                const hasBeenAuthorized =
+                    [AuthLevel.unauthenticated, AuthLevel.initial].indexOf(prevProps.authLevel) > -1;
+                if (hasBeenAuthorized) {
+                    AppToaster.show({
+                        icon: "user",
+                        intent: Intent.SUCCESS,
+                        message: "You are logged in.",
+                    });
+                }
+
+                this.handleAuth(prevProps);
+
+                return;
+            case AuthLevel.initial:
+                if (preloadedToken.length === 0) {
+                    changeAuthLevel(AuthLevel.unauthenticated);
+
+                    return;
+                }
+
+                reloadUser(preloadedToken);
+
+                return;
+            default:
+                return;
+        }
+    }
+
+    private handleUnauth(prevProps: Props) {
+        const { fetchBootLevel, boot, preloadedToken, changeIsLoginDialogOpen, isLoginDialogOpen } = this.props;
+
+        switch (fetchBootLevel) {
+            case FetchLevel.initial:
+                boot();
+
+                return;
+            case FetchLevel.failure:
+                if (prevProps.fetchBootLevel === FetchLevel.fetching) {
+                    AppToaster.show({
+                        icon: "info-sign",
+                        intent: Intent.DANGER,
+                        message: "Failed to load regions.",
+                    });
+                }
+
+                return;
+            case FetchLevel.success:
+                if (prevProps.fetchBootLevel === FetchLevel.fetching) {
+                    AppToaster.show({
+                        icon: "info-sign",
+                        intent: Intent.SUCCESS,
+                        message: "Loaded regions.",
+                    });
+
+                    if (preloadedToken.length > 0) {
+                        AppToaster.show({
+                            action: {
+                                icon: "log-in",
+                                intent: Intent.PRIMARY,
+                                onClick: () => changeIsLoginDialogOpen(!isLoginDialogOpen),
+                                text: "Login",
+                            },
+                            icon: "info-sign",
+                            intent: Intent.WARNING,
+                            message: "Your session has expired.",
+                        });
+                    }
+                }
+
+                this.handleUnauthBooted(prevProps);
+
+                return;
+            default:
+                return;
+        }
+    }
+
+    private handleUnauthBooted(prevProps: Props) {
+        const { currentRegion, fetchRealmLevel, refreshRealms } = this.props;
+
+        if (currentRegion !== null) {
+            switch (fetchRealmLevel) {
+                case FetchLevel.initial:
+                case FetchLevel.prompted:
+                    refreshRealms(currentRegion);
+
+                    return;
+                case FetchLevel.success:
+                    if (didRegionChange(prevProps.currentRegion, currentRegion)) {
+                        refreshRealms(currentRegion);
+                    }
+
+                    return;
+                default:
+                    return;
+            }
+        }
+    }
+
+    private handleAuth(prevProps: Props) {
+        const { fetchUserPreferencesLevel, loadUserPreferences, profile, userPreferences } = this.props;
+
+        switch (fetchUserPreferencesLevel) {
+            case FetchLevel.initial:
+                loadUserPreferences(profile!.token);
+
+                return;
+            case FetchLevel.failure:
+                if (prevProps.fetchUserPreferencesLevel === FetchLevel.fetching) {
+                    AppToaster.show({
+                        icon: "warning-sign",
+                        intent: Intent.DANGER,
+                        message: "Failed to load user preferences.",
+                    });
+                }
+
+                return;
+            case FetchLevel.success:
+                if (prevProps.fetchUserPreferencesLevel === FetchLevel.fetching) {
+                    if (userPreferences === null) {
+                        AppToaster.show({
+                            icon: "user",
+                            intent: Intent.WARNING,
+                            message: "You have no preferences.",
+                        });
+                    } else {
+                        AppToaster.show({
+                            icon: "info-sign",
+                            intent: Intent.SUCCESS,
+                            message: "Loaded user preferences.",
+                        });
+                    }
+                }
+
+                this.handleAuthWithPreferences(prevProps);
+
+                return;
+            default:
+                return;
+        }
+    }
+
+    private handleAuthWithPreferences(prevProps: Props) {
+        const { fetchBootLevel, boot } = this.props;
+
+        switch (fetchBootLevel) {
+            case FetchLevel.initial:
+                boot();
+
+                return;
+            case FetchLevel.failure:
+                if (prevProps.fetchBootLevel === FetchLevel.fetching) {
+                    AppToaster.show({
+                        icon: "info-sign",
+                        intent: Intent.DANGER,
+                        message: "Failed to load regions.",
+                    });
+                }
+
+                return;
+            case FetchLevel.success:
+                if (prevProps.fetchBootLevel === FetchLevel.fetching) {
+                    AppToaster.show({
+                        icon: "info-sign",
+                        intent: Intent.SUCCESS,
+                        message: "Loaded regions.",
+                    });
+                }
+
+                this.handleAuthBooted(prevProps);
+
+                return;
+            default:
+                return;
+        }
+    }
+
+    private handleAuthBooted(prevProps: Props) {
+        const { currentRegion, fetchRealmLevel, refreshRealms } = this.props;
+
+        if (currentRegion !== null) {
+            switch (fetchRealmLevel) {
+                case FetchLevel.prompted:
+                    refreshRealms(currentRegion);
+
+                    break;
+                case FetchLevel.success:
+                    if (didRegionChange(prevProps.currentRegion, currentRegion)) {
+                        refreshRealms(currentRegion);
+                    }
+
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }
