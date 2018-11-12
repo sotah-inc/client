@@ -69,7 +69,7 @@ export const main = (state: State, action: MainActions): State => {
         case REQUEST_REALMS:
             return { ...state, fetchRealmLevel: FetchLevel.fetching };
         case RECEIVE_REALMS:
-            if (action.payload === null) {
+            if (action.payload === null || action.payload.length === 0) {
                 return { ...state, fetchRealmLevel: FetchLevel.failure };
             }
 
