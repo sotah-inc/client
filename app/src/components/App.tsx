@@ -131,7 +131,7 @@ export class App extends React.Component<Props> {
 
                 return;
             case AuthLevel.initial:
-                if (preloadedToken.length === 0 || true) {
+                if (preloadedToken.length === 0) {
                     changeAuthLevel(AuthLevel.unauthenticated);
 
                     return;
