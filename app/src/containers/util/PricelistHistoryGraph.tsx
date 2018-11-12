@@ -13,15 +13,18 @@ import { IStoreState } from "@app/types";
 
 const mapStateToProps = (state: IStoreState): IStateProps => {
     const {
-        items,
+        items: pricelistsItems,
         getPricelistHistoryLevel,
         pricelistHistoryMap,
         itemsPriceLimits,
         overallPriceLimits,
     } = state.PriceLists;
+
+    const { items: auctionItems } = state.Auction;
+
     return {
         getPricelistHistoryLevel,
-        items,
+        items: { ...pricelistsItems, ...auctionItems },
         itemsPriceLimits,
         overallPriceLimits,
         pricelistHistoryMap,
