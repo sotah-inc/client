@@ -173,7 +173,6 @@ export const main = (state: State, action: MainActions): State => {
                 currentRegion: bootCurrentRegion,
                 expansions: action.payload.expansions,
                 fetchBootLevel: FetchLevel.success,
-                fetchRealmLevel: FetchLevel.prompted,
                 itemClasses: bootItemClasses,
                 professions: action.payload.professions,
                 regions: bootRegions,
