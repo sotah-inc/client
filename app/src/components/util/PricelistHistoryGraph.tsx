@@ -291,8 +291,7 @@ export class PricelistHistoryGraph extends React.Component<Props, State> {
                 dataKey={this.getDataKey(itemId)}
                 stroke={getColor(index)}
                 dot={false}
-                animationEasing={"ease-in-out"}
-                animationDuration={500}
+                animationDuration={0}
             />
         );
     }
