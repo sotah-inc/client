@@ -75,7 +75,7 @@ export class App extends React.Component<Props> {
                     });
                 }
 
-                this.handleFetchPingSuccess(prevProps);
+                this.handleLoaded(prevProps);
 
                 return;
             default:
@@ -108,7 +108,7 @@ export class App extends React.Component<Props> {
         );
     }
 
-    private handleFetchPingSuccess(prevProps: Props) {
+    private handleLoaded(prevProps: Props) {
         const { authLevel, preloadedToken, changeAuthLevel, reloadUser } = this.props;
 
         switch (authLevel) {
