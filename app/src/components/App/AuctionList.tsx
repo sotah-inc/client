@@ -24,7 +24,6 @@ import { LastModified, Pagination } from "@app/components/util";
 import { AuctionTableContainer } from "@app/containers/App/AuctionList/AuctionTable";
 import { CountToggleContainer } from "@app/containers/App/AuctionList/CountToggle";
 import { QueryAuctionsFilterContainer } from "@app/containers/App/AuctionList/QueryAuctionsFilter";
-import { PricelistHistoryGraphContainer } from "@app/containers/util/PricelistHistoryGraph";
 import { RealmToggleContainer } from "@app/containers/util/RealmToggle";
 import { RegionToggleContainer } from "@app/containers/util/RegionToggle";
 import { AuthLevel, FetchLevel } from "@app/types/main";
@@ -282,36 +281,6 @@ export class AuctionList extends React.Component<Props> {
         return pageCount;
     }
 
-    private renderPricelistHistoryGraph() {
-        const { currentRegion, currentRealm, auctions } = this.props;
-
-        if (currentRegion === null || currentRealm === null) {
-            return null;
-        }
-
-        const itemIds: ItemId[] = auctions
-            .filter(v => v !== null)
-            .map(v => v!.itemId)
-            .reduce((previous: ItemId[], current: ItemId) => {
-                if (previous.indexOf(current) > -1) {
-                    return previous;
-                }
-
-                return [...previous, current];
-            }, []);
-
-        if (itemIds.length > 10) {
-            return null;
-        }
-
-        return (
-            <>
-                <H4>History</H4>
-                <PricelistHistoryGraphContainer itemIds={itemIds} region={currentRegion} realm={currentRealm} />
-            </>
-        );
-    }
-
     private renderAuctions() {
         const { auctions, totalResults, auctionsPerPage, currentPage, setCurrentPage } = this.props;
 
@@ -349,14 +318,10 @@ export class AuctionList extends React.Component<Props> {
                         </ButtonGroup>
                     </NavbarGroup>
                 </Navbar>
-                <p style={{ textAlign: "center", margin: "10px auto" }}>
-                    Page {currentPage + 1} of {pageCount + 1}
-                </p>
                 <AuctionTableContainer />
                 <p style={{ textAlign: "center", margin: "10px auto" }}>
                     Page {currentPage + 1} of {pageCount + 1}
                 </p>
-                {this.renderPricelistHistoryGraph()}
                 {this.renderAuctionsFooter()}
             </>
         );
