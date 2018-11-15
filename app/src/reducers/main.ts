@@ -19,6 +19,7 @@ import {
 import { IRealm, IRegion } from "@app/api-types/region";
 import { IItemClasses, IRealms, IRegions, ISubItemClasses } from "@app/types/global";
 import { AuthLevel, defaultMainState, FetchLevel, IMainState } from "@app/types/main";
+import { runners } from "./handlers";
 
 type State = Readonly<IMainState> | undefined;
 
@@ -178,6 +179,6 @@ export const main = (state: State, action: MainActions): State => {
                 regions: bootRegions,
             };
         default:
-            return state;
+            return runners.main(state, action);
     }
 };

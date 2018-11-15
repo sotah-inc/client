@@ -1,3 +1,4 @@
+import { run as mainRunner } from "./main";
 import { run as pricelistsRunner } from "./price-lists";
 
 export interface IKindHandlers<T, A> {
@@ -15,5 +16,6 @@ export interface ITaskHandlers<T, A> {
 export type Runner<T, A> = (x: T, y: A) => T;
 
 export const runners = {
+    main: mainRunner,
     pricelist: pricelistsRunner,
 };
