@@ -1,5 +1,5 @@
 const hostname = window.location.hostname;
-export let apiEndpoint = `//${window.location.hostname}:8080`;
+export let apiEndpoint = `//${window.location.hostname}:9999`;
 if (hostname !== "localhost") {
     apiEndpoint = `//api.${hostname}`;
 }
