@@ -55,13 +55,20 @@ export interface IDispatchProps {
     refreshAuctionsQuery: (opts: IQueryAuctionsOptions) => void;
 }
 
-export interface IOwnProps extends RouteComponentProps<{}> {}
+interface IRouteParams {
+    region_name: string;
+    realm_slug: string;
+}
+
+export interface IOwnProps extends RouteComponentProps<IRouteParams> {}
 
 type Props = Readonly<IStateProps & IDispatchProps & IOwnProps>;
 
 export class AuctionList extends React.Component<Props> {
     public componentDidMount() {
-        const { fetchAuctionsLevel, refreshAuctionsQuery, currentRegion, currentRealm } = this.props;
+        const { fetchAuctionsLevel, refreshAuctionsQuery, currentRegion, currentRealm, match } = this.props;
+
+        console.log("AuctionList MOUNTED", match.params);
 
         if (fetchAuctionsLevel !== FetchLevel.initial) {
             return;
