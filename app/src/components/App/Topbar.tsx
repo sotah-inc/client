@@ -140,11 +140,13 @@ export class Topbar extends React.Component<Props> {
                         <LinkButtonRouteContainer
                             destination="/data/auctions"
                             buttonProps={{ icon: "dollar", text: "Auctions", minimal: true }}
+                            prefix={true}
                         />
                         <NavbarDivider />
                         <LinkButtonRouteContainer
                             destination="/data/price-lists"
                             buttonProps={{ icon: "polygon-filter", text: "Professions", minimal: true }}
+                            prefix={true}
                         />
                     </>
                 );
