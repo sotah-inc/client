@@ -1,10 +1,10 @@
 import * as React from "react";
 import { Route, Switch } from "react-router-dom";
 
-import { PriceListsContainer } from "@app/containers/App/PriceLists";
-import { AuctionListRouteContainer } from "@app/route-containers/App/AuctionList";
+import { PriceListsContainer } from "@app/containers/App/Data/PriceLists";
 import { ContentRouteContainer } from "@app/route-containers/App/Content";
 import { DataRouteContainer } from "@app/route-containers/App/Data";
+import { AuctionListRouteContainer } from "@app/route-containers/App/Data/AuctionList";
 import { RootRouteContainer } from "@app/route-containers/App/Root";
 import { NotFound } from "../util/NotFound";
 
