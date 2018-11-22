@@ -4,11 +4,12 @@ import { Classes, Intent, NonIdealState, Spinner } from "@blueprintjs/core";
 import { Redirect, RouteComponentProps } from "react-router-dom";
 
 import { IRegion } from "@app/api-types/region";
-import { AuthLevel } from "@app/types/main";
+import { AuthLevel, FetchLevel } from "@app/types/main";
 
 export interface IStateProps {
     currentRegion: IRegion | null;
     authLevel: AuthLevel;
+    fetchUserPreferencesLevel: FetchLevel;
 }
 
 export interface IOwnProps extends RouteComponentProps<{}> {}
@@ -36,9 +37,51 @@ export class Data extends React.Component<Props> {
     }
 
     private renderBootAuth() {
-        throw new Error("wew lad");
+        const { fetchUserPreferencesLevel } = this.props;
 
-        return null;
+        switch (fetchUserPreferencesLevel) {
+            case FetchLevel.fetching:
+            case FetchLevel.refetching:
+            case FetchLevel.prompted:
+                return (
+                    <NonIdealState
+                        title="Loading"
+                        icon={<Spinner className={Classes.LARGE} intent={Intent.PRIMARY} />}
+                    />
+                );
+            case FetchLevel.success:
+                return this.renderBootAuthWithPreferences();
+            case FetchLevel.failure:
+                return (
+                    <NonIdealState
+                        title="Failed to load user preferences."
+                        icon={<Spinner className={Classes.LARGE} intent={Intent.DANGER} value={1} />}
+                    />
+                );
+            case FetchLevel.initial:
+            default:
+                return (
+                    <NonIdealState
+                        title="Loading"
+                        icon={<Spinner className={Classes.LARGE} intent={Intent.NONE} value={0} />}
+                    />
+                );
+        }
+    }
+
+    private renderBootAuthWithPreferences() {
+        const { currentRegion } = this.props;
+
+        if (currentRegion === null) {
+            return (
+                <NonIdealState
+                    title="Loading"
+                    icon={<Spinner className={Classes.LARGE} intent={Intent.NONE} value={0} />}
+                />
+            );
+        }
+
+        return <Redirect to={`/data/${currentRegion.name}`} />;
     }
 
     private renderBootUnauth() {

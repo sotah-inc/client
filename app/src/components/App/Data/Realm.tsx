@@ -33,8 +33,8 @@ export class Realm extends React.Component<Props> {
         if (currentRegion === null || currentRealm === null) {
             return (
                 <NonIdealState
-                    title="Failure"
-                    icon={<Spinner className={Classes.LARGE} intent={Intent.DANGER} value={1} />}
+                    title="Loading"
+                    icon={<Spinner className={Classes.LARGE} intent={Intent.NONE} value={0} />}
                 />
             );
         }
