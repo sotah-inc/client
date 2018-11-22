@@ -1,40 +1,36 @@
 import * as React from "react";
 
 import { Classes, Intent, NonIdealState, Spinner } from "@blueprintjs/core";
-import { Redirect, RouteComponentProps } from "react-router-dom";
 
 import { IRealm, IRegion } from "@app/api-types/region";
-import { IRegions } from "@app/types/global";
+import { IRealms, IRegions } from "@app/types/global";
 import { AuthLevel, FetchLevel } from "@app/types/main";
 
 export interface IStateProps {
+    fetchRealmLevel: FetchLevel;
+    realms: IRealms;
     currentRegion: IRegion | null;
     currentRealm: IRealm | null;
     authLevel: AuthLevel;
     regions: IRegions;
-    fetchRealmLevel: FetchLevel;
 }
 
 export interface IDispatchProps {
     onRegionChange: (region: IRegion) => void;
+    onRealmChange: (realm: IRealm) => void;
 }
 
-interface IRouteProps {
+export interface IOwnProps {
     region_name: string;
+    realm_slug: string;
+    children: React.ReactNode;
 }
-
-export interface IOwnProps extends RouteComponentProps<IRouteProps> {}
 
 export type Props = Readonly<IOwnProps & IStateProps & IDispatchProps>;
 
-export class Region extends React.Component<Props> {
+export class RealmRouteParser extends React.Component<Props> {
     public render() {
-        const {
-            currentRegion,
-            match: {
-                params: { region_name },
-            },
-        } = this.props;
+        const { currentRegion, region_name } = this.props;
 
         if (currentRegion === null) {
             return (
@@ -46,13 +42,13 @@ export class Region extends React.Component<Props> {
         }
 
         if (currentRegion.name !== region_name) {
-            return this.renderUnmatched();
+            return this.renderUnmatchedRegion();
         }
 
-        return this.renderMatched();
+        return this.renderMatchedRegion();
     }
 
-    private renderMatched() {
+    private renderMatchedRegion() {
         const { fetchRealmLevel } = this.props;
 
         switch (fetchRealmLevel) {
@@ -73,7 +69,7 @@ export class Region extends React.Component<Props> {
                     />
                 );
             case FetchLevel.success:
-                return this.renderMatchedWithRealms();
+                return this.renderMatchedRegionWithRealms();
             case FetchLevel.initial:
             default:
                 return (
@@ -85,8 +81,8 @@ export class Region extends React.Component<Props> {
         }
     }
 
-    private renderMatchedWithRealms() {
-        const { currentRealm, currentRegion } = this.props;
+    private renderMatchedRegionWithRealms() {
+        const { currentRealm, currentRegion, realm_slug, realms, onRealmChange, children } = this.props;
 
         if (currentRegion === null || currentRealm === null) {
             return (
@@ -97,17 +93,26 @@ export class Region extends React.Component<Props> {
             );
         }
 
-        return <Redirect to={`/data/${currentRegion.name}/${currentRealm.slug}`} />;
+        if (!(realm_slug in realms)) {
+            return (
+                <NonIdealState
+                    title={`Realm ${realm_slug} in region ${currentRegion.name} not found!`}
+                    icon={<Spinner className={Classes.LARGE} intent={Intent.DANGER} value={1} />}
+                />
+            );
+        }
+
+        if (realm_slug !== currentRealm.slug) {
+            onRealmChange(realms[realm_slug]);
+
+            return <NonIdealState title="Loading" icon={<Spinner className={Classes.LARGE} intent={Intent.NONE} />} />;
+        }
+
+        return children;
     }
 
-    private renderUnmatched() {
-        const {
-            regions,
-            onRegionChange,
-            match: {
-                params: { region_name },
-            },
-        } = this.props;
+    private renderUnmatchedRegion() {
+        const { regions, onRegionChange, region_name } = this.props;
 
         if (!(region_name in regions)) {
             return (

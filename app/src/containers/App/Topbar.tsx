@@ -4,8 +4,10 @@ import { IOwnProps, IStateProps, Topbar } from "@app/components/App/Topbar";
 import { IStoreState } from "@app/types";
 
 const mapStateToProps = (state: IStoreState): IStateProps => {
-    const user = state.Main.profile === null ? null : state.Main.profile.user;
-    return { user };
+    const { profile, currentRealm, currentRegion } = state.Main;
+
+    const user = profile === null ? null : profile.user;
+    return { user, currentRealm, currentRegion };
 };
 
 export const TopbarContainer = connect<IStateProps, IOwnProps>(mapStateToProps)(Topbar);

@@ -4,6 +4,7 @@ import {
     Alignment,
     ButtonGroup,
     Classes,
+    IconName,
     Navbar,
     NavbarDivider,
     NavbarGroup,
@@ -13,12 +14,15 @@ import {
 import { RouteComponentProps } from "react-router-dom";
 
 import { IUserJson } from "@app/api-types/entities";
+import { IRealm, IRegion } from "@app/api-types/region";
 import { LoginContainer } from "@app/containers/App/Login";
 import { RegisterContainer } from "@app/containers/App/Register";
 import { LinkButtonRouteContainer } from "@app/route-containers/util/LinkButton";
 
 export interface IStateProps {
     user: IUserJson | null;
+    currentRealm: IRealm | null;
+    currentRegion: IRegion | null;
 }
 
 export interface IOwnProps extends RouteComponentProps<{}> {}
@@ -135,24 +139,42 @@ export class Topbar extends React.Component<Props> {
                     </>
                 );
             case SubBarKind.Data:
-                return (
-                    <>
-                        <LinkButtonRouteContainer
-                            destination="/data/auctions"
-                            buttonProps={{ icon: "dollar", text: "Auctions", minimal: true }}
-                            prefix={true}
-                        />
-                        <NavbarDivider />
-                        <LinkButtonRouteContainer
-                            destination="/data/price-lists"
-                            buttonProps={{ icon: "polygon-filter", text: "Professions", minimal: true }}
-                            prefix={true}
-                        />
-                    </>
-                );
+                return this.renderDataSubBar();
             default:
                 return null;
         }
+    }
+
+    private renderDataSubBar() {
+        return (
+            <>
+                {this.renderRegionRealmButton("/auctions", "dollar", "Auctions")}
+                <NavbarDivider />
+                {this.renderRegionRealmButton("/price-lists", "polygon-filter", "Professions")}
+            </>
+        );
+    }
+
+    private renderRegionRealmButton(destination: string, icon: IconName, text: string) {
+        const { currentRegion, currentRealm } = this.props;
+
+        if (currentRegion === null || currentRealm === null) {
+            return (
+                <LinkButtonRouteContainer
+                    destination={""}
+                    buttonProps={{ icon, text, minimal: true, disabled: true }}
+                    prefix={true}
+                />
+            );
+        }
+
+        return (
+            <LinkButtonRouteContainer
+                destination={`/data/${currentRegion.name}/${currentRealm.slug}${destination}`}
+                buttonProps={{ icon, text, minimal: true }}
+                prefix={true}
+            />
+        );
     }
 
     private renderUserInfo() {

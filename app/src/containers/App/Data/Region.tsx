@@ -1,11 +1,23 @@
-import { connect } from "react-redux";
+import { connect, Dispatch } from "react-redux";
 
-import { IOwnProps, IStateProps, Region } from "@app/components/App/Data/Region";
+import { Actions } from "@app/actions";
+import { RegionChange } from "@app/actions/main";
+import { IRegion } from "@app/api-types/region";
+import { IDispatchProps, IOwnProps, IStateProps, Region } from "@app/components/App/Data/Region";
 import { IStoreState } from "@app/types";
 
 const mapStateToProps = (state: IStoreState): IStateProps => {
-    const { regions } = state.Main;
-    return { regions };
+    const { currentRegion, currentRealm, authLevel, regions, fetchRealmLevel } = state.Main;
+    return { currentRegion, currentRealm, authLevel, regions, fetchRealmLevel };
 };
 
-export const RegionContainer = connect<IStateProps, IOwnProps>(mapStateToProps)(Region);
+const mapDispatchToProps = (dispatch: Dispatch<Actions>): IDispatchProps => {
+    return {
+        onRegionChange: (region: IRegion) => dispatch(RegionChange(region)),
+    };
+};
+
+export const RegionContainer = connect<IStateProps, IDispatchProps, IOwnProps>(
+    mapStateToProps,
+    mapDispatchToProps,
+)(Region);

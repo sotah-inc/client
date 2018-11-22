@@ -24,6 +24,7 @@ import { LastModified, Pagination } from "@app/components/util";
 import { AuctionTableContainer } from "@app/containers/App/Data/AuctionList/AuctionTable";
 import { CountToggleContainer } from "@app/containers/App/Data/AuctionList/CountToggle";
 import { QueryAuctionsFilterContainer } from "@app/containers/App/Data/AuctionList/QueryAuctionsFilter";
+import { RealmRouteParserContainer } from "@app/containers/util/RealmRouteParser";
 import { RealmToggleContainer } from "@app/containers/util/RealmToggle";
 import { RegionToggleContainer } from "@app/containers/util/RegionToggle";
 import { AuthLevel, FetchLevel } from "@app/types/main";
@@ -92,6 +93,31 @@ export class AuctionList extends React.Component<Props> {
     }
 
     public render() {
+        const {
+            currentRegion,
+            currentRealm,
+            match: {
+                params: { region_name, realm_slug },
+            },
+        } = this.props;
+
+        if (currentRegion === null || currentRealm === null) {
+            return (
+                <NonIdealState
+                    title="Failure"
+                    icon={<Spinner className={Classes.LARGE} intent={Intent.DANGER} value={1} />}
+                />
+            );
+        }
+
+        return (
+            <RealmRouteParserContainer region_name={region_name} realm_slug={realm_slug}>
+                {this.renderContent()}
+            </RealmRouteParserContainer>
+        );
+    }
+
+    private renderContent() {
         switch (this.props.fetchAuctionsLevel) {
             case FetchLevel.initial:
                 return (
