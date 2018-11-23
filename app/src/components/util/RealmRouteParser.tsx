@@ -16,6 +16,7 @@ export interface IStateProps {
 }
 
 export interface IDispatchProps {
+    fetchRealms: (region: IRegion) => void;
     onRegionChange: (region: IRegion) => void;
     onRealmChange: (realm: IRealm) => void;
 }
@@ -29,13 +30,66 @@ export interface IOwnProps {
 export type Props = Readonly<IOwnProps & IStateProps & IDispatchProps>;
 
 export class RealmRouteParser extends React.Component<Props> {
+    public componentDidMount() {
+        const { currentRegion, region_name, onRegionChange, regions, fetchRealmLevel, fetchRealms } = this.props;
+
+        if (currentRegion === null) {
+            return;
+        }
+
+        if (currentRegion.name !== region_name) {
+            if (region_name in regions) {
+                onRegionChange(regions[region_name]);
+
+                return;
+            }
+
+            return;
+        }
+
+        switch (fetchRealmLevel) {
+            case FetchLevel.initial:
+            case FetchLevel.prompted:
+                fetchRealms(currentRegion);
+
+                return;
+            default:
+                return;
+        }
+    }
+
+    public componentDidUpdate(prevProps: Props) {
+        const { currentRegion, region_name, fetchRealmLevel, fetchRealms } = this.props;
+
+        if (currentRegion === null) {
+            return;
+        }
+
+        if (currentRegion.name !== region_name) {
+            return;
+        }
+
+        switch (fetchRealmLevel) {
+            case FetchLevel.prompted:
+                if (prevProps.fetchRealmLevel === fetchRealmLevel) {
+                    return;
+                }
+
+                fetchRealms(currentRegion);
+
+                return;
+            default:
+                return;
+        }
+    }
+
     public render() {
         const { currentRegion, region_name } = this.props;
 
         if (currentRegion === null) {
             return (
                 <NonIdealState
-                    title="Loading"
+                    title="Loading region"
                     icon={<Spinner className={Classes.LARGE} intent={Intent.DANGER} value={0} />}
                 />
             );
@@ -57,7 +111,7 @@ export class RealmRouteParser extends React.Component<Props> {
             case FetchLevel.refetching:
                 return (
                     <NonIdealState
-                        title="Loading"
+                        title="Loading realms"
                         icon={<Spinner className={Classes.LARGE} intent={Intent.PRIMARY} />}
                     />
                 );
@@ -74,7 +128,7 @@ export class RealmRouteParser extends React.Component<Props> {
             default:
                 return (
                     <NonIdealState
-                        title="Loading"
+                        title="Loading realms"
                         icon={<Spinner className={Classes.LARGE} intent={Intent.NONE} value={0} />}
                     />
                 );
@@ -82,7 +136,7 @@ export class RealmRouteParser extends React.Component<Props> {
     }
 
     private renderMatchedRegionWithRealms() {
-        const { currentRealm, currentRegion, realm_slug, realms, onRealmChange, children } = this.props;
+        const { currentRealm, currentRegion, realm_slug, realms, children } = this.props;
 
         if (currentRegion === null || currentRealm === null) {
             return (
@@ -103,16 +157,19 @@ export class RealmRouteParser extends React.Component<Props> {
         }
 
         if (realm_slug !== currentRealm.slug) {
-            onRealmChange(realms[realm_slug]);
-
-            return <NonIdealState title="Loading" icon={<Spinner className={Classes.LARGE} intent={Intent.NONE} />} />;
+            return (
+                <NonIdealState
+                    title="Changing realm"
+                    icon={<Spinner className={Classes.LARGE} intent={Intent.NONE} />}
+                />
+            );
         }
 
         return children;
     }
 
     private renderUnmatchedRegion() {
-        const { regions, onRegionChange, region_name } = this.props;
+        const { regions, region_name } = this.props;
 
         if (!(region_name in regions)) {
             return (
@@ -123,8 +180,8 @@ export class RealmRouteParser extends React.Component<Props> {
             );
         }
 
-        onRegionChange(regions[region_name]);
-
-        return <NonIdealState title="Loading" icon={<Spinner className={Classes.LARGE} intent={Intent.NONE} />} />;
+        return (
+            <NonIdealState title="Changing region" icon={<Spinner className={Classes.LARGE} intent={Intent.NONE} />} />
+        );
     }
 }

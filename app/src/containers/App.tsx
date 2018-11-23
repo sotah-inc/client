@@ -6,11 +6,9 @@ import {
     ChangeIsLoginDialogOpen,
     FetchBoot,
     FetchPing,
-    FetchRealms,
     FetchUserPreferences,
     FetchUserReload,
 } from "@app/actions/main";
-import { IRegion } from "@app/api-types/region";
 import { App, IDispatchProps, IOwnProps, IStateProps } from "@app/components/App";
 import { IStoreState } from "@app/types";
 import { AuthLevel } from "@app/types/main";
@@ -51,7 +49,6 @@ const mapDispatchToProps = (dispatch: Dispatch<Actions>): IDispatchProps => {
         changeIsLoginDialogOpen: (isLoginDialogOpen: boolean) => dispatch(ChangeIsLoginDialogOpen(isLoginDialogOpen)),
         loadUserPreferences: (token: string) => dispatch(FetchUserPreferences(token)),
         onLoad: () => dispatch(FetchPing()),
-        refreshRealms: (region: IRegion) => dispatch(FetchRealms(region)),
         reloadUser: (token: string) => dispatch(FetchUserReload(token)),
     };
 };

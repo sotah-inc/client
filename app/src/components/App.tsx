@@ -9,7 +9,6 @@ import { TopbarRouteContainer } from "@app/route-containers/App/Topbar";
 import { ViewportRouteContainer } from "@app/route-containers/App/Viewport";
 import { IProfile } from "@app/types/global";
 import { AuthLevel, FetchLevel } from "@app/types/main";
-import { didRegionChange } from "@app/util";
 import { AppToaster } from "@app/util/toasters";
 
 import "./App.scss";
@@ -31,7 +30,6 @@ export interface IStateProps {
 export interface IDispatchProps {
     onLoad: () => void;
     reloadUser: (token: string) => void;
-    refreshRealms: (region: IRegion) => void;
     changeIsLoginDialogOpen: (isLoginDialogOpen: boolean) => void;
     loadUserPreferences: (token: string) => void;
     changeAuthLevel: (authLevel: AuthLevel) => void;
@@ -181,32 +179,6 @@ export class App extends React.Component<Props> {
                     }
                 }
 
-                this.handleUnauthBooted(prevProps);
-
-                return;
-            default:
-                return;
-        }
-    }
-
-    private handleUnauthBooted(prevProps: Props) {
-        const { currentRegion, fetchRealmLevel, refreshRealms } = this.props;
-
-        if (currentRegion === null) {
-            return;
-        }
-
-        switch (fetchRealmLevel) {
-            case FetchLevel.initial:
-            case FetchLevel.prompted:
-                refreshRealms(currentRegion);
-
-                return;
-            case FetchLevel.success:
-                if (didRegionChange(prevProps.currentRegion, currentRegion)) {
-                    refreshRealms(currentRegion);
-                }
-
                 return;
             default:
                 return;
@@ -259,35 +231,8 @@ export class App extends React.Component<Props> {
 
                 return;
             case FetchLevel.success:
-                this.handleAuthBooted(prevProps);
-
-                return;
             default:
                 return;
-        }
-    }
-
-    private handleAuthBooted(prevProps: Props) {
-        const { currentRegion, fetchRealmLevel, refreshRealms } = this.props;
-
-        if (currentRegion === null) {
-            return;
-        }
-
-        switch (fetchRealmLevel) {
-            case FetchLevel.initial:
-            case FetchLevel.prompted:
-                refreshRealms(currentRegion);
-
-                break;
-            case FetchLevel.success:
-                if (didRegionChange(prevProps.currentRegion, currentRegion)) {
-                    refreshRealms(currentRegion);
-                }
-
-                break;
-            default:
-                break;
         }
     }
 }

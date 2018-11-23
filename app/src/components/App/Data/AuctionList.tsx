@@ -94,21 +94,10 @@ export class AuctionList extends React.Component<Props> {
 
     public render() {
         const {
-            currentRegion,
-            currentRealm,
             match: {
                 params: { region_name, realm_slug },
             },
         } = this.props;
-
-        if (currentRegion === null || currentRealm === null) {
-            return (
-                <NonIdealState
-                    title="Loading"
-                    icon={<Spinner className={Classes.LARGE} intent={Intent.NONE} value={0} />}
-                />
-            );
-        }
 
         return (
             <RealmRouteParserContainer region_name={region_name} realm_slug={realm_slug}>
@@ -118,6 +107,17 @@ export class AuctionList extends React.Component<Props> {
     }
 
     private renderContent() {
+        const { currentRegion, currentRealm } = this.props;
+
+        if (currentRegion === null || currentRealm === null) {
+            return (
+                <NonIdealState
+                    title="Loading region and realm"
+                    icon={<Spinner className={Classes.LARGE} intent={Intent.NONE} value={0} />}
+                />
+            );
+        }
+
         switch (this.props.fetchAuctionsLevel) {
             case FetchLevel.initial:
                 return (

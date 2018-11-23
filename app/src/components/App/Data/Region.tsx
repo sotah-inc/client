@@ -17,6 +17,7 @@ export interface IStateProps {
 
 export interface IDispatchProps {
     onRegionChange: (region: IRegion) => void;
+    fetchRealms: (region: IRegion) => void;
 }
 
 interface IRouteProps {
@@ -28,6 +29,54 @@ export interface IOwnProps extends RouteComponentProps<IRouteProps> {}
 export type Props = Readonly<IOwnProps & IStateProps & IDispatchProps>;
 
 export class Region extends React.Component<Props> {
+    public componentDidMount() {
+        const {
+            match: {
+                params: { region_name },
+            },
+            regions,
+            onRegionChange,
+        } = this.props;
+
+        if (!(region_name in regions)) {
+            return;
+        }
+
+        onRegionChange(regions[region_name]);
+    }
+
+    public componentDidUpdate(prevProps: Props) {
+        const {
+            currentRegion,
+            match: {
+                params: { region_name },
+            },
+            fetchRealmLevel,
+            fetchRealms,
+        } = this.props;
+
+        if (currentRegion === null) {
+            return;
+        }
+
+        if (currentRegion.name !== region_name) {
+            return;
+        }
+
+        switch (fetchRealmLevel) {
+            case FetchLevel.prompted:
+                if (prevProps.fetchRealmLevel === fetchRealmLevel) {
+                    return;
+                }
+
+                fetchRealms(currentRegion);
+
+                return;
+            default:
+                return;
+        }
+    }
+
     public render() {
         const {
             currentRegion,
@@ -36,16 +85,7 @@ export class Region extends React.Component<Props> {
             },
         } = this.props;
 
-        if (currentRegion === null) {
-            return (
-                <NonIdealState
-                    title="Loading"
-                    icon={<Spinner className={Classes.LARGE} intent={Intent.NONE} value={0} />}
-                />
-            );
-        }
-
-        if (currentRegion.name !== region_name) {
+        if (currentRegion === null || currentRegion.name !== region_name) {
             return this.renderUnmatched();
         }
 
@@ -59,9 +99,11 @@ export class Region extends React.Component<Props> {
             case FetchLevel.prompted:
             case FetchLevel.fetching:
             case FetchLevel.refetching:
+                console.log(FetchLevel[fetchRealmLevel]);
+
                 return (
                     <NonIdealState
-                        title="Loading"
+                        title="Loading realms"
                         icon={<Spinner className={Classes.LARGE} intent={Intent.PRIMARY} />}
                     />
                 );
@@ -78,7 +120,7 @@ export class Region extends React.Component<Props> {
             default:
                 return (
                     <NonIdealState
-                        title="Loading"
+                        title="Loading realms"
                         icon={<Spinner className={Classes.LARGE} intent={Intent.NONE} value={0} />}
                     />
                 );
@@ -103,7 +145,6 @@ export class Region extends React.Component<Props> {
     private renderUnmatched() {
         const {
             regions,
-            onRegionChange,
             match: {
                 params: { region_name },
             },
@@ -118,8 +159,8 @@ export class Region extends React.Component<Props> {
             );
         }
 
-        onRegionChange(regions[region_name]);
-
-        return <NonIdealState title="Loading" icon={<Spinner className={Classes.LARGE} intent={Intent.NONE} />} />;
+        return (
+            <NonIdealState title="Changing region" icon={<Spinner className={Classes.LARGE} intent={Intent.NONE} />} />
+        );
     }
 }

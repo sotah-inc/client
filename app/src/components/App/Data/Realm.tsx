@@ -23,26 +23,30 @@ export type Props = Readonly<IOwnProps & IStateProps>;
 export class Realm extends React.Component<Props> {
     public render() {
         const {
-            currentRegion,
-            currentRealm,
             match: {
                 params: { region_name, realm_slug },
             },
         } = this.props;
 
+        return (
+            <RealmRouteParserContainer region_name={region_name} realm_slug={realm_slug}>
+                {this.renderRedirect()}
+            </RealmRouteParserContainer>
+        );
+    }
+
+    private renderRedirect() {
+        const { currentRegion, currentRealm } = this.props;
+
         if (currentRegion === null || currentRealm === null) {
             return (
                 <NonIdealState
-                    title="Loading"
+                    title="Loading region and realm"
                     icon={<Spinner className={Classes.LARGE} intent={Intent.NONE} value={0} />}
                 />
             );
         }
 
-        return (
-            <RealmRouteParserContainer region_name={region_name} realm_slug={realm_slug}>
-                <Redirect to={`/data/${currentRegion.name}/${currentRealm.slug}/auctions`} />
-            </RealmRouteParserContainer>
-        );
+        return <Redirect to={`/data/${currentRegion.name}/${currentRealm.slug}/auctions`} />;
     }
 }
