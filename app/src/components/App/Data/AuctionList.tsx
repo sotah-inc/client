@@ -67,9 +67,7 @@ type Props = Readonly<IStateProps & IDispatchProps & IOwnProps>;
 
 export class AuctionList extends React.Component<Props> {
     public componentDidMount() {
-        const { fetchAuctionsLevel, refreshAuctionsQuery, currentRegion, currentRealm, match } = this.props;
-
-        console.log("AuctionList MOUNTED", match.params);
+        const { fetchAuctionsLevel, refreshAuctionsQuery, currentRegion, currentRealm } = this.props;
 
         if (fetchAuctionsLevel !== FetchLevel.initial) {
             return;

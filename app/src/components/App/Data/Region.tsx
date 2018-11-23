@@ -99,8 +99,6 @@ export class Region extends React.Component<Props> {
             case FetchLevel.prompted:
             case FetchLevel.fetching:
             case FetchLevel.refetching:
-                console.log(FetchLevel[fetchRealmLevel]);
-
                 return (
                     <NonIdealState
                         title="Loading realms"
