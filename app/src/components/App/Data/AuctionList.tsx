@@ -157,6 +157,7 @@ export class AuctionList extends React.Component<Props> {
                         return;
                     }
 
+                    this.setTitle();
                     history.push(`/data/${currentRegion.name}/${currentRealm.slug}/auctions`);
                     this.refreshAuctions();
                     this.refreshAuctionsQuery();
@@ -192,6 +193,7 @@ export class AuctionList extends React.Component<Props> {
             return;
         }
 
+        this.setTitle();
         this.refreshAuctionsTrigger(prevProps);
         this.refreshAuctionsQueryTrigger(prevProps);
     }
@@ -218,6 +220,16 @@ export class AuctionList extends React.Component<Props> {
         }
 
         return this.renderMatchedRegion();
+    }
+
+    private setTitle() {
+        const { currentRegion, currentRealm } = this.props;
+
+        if (currentRegion === null || currentRealm === null) {
+            return;
+        }
+
+        document.title = `${currentRegion.name.toUpperCase()} ${currentRealm.name} - Auctions - Sotah Client`;
     }
 
     private refreshAuctions() {
