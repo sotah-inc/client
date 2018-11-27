@@ -133,6 +133,7 @@ export class AuctionList extends React.Component<Props> {
             match: {
                 params: { region_name, realm_slug },
             },
+            history,
             fetchRealmLevel,
             currentRegion,
             fetchRealms,
@@ -146,14 +147,29 @@ export class AuctionList extends React.Component<Props> {
         }
 
         if (currentRegion.name !== region_name) {
-            return;
+            switch (fetchRealmLevel) {
+                case FetchLevel.prompted:
+                    fetchRealms(currentRegion);
+
+                    return;
+                case FetchLevel.success:
+                    if (currentRealm === null) {
+                        return;
+                    }
+
+                    history.push(`/data/${currentRegion.name}/${currentRealm.slug}/auctions`);
+                    this.refreshAuctions();
+                    this.refreshAuctionsQuery();
+
+                    return;
+                default:
+                    return;
+            }
         }
 
         switch (fetchRealmLevel) {
             case FetchLevel.prompted:
-                if (prevProps.fetchRealmLevel !== fetchRealmLevel) {
-                    fetchRealms(currentRegion);
-                }
+                fetchRealms(currentRegion);
 
                 return;
             case FetchLevel.success:
