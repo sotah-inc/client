@@ -24,17 +24,15 @@ import { LastModified, Pagination } from "@app/components/util";
 import { AuctionTableContainer } from "@app/containers/App/Data/AuctionList/AuctionTable";
 import { CountToggleContainer } from "@app/containers/App/Data/AuctionList/CountToggle";
 import { QueryAuctionsFilterContainer } from "@app/containers/App/Data/AuctionList/QueryAuctionsFilter";
-import { RealmRouteParserContainer } from "@app/containers/util/RealmRouteParser";
 import { RealmToggleContainer } from "@app/containers/util/RealmToggle";
 import { RegionToggleContainer } from "@app/containers/util/RegionToggle";
+import { IRealms, IRegions } from "@app/types/global";
 import { AuthLevel, FetchLevel } from "@app/types/main";
 import { didRealmChange } from "@app/util";
 
 type ListAuction = IAuction | null;
 
 export interface IStateProps {
-    currentRegion: IRegion | null;
-    currentRealm: IRealm | null;
     fetchAuctionsLevel: FetchLevel;
     auctions: ListAuction[];
     currentPage: number;
@@ -44,13 +42,21 @@ export interface IStateProps {
     sortDirection: SortDirection;
     queryAuctionsLevel: FetchLevel;
     selectedQueryAuctionResults: IQueryAuctionsItem[];
-    authLevel: AuthLevel;
     fetchUserPreferencesLevel: FetchLevel;
     userPreferences: IPreferenceJson | null;
     activeSelect: boolean;
+    fetchRealmLevel: FetchLevel;
+    realms: IRealms;
+    currentRegion: IRegion | null;
+    currentRealm: IRealm | null;
+    authLevel: AuthLevel;
+    regions: IRegions;
 }
 
 export interface IDispatchProps {
+    fetchRealms: (region: IRegion) => void;
+    onRegionChange: (region: IRegion) => void;
+    onRealmChange: (realm: IRealm) => void;
     refreshAuctions: (opts: IGetAuctionsOptions) => void;
     setCurrentPage: (page: number) => void;
     refreshAuctionsQuery: (opts: IQueryAuctionsOptions) => void;
@@ -67,17 +73,178 @@ type Props = Readonly<IStateProps & IDispatchProps & IOwnProps>;
 
 export class AuctionList extends React.Component<Props> {
     public componentDidMount() {
-        const { fetchAuctionsLevel, refreshAuctionsQuery, currentRegion, currentRealm } = this.props;
+        const {
+            currentRegion,
+            match: {
+                params: { region_name, realm_slug },
+            },
+            onRegionChange,
+            regions,
+            fetchRealmLevel,
+            fetchRealms,
+            fetchAuctionsLevel,
+            currentRealm,
+        } = this.props;
 
-        if (fetchAuctionsLevel !== FetchLevel.initial) {
+        if (currentRegion === null) {
             return;
         }
+
+        if (currentRegion.name !== region_name) {
+            if (region_name in regions) {
+                onRegionChange(regions[region_name]);
+
+                return;
+            }
+
+            return;
+        }
+
+        switch (fetchRealmLevel) {
+            case FetchLevel.initial:
+            case FetchLevel.prompted:
+                fetchRealms(currentRegion);
+
+                return;
+            case FetchLevel.success:
+                break;
+            default:
+                return;
+        }
+
+        if (currentRealm === null) {
+            return;
+        }
+
+        if (currentRealm.slug !== realm_slug) {
+            return;
+        }
+
+        if (fetchAuctionsLevel === FetchLevel.initial) {
+            this.refreshAuctions();
+            this.refreshAuctionsQuery();
+
+            return;
+        }
+    }
+
+    public componentDidUpdate(prevProps: Props) {
+        const {
+            match: {
+                params: { region_name, realm_slug },
+            },
+            fetchRealmLevel,
+            currentRegion,
+            fetchRealms,
+            currentRealm,
+            onRealmChange,
+            realms,
+        } = this.props;
+
+        if (currentRegion === null) {
+            return;
+        }
+
+        if (currentRegion.name !== region_name) {
+            return;
+        }
+
+        switch (fetchRealmLevel) {
+            case FetchLevel.prompted:
+                if (prevProps.fetchRealmLevel !== fetchRealmLevel) {
+                    fetchRealms(currentRegion);
+                }
+
+                return;
+            case FetchLevel.success:
+                break;
+            default:
+                return;
+        }
+
+        if (currentRealm === null) {
+            return;
+        }
+
+        if (currentRealm.slug !== realm_slug) {
+            if (!(realm_slug in realms)) {
+                return;
+            }
+
+            onRealmChange(realms[realm_slug]);
+
+            return;
+        }
+
+        this.refreshAuctionsTrigger(prevProps);
+        this.refreshAuctionsQueryTrigger(prevProps);
+    }
+
+    public render() {
+        const {
+            currentRegion,
+            match: {
+                params: { region_name },
+            },
+        } = this.props;
+
+        if (currentRegion === null) {
+            return (
+                <NonIdealState
+                    title="Loading region"
+                    icon={<Spinner className={Classes.LARGE} intent={Intent.DANGER} value={0} />}
+                />
+            );
+        }
+
+        if (currentRegion.name !== region_name) {
+            return this.renderUnmatchedRegion();
+        }
+
+        return this.renderMatchedRegion();
+    }
+
+    private refreshAuctions() {
+        const {
+            selectedQueryAuctionResults,
+            refreshAuctions,
+            currentRealm,
+            currentRegion,
+            auctionsPerPage,
+            currentPage,
+            sortDirection,
+            sortKind,
+        } = this.props;
 
         if (currentRegion === null || currentRealm === null) {
             return;
         }
 
-        this.refreshAuctions();
+        const ownerFilters: OwnerName[] = selectedQueryAuctionResults
+            .filter(v => v.owner !== null)
+            .map(v => v.owner!.name);
+        const itemFilters: ItemId[] = selectedQueryAuctionResults.filter(v => v.item !== null).map(v => v.item!.id);
+        refreshAuctions({
+            realmSlug: currentRealm.slug,
+            regionName: currentRegion.name,
+            request: {
+                count: auctionsPerPage,
+                itemFilters,
+                ownerFilters,
+                page: currentPage,
+                sortDirection,
+                sortKind,
+            },
+        });
+    }
+
+    private refreshAuctionsQuery() {
+        const { refreshAuctionsQuery, currentRealm, currentRegion } = this.props;
+
+        if (currentRealm === null || currentRegion === null) {
+            return;
+        }
+
         refreshAuctionsQuery({
             query: "",
             realmSlug: currentRealm.slug,
@@ -85,32 +252,117 @@ export class AuctionList extends React.Component<Props> {
         });
     }
 
-    public componentDidUpdate(prevProps: Props) {
-        this.refreshAuctionsTrigger(prevProps);
-        this.refreshAuctionsQueryTrigger(prevProps);
-    }
-
-    public render() {
+    private renderUnmatchedRegion() {
         const {
+            regions,
             match: {
-                params: { region_name, realm_slug },
+                params: { region_name },
             },
         } = this.props;
 
+        if (!(region_name in regions)) {
+            return (
+                <NonIdealState
+                    title={`Region ${region_name} not found!`}
+                    icon={<Spinner className={Classes.LARGE} intent={Intent.DANGER} value={1} />}
+                />
+            );
+        }
+
         return (
-            <RealmRouteParserContainer region_name={region_name} realm_slug={realm_slug}>
-                {this.renderContent()}
-            </RealmRouteParserContainer>
+            <NonIdealState title="Changing region" icon={<Spinner className={Classes.LARGE} intent={Intent.NONE} />} />
         );
+    }
+
+    private renderMatchedRegion() {
+        const { fetchRealmLevel } = this.props;
+
+        switch (fetchRealmLevel) {
+            case FetchLevel.prompted:
+            case FetchLevel.fetching:
+            case FetchLevel.refetching:
+                return (
+                    <NonIdealState
+                        title="Loading realms"
+                        icon={<Spinner className={Classes.LARGE} intent={Intent.PRIMARY} />}
+                    />
+                );
+            case FetchLevel.failure:
+                return (
+                    <NonIdealState
+                        title="Failed to load realms"
+                        icon={<Spinner className={Classes.LARGE} intent={Intent.DANGER} value={1} />}
+                    />
+                );
+            case FetchLevel.success:
+                return this.renderMatchedRegionWithRealms();
+            case FetchLevel.initial:
+            default:
+                return (
+                    <NonIdealState
+                        title="Loading realms"
+                        icon={<Spinner className={Classes.LARGE} intent={Intent.NONE} value={0} />}
+                    />
+                );
+        }
+    }
+
+    private renderMatchedRegionWithRealms() {
+        const {
+            currentRealm,
+            currentRegion,
+            match: {
+                params: { realm_slug },
+            },
+            realms,
+        } = this.props;
+
+        if (currentRegion === null || currentRealm === null) {
+            return (
+                <NonIdealState
+                    title="No region or realm!"
+                    icon={<Spinner className={Classes.LARGE} intent={Intent.DANGER} value={1} />}
+                />
+            );
+        }
+
+        if (!(realm_slug in realms)) {
+            return (
+                <NonIdealState
+                    title={`Realm ${realm_slug} in region ${currentRegion.name} not found!`}
+                    icon={<Spinner className={Classes.LARGE} intent={Intent.DANGER} value={1} />}
+                />
+            );
+        }
+
+        if (realm_slug !== currentRealm.slug) {
+            return (
+                <NonIdealState
+                    title="Changing realm"
+                    icon={<Spinner className={Classes.LARGE} intent={Intent.NONE} />}
+                />
+            );
+        }
+
+        return this.renderContent();
     }
 
     private renderContent() {
         const { currentRegion, currentRealm } = this.props;
 
-        if (currentRegion === null || currentRealm === null) {
+        if (currentRegion === null) {
             return (
                 <NonIdealState
-                    title="Loading region and realm"
+                    title="Loading region"
+                    icon={<Spinner className={Classes.LARGE} intent={Intent.NONE} value={0} />}
+                />
+            );
+        }
+
+        if (currentRealm === null) {
+            return (
+                <NonIdealState
+                    title="Loading realm"
                     icon={<Spinner className={Classes.LARGE} intent={Intent.NONE} value={0} />}
                 />
             );
@@ -120,14 +372,14 @@ export class AuctionList extends React.Component<Props> {
             case FetchLevel.initial:
                 return (
                     <NonIdealState
-                        title="Loading"
+                        title="Loading auctions"
                         icon={<Spinner className={Classes.LARGE} intent={Intent.NONE} value={0} />}
                     />
                 );
             case FetchLevel.fetching:
                 return (
                     <NonIdealState
-                        title="Loading"
+                        title="Loading auctions"
                         icon={<Spinner className={Classes.LARGE} intent={Intent.PRIMARY} />}
                     />
                 );
@@ -174,8 +426,6 @@ export class AuctionList extends React.Component<Props> {
             auctionsPerPage,
             sortDirection,
             selectedQueryAuctionResults,
-            authLevel,
-            fetchUserPreferencesLevel,
             activeSelect,
         } = this.props;
 
@@ -183,99 +433,57 @@ export class AuctionList extends React.Component<Props> {
             return;
         }
 
-        const didOptionsChange: boolean = (() => {
-            if (didRealmChange(prevProps.currentRealm, currentRealm)) {
-                return true;
-            }
-
-            if (currentPage !== prevProps.currentPage) {
-                return true;
-            }
-
-            if (auctionsPerPage !== prevProps.auctionsPerPage) {
-                return true;
-            }
-
-            if (prevProps.sortDirection !== sortDirection) {
-                return true;
-            }
-
-            if (prevProps.sortKind !== this.props.sortKind) {
-                return true;
-            }
-
-            if (activeSelect && prevProps.selectedQueryAuctionResults.length !== selectedQueryAuctionResults.length) {
-                return true;
-            }
-
-            if (prevProps.activeSelect !== activeSelect) {
-                return true;
-            }
-
-            return false;
-        })();
-
         switch (fetchAuctionsLevel) {
             case FetchLevel.initial:
-                break;
+                this.refreshAuctions();
+
+                return;
             case FetchLevel.success:
-                if (!didOptionsChange) {
+                const didOptionsChange: boolean = (() => {
+                    if (didRealmChange(prevProps.currentRealm, currentRealm)) {
+                        return true;
+                    }
+
+                    if (currentPage !== prevProps.currentPage) {
+                        return true;
+                    }
+
+                    if (auctionsPerPage !== prevProps.auctionsPerPage) {
+                        return true;
+                    }
+
+                    if (prevProps.sortDirection !== sortDirection) {
+                        return true;
+                    }
+
+                    if (prevProps.sortKind !== this.props.sortKind) {
+                        return true;
+                    }
+
+                    const didSelectedAuctionsQueryChange =
+                        activeSelect &&
+                        prevProps.selectedQueryAuctionResults.length !== selectedQueryAuctionResults.length;
+                    if (didSelectedAuctionsQueryChange) {
+                        return true;
+                    }
+
+                    if (prevProps.activeSelect !== activeSelect) {
+                        return true;
+                    }
+
+                    return false;
+                })();
+
+                if (didOptionsChange) {
+                    this.refreshAuctions();
+
                     return;
                 }
 
-                break;
+                return;
             default:
                 return;
         }
-
-        switch (authLevel) {
-            case AuthLevel.unauthenticated:
-                break;
-            case AuthLevel.authenticated:
-                if (fetchUserPreferencesLevel !== FetchLevel.success) {
-                    return;
-                }
-
-                break;
-            default:
-                return;
-        }
-
-        this.refreshAuctions();
-    }
-
-    private refreshAuctions() {
-        const {
-            currentRegion,
-            currentRealm,
-            currentPage,
-            auctionsPerPage,
-            sortDirection,
-            sortKind,
-            selectedQueryAuctionResults,
-            refreshAuctions,
-        } = this.props;
-
-        if (currentRegion === null || currentRealm === null) {
-            return;
-        }
-
-        const ownerFilters: OwnerName[] = selectedQueryAuctionResults
-            .filter(v => v.owner !== null)
-            .map(v => v.owner!.name);
-        const itemFilters: ItemId[] = selectedQueryAuctionResults.filter(v => v.item !== null).map(v => v.item!.id);
-        refreshAuctions({
-            realmSlug: currentRealm.slug,
-            regionName: currentRegion.name,
-            request: {
-                count: auctionsPerPage,
-                itemFilters,
-                ownerFilters,
-                page: currentPage,
-                sortDirection,
-                sortKind,
-            },
-        });
     }
 
     private renderRefetchingSpinner() {
@@ -312,6 +520,16 @@ export class AuctionList extends React.Component<Props> {
         return pageCount;
     }
 
+    private onRealmChange(realm: IRealm) {
+        const { history, currentRegion } = this.props;
+
+        if (currentRegion === null) {
+            return;
+        }
+
+        history.push(`/data/${currentRegion.name}/${realm.slug}/auctions`);
+    }
+
     private renderAuctions() {
         const { auctions, totalResults, auctionsPerPage, currentPage, setCurrentPage } = this.props;
 
@@ -344,7 +562,7 @@ export class AuctionList extends React.Component<Props> {
                     </NavbarGroup>
                     <NavbarGroup align={Alignment.RIGHT}>
                         <ButtonGroup>
-                            <RealmToggleContainer />
+                            <RealmToggleContainer onRealmChange={v => this.onRealmChange(v)} />
                             <RegionToggleContainer />
                         </ButtonGroup>
                     </NavbarGroup>

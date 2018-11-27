@@ -18,15 +18,15 @@ import { IProfile } from "@app/types/global";
 import { AuthLevel } from "@app/types/main";
 import { ActionsUnion, createAction } from "./helpers";
 
-export const REQUEST_PING = "REQUEST_PING";
-export const RECEIVE_PING = "RECEIVE_PING";
-const RequestPing = () => createAction(REQUEST_PING);
-const ReceivePing = (payload: boolean) => createAction(RECEIVE_PING, payload);
-type FetchPingType = ReturnType<typeof RequestPing | typeof ReceivePing>;
-export const FetchPing = () => {
-    return async (dispatch: Dispatch<FetchPingType>) => {
-        dispatch(RequestPing());
-        dispatch(ReceivePing(await getPing()));
+export const REQUEST_GET_PING = "REQUEST_GET_PING";
+export const RECEIVE_GET_PING = "RECEIVE_GET_PING";
+export const RequestGetPing = () => createAction(REQUEST_GET_PING);
+export const ReceiveGetPing = (payload: boolean) => createAction(RECEIVE_GET_PING, payload);
+type FetchGetPingType = ReturnType<typeof RequestGetPing | typeof ReceiveGetPing>;
+export const FetchGetPing = () => {
+    return async (dispatch: Dispatch<FetchGetPingType>) => {
+        dispatch(RequestGetPing());
+        dispatch(ReceiveGetPing(await getPing()));
     };
 };
 
@@ -51,15 +51,16 @@ export const FetchUserReload = (token: string) => {
 export const CHANGE_AUTH_LEVEL = "CHANGE_AUTH_LEVEL";
 export const ChangeAuthLevel = (payload: AuthLevel) => createAction(CHANGE_AUTH_LEVEL, payload);
 
-export const REQUEST_USER_PREFERENCES = "REQUEST_USER_PREFERENCES";
-export const RECEIVE_USER_PREFERENCES = "RECEIVE_USER_PREFERENCES";
-const RequestUserPreferences = () => createAction(REQUEST_USER_PREFERENCES);
-const ReceiveUserPreferences = (payload: IGetPreferencesResult) => createAction(RECEIVE_USER_PREFERENCES, payload);
-type FetchUserPreferencesType = ReturnType<typeof RequestUserPreferences | typeof ReceiveUserPreferences>;
-export const FetchUserPreferences = (token: string) => {
-    return async (dispatch: Dispatch<FetchUserPreferencesType>) => {
-        dispatch(RequestUserPreferences());
-        dispatch(ReceiveUserPreferences(await getPreferences(token)));
+export const REQUEST_GET_USERPREFERENCES = "REQUEST_GET_USERPREFERENCES";
+export const RECEIVE_GET_USERPREFERENCES = "RECEIVE_GET_USERPREFERENCES";
+export const RequestGetUserPreferences = () => createAction(REQUEST_GET_USERPREFERENCES);
+export const ReceiveGetUserPreferences = (payload: IGetPreferencesResult) =>
+    createAction(RECEIVE_GET_USERPREFERENCES, payload);
+type FetchGetUserPreferencesType = ReturnType<typeof RequestGetUserPreferences | typeof ReceiveGetUserPreferences>;
+export const FetchGetUserPreferences = (token: string) => {
+    return async (dispatch: Dispatch<FetchGetUserPreferencesType>) => {
+        dispatch(RequestGetUserPreferences());
+        dispatch(ReceiveGetUserPreferences(await getPreferences(token)));
     };
 };
 
@@ -93,30 +94,30 @@ export const FetchUserPreferencesUpdate = (token: string, body: IUpdatePreferenc
     };
 };
 
-export const REQUEST_BOOT = "REQUEST_BOOT";
-export const RECEIVE_BOOT = "RECEIVE_BOOT";
-const RequestBoot = () => createAction(REQUEST_BOOT);
-const ReceiveBoot = (payload: IGetBootResponse | null) => createAction(RECEIVE_BOOT, payload);
-type FetchBootType = ReturnType<typeof RequestBoot | typeof ReceiveBoot>;
-export const FetchBoot = () => {
-    return async (dispatch: Dispatch<FetchBootType>) => {
-        dispatch(RequestBoot());
-        dispatch(ReceiveBoot(await getBoot()));
+export const REQUEST_GET_BOOT = "REQUEST_GET_BOOT";
+export const RECEIVE_GET_BOOT = "RECEIVE_GET_BOOT";
+export const RequestGetBoot = () => createAction(REQUEST_GET_BOOT);
+export const ReceiveGetBoot = (payload: IGetBootResponse | null) => createAction(RECEIVE_GET_BOOT, payload);
+type FetchGetBootType = ReturnType<typeof RequestGetBoot | typeof ReceiveGetBoot>;
+export const FetchGetBoot = () => {
+    return async (dispatch: Dispatch<FetchGetBootType>) => {
+        dispatch(RequestGetBoot());
+        dispatch(ReceiveGetBoot(await getBoot()));
     };
 };
 
 export const REGION_CHANGE = "REGION_CHANGE";
 export const RegionChange = (payload: IRegion) => createAction(REGION_CHANGE, payload);
 
-export const REQUEST_REALMS = "REQUEST_REALMS";
-export const RECEIVE_REALMS = "RECEIVE_REALMS";
-const RequestRealms = () => createAction(REQUEST_REALMS);
-const ReceiveRealms = (payload: IRealm[] | null) => createAction(RECEIVE_REALMS, payload);
-type FetchRealmType = ReturnType<typeof RequestRealms | typeof ReceiveRealms>;
-export const FetchRealms = (region: IRegion) => {
-    return async (dispatch: Dispatch<FetchRealmType>) => {
-        dispatch(RequestRealms());
-        dispatch(ReceiveRealms(await getStatus(region.name)));
+export const REQUEST_GET_REALMS = "REQUEST_GET_REALMS";
+export const RECEIVE_GET_REALMS = "RECEIVE_GET_REALMS";
+export const RequestGetRealms = () => createAction(REQUEST_GET_REALMS);
+export const ReceiveGetRealms = (payload: IRealm[] | null) => createAction(RECEIVE_GET_REALMS, payload);
+type FetchGetRealmType = ReturnType<typeof RequestGetRealms | typeof ReceiveGetRealms>;
+export const FetchGetRealms = (region: IRegion) => {
+    return async (dispatch: Dispatch<FetchGetRealmType>) => {
+        dispatch(RequestGetRealms());
+        dispatch(ReceiveGetRealms(await getStatus(region.name)));
     };
 };
 
@@ -130,16 +131,16 @@ export const MainActions = {
     ChangeAuthLevel,
     ChangeIsLoginDialogOpen,
     RealmChange,
-    ReceiveBoot,
-    ReceivePing,
-    ReceiveRealms,
-    ReceiveUserPreferences,
+    ReceiveGetBoot,
+    ReceiveGetPing,
+    ReceiveGetRealms,
+    ReceiveGetUserPreferences,
     ReceiveUserReload,
     RegionChange,
-    RequestBoot,
-    RequestPing,
-    RequestRealms,
-    RequestUserPreferences,
+    RequestGetBoot,
+    RequestGetPing,
+    RequestGetRealms,
+    RequestGetUserPreferences,
     RequestUserReload,
     UserLogin,
     UserRegister,

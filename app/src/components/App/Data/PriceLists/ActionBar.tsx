@@ -48,12 +48,16 @@ export class ActionBar extends React.Component<Props> {
                 <NavbarGroup align={Alignment.LEFT}>{this.renderButtons()}</NavbarGroup>
                 <NavbarGroup align={Alignment.RIGHT}>
                     <ButtonGroup>
-                        <RealmToggleContainer />
+                        <RealmToggleContainer onRealmChange={v => this.onRealmChange(v)} />
                         <RegionToggleContainer />
                     </ButtonGroup>
                 </NavbarGroup>
             </Navbar>
         );
+    }
+
+    private onRealmChange(realm: IRealm) {
+        console.log(realm);
     }
 
     private renderListButtons() {

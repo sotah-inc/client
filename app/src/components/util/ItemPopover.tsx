@@ -72,10 +72,10 @@ export class ItemPopover extends React.Component<Props> {
         }
         const iClass = itemClasses[item.itemClass];
 
-        if (!(item.itemSubClass in iClass.subClasses)) {
+        if (!(item.itemSubClass in iClass.subclasses)) {
             return `${iClass.name} sub-class #${item.itemSubClass}`;
         }
-        const iSubClass = iClass.subClasses[item.itemSubClass];
+        const iSubClass = iClass.subclasses[item.itemSubClass];
 
         return `${iClass.name} (#${item.itemClass}) - ${iSubClass.name}`;
     }
@@ -145,8 +145,8 @@ export class ItemPopover extends React.Component<Props> {
                 let iSubClassText = "";
                 if (item.itemClass in itemClasses) {
                     const iClass = itemClasses[item.itemClass];
-                    if (item.itemSubClass in iClass.subClasses) {
-                        iSubClassText = iClass.subClasses[item.itemSubClass].name;
+                    if (item.itemSubClass in iClass.subclasses) {
+                        iSubClassText = iClass.subclasses[item.itemSubClass].name;
                     }
                 }
 

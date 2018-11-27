@@ -4,9 +4,9 @@ import { Actions } from "@app/actions";
 import {
     ChangeAuthLevel,
     ChangeIsLoginDialogOpen,
-    FetchBoot,
-    FetchPing,
-    FetchUserPreferences,
+    FetchGetBoot,
+    FetchGetPing,
+    FetchGetUserPreferences,
     FetchUserReload,
 } from "@app/actions/main";
 import { App, IDispatchProps, IOwnProps, IStateProps } from "@app/components/App";
@@ -44,11 +44,11 @@ const mapStateToProps = (state: IStoreState): IStateProps => {
 
 const mapDispatchToProps = (dispatch: Dispatch<Actions>): IDispatchProps => {
     return {
-        boot: () => dispatch(FetchBoot()),
+        boot: () => dispatch(FetchGetBoot()),
         changeAuthLevel: (authLevel: AuthLevel) => dispatch(ChangeAuthLevel(authLevel)),
         changeIsLoginDialogOpen: (isLoginDialogOpen: boolean) => dispatch(ChangeIsLoginDialogOpen(isLoginDialogOpen)),
-        loadUserPreferences: (token: string) => dispatch(FetchUserPreferences(token)),
-        onLoad: () => dispatch(FetchPing()),
+        loadUserPreferences: (token: string) => dispatch(FetchGetUserPreferences(token)),
+        onLoad: () => dispatch(FetchGetPing()),
         reloadUser: (token: string) => dispatch(FetchUserReload(token)),
     };
 };

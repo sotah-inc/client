@@ -35,14 +35,36 @@ export class Region extends React.Component<Props> {
                 params: { region_name },
             },
             regions,
+            currentRegion,
             onRegionChange,
+            fetchRealms,
+            fetchRealmLevel,
         } = this.props;
 
         if (!(region_name in regions)) {
             return;
         }
 
-        onRegionChange(regions[region_name]);
+        if (currentRegion === null) {
+            onRegionChange(regions[region_name]);
+
+            return;
+        }
+
+        if (currentRegion.name !== region_name) {
+            onRegionChange(regions[region_name]);
+
+            return;
+        }
+
+        switch (fetchRealmLevel) {
+            case FetchLevel.initial:
+                fetchRealms(currentRegion);
+
+                return;
+            default:
+                return;
+        }
     }
 
     public componentDidUpdate(prevProps: Props) {
@@ -64,6 +86,10 @@ export class Region extends React.Component<Props> {
         }
 
         switch (fetchRealmLevel) {
+            case FetchLevel.initial:
+                fetchRealms(currentRegion);
+
+                return;
             case FetchLevel.prompted:
                 if (prevProps.fetchRealmLevel === fetchRealmLevel) {
                     return;

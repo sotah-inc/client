@@ -32,12 +32,15 @@ export interface IStateProps {
 type persistUserPreferencesFunc = (token: string, body: ICreatePreferencesRequest | IUpdatePreferencesRequest) => void;
 
 export interface IDispatchProps {
-    onRealmChange: (realm: IRealm) => void;
     createUserPreferences: (token: string, body: ICreatePreferencesRequest) => void;
     updateUserPreferences: (token: string, body: IUpdatePreferencesRequest) => void;
 }
 
-type Props = Readonly<IStateProps & IDispatchProps>;
+export interface IOwnProps {
+    onRealmChange: (realm: IRealm) => void;
+}
+
+type Props = Readonly<IStateProps & IDispatchProps & IOwnProps>;
 
 export class RealmToggle extends React.Component<Props> {
     public componentDidUpdate(prevProps: Props) {
