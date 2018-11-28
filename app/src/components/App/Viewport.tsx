@@ -3,6 +3,7 @@ import * as React from "react";
 import { Classes, Intent, NonIdealState, Spinner } from "@blueprintjs/core";
 import { Route, RouteComponentProps, Switch } from "react-router-dom";
 
+import { News } from "@app/components/App/Content/News";
 import { NotFound } from "@app/components/util/NotFound";
 import { PriceListsContainer } from "@app/containers/App/Data/PriceLists";
 import { ContentRouteContainer } from "@app/route-containers/App/Content";
@@ -62,6 +63,7 @@ export class Viewport extends React.Component<Props> {
             <Switch>
                 <Route exact={true} path="/" component={RootRouteContainer} />
                 <Route exact={true} path="/content" component={ContentRouteContainer} />
+                <Route exact={true} path="/content/news" component={News} />
                 <Route exact={true} path="/data" component={DataRouteContainer} />
                 <Route exact={true} path="/data/:region_name" component={RegionRouteContainer} />
                 <Route exact={true} path="/data/:region_name/:realm_slug" component={RealmRouteContainer} />

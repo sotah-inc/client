@@ -1,0 +1,28 @@
+.welcome {
+    text-align: center;
+    margin-top: 20px;
+
+    .bp3-icon {
+        color: #bfccd6 !important;
+    }
+
+    .homepage-card-container:first-child .homepage-card {
+        padding-left: 0;
+    }
+    .homepage-card-container:last-child .homepage-card {
+        padding-right: 0;
+    }
+
+    .homepage-card {
+        padding: 0 10px;
+
+        .bp3-card {
+            background: #293742;
+        }
+
+        .bp3-heading {
+            color: #48aff0;
+            margin-top: 10px;
+        }
+    }
+}
