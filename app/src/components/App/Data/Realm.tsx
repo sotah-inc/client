@@ -6,6 +6,7 @@ import { Redirect, RouteComponentProps } from "react-router-dom";
 import { IRealm, IRegion } from "@app/api-types/region";
 import { IRealms, IRegions } from "@app/types/global";
 import { AuthLevel, FetchLevel } from "@app/types/main";
+import { setTitle } from "@app/util";
 
 export interface IStateProps {
     fetchRealmLevel: FetchLevel;
@@ -232,9 +233,7 @@ export class Realm extends React.Component<Props> {
             );
         }
 
-        document.title = `Redirecting to Auctions - ${currentRegion.name.toUpperCase()} ${
-            currentRealm.name
-        } - Sotah Client`;
+        setTitle(`Redirecting to Auctions - ${currentRegion.name.toUpperCase()} ${currentRealm.name}`);
 
         return <Redirect to={`/data/${currentRegion.name}/${currentRealm.slug}/auctions`} />;
     }

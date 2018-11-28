@@ -28,7 +28,7 @@ import { RealmToggleContainer } from "@app/containers/util/RealmToggle";
 import { RegionToggleContainer } from "@app/containers/util/RegionToggle";
 import { IRealms, IRegions } from "@app/types/global";
 import { AuthLevel, FetchLevel } from "@app/types/main";
-import { didRealmChange } from "@app/util";
+import { didRealmChange, setTitle } from "@app/util";
 
 type ListAuction = IAuction | null;
 
@@ -234,7 +234,7 @@ export class AuctionList extends React.Component<Props> {
             return;
         }
 
-        document.title = `${currentRegion.name.toUpperCase()} ${currentRealm.name} - Auctions - Sotah Client`;
+        setTitle(`${currentRegion.name.toUpperCase()} ${currentRealm.name} - Auctions`);
     }
 
     private refreshAuctions() {

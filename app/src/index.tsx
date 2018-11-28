@@ -11,7 +11,7 @@ import registerServiceWorker from "@app/registerServiceWorker";
 import { AppRouteContainer } from "@app/route-containers/App";
 import { defaultAuctionState, defaultMainState, defaultPriceListsState, IStoreState } from "@app/types";
 
-const ayy: IStoreState = {
+const defaultState: IStoreState = {
     Auction: defaultAuctionState,
     Main: defaultMainState,
     PriceLists: defaultPriceListsState,
@@ -19,7 +19,7 @@ const ayy: IStoreState = {
 
 const token = localStorage.getItem("token");
 if (token !== null) {
-    ayy.Main.preloadedToken = token;
+    defaultState.Main.preloadedToken = token;
 }
 
 const localStorageMiddleware: Middleware = () => next => action => {
@@ -36,7 +36,7 @@ const localStorageMiddleware: Middleware = () => next => action => {
     return next(action);
 };
 
-const store = createStore<IStoreState>(rootReducer, ayy, applyMiddleware(localStorageMiddleware, thunk));
+const store = createStore<IStoreState>(rootReducer, defaultState, applyMiddleware(localStorageMiddleware, thunk));
 
 ReactDOM.render(
     <Provider store={store}>

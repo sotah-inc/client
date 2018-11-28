@@ -6,6 +6,12 @@ import { IExpansion } from "@app/api-types/expansion";
 import { IItem, InventoryType, ItemQuality, ItemStat } from "@app/api-types/item";
 import { IRealm, IRegion } from "@app/api-types/region";
 
+const hostname = window.location.hostname;
+export const title: string = hostname === "localhost" ? "SotAH (DEV)" : "Secrets of the Auction House";
+export const setTitle = (prefix: string) => {
+    document.title = `${prefix} - ${title}`;
+};
+
 export const currencyToText = (amount: number): string => {
     if (amount === 0) {
         return "0g";

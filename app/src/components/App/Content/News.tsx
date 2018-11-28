@@ -3,6 +3,8 @@ import * as React from "react";
 import { Card, H1, H4, Icon, IconName } from "@blueprintjs/core";
 import { RouteComponentProps } from "react-router-dom";
 
+import { setTitle } from "@app/util";
+
 import "./News.scss";
 
 export interface IOwnProps extends RouteComponentProps<{}> {}
@@ -11,7 +13,7 @@ type Props = Readonly<IOwnProps>;
 
 export class News extends React.Component<Props> {
     public render() {
-        document.title = "News - Sotah Client";
+        setTitle("News");
 
         return (
             <>
