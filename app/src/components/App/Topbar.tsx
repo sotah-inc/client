@@ -4,6 +4,7 @@ import {
     Alignment,
     ButtonGroup,
     Classes,
+    Icon,
     IconName,
     Navbar,
     NavbarDivider,
@@ -79,7 +80,10 @@ export class Topbar extends React.Component<Props> {
                 <Navbar className={Classes.DARK}>
                     <div id="topbar">
                         <NavbarGroup align={Alignment.LEFT}>
-                            <NavbarHeading>Sotah Client</NavbarHeading>
+                            <NavbarHeading>
+                                <Icon icon="globe" />
+                                <span style={{ marginLeft: "5px" }}>Sotah</span>
+                            </NavbarHeading>
                             <NavbarDivider />
                             {contentLink}
                             <NavbarDivider />
