@@ -1,10 +1,15 @@
 import * as React from "react";
 
-import { Card, H1, H4, Icon } from "@blueprintjs/core";
+import { Card, H1, H4, Icon, IconName } from "@blueprintjs/core";
+import { RouteComponentProps } from "react-router-dom";
 
 import "./News.scss";
 
-export class News extends React.Component<{}> {
+export interface IOwnProps extends RouteComponentProps<{}> {}
+
+type Props = Readonly<IOwnProps>;
+
+export class News extends React.Component<Props> {
     public render() {
         document.title = "News - Sotah Client";
 
@@ -19,47 +24,34 @@ export class News extends React.Component<{}> {
                 <p>It is optimized for users comparing markets and discovering competitors.</p>
                 <div className="welcome pure-g">
                     <div className="pure-u-1-4 homepage-card-container">
-                        <div className="homepage-card">
-                            <a href="/content/getting-started">
-                                <Card interactive={true}>
-                                    <Icon icon="star" iconSize={40} />
-                                    <H4>Getting started</H4>
-                                </Card>
-                            </a>
-                        </div>
+                        {this.renderCard("/content/getting-started", "star", "Getting started")}
                     </div>
                     <div className="pure-u-1-4 homepage-card-container">
-                        <div className="homepage-card">
-                            <a href="/content/getting-started">
-                                <Card interactive={true}>
-                                    <Icon icon="star" iconSize={40} />
-                                    <H4>Getting started</H4>
-                                </Card>
-                            </a>
-                        </div>
+                        {this.renderCard("/content/getting-started", "star", "Getting started")}
                     </div>
                     <div className="pure-u-1-4 homepage-card-container">
-                        <div className="homepage-card">
-                            <a href="/content/getting-started">
-                                <Card interactive={true}>
-                                    <Icon icon="star" iconSize={40} />
-                                    <H4>Getting started</H4>
-                                </Card>
-                            </a>
-                        </div>
+                        {this.renderCard("/content/getting-started", "star", "Getting started")}
                     </div>
                     <div className="pure-u-1-4 homepage-card-container">
-                        <div className="homepage-card">
-                            <a href="/content/getting-started">
-                                <Card interactive={true}>
-                                    <Icon icon="star" iconSize={40} />
-                                    <H4>Getting started</H4>
-                                </Card>
-                            </a>
-                        </div>
+                        {this.renderCard("/content/getting-started", "star", "Getting started")}
                     </div>
                 </div>
             </>
+        );
+    }
+
+    private renderCard(dest: string, icon: IconName, label: string) {
+        const { history } = this.props;
+
+        return (
+            <div className="homepage-card">
+                <a onClick={() => history.push(dest)}>
+                    <Card interactive={true}>
+                        <Icon icon={icon} iconSize={40} />
+                        <H4>{label}</H4>
+                    </Card>
+                </a>
+            </div>
         );
     }
 }
