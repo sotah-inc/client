@@ -120,11 +120,16 @@ export class AuctionList extends React.Component<Props> {
             return;
         }
 
-        if (fetchAuctionsLevel === FetchLevel.initial) {
-            this.refreshAuctions();
-            this.refreshAuctionsQuery();
+        switch (fetchAuctionsLevel) {
+            case FetchLevel.initial:
+                this.refreshAuctions();
+                this.refreshAuctionsQuery();
 
-            return;
+                return;
+            default:
+                this.setTitle();
+
+                return;
         }
     }
 

@@ -232,6 +232,10 @@ export class Realm extends React.Component<Props> {
             );
         }
 
+        document.title = `Redirecting to Auctions - ${currentRegion.name.toUpperCase()} ${
+            currentRealm.name
+        } - Sotah Client`;
+
         return <Redirect to={`/data/${currentRegion.name}/${currentRealm.slug}/auctions`} />;
     }
 }
