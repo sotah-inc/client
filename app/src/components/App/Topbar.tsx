@@ -137,6 +137,11 @@ export class Topbar extends React.Component<Props> {
                         />
                         <NavbarDivider />
                         <LinkButtonRouteContainer
+                            destination="/content/getting-started"
+                            buttonProps={{ icon: "star", text: "Getting started", minimal: true }}
+                        />
+                        <NavbarDivider />
+                        <LinkButtonRouteContainer
                             destination="/content/feed"
                             buttonProps={{ icon: "feed", text: "Feed", minimal: true }}
                         />
