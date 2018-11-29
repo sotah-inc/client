@@ -159,7 +159,7 @@ export class Topbar extends React.Component<Props> {
             <>
                 {this.renderRegionRealmButton("/auctions", "dollar", "Auctions")}
                 <NavbarDivider />
-                {this.renderRegionRealmButton("/price-lists", "polygon-filter", "Professions")}
+                {this.renderRegionRealmButton("/professions", "polygon-filter", "Professions")}
             </>
         );
     }
