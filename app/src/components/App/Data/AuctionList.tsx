@@ -1,3 +1,5 @@
+import * as React from "react";
+
 import {
     Alignment,
     ButtonGroup,
@@ -10,7 +12,6 @@ import {
     NonIdealState,
     Spinner,
 } from "@blueprintjs/core";
-import * as React from "react";
 import { RouteComponentProps } from "react-router";
 
 import { SortDirection, SortKind } from "@app/api-types";
