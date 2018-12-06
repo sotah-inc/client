@@ -5,10 +5,10 @@ import { Route, RouteComponentProps, Switch } from "react-router-dom";
 
 import { News } from "@app/components/App/Content/News";
 import { NotFound } from "@app/components/util/NotFound";
-import { PriceListsContainer } from "@app/containers/App/Data/PriceLists";
 import { ContentRouteContainer } from "@app/route-containers/App/Content";
 import { DataRouteContainer } from "@app/route-containers/App/Data";
 import { AuctionListRouteContainer } from "@app/route-containers/App/Data/AuctionList";
+import { PriceListsRouteContainer } from "@app/route-containers/App/Data/PriceLists";
 import { RealmRouteContainer } from "@app/route-containers/App/Data/Realm";
 import { RegionRouteContainer } from "@app/route-containers/App/Data/Region";
 import { RootRouteContainer } from "@app/route-containers/App/Root";
@@ -72,7 +72,11 @@ export class Viewport extends React.Component<Props> {
                     path="/data/:region_name/:realm_slug/auctions"
                     component={AuctionListRouteContainer}
                 />
-                <Route exact={true} path="/data/price-lists" component={PriceListsContainer} />
+                <Route
+                    exact={true}
+                    path="/data/:region_name/:realm_slug/professions"
+                    component={PriceListsRouteContainer}
+                />
                 <Route component={NotFound} />
             </Switch>
         );

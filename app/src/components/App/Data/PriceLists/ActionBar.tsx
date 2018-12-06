@@ -12,6 +12,7 @@ import {
     Spinner,
     Tooltip,
 } from "@blueprintjs/core";
+import { RouteComponentProps } from "react-router";
 
 import { IPricelistJson, UserLevel } from "@app/api-types/entities";
 import { IProfession } from "@app/api-types/profession";
@@ -39,7 +40,9 @@ export interface IDispatchProps {
     changeIsDeleteListDialogOpen: (isDialogOpen: boolean) => void;
 }
 
-export type Props = Readonly<IStateProps & IDispatchProps>;
+export interface IOwnProps extends RouteComponentProps<{}> {}
+
+export type Props = Readonly<IStateProps & IDispatchProps & IOwnProps>;
 
 export class ActionBar extends React.Component<Props> {
     public render() {
@@ -57,7 +60,13 @@ export class ActionBar extends React.Component<Props> {
     }
 
     private onRealmChange(realm: IRealm) {
-        console.log(realm);
+        const { history, currentRegion } = this.props;
+
+        if (currentRegion === null) {
+            return;
+        }
+
+        history.push(`/data/${currentRegion.name}/${realm.slug}/professions`);
     }
 
     private renderListButtons() {

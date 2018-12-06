@@ -7,7 +7,7 @@ import {
     ChangeIsDeleteListDialogOpen,
     ChangeIsEditListDialogOpen,
 } from "@app/actions/price-lists";
-import { ActionBar, IDispatchProps, IStateProps } from "@app/components/App/Data/PriceLists/ActionBar";
+import { ActionBar, IDispatchProps, IOwnProps, IStateProps } from "@app/components/App/Data/PriceLists/ActionBar";
 import { IStoreState } from "@app/types";
 
 const mapStateToProps = (state: IStoreState): IStateProps => {
@@ -34,7 +34,7 @@ const mapDispatchToProps = (dispatch: Dispatch<Actions>): IDispatchProps => {
     };
 };
 
-export const ActionBarContainer = connect<IStateProps, IDispatchProps>(
+export const ActionBarContainer = connect<IStateProps, IDispatchProps, IOwnProps>(
     mapStateToProps,
     mapDispatchToProps,
 )(ActionBar);

@@ -235,7 +235,7 @@ export class AuctionList extends React.Component<Props> {
             return;
         }
 
-        setTitle(`${currentRegion.name.toUpperCase()} ${currentRealm.name} - Auctions`);
+        setTitle(`Auctions - ${currentRegion.name.toUpperCase()} ${currentRealm.name}`);
     }
 
     private refreshAuctions() {
