@@ -126,7 +126,7 @@ export class ActionBar extends React.Component<Props> {
         const { currentRegion, currentRealm } = this.props;
 
         if (currentRegion === null || currentRealm === null) {
-            return <Spinner className={Classes.SMALL} intent={Intent.PRIMARY} />;
+            return <Spinner className={Classes.SMALL} intent={Intent.NONE} value={0} />;
         }
 
         return (

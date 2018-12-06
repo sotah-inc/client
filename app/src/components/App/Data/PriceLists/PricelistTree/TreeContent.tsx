@@ -22,7 +22,10 @@ export class TreeContent extends React.Component<Props> {
 
         if (currentRealm === null || currentRegion === null) {
             return (
-                <NonIdealState title="Loading" icon={<Spinner className={Classes.LARGE} intent={Intent.PRIMARY} />} />
+                <NonIdealState
+                    title="Loading"
+                    icon={<Spinner className={Classes.LARGE} intent={Intent.NONE} value={0} />}
+                />
             );
         }
 
