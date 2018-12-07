@@ -40,6 +40,15 @@ export const gather = async <T, A>(opts: IGatherOptions<T>): Promise<IGatherResu
             return null;
         }
 
+        const contentType = response.headers.get("content-type");
+        if (contentType === null) {
+            return null;
+        }
+
+        if (/^application\/json/.test(contentType) === false) {
+            return null;
+        }
+
         return JSON.parse(responseText);
     })();
 
