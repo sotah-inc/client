@@ -14,6 +14,7 @@ import { didRealmChange, didRegionChange } from "@app/util";
 export interface IStateProps {
     itemsOwnershipMap: IQueryOwnerItemsMap;
     getItemsOwnershipLevel: FetchLevel;
+    fetchRealmLevel: FetchLevel;
 }
 
 export interface IDispatchProps {
@@ -50,26 +51,36 @@ export class CurrentSellersTable extends React.Component<Props & State> {
     }
 
     public componentDidUpdate(prevProps: Props) {
-        const { queryOwnersByItems, region, realm, getItemsOwnershipLevel, list } = this.props;
+        const { queryOwnersByItems, region, realm, getItemsOwnershipLevel, list, fetchRealmLevel } = this.props;
 
-        const itemIds = list.pricelist_entries!.map(v => v.item_id);
+        switch (fetchRealmLevel) {
+            case FetchLevel.success:
+                break;
+            default:
+                return;
+        }
 
         switch (getItemsOwnershipLevel) {
             case FetchLevel.success:
-                const shouldReloadPrices =
-                    didRegionChange(prevProps.region, region) ||
-                    didRealmChange(prevProps.realm, realm) ||
-                    prevProps.list.id !== list.id;
-                if (shouldReloadPrices) {
-                    queryOwnersByItems({
-                        items: itemIds,
-                        realmSlug: realm.slug,
-                        regionName: region.name,
-                    });
-                }
-            default:
                 break;
+            default:
+                return;
         }
+
+        const shouldReloadPrices =
+            didRegionChange(prevProps.region, region) ||
+            didRealmChange(prevProps.realm, realm) ||
+            prevProps.list.id !== list.id;
+        if (!shouldReloadPrices) {
+            return;
+        }
+
+        const itemIds = list.pricelist_entries!.map(v => v.item_id);
+        queryOwnersByItems({
+            items: itemIds,
+            realmSlug: realm.slug,
+            regionName: region.name,
+        });
     }
 
     public render() {
@@ -99,6 +110,24 @@ export class CurrentSellersTable extends React.Component<Props & State> {
     }
 
     private renderContent() {
+        const { fetchRealmLevel } = this.props;
+
+        switch (fetchRealmLevel) {
+            case FetchLevel.prompted:
+            case FetchLevel.fetching:
+            case FetchLevel.refetching:
+                return <Spinner intent={Intent.PRIMARY} />;
+            case FetchLevel.failure:
+                return <Spinner intent={Intent.DANGER} value={1} />;
+            case FetchLevel.success:
+                return this.renderContentWithRealms();
+            case FetchLevel.initial:
+            default:
+                return <Spinner intent={Intent.NONE} value={0} />;
+        }
+    }
+
+    private renderContentWithRealms() {
         const { getItemsOwnershipLevel, itemsOwnershipMap: ownership } = this.props;
         const { currentPage } = this.state;
 

@@ -16,6 +16,7 @@ export interface IStateProps {
     items: IItemsMap;
     getPricelistLevel: FetchLevel;
     pricelistMap: IPriceListMap;
+    fetchRealmLevel: FetchLevel;
 }
 
 export interface IDispatchProps {
@@ -44,26 +45,36 @@ export class CurrentPricesTable extends React.Component<Props> {
     }
 
     public componentDidUpdate(prevProps: Props) {
-        const { reloadPrices, region, realm, getPricelistLevel, list } = this.props;
+        const { reloadPrices, region, realm, getPricelistLevel, list, fetchRealmLevel } = this.props;
 
-        const itemIds = list.pricelist_entries!.map(v => v.item_id);
+        switch (fetchRealmLevel) {
+            case FetchLevel.success:
+                break;
+            default:
+                return;
+        }
 
         switch (getPricelistLevel) {
             case FetchLevel.success:
-                const shouldReloadPrices =
-                    didRegionChange(prevProps.region, region) ||
-                    didRealmChange(prevProps.realm, realm) ||
-                    prevProps.list.id !== list.id;
-                if (shouldReloadPrices) {
-                    reloadPrices({
-                        itemIds,
-                        realmSlug: realm.slug,
-                        regionName: region.name,
-                    });
-                }
-            default:
                 break;
+            default:
+                return;
         }
+
+        const itemIds = list.pricelist_entries!.map(v => v.item_id);
+        const shouldReloadPrices =
+            didRegionChange(prevProps.region, region) ||
+            didRealmChange(prevProps.realm, realm) ||
+            prevProps.list.id !== list.id;
+        if (!shouldReloadPrices) {
+            return;
+        }
+
+        reloadPrices({
+            itemIds,
+            realmSlug: realm.slug,
+            regionName: region.name,
+        });
     }
 
     public render() {
@@ -86,6 +97,24 @@ export class CurrentPricesTable extends React.Component<Props> {
     }
 
     private renderContent() {
+        const { fetchRealmLevel } = this.props;
+
+        switch (fetchRealmLevel) {
+            case FetchLevel.prompted:
+            case FetchLevel.fetching:
+            case FetchLevel.refetching:
+                return <Spinner intent={Intent.PRIMARY} />;
+            case FetchLevel.failure:
+                return <Spinner intent={Intent.DANGER} value={1} />;
+            case FetchLevel.success:
+                return this.renderContentWithRealms();
+            case FetchLevel.initial:
+            default:
+                return <Spinner intent={Intent.NONE} value={0} />;
+        }
+    }
+
+    private renderContentWithRealms() {
         const { getPricelistLevel } = this.props;
 
         switch (getPricelistLevel) {

@@ -12,8 +12,9 @@ import {
 import { IStoreState } from "@app/types";
 
 const mapStateToProps = (state: IStoreState): IStateProps => {
+    const { fetchRealmLevel } = state.Main;
     const { getItemsOwnershipLevel, itemsOwnershipMap } = state.PriceLists;
-    return { getItemsOwnershipLevel, itemsOwnershipMap };
+    return { fetchRealmLevel, getItemsOwnershipLevel, itemsOwnershipMap };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<Actions>): IDispatchProps => {
