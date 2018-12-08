@@ -11,6 +11,7 @@ import { AuctionListRouteContainer } from "@app/route-containers/App/Data/Auctio
 import { PriceListsRouteContainer } from "@app/route-containers/App/Data/PriceLists";
 import { RealmRouteContainer } from "@app/route-containers/App/Data/Realm";
 import { RegionRouteContainer } from "@app/route-containers/App/Data/Region";
+import { ProfessionsLandingRouteContainer } from "@app/route-containers/App/ProfessionsLanding";
 import { RootRouteContainer } from "@app/route-containers/App/Root";
 
 export interface IOwnProps extends RouteComponentProps<{}> {}
@@ -30,6 +31,11 @@ export class Viewport extends React.Component<Props> {
                 <Route exact={true} path="/content/news" component={NewsRouteContainer} />
                 <Route exact={true} path="/data" component={DataContainer} />
                 <Route exact={true} path="/data/auctions/:region_name" component={AuctionsLandingRouteContainer} />
+                <Route
+                    exact={true}
+                    path="/data/professions/:region_name"
+                    component={ProfessionsLandingRouteContainer}
+                />
                 <Route exact={true} path="/data/:region_name" component={RegionRouteContainer} />
                 <Route exact={true} path="/data/:region_name/:realm_slug" component={RealmRouteContainer} />
                 <Route

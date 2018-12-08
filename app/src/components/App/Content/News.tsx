@@ -45,17 +45,15 @@ export class News extends React.Component<Props> {
                 <p>It is optimized for users comparing markets and discovering competitors.</p>
                 <div className="welcome pure-g">
                     <div className="pure-u-1-4 homepage-card-container">
-                        {this.renderCard("/content/getting-started", "star", "Getting started")}
+                        {this.renderCard("/content/getting-started", "star", "Getting Started")}
                     </div>
                     <div className="pure-u-1-4 homepage-card-container">
                         {this.renderCard(`/data/auctions/${currentRegion.name}`, "dollar", "Auctions")}
                     </div>
                     <div className="pure-u-1-4 homepage-card-container">
-                        {this.renderCard("/content/getting-started", "star", "Getting started")}
+                        {this.renderCard(`/data/professions/${currentRegion.name}`, "chart", "Professions")}
                     </div>
-                    <div className="pure-u-1-4 homepage-card-container">
-                        {this.renderCard("/content/getting-started", "star", "Getting started")}
-                    </div>
+                    <div className="pure-u-1-4 homepage-card-container">{this.renderRegisterCallout()}</div>
                 </div>
                 <H2>Latest News</H2>
                 <p>
@@ -69,5 +67,9 @@ export class News extends React.Component<Props> {
         const { history } = this.props;
 
         return <CardCallout onClick={() => history.push(dest)} icon={icon} label={label} />;
+    }
+
+    private renderRegisterCallout() {
+        return <CardCallout onClick={() => console.log("wew")} icon="user" label="Create Account" />;
     }
 }
