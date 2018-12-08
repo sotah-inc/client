@@ -82,7 +82,7 @@ export class Topbar extends React.Component<Props> {
                         <NavbarGroup align={Alignment.LEFT}>
                             <NavbarHeading>
                                 <Icon icon="globe" />
-                                <span style={{ marginLeft: "5px" }}>Sotah</span>
+                                <span style={{ marginLeft: "5px" }}>SotAH</span>
                             </NavbarHeading>
                             <NavbarDivider />
                             {contentLink}

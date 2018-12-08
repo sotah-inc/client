@@ -6,23 +6,10 @@
         color: #bfccd6 !important;
     }
 
-    .homepage-card-container:first-child .homepage-card {
+    .homepage-card-container:first-child .card-callout {
         padding-left: 0;
     }
-    .homepage-card-container:last-child .homepage-card {
+    .homepage-card-container:last-child .card-callout {
         padding-right: 0;
-    }
-
-    .homepage-card {
-        padding: 0 10px;
-
-        .bp3-card {
-            background: #293742;
-        }
-
-        .bp3-heading {
-            color: #48aff0;
-            margin-top: 10px;
-        }
     }
 }

@@ -9,9 +9,11 @@ export interface IOwnProps extends RouteComponentProps<{}> {}
 export type Props = Readonly<IOwnProps>;
 
 export class Content extends React.Component<Props> {
-    public render() {
+    public componentDidMount() {
         setTitle("Redirecting to News");
+    }
 
+    public render() {
         return <Redirect to="/content/news" />;
     }
 }

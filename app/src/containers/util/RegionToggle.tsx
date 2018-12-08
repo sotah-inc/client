@@ -7,10 +7,9 @@ import { IDispatchProps, IStateProps, RegionToggle } from "@app/components/util/
 import { IStoreState } from "@app/types";
 
 const mapStateToProps = (state: IStoreState): IStateProps => {
-    const { regions, currentRegion, fetchBootLevel } = state.Main;
+    const { regions, currentRegion } = state.Main;
     return {
         currentRegion,
-        fetchBootLevel,
         regions,
     };
 };

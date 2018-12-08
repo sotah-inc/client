@@ -1,6 +1,5 @@
 import { withRouter } from "react-router-dom";
 
-import { IOwnProps } from "@app/components/App/Viewport";
-import { ViewportContainer } from "@app/containers/App/Viewport";
+import { IOwnProps, Viewport } from "@app/components/App/Viewport";
 
-export const ViewportRouteContainer = withRouter<IOwnProps>(ViewportContainer);
+export const ViewportRouteContainer = withRouter<IOwnProps>(Viewport);

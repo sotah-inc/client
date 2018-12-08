@@ -1,15 +1,13 @@
 import * as React from "react";
 
-import { Button, Classes, H6, Intent, Menu, MenuItem, Popover, Position, Spinner } from "@blueprintjs/core";
+import { Button, Classes, H6, Menu, MenuItem, Popover, Position } from "@blueprintjs/core";
 
 import { IRegion } from "@app/api-types/region";
 import { IRegions } from "@app/types/global";
-import { FetchLevel } from "@app/types/main";
 
 export interface IStateProps {
     currentRegion: IRegion | null;
     regions: IRegions;
-    fetchBootLevel: FetchLevel;
 }
 
 export interface IDispatchProps {
@@ -50,24 +48,14 @@ export class RegionToggle extends React.Component<Props> {
     }
 
     public render() {
-        const { currentRegion, fetchBootLevel } = this.props;
+        const { currentRegion } = this.props;
 
-        switch (fetchBootLevel) {
-            case FetchLevel.success:
-                return (
-                    <Popover
-                        content={this.renderMenu(this.props.regions)}
-                        target={<Button icon="double-caret-vertical">{currentRegion!.name.toUpperCase()}</Button>}
-                        position={Position.BOTTOM_RIGHT}
-                    />
-                );
-            case FetchLevel.failure:
-                return <Spinner className={Classes.SMALL} intent={Intent.DANGER} value={1} />;
-            case FetchLevel.initial:
-                return <Spinner className={Classes.SMALL} intent={Intent.NONE} value={1} />;
-            case FetchLevel.fetching:
-            default:
-                return <Spinner className={Classes.SMALL} intent={Intent.PRIMARY} />;
-        }
+        return (
+            <Popover
+                content={this.renderMenu(this.props.regions)}
+                target={<Button icon="double-caret-vertical">{currentRegion!.name.toUpperCase()}</Button>}
+                position={Position.BOTTOM_RIGHT}
+            />
+        );
     }
 }
