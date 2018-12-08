@@ -103,6 +103,7 @@ export class ProfessionsLanding extends React.Component<Props> {
         }
 
         switch (fetchRealmLevel) {
+            case FetchLevel.initial:
             case FetchLevel.prompted:
                 fetchRealms(currentRegion);
 
