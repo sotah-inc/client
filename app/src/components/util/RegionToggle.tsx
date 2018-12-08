@@ -50,10 +50,14 @@ export class RegionToggle extends React.Component<Props> {
     public render() {
         const { currentRegion } = this.props;
 
+        if (currentRegion === null) {
+            return null;
+        }
+
         return (
             <Popover
                 content={this.renderMenu(this.props.regions)}
-                target={<Button icon="double-caret-vertical">{currentRegion!.name.toUpperCase()}</Button>}
+                target={<Button icon="double-caret-vertical">{currentRegion.name.toUpperCase()}</Button>}
                 position={Position.BOTTOM_RIGHT}
             />
         );
