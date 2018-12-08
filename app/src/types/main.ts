@@ -23,6 +23,7 @@ export interface IMainState {
     professions: IProfession[];
     itemClasses: IItemClasses;
     fetchBootLevel: FetchLevel;
+    isRegisterDialogOpen: boolean;
 }
 
 export enum FetchLevel {
@@ -51,6 +52,7 @@ export const defaultMainState: IMainState = {
     fetchUserPreferencesLevel: FetchLevel.initial,
     isLoggedIn: false,
     isLoginDialogOpen: false,
+    isRegisterDialogOpen: false,
     isRegistered: false,
     itemClasses: {},
     preloadedToken: "",

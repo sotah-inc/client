@@ -5,17 +5,23 @@ import { RouteComponentProps } from "react-router-dom";
 
 import { IRegion } from "@app/api-types/region";
 import { CardCallout } from "@app/components/util";
+import { AuthLevel } from "@app/types/main";
 import { setTitle } from "@app/util";
 
 import "./News.scss";
 
 export interface IStateProps {
     currentRegion: IRegion | null;
+    authLevel: AuthLevel;
+}
+
+export interface IDispatchProps {
+    changeIsRegisterDialogOpen: (isOpen: boolean) => void;
 }
 
 export interface IOwnProps extends RouteComponentProps<{}> {}
 
-type Props = Readonly<IOwnProps & IStateProps>;
+type Props = Readonly<IOwnProps & IStateProps & IDispatchProps>;
 
 export class News extends React.Component<Props> {
     public componentDidMount() {
@@ -53,7 +59,7 @@ export class News extends React.Component<Props> {
                     <div className="pure-u-1-4 homepage-card-container">
                         {this.renderCard(`/data/professions/${currentRegion.name}`, "chart", "Professions")}
                     </div>
-                    <div className="pure-u-1-4 homepage-card-container">{this.renderRegisterCallout()}</div>
+                    {this.renderRegisterCallout()}
                 </div>
                 <H2>Latest News</H2>
                 <p>
@@ -70,6 +76,16 @@ export class News extends React.Component<Props> {
     }
 
     private renderRegisterCallout() {
-        return <CardCallout onClick={() => console.log("wew")} icon="user" label="Create Account" />;
+        const { changeIsRegisterDialogOpen, authLevel } = this.props;
+
+        if (authLevel === AuthLevel.authenticated) {
+            return null;
+        }
+
+        return (
+            <div className="pure-u-1-4 homepage-card-container">
+                <CardCallout onClick={() => changeIsRegisterDialogOpen(true)} icon="user" label="Create Account" />
+            </div>
+        );
     }
 }

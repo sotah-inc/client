@@ -1,6 +1,7 @@
 import {
     CHANGE_AUTH_LEVEL,
     CHANGE_IS_LOGIN_DIALOG_OPEN,
+    CHANGE_IS_REGISTER_DIALOG_OPEN,
     MainActions,
     REALM_CHANGE,
     RECEIVE_USER_RELOAD,
@@ -41,6 +42,8 @@ export const main = (state: State, action: MainActions): State => {
             return { ...state, currentRealm: action.payload };
         case CHANGE_IS_LOGIN_DIALOG_OPEN:
             return { ...state, isLoginDialogOpen: action.payload };
+        case CHANGE_IS_REGISTER_DIALOG_OPEN:
+            return { ...state, isRegisterDialogOpen: action.payload };
         default:
             return runners.main(state, action);
     }

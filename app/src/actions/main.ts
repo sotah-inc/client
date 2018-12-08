@@ -127,9 +127,13 @@ export const RealmChange = (payload: IRealm) => createAction(REALM_CHANGE, paylo
 export const CHANGE_IS_LOGIN_DIALOG_OPEN = "CHANGE_IS_LOGIN_DIALOG_OPEN";
 export const ChangeIsLoginDialogOpen = (payload: boolean) => createAction(CHANGE_IS_LOGIN_DIALOG_OPEN, payload);
 
+export const CHANGE_IS_REGISTER_DIALOG_OPEN = "CHANGE_IS_REGISTER_DIALOG_OPEN";
+export const ChangeIsRegisterDialogOpen = (payload: boolean) => createAction(CHANGE_IS_REGISTER_DIALOG_OPEN, payload);
+
 export const MainActions = {
     ChangeAuthLevel,
     ChangeIsLoginDialogOpen,
+    ChangeIsRegisterDialogOpen,
     RealmChange,
     ReceiveGetBoot,
     ReceiveGetPing,

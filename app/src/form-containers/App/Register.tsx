@@ -8,7 +8,10 @@ import { UserRules } from "@app/validator-rules";
 
 interface IFormProps {
     onUserRegister: (payload: IProfile) => void;
+    changeIsRegisterDialogOpen: (isOpen: boolean) => void;
+
     isRegistered: boolean;
+    isRegisterDialogOpen: boolean;
 }
 
 const config: WithFormikConfig<IFormProps, IFormValues> = {

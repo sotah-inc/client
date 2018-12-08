@@ -9,10 +9,12 @@ import { Generator as FormFieldGenerator } from "../util/FormField";
 
 export interface IStateProps {
     isRegistered: boolean;
+    isRegisterDialogOpen: boolean;
 }
 
 export interface IDispatchProps {
     onUserRegister: (payload: IProfile) => void;
+    changeIsRegisterDialogOpen: (isOpen: boolean) => void;
 }
 
 export interface IFormValues {
@@ -22,20 +24,12 @@ export interface IFormValues {
 
 export type Props = Readonly<IStateProps & IDispatchProps & FormikProps<IFormValues>>;
 
-type State = Readonly<{
-    isDialogOpen: boolean;
-}>;
-
-export class Register extends React.Component<Props, State> {
-    public state: State = {
-        isDialogOpen: false,
-    };
-
+export class Register extends React.Component<Props> {
     public componentDidUpdate() {
-        const { isRegistered } = this.props;
+        const { isRegistered, changeIsRegisterDialogOpen } = this.props;
 
         if (isRegistered) {
-            this.setState({ isDialogOpen: false });
+            changeIsRegisterDialogOpen(false);
         }
     }
 
@@ -73,14 +67,14 @@ export class Register extends React.Component<Props, State> {
     }
 
     public render() {
-        const { isDialogOpen } = this.state;
+        const { isRegisterDialogOpen, changeIsRegisterDialogOpen } = this.props;
 
         return (
             <>
-                <Button onClick={() => this.setState({ isDialogOpen: !isDialogOpen })} text="Register" icon="user" />
+                <Button onClick={() => changeIsRegisterDialogOpen(!isRegisterDialogOpen)} text="Register" icon="user" />
                 <Dialog
-                    isOpen={this.state.isDialogOpen}
-                    onClose={() => this.setState({ isDialogOpen: !isDialogOpen })}
+                    isOpen={isRegisterDialogOpen}
+                    onClose={() => changeIsRegisterDialogOpen(!isRegisterDialogOpen)}
                     title="Register"
                     icon="manually-entered-data"
                 >
