@@ -4,7 +4,6 @@ import {
     Alignment,
     ButtonGroup,
     Classes,
-    H4,
     Intent,
     Navbar,
     NavbarDivider,
@@ -581,7 +580,6 @@ export class AuctionList extends React.Component<Props> {
 
         return (
             <>
-                <H4>Search</H4>
                 <QueryAuctionsFilterContainer />
                 <Navbar>
                     <NavbarGroup align={Alignment.LEFT}>
