@@ -17,8 +17,11 @@ const defaultState: IStoreState = {
     PriceLists: defaultPriceListsState,
 };
 
+const x: boolean = (() => {
+    return false;
+})();
 const token = localStorage.getItem("token");
-if (token !== null) {
+if (x === true && token !== null) {
     defaultState.Main.preloadedToken = token;
 }
 

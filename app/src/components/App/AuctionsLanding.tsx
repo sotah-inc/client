@@ -21,7 +21,7 @@ export interface IDispatchProps {
 }
 
 interface IRouteParams {
-    region_name: string;
+    region_name?: string;
 }
 
 export interface IOwnProps extends RouteComponentProps<IRouteParams> {}
@@ -42,6 +42,24 @@ export class AuctionsLanding extends React.Component<Props> {
         } = this.props;
 
         if (currentRegion === null) {
+            return;
+        }
+
+        if (typeof region_name === "undefined") {
+            switch (fetchRealmLevel) {
+                case FetchLevel.initial:
+                case FetchLevel.prompted:
+                    fetchRealms(currentRegion);
+
+                    return;
+                case FetchLevel.success:
+                    break;
+                default:
+                    return;
+            }
+
+            this.setTitle();
+
             return;
         }
 
@@ -87,7 +105,7 @@ export class AuctionsLanding extends React.Component<Props> {
             return;
         }
 
-        if (currentRegion.name !== region_name) {
+        if (typeof region_name !== "undefined" && currentRegion.name !== region_name) {
             switch (fetchRealmLevel) {
                 case FetchLevel.success:
                     if (!(region_name in regions)) {
@@ -103,6 +121,7 @@ export class AuctionsLanding extends React.Component<Props> {
         }
 
         switch (fetchRealmLevel) {
+            case FetchLevel.initial:
             case FetchLevel.prompted:
                 fetchRealms(currentRegion);
 
@@ -139,7 +158,7 @@ export class AuctionsLanding extends React.Component<Props> {
             );
         }
 
-        if (currentRegion.name !== region_name) {
+        if (typeof region_name !== "undefined" && currentRegion.name !== region_name) {
             return (
                 <NonIdealState
                     title="Changing region"

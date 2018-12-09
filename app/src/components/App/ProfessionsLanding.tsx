@@ -21,7 +21,7 @@ export interface IDispatchProps {
 }
 
 interface IRouteParams {
-    region_name: string;
+    region_name?: string;
 }
 
 export interface IOwnProps extends RouteComponentProps<IRouteParams> {}
@@ -45,7 +45,7 @@ export class ProfessionsLanding extends React.Component<Props> {
             return;
         }
 
-        if (currentRegion.name !== region_name) {
+        if (typeof region_name !== "undefined" && currentRegion.name !== region_name) {
             if (region_name in regions) {
                 onRegionChange(regions[region_name]);
 
@@ -87,7 +87,7 @@ export class ProfessionsLanding extends React.Component<Props> {
             return;
         }
 
-        if (currentRegion.name !== region_name) {
+        if (typeof region_name !== "undefined" && currentRegion.name !== region_name) {
             switch (fetchRealmLevel) {
                 case FetchLevel.success:
                     if (!(region_name in regions)) {
@@ -140,7 +140,7 @@ export class ProfessionsLanding extends React.Component<Props> {
             );
         }
 
-        if (currentRegion.name !== region_name) {
+        if (typeof region_name !== "undefined" && currentRegion.name !== region_name) {
             return (
                 <NonIdealState
                     title="Changing region"

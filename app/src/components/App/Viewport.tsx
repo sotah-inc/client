@@ -27,6 +27,8 @@ export class Viewport extends React.Component<Props> {
         return (
             <Switch>
                 <Route exact={true} path="/" component={RootRouteContainer} />
+                <Route exact={true} path="/auctions" component={AuctionsLandingRouteContainer} />
+                <Route exact={true} path="/price-lists" component={ProfessionsLandingRouteContainer} />
                 <Route exact={true} path="/content" component={ContentRouteContainer} />
                 <Route exact={true} path="/content/news" component={NewsRouteContainer} />
                 <Route exact={true} path="/data" component={DataContainer} />
