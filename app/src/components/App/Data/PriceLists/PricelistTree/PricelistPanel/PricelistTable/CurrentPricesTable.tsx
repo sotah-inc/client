@@ -61,11 +61,16 @@ export class CurrentPricesTable extends React.Component<Props> {
                 return;
         }
 
-        const itemIds = list.pricelist_entries!.map(v => v.item_id);
+        const previousItemIds = prevProps.list.pricelist_entries.map(v => v.item_id);
+        const itemIds = list.pricelist_entries.map(v => v.item_id);
+        const newItemIds = itemIds.filter(v => previousItemIds.indexOf(v) === -1);
+        const missingItemIds = previousItemIds.filter(v => itemIds.indexOf(v) === -1);
         const shouldReloadPrices =
             didRegionChange(prevProps.region, region) ||
             didRealmChange(prevProps.realm, realm) ||
-            prevProps.list.id !== list.id;
+            prevProps.list.id !== list.id ||
+            newItemIds.length > 0 ||
+            missingItemIds.length > 0;
         if (!shouldReloadPrices) {
             return;
         }
