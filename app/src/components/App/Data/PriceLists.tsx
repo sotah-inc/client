@@ -104,6 +104,8 @@ export class PriceLists extends React.Component<Props> {
             currentRealm,
             onRealmChange,
             realms,
+            onRegionChange,
+            regions,
         } = this.props;
 
         if (currentRegion === null) {
@@ -112,6 +114,14 @@ export class PriceLists extends React.Component<Props> {
 
         if (currentRegion.name !== region_name) {
             switch (fetchRealmLevel) {
+                case FetchLevel.initial:
+                    if (region_name in regions) {
+                        onRegionChange(regions[region_name]);
+
+                        return;
+                    }
+
+                    return;
                 case FetchLevel.prompted:
                     fetchRealms(currentRegion);
 

@@ -143,8 +143,10 @@ export class AuctionList extends React.Component<Props> {
             currentRegion,
             fetchRealms,
             currentRealm,
+            onRegionChange,
             onRealmChange,
             realms,
+            regions,
         } = this.props;
 
         if (currentRegion === null) {
@@ -153,6 +155,14 @@ export class AuctionList extends React.Component<Props> {
 
         if (currentRegion.name !== region_name) {
             switch (fetchRealmLevel) {
+                case FetchLevel.initial:
+                    if (region_name in regions) {
+                        onRegionChange(regions[region_name]);
+
+                        return;
+                    }
+
+                    return;
                 case FetchLevel.prompted:
                     fetchRealms(currentRegion);
 
