@@ -2,7 +2,7 @@ import { withFormik, WithFormikConfig } from "formik";
 import * as Yup from "yup";
 
 import { IPricelistEntryJson } from "@app/api-types/entities";
-import { IItem } from "@app/api-types/item";
+import { IItem, ItemId } from "@app/api-types/item";
 import { CreateEntryForm, IFormValues } from "@app/components/App/Data/PriceLists/util/CreateEntryForm";
 import { PriceListRules } from "@app/validator-rules";
 
@@ -12,6 +12,7 @@ interface IFormProps {
 
     isSubmitDisabled?: boolean;
     externalItemError?: string;
+    itemIdBlacklist?: ItemId[];
 }
 
 const config: WithFormikConfig<IFormProps, IFormValues> = {

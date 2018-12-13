@@ -206,17 +206,20 @@ export class ListDialog extends React.Component<Props, State> {
     }
 
     private renderCreateEntryForm() {
-        const { listDialogStep, entryFormError } = this.state;
+        const { listDialogStep, entryFormError, entries } = this.state;
 
         if (listDialogStep !== ListDialogStep.entry) {
             return;
         }
+
+        const itemIdBlacklist: ItemId[] = entries.map(v => v.item_id);
 
         return (
             <CreateEntryFormFormContainer
                 onComplete={(v, item) => this.onCreateEntryFormComplete(v, item)}
                 onItemSelect={v => this.onCreateEntryFormItemSelect(v)}
                 externalItemError={entryFormError}
+                itemIdBlacklist={itemIdBlacklist}
             >
                 {this.renderNav()}
             </CreateEntryFormFormContainer>

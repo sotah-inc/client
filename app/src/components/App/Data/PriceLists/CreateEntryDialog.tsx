@@ -3,7 +3,7 @@ import * as React from "react";
 import { Dialog } from "@blueprintjs/core";
 
 import { IPricelistEntryJson, IPricelistJson } from "@app/api-types/entities";
-import { IItem } from "@app/api-types/item";
+import { IItem, ItemId } from "@app/api-types/item";
 import { CreateEntryFormFormContainer } from "@app/form-containers/App/Data/PriceLists/util/CreateEntryForm";
 import { IProfile } from "@app/types/global";
 import { FetchLevel } from "@app/types/main";
@@ -40,6 +40,8 @@ export class CreateEntryDialog extends React.Component<Props, IState> {
             return null;
         }
 
+        const itemIdBlacklist: ItemId[] = selectedList.pricelist_entries.map(v => v.item_id);
+
         return (
             <Dialog
                 isOpen={isAddEntryDialogOpen}
@@ -53,6 +55,7 @@ export class CreateEntryDialog extends React.Component<Props, IState> {
                     onItemSelect={v => this.onCreateEntryFormItemSelect(v)}
                     isSubmitDisabled={updatePricelistLevel === FetchLevel.fetching}
                     externalItemError={entryFormError}
+                    itemIdBlacklist={itemIdBlacklist}
                 />
             </Dialog>
         );

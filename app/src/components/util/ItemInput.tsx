@@ -12,7 +12,7 @@ import {
 import { debounce } from "lodash";
 
 import { IQueryItemsItem } from "@app/api-types/contracts/data";
-import { IItem } from "@app/api-types/item";
+import { IItem, ItemId } from "@app/api-types/item";
 import { getItems } from "@app/api/data";
 import { getItemIconUrl, getItemTextValue, qualityToColorClass } from "@app/util";
 
@@ -20,6 +20,7 @@ const ItemSuggest = Suggest.ofType<IQueryItemsItem>();
 
 type Props = Readonly<{
     autoFocus?: boolean;
+    itemIdBlacklist?: ItemId[];
     onSelect(item: IItem): void;
 }>;
 
@@ -75,6 +76,8 @@ export class ItemInput extends React.Component<Props, State> {
             return null;
         }
 
+        const { itemIdBlacklist } = this.props;
+
         let className = modifiers.active ? Classes.ACTIVE : "";
         const { item } = result;
 
@@ -84,6 +87,14 @@ export class ItemInput extends React.Component<Props, State> {
             className = `${className} ${qualityToColorClass(item.quality)}`;
         }
 
+        const disabled: boolean = (() => {
+            if (typeof itemIdBlacklist === "undefined") {
+                return false;
+            }
+
+            return itemIdBlacklist.indexOf(item.id) > -1;
+        })();
+
         return (
             <MenuItem
                 key={index}
@@ -91,6 +102,7 @@ export class ItemInput extends React.Component<Props, State> {
                 onClick={handleClick}
                 text={this.renderItemRendererText(item)}
                 label={label}
+                disabled={disabled}
             />
         );
     };

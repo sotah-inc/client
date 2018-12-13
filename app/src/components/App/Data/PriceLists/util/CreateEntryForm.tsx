@@ -4,7 +4,7 @@ import { Button, FormGroup, H5, Intent } from "@blueprintjs/core";
 import { FormikProps } from "formik";
 
 import { IPricelistEntryJson } from "@app/api-types/entities";
-import { IItem } from "@app/api-types/item";
+import { IItem, ItemId } from "@app/api-types/item";
 import { DialogActions, DialogBody, ItemInput } from "@app/components/util";
 import { Generator as FormFieldGenerator } from "@app/components/util/FormField";
 import { getItemIconUrl, getItemTextValue, qualityToColorClass } from "@app/util";
@@ -17,6 +17,7 @@ export interface IOwnProps {
 
     isSubmitDisabled?: boolean;
     externalItemError?: string;
+    itemIdBlacklist?: ItemId[];
 }
 
 export interface IFormValues {
@@ -39,6 +40,7 @@ export class CreateEntryForm extends React.Component<Props> {
             touched,
             children,
             externalItemError,
+            itemIdBlacklist,
         } = this.props;
         const createFormField = FormFieldGenerator({ setFieldValue });
 
@@ -58,7 +60,11 @@ export class CreateEntryForm extends React.Component<Props> {
                                     labelInfo={true}
                                     intent={itemIntent}
                                 >
-                                    <ItemInput onSelect={v => this.onItemSelect(v)} autoFocus={true} />
+                                    <ItemInput
+                                        itemIdBlacklist={itemIdBlacklist}
+                                        onSelect={v => this.onItemSelect(v)}
+                                        autoFocus={true}
+                                    />
                                 </FormGroup>
                             </div>
                         </div>
