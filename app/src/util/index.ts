@@ -102,6 +102,8 @@ export const inventoryTypeToString = (iType: InventoryType): string => {
             return "Chest";
         case InventoryType.OneHand:
             return "One-Hand";
+        case InventoryType.HeldInOffHand:
+            return "Held in Off-hand";
         default:
             return InventoryType[iType];
     }
