@@ -30,7 +30,8 @@ body.bp3-dark,
     justify-content: flex-start;
     float: left;
 
-    > .bp3-button:first-child {
+    > .bp3-button:first-child,
+    > .bp3-popover-wrapper:first-child .bp3-button {
         margin-left: 0;
     }
 }
