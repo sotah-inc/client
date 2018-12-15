@@ -1,11 +1,12 @@
 import * as React from "react";
 
-import { Button, Classes, Dialog, HTMLTable, Intent } from "@blueprintjs/core";
+import { Button, Classes, Dialog, HTMLTable, Intent, Tooltip } from "@blueprintjs/core";
 
 import { IPricelistEntryJson } from "@app/api-types/entities";
 import { IItem, IItemsMap, ItemId } from "@app/api-types/item";
 import { DialogActions, DialogBody, ErrorList, PanelHeader } from "@app/components/util";
 import { ItemPopoverContainer } from "@app/containers/util/ItemPopover";
+import { BulkEntryFormFormContainer } from "@app/form-containers/App/Data/PriceLists/util/BulkEntryForm";
 import { CreateEntryFormFormContainer } from "@app/form-containers/App/Data/PriceLists/util/CreateEntryForm";
 import { ListFormFormContainer } from "@app/form-containers/App/Data/PriceLists/util/ListForm";
 import { IErrors } from "@app/types/global";
@@ -40,7 +41,12 @@ export interface IOwnProps {
     onComplete: (opts: IOnCompleteOptions) => void;
 }
 
-export type Props = Readonly<IOwnProps & IStateProps>;
+export type Props = Readonly<IStateProps & IOwnProps>;
+
+enum EntryMode {
+    Set,
+    Pick,
+}
 
 type State = Readonly<{
     listDialogStep: ListDialogStep;
@@ -48,6 +54,7 @@ type State = Readonly<{
     entries: IPricelistEntryJson[];
     entriesItems: IItemsMap;
     entryFormError: string;
+    entryMode: EntryMode;
 }>;
 
 export class ListDialog extends React.Component<Props, State> {
@@ -55,6 +62,7 @@ export class ListDialog extends React.Component<Props, State> {
         entries: [],
         entriesItems: {},
         entryFormError: "",
+        entryMode: EntryMode.Set,
         listDialogStep: ListDialogStep.list,
         listName: "",
     };
@@ -107,7 +115,7 @@ export class ListDialog extends React.Component<Props, State> {
                 canOutsideClickClose={false}
             >
                 {this.renderListForm()}
-                {this.renderCreateEntryForm()}
+                {this.renderListEntry()}
                 {this.renderFinish()}
             </Dialog>
         );
@@ -191,6 +199,12 @@ export class ListDialog extends React.Component<Props, State> {
         });
     }
 
+    private onBulkEntryFormComplete() {
+        this.setState({
+            listDialogStep: ListDialogStep.finish,
+        });
+    }
+
     private onCreateEntryFormItemSelect(item: IItem) {
         const { entries } = this.state;
 
@@ -205,8 +219,49 @@ export class ListDialog extends React.Component<Props, State> {
         this.setState({ entryFormError: "" });
     }
 
-    private renderCreateEntryForm() {
-        const { listDialogStep, entryFormError, entries } = this.state;
+    private onBulkEntryFormItemSelect(item: IItem) {
+        const { entries } = this.state;
+
+        for (const entry of entries) {
+            if (entry.item_id === item.id) {
+                this.setState({ entryFormError: "Item is already in the list." });
+
+                return;
+            }
+        }
+
+        this.setState({
+            entries: [...entries, { id: -1, item_id: item.id, quantity_modifier: 1 }],
+            entriesItems: {
+                ...this.state.entriesItems,
+                [item.id]: item,
+            },
+            entryFormError: "",
+        });
+    }
+
+    private renderSetToggle() {
+        return (
+            <Tooltip content="Switch to Pick Mode for faster entry">
+                <Button icon="changes" onClick={() => this.setState({ entryMode: EntryMode.Pick })}>
+                    Pick Mode
+                </Button>
+            </Tooltip>
+        );
+    }
+
+    private renderPickToggle() {
+        return (
+            <Tooltip content="Switch to Set Mode for manually setting quantity">
+                <Button icon="build" onClick={() => this.setState({ entryMode: EntryMode.Set })}>
+                    Set Mode
+                </Button>
+            </Tooltip>
+        );
+    }
+
+    private renderListEntry() {
+        const { listDialogStep, entryFormError, entries, entryMode } = this.state;
 
         if (listDialogStep !== ListDialogStep.entry) {
             return;
@@ -214,16 +269,34 @@ export class ListDialog extends React.Component<Props, State> {
 
         const itemIdBlacklist: ItemId[] = entries.map(v => v.item_id);
 
-        return (
-            <CreateEntryFormFormContainer
-                onComplete={(v, item) => this.onCreateEntryFormComplete(v, item)}
-                onItemSelect={v => this.onCreateEntryFormItemSelect(v)}
-                externalItemError={entryFormError}
-                itemIdBlacklist={itemIdBlacklist}
-            >
-                {this.renderNav()}
-            </CreateEntryFormFormContainer>
-        );
+        switch (entryMode) {
+            case EntryMode.Set:
+                return (
+                    <CreateEntryFormFormContainer
+                        onComplete={(v, item) => this.onCreateEntryFormComplete(v, item)}
+                        onItemSelect={v => this.onCreateEntryFormItemSelect(v)}
+                        externalItemError={entryFormError}
+                        itemIdBlacklist={itemIdBlacklist}
+                        leftChildren={this.renderSetToggle()}
+                    >
+                        {this.renderNav()}
+                    </CreateEntryFormFormContainer>
+                );
+            case EntryMode.Pick:
+                return (
+                    <BulkEntryFormFormContainer
+                        onComplete={() => this.onBulkEntryFormComplete()}
+                        onItemSelect={v => this.onBulkEntryFormItemSelect(v)}
+                        externalItemError={entryFormError}
+                        itemIdBlacklist={itemIdBlacklist}
+                        leftChildren={this.renderPickToggle()}
+                    >
+                        {this.renderNav()}
+                    </BulkEntryFormFormContainer>
+                );
+            default:
+                return null;
+        }
     }
 
     private removeEntryAtIndex(index: number) {
