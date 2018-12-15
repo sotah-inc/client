@@ -29,6 +29,7 @@ export interface IStateProps {
     fetchUserPreferencesLevel: FetchLevel;
     profile: IProfile | null;
     items: IItemsMap;
+    getPricelistsLevel: FetchLevel;
 }
 
 export interface IDispatchProps {
@@ -65,49 +66,50 @@ export class PricelistTree extends React.Component<Props, IState> {
     };
 
     public componentDidMount() {
-        const {
-            currentRegion,
-            currentRealm,
-            authLevel,
-            fetchUserPreferencesLevel,
-            refreshPricelists,
-            profile,
-        } = this.props;
+        const { refreshPricelists, profile, getPricelistsLevel } = this.props;
 
-        if (currentRegion !== null && currentRealm !== null) {
-            const hasFinishedLoading =
-                authLevel === AuthLevel.authenticated && fetchUserPreferencesLevel === FetchLevel.success;
-            if (hasFinishedLoading) {
-                refreshPricelists(profile!.token);
-            }
+        if (profile === null) {
+            return;
+        }
+
+        switch (getPricelistsLevel) {
+            case FetchLevel.initial:
+                refreshPricelists(profile.token);
+
+                return;
+            default:
+                return;
         }
     }
 
     public componentDidUpdate(prevProps: Props) {
         const {
-            authLevel,
-            fetchUserPreferencesLevel,
             refreshPricelists,
             profile,
-            currentRealm,
             selectedProfession,
             refreshProfessionPricelists,
+            getPricelistsLevel,
         } = this.props;
 
-        const shouldRefreshPricelists =
-            (prevProps.currentRealm === null && currentRealm !== null) ||
-            (prevProps.fetchUserPreferencesLevel === FetchLevel.fetching &&
-                fetchUserPreferencesLevel === FetchLevel.success);
-        if (shouldRefreshPricelists) {
-            const hasFinishedLoading =
-                authLevel === AuthLevel.authenticated && fetchUserPreferencesLevel === FetchLevel.success;
-            if (hasFinishedLoading) {
-                refreshPricelists(profile!.token);
+        if (selectedProfession !== null) {
+            const shouldRefreshProfessionPricelists =
+                prevProps.selectedProfession === null || prevProps.selectedProfession.name !== selectedProfession.name;
+            if (shouldRefreshProfessionPricelists) {
+                refreshProfessionPricelists(selectedProfession.name);
             }
         }
 
-        if (selectedProfession !== null && selectedProfession !== prevProps.selectedProfession) {
-            refreshProfessionPricelists(selectedProfession.name);
+        if (profile === null) {
+            return;
+        }
+
+        switch (getPricelistsLevel) {
+            case FetchLevel.initial:
+                refreshPricelists(profile.token);
+
+                return;
+            default:
+                return;
         }
     }
 

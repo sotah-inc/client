@@ -33,6 +33,7 @@ const mapStateToProps = (state: IStoreState): IStateProps => {
         professionPricelists,
         selectedExpansion,
         items,
+        getPricelistsLevel,
     } = state.PriceLists;
     return {
         authLevel,
@@ -40,6 +41,7 @@ const mapStateToProps = (state: IStoreState): IStateProps => {
         currentRegion,
         expansions,
         fetchUserPreferencesLevel,
+        getPricelistsLevel,
         getProfessionPricelistsLevel,
         items,
         pricelists,
