@@ -21,6 +21,7 @@ const ItemSuggest = Suggest.ofType<IQueryItemsItem>();
 type Props = Readonly<{
     autoFocus?: boolean;
     itemIdBlacklist?: ItemId[];
+    closeOnSelect?: boolean;
     onSelect(item: IItem): void;
 }>;
 
@@ -159,7 +160,7 @@ export class ItemInput extends React.Component<Props, State> {
     };
 
     public render() {
-        const { autoFocus, onSelect } = this.props;
+        const { autoFocus, onSelect, closeOnSelect } = this.props;
         const { results } = this.state;
 
         return (
@@ -168,7 +169,7 @@ export class ItemInput extends React.Component<Props, State> {
                 itemRenderer={this.itemRenderer}
                 items={results}
                 onItemSelect={v => onSelect(v.item)}
-                closeOnSelect={true}
+                closeOnSelect={typeof closeOnSelect === "undefined" ? true : closeOnSelect}
                 onQueryChange={this.debouncedTriggerQuery}
                 inputProps={{
                     autoFocus,

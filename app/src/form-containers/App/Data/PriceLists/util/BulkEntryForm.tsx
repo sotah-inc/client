@@ -29,7 +29,7 @@ const config: WithFormikConfig<IFormProps, IFormValues> = {
         };
     },
     validationSchema: Yup.object().shape({
-        item: PriceListRules.item,
+        item: PriceListRules.item.notRequired(),
         quantity: PriceListRules.quantity,
     }),
 };
