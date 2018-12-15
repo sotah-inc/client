@@ -290,6 +290,7 @@ export class ListDialog extends React.Component<Props, State> {
                         externalItemError={entryFormError}
                         itemIdBlacklist={itemIdBlacklist}
                         leftChildren={this.renderPickToggle()}
+                        entriesTable={this.renderEntries()}
                     >
                         {this.renderNav()}
                     </BulkEntryFormFormContainer>

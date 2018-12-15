@@ -13,6 +13,7 @@ interface IFormProps {
     externalItemError?: string;
     itemIdBlacklist?: ItemId[];
     leftChildren?: React.ReactNode;
+    entriesTable: React.ReactNode;
 }
 
 const config: WithFormikConfig<IFormProps, IFormValues> = {

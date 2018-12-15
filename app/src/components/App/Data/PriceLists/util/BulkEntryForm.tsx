@@ -17,6 +17,7 @@ export interface IOwnProps {
     externalItemError?: string;
     itemIdBlacklist?: ItemId[];
     leftChildren?: React.ReactNode;
+    entriesTable: React.ReactNode;
 }
 
 export interface IFormValues {
@@ -38,6 +39,7 @@ export class BulkEntryForm extends React.Component<Props> {
             externalItemError,
             itemIdBlacklist,
             leftChildren,
+            entriesTable,
         } = this.props;
 
         const itemIntent = this.getItemError() && touched.item ? Intent.DANGER : Intent.NONE;
@@ -72,6 +74,7 @@ export class BulkEntryForm extends React.Component<Props> {
                             </div>
                         </div>
                     </div>
+                    {entriesTable}
                 </DialogBody>
                 <DialogActions leftChildren={leftChildren}>
                     <Button text="Reset" intent={Intent.NONE} onClick={handleReset} disabled={!dirty || isSubmitting} />
