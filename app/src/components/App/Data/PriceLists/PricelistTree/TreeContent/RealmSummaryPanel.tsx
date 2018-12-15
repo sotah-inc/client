@@ -43,7 +43,14 @@ interface ICollapsedResultItem {
 
 export class RealmSummaryPanel extends React.Component<Props> {
     public componentDidMount() {
-        const { refreshUnmetDemand, region, realm, expansions } = this.props;
+        const { refreshUnmetDemand, region, realm, expansions, getUnmetDemandLevel } = this.props;
+
+        switch (getUnmetDemandLevel) {
+            case FetchLevel.initial:
+                break;
+            default:
+                return;
+        }
 
         refreshUnmetDemand({
             realm: realm.slug,
@@ -55,17 +62,27 @@ export class RealmSummaryPanel extends React.Component<Props> {
     }
 
     public componentDidUpdate(prevProps: Props) {
-        const { refreshUnmetDemand, region, realm, expansions } = this.props;
+        const { refreshUnmetDemand, region, realm, expansions, getUnmetDemandLevel } = this.props;
 
-        if (didRealmChange(prevProps.realm, realm)) {
-            refreshUnmetDemand({
-                realm: realm.slug,
-                region: region.name,
-                request: {
-                    expansion: getPrimaryExpansion(expansions).name,
-                },
-            });
+        switch (getUnmetDemandLevel) {
+            case FetchLevel.initial:
+            case FetchLevel.success:
+                break;
+            default:
+                return;
         }
+
+        if (!didRealmChange(prevProps.realm, realm)) {
+            return;
+        }
+
+        refreshUnmetDemand({
+            realm: realm.slug,
+            region: region.name,
+            request: {
+                expansion: getPrimaryExpansion(expansions).name,
+            },
+        });
     }
 
     public render() {
