@@ -62,7 +62,7 @@ export class ListDialog extends React.Component<Props, State> {
         entries: [],
         entriesItems: {},
         entryFormError: "",
-        entryMode: EntryMode.Set,
+        entryMode: EntryMode.Pick,
         listDialogStep: ListDialogStep.list,
         listName: "",
     };
