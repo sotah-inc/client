@@ -5,18 +5,15 @@ import {
     CHANGE_IS_ADD_LIST_DIALOG_OPEN,
     CHANGE_IS_DELETE_LIST_DIALOG_OPEN,
     CHANGE_IS_EDIT_LIST_DIALOG_OPEN,
-    CHANGE_SELECTED_EXPANSION,
     CHANGE_SELECTED_LIST,
     CHANGE_SELECTED_PROFESSION,
     NAVIGATE_PROFESSIONNODE,
     PriceListsActions,
     RESET_PROFESSIONS_SELECTIONS,
 } from "@app/actions/price-lists";
-import { IPricelistJson } from "@app/api-types/entities";
 import { IItem } from "@app/api-types/item";
 import { defaultPriceListsState, IPriceListsState } from "@app/types/price-lists";
 import { runners } from "./handlers";
-import { getFirstExpansionPricelist } from "./helper";
 
 type State = Readonly<IPriceListsState> | undefined;
 
@@ -70,21 +67,6 @@ export const priceLists = (state: State, action: PriceListsActions): State => {
             }
 
             return { ...state, items: appendingItems };
-        case CHANGE_SELECTED_EXPANSION:
-            let expansionSelectedList: IPricelistJson | null = null;
-            if (action.payload.jumpTo) {
-                expansionSelectedList = action.payload.jumpTo;
-            } else {
-                expansionSelectedList =
-                    getFirstExpansionPricelist(action.payload.expansion, state.professionPricelists) ||
-                    state.selectedList;
-            }
-
-            return {
-                ...state,
-                selectedExpansion: action.payload.expansion,
-                selectedList: expansionSelectedList,
-            };
         case RESET_PROFESSIONS_SELECTIONS:
             return { ...state, selectedProfession: null, selectedExpansion: null, selectedList: null };
         default:

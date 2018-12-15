@@ -1,6 +1,5 @@
 import { IPricelistJson, IProfessionPricelistJson } from "@app/api-types/entities";
-import { IExpansion } from "@app/api-types/expansion";
-import { IExpansionProfessionPricelistMap, IPriceListsState } from "@app/types/price-lists";
+import { IPriceListsState } from "@app/types/price-lists";
 
 export const getPricelistIndex = (pricelists: IPricelistJson[], id: number): number => {
     for (let i = 0; i < pricelists.length; i++) {
@@ -22,17 +21,6 @@ export const getProfessionPricelistIndex = (professionPricelists: IProfessionPri
     }
 
     return -1;
-};
-
-export const getFirstExpansionPricelist = (
-    expansion: IExpansion,
-    pricelistMap: IExpansionProfessionPricelistMap,
-): IPricelistJson | null => {
-    if (!(expansion.name in pricelistMap)) {
-        return null;
-    }
-
-    return pricelistMap[expansion.name][0].pricelist;
 };
 
 export const getProfessionPricelist = (
