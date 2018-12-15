@@ -246,7 +246,7 @@ export class PricelistTree extends React.Component<Props, IState> {
                 className: "expansion-node",
                 hasCaret: false,
                 id: `expansion-${v.name}`,
-                isExpanded: true,
+                isExpanded: isSelected,
                 isSelected,
                 label: <span style={{ color: v.label_color }}>{v.label}</span>,
             };
