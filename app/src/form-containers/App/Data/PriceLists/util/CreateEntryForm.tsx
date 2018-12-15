@@ -13,6 +13,7 @@ interface IFormProps {
     isSubmitDisabled?: boolean;
     externalItemError?: string;
     itemIdBlacklist?: ItemId[];
+    leftChildren?: React.ReactNode;
 }
 
 const config: WithFormikConfig<IFormProps, IFormValues> = {

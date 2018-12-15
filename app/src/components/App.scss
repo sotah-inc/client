@@ -24,6 +24,17 @@ body.bp3-dark,
     background: #30404d;
 }
 
+.bp3-dialog-footer-actions.bp3-align-left {
+    -ms-flex-pack: start;
+    -webkit-box-pack: start;
+    justify-content: flex-start;
+    float: left;
+
+    > .bp3-button:first-child {
+        margin-left: 0;
+    }
+}
+
 .bp3-dark {
     .poor-text,
     .poor-text a {

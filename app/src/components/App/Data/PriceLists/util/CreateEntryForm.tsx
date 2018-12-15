@@ -18,6 +18,7 @@ export interface IOwnProps {
     isSubmitDisabled?: boolean;
     externalItemError?: string;
     itemIdBlacklist?: ItemId[];
+    leftChildren?: React.ReactNode;
 }
 
 export interface IFormValues {
@@ -41,6 +42,7 @@ export class CreateEntryForm extends React.Component<Props> {
             children,
             externalItemError,
             itemIdBlacklist,
+            leftChildren,
         } = this.props;
         const createFormField = FormFieldGenerator({ setFieldValue });
 
@@ -85,7 +87,7 @@ export class CreateEntryForm extends React.Component<Props> {
                         type: "number",
                     })}
                 </DialogBody>
-                <DialogActions>
+                <DialogActions leftChildren={leftChildren}>
                     <Button text="Reset" intent={Intent.NONE} onClick={handleReset} disabled={!dirty || isSubmitting} />
                     <Button
                         type="submit"
