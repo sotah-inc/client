@@ -310,7 +310,19 @@ export class PricelistTree extends React.Component<Props, IState> {
     }
 
     private onPricelistNodeClick(id: string) {
-        const { pricelists, professionPricelists, changeSelectedList, selectedExpansion } = this.props;
+        const {
+            pricelists,
+            professionPricelists,
+            changeSelectedList,
+            selectedExpansion,
+            history,
+            currentRegion,
+            currentRealm,
+        } = this.props;
+
+        if (currentRegion === null || currentRealm === null) {
+            return;
+        }
 
         // checking user pricelists first
         const list = pricelists.reduce((result, v) => {
@@ -325,6 +337,7 @@ export class PricelistTree extends React.Component<Props, IState> {
             return null;
         }, null);
         if (list !== null) {
+            history.push(`/data/${currentRegion.name}/${currentRealm.slug}/professions`);
             changeSelectedList(list);
 
             return;
