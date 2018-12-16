@@ -314,13 +314,7 @@ export class PricelistTree extends React.Component<Props, IState> {
     }
 
     private onPricelistNodeClick(id: string) {
-        const {
-            pricelists,
-            professionPricelists,
-            changeSelectedList,
-            changeSelectedExpansion,
-            expansions,
-        } = this.props;
+        const { pricelists, professionPricelists, changeSelectedList, selectedExpansion } = this.props;
 
         // checking user pricelists first
         const list = pricelists.reduce((result, v) => {
@@ -340,31 +334,34 @@ export class PricelistTree extends React.Component<Props, IState> {
             return;
         }
 
-        // checking profession pricelists
-        for (const expansionName of Object.keys(professionPricelists)) {
-            const expansion: IExpansion | null = expansions.reduce((result: IExpansion, v) => {
-                if (result !== null) {
-                    return result;
+        if (selectedExpansion === null) {
+            return;
+        }
+
+        if (!(selectedExpansion.name in professionPricelists)) {
+            return;
+        }
+
+        const expansionProfessionPricelists = professionPricelists[selectedExpansion.name];
+        const foundProfessionPricelist: IPricelistJson | null = expansionProfessionPricelists.reduce(
+            (previousValue, currentValue) => {
+                if (previousValue !== null) {
+                    return previousValue;
                 }
 
-                if (v.name === expansionName) {
-                    return v;
+                if (currentValue.pricelist.id.toString() === id) {
+                    return currentValue.pricelist;
                 }
 
                 return null;
-            }, null);
-
-            for (const professionPricelist of professionPricelists[expansionName]) {
-                if (professionPricelist.pricelist.id.toString() === id) {
-                    changeSelectedExpansion({
-                        expansion: expansion!,
-                        jumpTo: professionPricelist.pricelist!,
-                    });
-
-                    return;
-                }
-            }
+            },
+            null,
+        );
+        if (foundProfessionPricelist === null) {
+            return;
         }
+
+        changeSelectedList(foundProfessionPricelist);
     }
 
     private onProfessionNodeClick(id: string) {
