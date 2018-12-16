@@ -8,6 +8,8 @@ import { IStoreState } from "@app/types";
 
 const mapStateToProps = (state: IStoreState): IStateProps => {
     const { currentRegion, currentRealm, authLevel, fetchRealmLevel, regions, realms } = state.Main;
+    const { selectedProfession, selectedExpansion } = state.PriceLists;
+
     return {
         authLevel,
         currentRealm,
@@ -15,6 +17,8 @@ const mapStateToProps = (state: IStoreState): IStateProps => {
         fetchRealmLevel,
         realms,
         regions,
+        selectedExpansion,
+        selectedProfession,
     };
 };
 

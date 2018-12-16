@@ -2,6 +2,8 @@ import * as React from "react";
 
 import { RouteComponentProps } from "react-router";
 
+import { IExpansion } from "@app/api-types/expansion";
+import { IProfession } from "@app/api-types/profession";
 import { IRealm, IRegion } from "@app/api-types/region";
 import { CreateEntryDialogContainer } from "@app/containers/App/Data/PriceLists/CreateEntryDialog";
 import { CreateListDialogContainer } from "@app/containers/App/Data/PriceLists/CreateListDialog";
@@ -23,6 +25,8 @@ export interface IStateProps {
     regions: IRegions;
     fetchRealmLevel: FetchLevel;
     realms: IRealms;
+    selectedProfession: IProfession | null;
+    selectedExpansion: IExpansion | null;
 }
 
 export interface IDispatchProps {
@@ -35,6 +39,7 @@ export interface IDispatchProps {
 interface IRouteParams {
     region_name: string;
     realm_slug: string;
+    profession?: string;
 }
 
 export interface IOwnProps extends RouteComponentProps<IRouteParams> {}
@@ -194,12 +199,28 @@ export class PriceLists extends React.Component<Props> {
     }
 
     private setTitle() {
-        const { currentRegion, currentRealm } = this.props;
+        const { currentRegion, currentRealm, selectedProfession, selectedExpansion } = this.props;
 
         if (currentRegion === null || currentRealm === null) {
             return;
         }
 
-        setTitle(`Professions - ${currentRegion.name.toUpperCase()} ${currentRealm.name}`);
+        if (selectedProfession === null) {
+            setTitle(`Professions - ${currentRegion.name.toUpperCase()} ${currentRealm.name}`);
+
+            return;
+        }
+
+        if (selectedExpansion === null) {
+            setTitle(`
+                ${selectedProfession.label} - Professions - ${currentRegion.name.toUpperCase()} ${currentRealm.name}`);
+
+            return;
+        }
+
+        setTitle(`
+            ${selectedExpansion.label} - ${
+            selectedProfession.label
+        } - Professions - ${currentRegion.name.toUpperCase()} ${currentRealm.name}`);
     }
 }
