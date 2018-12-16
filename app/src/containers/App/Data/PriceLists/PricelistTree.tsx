@@ -4,13 +4,12 @@ import { Actions } from "@app/actions";
 import {
     ChangeSelectedExpansion,
     ChangeSelectedList,
-    ChangeSelectedProfession,
     FetchGetPricelists,
     FetchGetProfessionPricelists,
     ResetProfessionsSelections,
 } from "@app/actions/price-lists";
 import { IPricelistJson } from "@app/api-types/entities";
-import { IProfession, ProfessionName } from "@app/api-types/profession";
+import { ProfessionName } from "@app/api-types/profession";
 import { IDispatchProps, IStateProps, PricelistTree } from "@app/components/App/Data/PriceLists/PricelistTree";
 import { IStoreState } from "@app/types";
 import { ISelectExpansionPayload } from "@app/types/price-lists";
@@ -58,7 +57,6 @@ const mapDispatchToProps = (dispatch: Dispatch<Actions>): IDispatchProps => {
     return {
         changeSelectedExpansion: (v: ISelectExpansionPayload) => dispatch(ChangeSelectedExpansion(v)),
         changeSelectedList: (selectedList: IPricelistJson) => dispatch(ChangeSelectedList(selectedList)),
-        changeSelectedProfession: (profession: IProfession) => dispatch(ChangeSelectedProfession(profession)),
         refreshPricelists: (token: string) => dispatch(FetchGetPricelists(token)),
         refreshProfessionPricelists: (profession: ProfessionName) => dispatch(FetchGetProfessionPricelists(profession)),
         resetProfessionsSelections: () => dispatch(ResetProfessionsSelections()),

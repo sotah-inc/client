@@ -35,7 +35,6 @@ export interface IStateProps {
 
 export interface IDispatchProps {
     changeSelectedList: (list: IPricelistJson) => void;
-    changeSelectedProfession: (profession: IProfession) => void;
     refreshProfessionPricelists: (profession: ProfessionName) => void;
     changeSelectedExpansion: (v: ISelectExpansionPayload) => void;
     resetProfessionsSelections: () => void;
