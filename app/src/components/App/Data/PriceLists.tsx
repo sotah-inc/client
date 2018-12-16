@@ -27,10 +27,12 @@ export interface IStateProps {
     realms: IRealms;
     selectedProfession: IProfession | null;
     selectedExpansion: IExpansion | null;
+    professions: IProfession[];
 }
 
 export interface IDispatchProps {
     changeIsLoginDialogOpen: (isLoginDialogOpen: boolean) => void;
+    changeSelectedProfession: (profession: IProfession) => void;
     fetchRealms: (region: IRegion) => void;
     onRegionChange: (region: IRegion) => void;
     onRealmChange: (realm: IRealm) => void;
@@ -51,13 +53,15 @@ export class PriceLists extends React.Component<Props> {
         const {
             currentRegion,
             match: {
-                params: { region_name, realm_slug },
+                params: { region_name, realm_slug, profession },
             },
             onRegionChange,
             regions,
             fetchRealmLevel,
             fetchRealms,
             currentRealm,
+            selectedProfession,
+            history,
         } = this.props;
 
         if (currentRegion === null) {
@@ -94,13 +98,19 @@ export class PriceLists extends React.Component<Props> {
             return;
         }
 
+        if (selectedProfession !== null && typeof profession === "undefined") {
+            history.replace(`/data/${currentRegion.name}/${currentRealm.slug}/professions/${selectedProfession.name}`);
+
+            return;
+        }
+
         this.setTitle();
     }
 
     public componentDidUpdate(prevProps: Props) {
         const {
             match: {
-                params: { region_name, realm_slug },
+                params: { region_name, realm_slug, profession },
             },
             history,
             fetchRealmLevel,
@@ -111,6 +121,9 @@ export class PriceLists extends React.Component<Props> {
             realms,
             onRegionChange,
             regions,
+            selectedProfession,
+            changeSelectedProfession,
+            professions,
         } = this.props;
 
         if (currentRegion === null) {
@@ -167,6 +180,32 @@ export class PriceLists extends React.Component<Props> {
             }
 
             onRealmChange(realms[realm_slug]);
+
+            return;
+        }
+
+        if (typeof profession === "undefined") {
+            return;
+        }
+
+        if (selectedProfession === null || selectedProfession.name !== profession) {
+            const foundProfession: IProfession | null = professions.reduce((previousValue, currentValue) => {
+                if (previousValue !== null) {
+                    return previousValue;
+                }
+
+                if (currentValue.name === profession) {
+                    return currentValue;
+                }
+
+                return null;
+            }, null);
+
+            if (foundProfession === null) {
+                return;
+            }
+
+            changeSelectedProfession(foundProfession);
 
             return;
         }
