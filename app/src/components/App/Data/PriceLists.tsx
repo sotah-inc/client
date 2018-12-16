@@ -9,8 +9,8 @@ import { CreateEntryDialogContainer } from "@app/containers/App/Data/PriceLists/
 import { CreateListDialogContainer } from "@app/containers/App/Data/PriceLists/CreateListDialog";
 import { DeleteListDialogContainer } from "@app/containers/App/Data/PriceLists/DeleteListDialog";
 import { EditListDialogContainer } from "@app/containers/App/Data/PriceLists/EditListDialog";
-import { PricelistTreeContainer } from "@app/containers/App/Data/PriceLists/PricelistTree";
 import { ActionBarRouteContainer } from "@app/route-containers/App/Data/PriceLists/ActionBar";
+import { PricelistTreeRouteContainer } from "@app/route-containers/App/Data/PriceLists/PricelistTree";
 import { IRealms, IRegions } from "@app/types/global";
 import { AuthLevel, FetchLevel } from "@app/types/main";
 import { setTitle } from "@app/util";
@@ -181,7 +181,7 @@ export class PriceLists extends React.Component<Props> {
             return (
                 <>
                     <ActionBarRouteContainer />
-                    <PricelistTreeContainer />
+                    <PricelistTreeRouteContainer />
                 </>
             );
         }
@@ -193,7 +193,7 @@ export class PriceLists extends React.Component<Props> {
                 <EditListDialogContainer />
                 <DeleteListDialogContainer />
                 <ActionBarRouteContainer />
-                <PricelistTreeContainer />
+                <PricelistTreeRouteContainer />
             </>
         );
     }

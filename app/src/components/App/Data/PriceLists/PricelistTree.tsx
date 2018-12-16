@@ -1,6 +1,7 @@
 import * as React from "react";
 
 import { Classes, Intent, ITreeNode, Spinner, Tree } from "@blueprintjs/core";
+import { RouteComponentProps } from "react-router";
 
 import { IPricelistJson } from "@app/api-types/entities";
 import { IExpansion } from "@app/api-types/expansion";
@@ -41,7 +42,9 @@ export interface IDispatchProps {
     refreshPricelists: (token: string) => void;
 }
 
-export type Props = Readonly<IStateProps & IDispatchProps>;
+export interface IOwnProps extends RouteComponentProps<{}> {}
+
+export type Props = Readonly<IStateProps & IDispatchProps & IOwnProps>;
 
 interface ITopOpenMap {
     [key: string]: boolean;
