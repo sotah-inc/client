@@ -35,11 +35,7 @@ import {
     updatePricelist,
 } from "@app/api/price-lists";
 import { FetchLevel } from "@app/types/main";
-import {
-    ISelectExpansionPayload,
-    IUpdatePricelistRequestOptions,
-    IUpdatePricelistResponseOptions,
-} from "@app/types/price-lists";
+import { IUpdatePricelistRequestOptions, IUpdatePricelistResponseOptions } from "@app/types/price-lists";
 
 import { ActionsUnion, createAction } from "./helpers";
 
@@ -108,8 +104,7 @@ export const CHANGE_SELECTED_PROFESSION = "CHANGE_SELECTED_PROFESSION";
 export const ChangeSelectedProfession = (payload: IProfession) => createAction(CHANGE_SELECTED_PROFESSION, payload);
 
 export const CHANGE_SELECTED_EXPANSION = "CHANGE_SELECTED_EXPANSION";
-export const ChangeSelectedExpansion = (payload: ISelectExpansionPayload) =>
-    createAction(CHANGE_SELECTED_EXPANSION, payload);
+export const ChangeSelectedExpansion = (payload: IExpansion) => createAction(CHANGE_SELECTED_EXPANSION, payload);
 
 export const CHANGE_IS_ADD_LIST_DIALOG_OPEN = "CHANGE_IS_ADD_LIST_DIALOG_OPEN";
 export const ChangeIsAddListDialogOpen = (payload: boolean) => createAction(CHANGE_IS_ADD_LIST_DIALOG_OPEN, payload);

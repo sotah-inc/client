@@ -26,15 +26,11 @@ const handlers: IKindHandlers<IPriceListsState, PriceListsActions> = {
         selected: {
             change: (state: IPriceListsState, action: ReturnType<typeof ChangeSelectedExpansion>) => {
                 const selectedList: IPricelistJson | null = (() => {
-                    if (action.payload.jumpTo) {
-                        return action.payload.jumpTo;
-                    }
-
-                    if (!(action.payload.expansion.name in state.professionPricelists)) {
+                    if (!(action.payload.name in state.professionPricelists)) {
                         return null;
                     }
 
-                    const sorted = state.professionPricelists[action.payload.expansion.name].sort((a, b) => {
+                    const sorted = state.professionPricelists[action.payload.name].sort((a, b) => {
                         if (a.pricelist.name === b.pricelist.name) {
                             return 0;
                         }
@@ -47,7 +43,7 @@ const handlers: IKindHandlers<IPriceListsState, PriceListsActions> = {
 
                 return {
                     ...state,
-                    selectedExpansion: action.payload.expansion,
+                    selectedExpansion: action.payload,
                     selectedList,
                 };
             },

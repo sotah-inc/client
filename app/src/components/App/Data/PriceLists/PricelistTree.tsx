@@ -13,7 +13,7 @@ import { TreeContentContainer } from "@app/containers/App/Data/PriceLists/Pricel
 import { PricelistIconContainer } from "@app/containers/util/PricelistIcon";
 import { IProfile } from "@app/types/global";
 import { AuthLevel, FetchLevel } from "@app/types/main";
-import { IExpansionProfessionPricelistMap, ISelectExpansionPayload } from "@app/types/price-lists";
+import { IExpansionProfessionPricelistMap } from "@app/types/price-lists";
 
 export interface IStateProps {
     pricelists: IPricelistJson[];
@@ -36,7 +36,7 @@ export interface IStateProps {
 export interface IDispatchProps {
     changeSelectedList: (list: IPricelistJson) => void;
     refreshProfessionPricelists: (profession: ProfessionName) => void;
-    changeSelectedExpansion: (v: ISelectExpansionPayload) => void;
+    changeSelectedExpansion: (v: IExpansion) => void;
     refreshPricelists: (token: string) => void;
 }
 
@@ -428,7 +428,7 @@ export class PricelistTree extends React.Component<Props, IState> {
             return;
         }
 
-        changeSelectedExpansion({ expansion });
+        changeSelectedExpansion(expansion);
     }
 
     private onNodeClick(node: ITreeNode) {

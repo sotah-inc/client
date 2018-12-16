@@ -8,10 +8,10 @@ import {
     FetchGetProfessionPricelists,
 } from "@app/actions/price-lists";
 import { IPricelistJson } from "@app/api-types/entities";
+import { IExpansion } from "@app/api-types/expansion";
 import { ProfessionName } from "@app/api-types/profession";
 import { IDispatchProps, IStateProps, PricelistTree } from "@app/components/App/Data/PriceLists/PricelistTree";
 import { IStoreState } from "@app/types";
-import { ISelectExpansionPayload } from "@app/types/price-lists";
 
 const mapStateToProps = (state: IStoreState): IStateProps => {
     const {
@@ -54,7 +54,7 @@ const mapStateToProps = (state: IStoreState): IStateProps => {
 
 const mapDispatchToProps = (dispatch: Dispatch<Actions>): IDispatchProps => {
     return {
-        changeSelectedExpansion: (v: ISelectExpansionPayload) => dispatch(ChangeSelectedExpansion(v)),
+        changeSelectedExpansion: (v: IExpansion) => dispatch(ChangeSelectedExpansion(v)),
         changeSelectedList: (selectedList: IPricelistJson) => dispatch(ChangeSelectedList(selectedList)),
         refreshPricelists: (token: string) => dispatch(FetchGetPricelists(token)),
         refreshProfessionPricelists: (profession: ProfessionName) => dispatch(FetchGetProfessionPricelists(profession)),

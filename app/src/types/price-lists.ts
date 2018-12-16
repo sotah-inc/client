@@ -75,11 +75,6 @@ export interface IUpdatePricelistResponseOptions {
     meta: IUpdatePricelistMeta;
 }
 
-export interface ISelectExpansionPayload {
-    expansion: IExpansion;
-    jumpTo?: IPricelistJson | null;
-}
-
 export const defaultPriceListsState: IPriceListsState = {
     createPricelistErrors: {},
     createPricelistLevel: FetchLevel.initial,
