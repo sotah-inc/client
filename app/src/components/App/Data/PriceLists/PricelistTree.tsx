@@ -5,7 +5,6 @@ import { RouteComponentProps } from "react-router";
 
 import { IPricelistJson } from "@app/api-types/entities";
 import { IExpansion } from "@app/api-types/expansion";
-import { IItemsMap } from "@app/api-types/item";
 import { IProfession, ProfessionName } from "@app/api-types/profession";
 import { IRealm, IRegion } from "@app/api-types/region";
 import { ProfessionIcon } from "@app/components/util/ProfessionIcon";
@@ -27,16 +26,13 @@ export interface IStateProps {
     expansions: IExpansion[];
     selectedExpansion: IExpansion | null;
     authLevel: AuthLevel;
-    fetchUserPreferencesLevel: FetchLevel;
     profile: IProfile | null;
-    items: IItemsMap;
     getPricelistsLevel: FetchLevel;
 }
 
 export interface IDispatchProps {
     changeSelectedList: (list: IPricelistJson) => void;
     refreshProfessionPricelists: (profession: ProfessionName) => void;
-    changeSelectedExpansion: (v: IExpansion) => void;
     refreshPricelists: (token: string) => void;
 }
 
@@ -410,7 +406,7 @@ export class PricelistTree extends React.Component<Props, IState> {
     }
 
     private onExpansionClick(id: string) {
-        const { expansions, changeSelectedExpansion } = this.props;
+        const { expansions, currentRegion, currentRealm, history, selectedProfession } = this.props;
 
         const expansion = expansions.reduce((result, v) => {
             if (result !== null) {
@@ -424,11 +420,19 @@ export class PricelistTree extends React.Component<Props, IState> {
             return null;
         }, null);
 
-        if (expansion === null) {
+        if (expansion === null || currentRegion === null || currentRealm === null || selectedProfession === null) {
             return;
         }
 
-        changeSelectedExpansion(expansion);
+        const url = [
+            "data",
+            currentRegion.name,
+            currentRealm.slug,
+            "professions",
+            selectedProfession.name,
+            expansion.name,
+        ].join("/");
+        history.push(`/${url}`);
     }
 
     private onNodeClick(node: ITreeNode) {

@@ -1,28 +1,14 @@
 import { connect, Dispatch } from "react-redux";
 
 import { Actions } from "@app/actions";
-import {
-    ChangeSelectedExpansion,
-    ChangeSelectedList,
-    FetchGetPricelists,
-    FetchGetProfessionPricelists,
-} from "@app/actions/price-lists";
+import { ChangeSelectedList, FetchGetPricelists, FetchGetProfessionPricelists } from "@app/actions/price-lists";
 import { IPricelistJson } from "@app/api-types/entities";
-import { IExpansion } from "@app/api-types/expansion";
 import { ProfessionName } from "@app/api-types/profession";
 import { IDispatchProps, IStateProps, PricelistTree } from "@app/components/App/Data/PriceLists/PricelistTree";
 import { IStoreState } from "@app/types";
 
 const mapStateToProps = (state: IStoreState): IStateProps => {
-    const {
-        currentRealm,
-        professions,
-        currentRegion,
-        expansions,
-        authLevel,
-        fetchUserPreferencesLevel,
-        profile,
-    } = state.Main;
+    const { currentRealm, professions, currentRegion, expansions, authLevel, profile } = state.Main;
     const {
         pricelists,
         selectedList,
@@ -30,18 +16,16 @@ const mapStateToProps = (state: IStoreState): IStateProps => {
         getProfessionPricelistsLevel,
         professionPricelists,
         selectedExpansion,
-        items,
         getPricelistsLevel,
     } = state.PriceLists;
+
     return {
         authLevel,
         currentRealm,
         currentRegion,
         expansions,
-        fetchUserPreferencesLevel,
         getPricelistsLevel,
         getProfessionPricelistsLevel,
-        items,
         pricelists,
         professionPricelists,
         professions,
@@ -54,7 +38,6 @@ const mapStateToProps = (state: IStoreState): IStateProps => {
 
 const mapDispatchToProps = (dispatch: Dispatch<Actions>): IDispatchProps => {
     return {
-        changeSelectedExpansion: (v: IExpansion) => dispatch(ChangeSelectedExpansion(v)),
         changeSelectedList: (selectedList: IPricelistJson) => dispatch(ChangeSelectedList(selectedList)),
         refreshPricelists: (token: string) => dispatch(FetchGetPricelists(token)),
         refreshProfessionPricelists: (profession: ProfessionName) => dispatch(FetchGetProfessionPricelists(profession)),

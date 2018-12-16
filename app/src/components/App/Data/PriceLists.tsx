@@ -29,10 +29,12 @@ export interface IStateProps {
     selectedProfession: IProfession | null;
     selectedExpansion: IExpansion | null;
     professions: IProfession[];
+    expansions: IExpansion[];
 }
 
 export interface IDispatchProps {
     changeIsLoginDialogOpen: (isLoginDialogOpen: boolean) => void;
+    changeSelectedExpansion: (expansion: IExpansion) => void;
     changeSelectedProfession: (profession: IProfession) => void;
     fetchRealms: (region: IRegion) => void;
     onRegionChange: (region: IRegion) => void;
@@ -43,7 +45,8 @@ export interface IDispatchProps {
 interface IRouteParams {
     region_name: string;
     realm_slug: string;
-    profession?: string;
+    profession_name?: string;
+    expansion_name?: string;
 }
 
 export interface IOwnProps extends RouteComponentProps<IRouteParams> {}
@@ -55,7 +58,7 @@ export class PriceLists extends React.Component<Props> {
         const {
             currentRegion,
             match: {
-                params: { region_name, realm_slug, profession },
+                params: { region_name, realm_slug, profession_name },
             },
             onRegionChange,
             regions,
@@ -100,7 +103,7 @@ export class PriceLists extends React.Component<Props> {
             return;
         }
 
-        if (selectedProfession !== null && typeof profession === "undefined") {
+        if (selectedProfession !== null && typeof profession_name === "undefined") {
             resetProfessionsSelections();
 
             return;
@@ -112,7 +115,7 @@ export class PriceLists extends React.Component<Props> {
     public componentDidUpdate(prevProps: Props) {
         const {
             match: {
-                params: { region_name, realm_slug, profession },
+                params: { region_name, realm_slug, profession_name, expansion_name },
             },
             history,
             fetchRealmLevel,
@@ -127,6 +130,9 @@ export class PriceLists extends React.Component<Props> {
             changeSelectedProfession,
             professions,
             resetProfessionsSelections,
+            selectedExpansion,
+            expansions,
+            changeSelectedExpansion,
         } = this.props;
 
         if (currentRegion === null) {
@@ -187,23 +193,25 @@ export class PriceLists extends React.Component<Props> {
             return;
         }
 
-        if (typeof profession === "undefined") {
+        if (typeof profession_name === "undefined") {
             if (selectedProfession !== null) {
                 resetProfessionsSelections();
 
                 return;
             }
 
+            this.setTitle();
+
             return;
         }
 
-        if (selectedProfession === null || selectedProfession.name !== profession) {
+        if (selectedProfession === null || selectedProfession.name !== profession_name) {
             const foundProfession: IProfession | null = professions.reduce((previousValue, currentValue) => {
                 if (previousValue !== null) {
                     return previousValue;
                 }
 
-                if (currentValue.name === profession) {
+                if (currentValue.name === profession_name) {
                     return currentValue;
                 }
 
@@ -219,6 +227,34 @@ export class PriceLists extends React.Component<Props> {
             return;
         }
 
+        if (typeof expansion_name === "undefined") {
+            this.setTitle();
+
+            return;
+        }
+
+        if (selectedExpansion === null || selectedExpansion.name !== expansion_name) {
+            const foundExpansion: IExpansion | null = expansions.reduce((previousValue, currentValue) => {
+                if (previousValue !== null) {
+                    return previousValue;
+                }
+
+                if (currentValue.name === expansion_name) {
+                    return currentValue;
+                }
+
+                return null;
+            }, null);
+
+            if (foundExpansion === null) {
+                return;
+            }
+
+            changeSelectedExpansion(foundExpansion);
+
+            return;
+        }
+
         this.setTitle();
     }
 
@@ -226,18 +262,18 @@ export class PriceLists extends React.Component<Props> {
         const {
             authLevel,
             match: {
-                params: { profession },
+                params: { profession_name },
             },
             professions,
         } = this.props;
 
-        if (typeof profession !== "undefined") {
+        if (typeof profession_name !== "undefined") {
             const hasProfession: boolean = professions.reduce((previousValue, currentValue) => {
                 if (previousValue !== false) {
                     return previousValue;
                 }
 
-                if (currentValue.name === profession) {
+                if (currentValue.name === profession_name) {
                     return true;
                 }
 
@@ -248,7 +284,7 @@ export class PriceLists extends React.Component<Props> {
                 return (
                     <NonIdealState
                         title="Profession not found"
-                        description={`Profession ${profession} could not be found`}
+                        description={`Profession ${profession_name} could not be found`}
                         icon={<Spinner className={Classes.LARGE} intent={Intent.DANGER} value={1} />}
                     />
                 );

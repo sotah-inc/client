@@ -52,7 +52,12 @@ export class Viewport extends React.Component<Props> {
                 />
                 <Route
                     exact={true}
-                    path="/data/:region_name/:realm_slug/professions/:profession"
+                    path="/data/:region_name/:realm_slug/professions/:profession_name"
+                    component={PriceListsRouteContainer}
+                />
+                <Route
+                    exact={true}
+                    path="/data/:region_name/:realm_slug/professions/:profession_name/:expansion_name"
                     component={PriceListsRouteContainer}
                 />
                 <Route component={NotFound} />
