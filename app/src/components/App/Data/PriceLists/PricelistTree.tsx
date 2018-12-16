@@ -370,7 +370,18 @@ export class PricelistTree extends React.Component<Props, IState> {
     }
 
     private onProfessionNodeClick(id: string) {
-        const { professions, changeSelectedProfession, selectedProfession, resetProfessionsSelections } = this.props;
+        const {
+            professions,
+            selectedProfession,
+            resetProfessionsSelections,
+            history,
+            currentRegion,
+            currentRealm,
+        } = this.props;
+
+        if (currentRegion === null || currentRealm === null) {
+            return;
+        }
 
         const profession = professions.reduce((result, v) => {
             if (result !== null) {
@@ -390,7 +401,7 @@ export class PricelistTree extends React.Component<Props, IState> {
             return;
         }
 
-        changeSelectedProfession(profession);
+        history.push(`/data/${currentRegion.name}/${currentRealm.slug}/professions/${profession.name}`);
     }
 
     private onTopNodeClick(id: TopOpenKey) {
