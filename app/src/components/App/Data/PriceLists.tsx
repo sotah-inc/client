@@ -1,5 +1,6 @@
 import * as React from "react";
 
+import { Classes, Intent, NonIdealState, Spinner } from "@blueprintjs/core";
 import { RouteComponentProps } from "react-router";
 
 import { IExpansion } from "@app/api-types/expansion";
@@ -222,7 +223,37 @@ export class PriceLists extends React.Component<Props> {
     }
 
     public render() {
-        const { authLevel } = this.props;
+        const {
+            authLevel,
+            match: {
+                params: { profession },
+            },
+            professions,
+        } = this.props;
+
+        if (typeof profession !== "undefined") {
+            const hasProfession: boolean = professions.reduce((previousValue, currentValue) => {
+                if (previousValue !== false) {
+                    return previousValue;
+                }
+
+                if (currentValue.name === profession) {
+                    return true;
+                }
+
+                return false;
+            }, false);
+
+            if (!hasProfession) {
+                return (
+                    <NonIdealState
+                        title="Profession not found"
+                        description={`Profession ${profession} could not be found`}
+                        icon={<Spinner className={Classes.LARGE} intent={Intent.DANGER} value={1} />}
+                    />
+                );
+            }
+        }
 
         if (authLevel === AuthLevel.unauthenticated) {
             return (
