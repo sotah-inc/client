@@ -30,6 +30,7 @@ export interface IStateProps {
     selectedExpansion: IExpansion | null;
     professions: IProfession[];
     expansions: IExpansion[];
+    getProfessionPricelistsLevel: FetchLevel;
 }
 
 export interface IDispatchProps {
@@ -133,6 +134,7 @@ export class PriceLists extends React.Component<Props> {
             selectedExpansion,
             expansions,
             changeSelectedExpansion,
+            getProfessionPricelistsLevel,
         } = this.props;
 
         if (currentRegion === null) {
@@ -225,6 +227,13 @@ export class PriceLists extends React.Component<Props> {
             changeSelectedProfession(foundProfession);
 
             return;
+        }
+
+        switch (getProfessionPricelistsLevel) {
+            case FetchLevel.success:
+                break;
+            default:
+                return;
         }
 
         if (typeof expansion_name === "undefined") {
