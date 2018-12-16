@@ -6,7 +6,6 @@ import {
     ChangeSelectedList,
     FetchGetPricelists,
     FetchGetProfessionPricelists,
-    ResetProfessionsSelections,
 } from "@app/actions/price-lists";
 import { IPricelistJson } from "@app/api-types/entities";
 import { ProfessionName } from "@app/api-types/profession";
@@ -59,7 +58,6 @@ const mapDispatchToProps = (dispatch: Dispatch<Actions>): IDispatchProps => {
         changeSelectedList: (selectedList: IPricelistJson) => dispatch(ChangeSelectedList(selectedList)),
         refreshPricelists: (token: string) => dispatch(FetchGetPricelists(token)),
         refreshProfessionPricelists: (profession: ProfessionName) => dispatch(FetchGetProfessionPricelists(profession)),
-        resetProfessionsSelections: () => dispatch(ResetProfessionsSelections()),
     };
 };
 

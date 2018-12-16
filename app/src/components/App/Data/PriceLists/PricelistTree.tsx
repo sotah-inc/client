@@ -37,7 +37,6 @@ export interface IDispatchProps {
     changeSelectedList: (list: IPricelistJson) => void;
     refreshProfessionPricelists: (profession: ProfessionName) => void;
     changeSelectedExpansion: (v: ISelectExpansionPayload) => void;
-    resetProfessionsSelections: () => void;
     refreshPricelists: (token: string) => void;
 }
 
@@ -369,14 +368,7 @@ export class PricelistTree extends React.Component<Props, IState> {
     }
 
     private onProfessionNodeClick(id: string) {
-        const {
-            professions,
-            selectedProfession,
-            resetProfessionsSelections,
-            history,
-            currentRegion,
-            currentRealm,
-        } = this.props;
+        const { professions, selectedProfession, history, currentRegion, currentRealm } = this.props;
 
         if (currentRegion === null || currentRealm === null) {
             return;
@@ -395,7 +387,7 @@ export class PricelistTree extends React.Component<Props, IState> {
         }, null);
 
         if (profession === null || (selectedProfession !== null && profession.name === selectedProfession.name)) {
-            resetProfessionsSelections();
+            history.push(`/data/${currentRegion.name}/${currentRealm.slug}/professions`);
 
             return;
         }
@@ -404,11 +396,15 @@ export class PricelistTree extends React.Component<Props, IState> {
     }
 
     private onTopNodeClick(id: TopOpenKey) {
-        const { resetProfessionsSelections } = this.props;
+        const { history, currentRegion, currentRealm } = this.props;
         const { topOpenMap } = this.state;
 
+        if (currentRegion === null || currentRealm === null) {
+            return;
+        }
+
         if (id === TopOpenKey.summary) {
-            resetProfessionsSelections();
+            history.push(`/data/${currentRegion.name}/${currentRealm.slug}/professions`);
 
             return;
         }

@@ -36,6 +36,7 @@ export interface IDispatchProps {
     fetchRealms: (region: IRegion) => void;
     onRegionChange: (region: IRegion) => void;
     onRealmChange: (realm: IRealm) => void;
+    resetProfessionsSelections: () => void;
 }
 
 interface IRouteParams {
@@ -61,7 +62,7 @@ export class PriceLists extends React.Component<Props> {
             fetchRealms,
             currentRealm,
             selectedProfession,
-            history,
+            resetProfessionsSelections,
         } = this.props;
 
         if (currentRegion === null) {
@@ -99,7 +100,7 @@ export class PriceLists extends React.Component<Props> {
         }
 
         if (selectedProfession !== null && typeof profession === "undefined") {
-            history.replace(`/data/${currentRegion.name}/${currentRealm.slug}/professions/${selectedProfession.name}`);
+            resetProfessionsSelections();
 
             return;
         }
@@ -124,6 +125,7 @@ export class PriceLists extends React.Component<Props> {
             selectedProfession,
             changeSelectedProfession,
             professions,
+            resetProfessionsSelections,
         } = this.props;
 
         if (currentRegion === null) {
@@ -185,6 +187,12 @@ export class PriceLists extends React.Component<Props> {
         }
 
         if (typeof profession === "undefined") {
+            if (selectedProfession !== null) {
+                resetProfessionsSelections();
+
+                return;
+            }
+
             return;
         }
 

@@ -2,7 +2,7 @@ import { connect, Dispatch } from "react-redux";
 
 import { Actions } from "@app/actions";
 import { ChangeIsLoginDialogOpen, FetchGetRealms, RealmChange, RegionChange } from "@app/actions/main";
-import { ChangeSelectedProfession } from "@app/actions/price-lists";
+import { ChangeSelectedProfession, ResetProfessionsSelections } from "@app/actions/price-lists";
 import { IProfession } from "@app/api-types/profession";
 import { IRealm, IRegion } from "@app/api-types/region";
 import { IDispatchProps, IStateProps, PriceLists } from "@app/components/App/Data/PriceLists";
@@ -32,6 +32,7 @@ const mapDispatchToProps = (dispatch: Dispatch<Actions>): IDispatchProps => {
         fetchRealms: (region: IRegion) => dispatch(FetchGetRealms(region)),
         onRealmChange: (realm: IRealm) => dispatch(RealmChange(realm)),
         onRegionChange: (region: IRegion) => dispatch(RegionChange(region)),
+        resetProfessionsSelections: () => dispatch(ResetProfessionsSelections()),
     };
 };
 
