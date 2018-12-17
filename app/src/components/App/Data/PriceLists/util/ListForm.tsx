@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { Button, FormGroup, InputGroup, Intent } from "@blueprintjs/core";
+import { Button, ControlGroup, FormGroup, InputGroup, Intent } from "@blueprintjs/core";
 import { IconName } from "@blueprintjs/icons";
 import { FormikProps } from "formik";
 import * as getSlug from "speakingurl";
@@ -73,18 +73,28 @@ export class ListForm extends React.Component<Props, State> {
                         />
                     </FormGroup>
                     <FormGroup
-                        helperText={errors.slug}
+                        helperText={errors.slug ? errors.slug : "For URLs"}
                         label="Slug"
                         labelFor="slug"
                         labelInfo={true}
                         intent={errors.slug && !!touched.slug ? Intent.DANGER : Intent.NONE}
                     >
-                        <InputGroup
-                            intent={errors.slug && !!touched.slug ? Intent.DANGER : Intent.NONE}
-                            type="text"
-                            value={values.slug}
-                            onChange={e => setFieldValue("slug", e.target.value)}
-                        />
+                        <ControlGroup fill={true}>
+                            <InputGroup
+                                intent={errors.slug && !!touched.slug ? Intent.DANGER : Intent.NONE}
+                                type="text"
+                                value={values.slug}
+                                onChange={e => setFieldValue("slug", e.target.value)}
+                                disabled={!manualSlug}
+                            />
+                            <Button
+                                active={manualSlug}
+                                icon="edit"
+                                onClick={() => this.setState({ manualSlug: !manualSlug })}
+                            >
+                                Edit
+                            </Button>
+                        </ControlGroup>
                     </FormGroup>
                 </DialogBody>
                 <DialogActions>
