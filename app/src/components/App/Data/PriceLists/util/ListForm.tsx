@@ -5,7 +5,6 @@ import { IconName } from "@blueprintjs/icons";
 import { FormikProps } from "formik";
 
 import { DialogActions, DialogBody } from "@app/components/util";
-import { Generator as FormFieldGenerator } from "@app/components/util/FormField";
 
 export interface IOwnProps {
     onComplete: (name: string, slug: string) => void;
@@ -21,7 +20,15 @@ export interface IFormValues {
 
 export type Props = Readonly<IOwnProps & FormikProps<IFormValues>>;
 
-export class ListForm extends React.Component<Props> {
+type State = Readonly<{
+    manualSlug: boolean;
+}>;
+
+export class ListForm extends React.Component<Props, State> {
+    public state: State = {
+        manualSlug: false,
+    };
+
     public render() {
         const {
             values,
@@ -36,21 +43,34 @@ export class ListForm extends React.Component<Props> {
             submitIcon,
             submitText,
         } = this.props;
-        const createFormField = FormFieldGenerator({ setFieldValue });
+        const { manualSlug } = this.state;
 
         return (
             <form onSubmit={handleSubmit}>
                 <DialogBody>
                     {children}
-                    {createFormField({
-                        autofocus: true,
-                        fieldName: "name",
-                        getError: () => errors.name,
-                        getTouched: () => !!touched.name,
-                        getValue: () => values.name,
-                        placeholder: "",
-                        type: "string",
-                    })}
+                    <FormGroup
+                        helperText={errors.name}
+                        label="Name"
+                        labelFor="name"
+                        labelInfo={true}
+                        intent={errors.name && !!touched.name ? Intent.DANGER : Intent.NONE}
+                    >
+                        <InputGroup
+                            intent={errors.name && !!touched.name ? Intent.DANGER : Intent.NONE}
+                            type="text"
+                            value={values.name}
+                            onChange={e => {
+                                setFieldValue("name", e.target.value);
+
+                                if (manualSlug) {
+                                    return;
+                                }
+
+                                setFieldValue("slug", e.target.value);
+                            }}
+                        />
+                    </FormGroup>
                     <FormGroup
                         helperText={errors.slug}
                         label="Slug"
