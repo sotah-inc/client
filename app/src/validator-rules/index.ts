@@ -16,4 +16,8 @@ export const PriceListRules = {
         .integer()
         .required("Quantity is required")
         .moreThan(0, "Quantity must be greater than zero"),
+    slug: Yup.string()
+        .min(4)
+        .matches(/^[a-z|0-9|_|\-]+$/, "Slug must be a-z, 0-9, or underscore")
+        .required("Slug is required"),
 };
