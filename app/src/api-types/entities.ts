@@ -17,6 +17,7 @@ export interface IPricelistEntryJson {
 export interface IPricelistJson {
     id: number;
     name: string;
+    slug: string | null;
     pricelist_entries: IPricelistEntryJson[];
 }
 
