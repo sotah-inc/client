@@ -4,6 +4,7 @@ import { IItemsMap } from "../../item";
 export interface ICreatePricelistRequest {
     pricelist: {
         name: string;
+        slug: string;
     };
     entries: Array<{
         id?: number;

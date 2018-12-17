@@ -5,6 +5,7 @@ import { ProfessionName } from "../../profession";
 export interface ICreateProfessionPricelistRequest {
     pricelist: {
         name: string;
+        slug: string;
     };
     entries: Array<{
         id?: number;
