@@ -68,7 +68,7 @@ export class CreateEntryDialog extends React.Component<Props, IState> {
             meta: { isAddEntryDialogOpen: false },
             request: {
                 entries: [...selectedList!.pricelist_entries!, entry],
-                pricelist: selectedList!,
+                pricelist: { name: selectedList!.name, slug: selectedList!.slug! },
             },
             token: profile!.token,
         });

@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { Button, Intent } from "@blueprintjs/core";
+import { Button, FormGroup, InputGroup, Intent } from "@blueprintjs/core";
 import { IconName } from "@blueprintjs/icons";
 import { FormikProps } from "formik";
 
@@ -8,7 +8,7 @@ import { DialogActions, DialogBody } from "@app/components/util";
 import { Generator as FormFieldGenerator } from "@app/components/util/FormField";
 
 export interface IOwnProps {
-    onComplete: (name: string) => void;
+    onComplete: (name: string, slug: string) => void;
     defaultName?: string;
     submitIcon: IconName;
     submitText: string;
@@ -16,6 +16,7 @@ export interface IOwnProps {
 
 export interface IFormValues {
     name: string;
+    slug: string;
 }
 
 export type Props = Readonly<IOwnProps & FormikProps<IFormValues>>;
@@ -50,6 +51,20 @@ export class ListForm extends React.Component<Props> {
                         placeholder: "",
                         type: "string",
                     })}
+                    <FormGroup
+                        helperText={errors.slug}
+                        label="Slug"
+                        labelFor="slug"
+                        labelInfo={true}
+                        intent={errors.slug && !!touched.slug ? Intent.DANGER : Intent.NONE}
+                    >
+                        <InputGroup
+                            intent={errors.slug && !!touched.slug ? Intent.DANGER : Intent.NONE}
+                            type="text"
+                            value={values.slug}
+                            onChange={e => setFieldValue("slug", e.target.value)}
+                        />
+                    </FormGroup>
                 </DialogBody>
                 <DialogActions>
                     <Button text="Reset" intent={Intent.NONE} onClick={handleReset} disabled={!dirty || isSubmitting} />

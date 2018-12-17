@@ -7,7 +7,8 @@ import { PriceListRules } from "@app/validator-rules";
 
 interface IFormProps {
     defaultName?: string;
-    onComplete: (name: string) => void;
+    defaultSlug?: string;
+    onComplete: (name: string, slug: string) => void;
     submitIcon: IconName;
     submitText: string;
 }
@@ -15,15 +16,17 @@ interface IFormProps {
 const config: WithFormikConfig<IFormProps, IFormValues> = {
     handleSubmit: async (values, { setSubmitting, props }) => {
         setSubmitting(false);
-        props.onComplete(values.name);
+        props.onComplete(values.name, values.slug);
     },
     mapPropsToValues: (props: IFormProps) => {
         return {
             name: props.defaultName ? props.defaultName : "",
+            slug: props.defaultSlug ? props.defaultSlug : "",
         };
     },
     validationSchema: Yup.object().shape({
         name: PriceListRules.name,
+        slug: PriceListRules.slug,
     }),
 };
 

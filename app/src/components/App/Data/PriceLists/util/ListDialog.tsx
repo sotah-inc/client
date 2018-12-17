@@ -16,6 +16,7 @@ import { qualityToColorClass } from "@app/util";
 
 interface IOnCompleteOptions {
     name: string;
+    slug: string;
     entries: Array<{
         id?: number;
         item_id: number;
@@ -35,6 +36,7 @@ export interface IOwnProps {
     mutatePricelistLevel: FetchLevel;
     resetTrigger: number;
     defaultName?: string;
+    defaultSlug?: string;
     defaultEntries?: IPricelistEntryJson[];
 
     onClose: () => void;
@@ -51,6 +53,7 @@ enum EntryMode {
 type State = Readonly<{
     listDialogStep: ListDialogStep;
     listName: string;
+    listSlug: string;
     entries: IPricelistEntryJson[];
     entriesItems: IItemsMap;
     entryFormError: string;
@@ -65,6 +68,7 @@ export class ListDialog extends React.Component<Props, State> {
         entryMode: EntryMode.Pick,
         listDialogStep: ListDialogStep.list,
         listName: "",
+        listSlug: "",
     };
 
     public componentDidMount() {
@@ -163,14 +167,14 @@ export class ListDialog extends React.Component<Props, State> {
         );
     }
 
-    private onListFormComplete(listName: string) {
+    private onListFormComplete(listName: string, listSlug: string) {
         const listDialogStep = this.state.entries.length === 0 ? ListDialogStep.entry : ListDialogStep.finish;
-        this.setState({ listDialogStep, listName });
+        this.setState({ listDialogStep, listName, listSlug });
     }
 
     private renderListForm() {
-        const { defaultName } = this.props;
-        const { listDialogStep, listName } = this.state;
+        const { defaultName, defaultSlug } = this.props;
+        const { listDialogStep, listName, listSlug } = this.state;
 
         if (listDialogStep !== ListDialogStep.list) {
             return;
@@ -178,10 +182,11 @@ export class ListDialog extends React.Component<Props, State> {
 
         return (
             <ListFormFormContainer
-                onComplete={v => this.onListFormComplete(v)}
+                onComplete={(name: string, slug: string) => this.onListFormComplete(name, slug)}
                 submitIcon="caret-right"
                 submitText="Next"
                 defaultName={listName || defaultName}
+                defaultSlug={listSlug || defaultSlug}
             >
                 {this.renderNav()}
             </ListFormFormContainer>
@@ -346,10 +351,10 @@ export class ListDialog extends React.Component<Props, State> {
     }
 
     private onFinishClick() {
-        const { listName: name, entries, entriesItems: items } = this.state;
+        const { listName: name, listSlug: slug, entries, entriesItems: items } = this.state;
         const { onComplete } = this.props;
 
-        onComplete({ entries, name, items });
+        onComplete({ entries, name, slug, items });
     }
 
     private renderEntries() {

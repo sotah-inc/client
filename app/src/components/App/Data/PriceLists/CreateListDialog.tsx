@@ -88,7 +88,7 @@ export class CreateListDialog extends React.Component<Props, State> {
         );
     }
 
-    private onListDialogComplete({ name, entries, items }) {
+    private onListDialogComplete({ name, slug, entries, items }) {
         const {
             createPricelist,
             profile,
@@ -101,13 +101,13 @@ export class CreateListDialog extends React.Component<Props, State> {
         if (selectedProfession === null) {
             createPricelist(profile!.token, {
                 entries,
-                pricelist: { name },
+                pricelist: { name, slug },
             });
         } else {
             createProfessionPricelist(profile!.token, {
                 entries,
                 expansion_name: selectedExpansion!.name,
-                pricelist: { name },
+                pricelist: { name, slug },
                 profession_name: selectedProfession.name,
             });
         }

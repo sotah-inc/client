@@ -74,6 +74,7 @@ export class EditListDialog extends React.Component<Props, State> {
                 mutatePricelistLevel={updatePricelistLevel}
                 resetTrigger={listDialogResetTrigger}
                 defaultName={selectedList!.name}
+                defaultSlug={selectedList!.slug === null ? "" : selectedList.slug!}
                 defaultEntries={selectedList.pricelist_entries}
                 onComplete={v => this.onListDialogComplete(v)}
             />
@@ -88,13 +89,13 @@ export class EditListDialog extends React.Component<Props, State> {
         this.setState({ listDialogResetTrigger: listDialogResetTrigger + 1 });
     }
 
-    private onListDialogComplete({ name, entries, items }) {
+    private onListDialogComplete({ name, entries, items, slug }) {
         const { updatePricelist, profile, selectedList, appendItems } = this.props;
 
         updatePricelist({
             id: selectedList!.id,
             meta: { isEditListDialogOpen: false },
-            request: { entries, pricelist: { name } },
+            request: { entries, pricelist: { name, slug } },
             token: profile!.token,
         });
         appendItems(items);
