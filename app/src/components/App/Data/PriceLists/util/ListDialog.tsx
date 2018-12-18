@@ -14,7 +14,7 @@ import { FetchLevel } from "@app/types/main";
 import { ListDialogStep } from "@app/types/price-lists";
 import { qualityToColorClass } from "@app/util";
 
-interface IOnCompleteOptions {
+export interface IOnCompleteOptions {
     name: string;
     slug: string;
     entries: Array<{

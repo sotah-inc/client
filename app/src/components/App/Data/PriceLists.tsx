@@ -8,9 +8,9 @@ import { IExpansion } from "@app/api-types/expansion";
 import { IProfession } from "@app/api-types/profession";
 import { IRealm, IRegion } from "@app/api-types/region";
 import { CreateEntryDialogContainer } from "@app/containers/App/Data/PriceLists/CreateEntryDialog";
-import { CreateListDialogContainer } from "@app/containers/App/Data/PriceLists/CreateListDialog";
 import { DeleteListDialogContainer } from "@app/containers/App/Data/PriceLists/DeleteListDialog";
 import { ActionBarRouteContainer } from "@app/route-containers/App/Data/PriceLists/ActionBar";
+import { CreateListDialogRouteContainer } from "@app/route-containers/App/Data/PriceLists/CreateListDialog";
 import { EditListDialogRouteContainer } from "@app/route-containers/App/Data/PriceLists/EditListDialog";
 import { PricelistTreeRouteContainer } from "@app/route-containers/App/Data/PriceLists/PricelistTree";
 import { IRealms, IRegions } from "@app/types/global";
@@ -186,7 +186,7 @@ export class PriceLists extends React.Component<Props> {
 
         return (
             <>
-                <CreateListDialogContainer />
+                <CreateListDialogRouteContainer />
                 <CreateEntryDialogContainer />
                 <EditListDialogRouteContainer />
                 <DeleteListDialogContainer />
