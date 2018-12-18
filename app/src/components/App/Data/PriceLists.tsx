@@ -122,28 +122,11 @@ export class PriceLists extends React.Component<Props> {
     public componentDidUpdate(prevProps: Props) {
         const {
             match: {
-                params: { region_name, realm_slug, profession_name, expansion_name, pricelist_slug },
+                params: { region_name },
             },
-            history,
-            fetchRealmLevel,
             currentRegion,
-            fetchRealms,
-            currentRealm,
-            onRealmChange,
-            realms,
             onRegionChange,
             regions,
-            selectedProfession,
-            changeSelectedProfession,
-            professions,
-            resetProfessionsSelections,
-            selectedExpansion,
-            expansions,
-            changeSelectedExpansion,
-            getProfessionPricelistsLevel,
-            selectedList,
-            professionPricelists,
-            changeSelectedList,
         } = this.props;
 
         if (currentRegion === null) {
@@ -151,31 +134,83 @@ export class PriceLists extends React.Component<Props> {
         }
 
         if (currentRegion.name !== region_name) {
-            switch (fetchRealmLevel) {
-                case FetchLevel.initial:
-                    if (region_name in regions) {
-                        onRegionChange(regions[region_name]);
+            onRegionChange(regions[region_name]);
 
-                        return;
-                    }
+            return;
+        }
 
-                    return;
-                case FetchLevel.prompted:
-                    fetchRealms(currentRegion);
+        this.handleWithRegion(prevProps);
+    }
 
-                    return;
-                case FetchLevel.success:
-                    if (currentRealm === null) {
-                        return;
-                    }
+    public render() {
+        const {
+            authLevel,
+            match: {
+                params: { profession_name },
+            },
+            professions,
+        } = this.props;
 
-                    this.setTitle();
-                    history.push(`/data/${currentRegion.name}/${currentRealm.slug}/professions`);
+        if (typeof profession_name !== "undefined") {
+            const hasProfession: boolean = professions.reduce((previousValue, currentValue) => {
+                if (previousValue !== false) {
+                    return previousValue;
+                }
 
-                    return;
-                default:
-                    return;
+                if (currentValue.name === profession_name) {
+                    return true;
+                }
+
+                return false;
+            }, false);
+
+            if (!hasProfession) {
+                return (
+                    <NonIdealState
+                        title="Profession not found"
+                        description={`Profession ${profession_name} could not be found`}
+                        icon={<Spinner className={Classes.LARGE} intent={Intent.DANGER} value={1} />}
+                    />
+                );
             }
+        }
+
+        if (authLevel === AuthLevel.unauthenticated) {
+            return (
+                <>
+                    <ActionBarRouteContainer />
+                    <PricelistTreeRouteContainer />
+                </>
+            );
+        }
+
+        return (
+            <>
+                <CreateListDialogContainer />
+                <CreateEntryDialogContainer />
+                <EditListDialogContainer />
+                <DeleteListDialogContainer />
+                <ActionBarRouteContainer />
+                <PricelistTreeRouteContainer />
+            </>
+        );
+    }
+
+    private handleWithRegion(prevProps: Props) {
+        const {
+            match: {
+                params: { realm_slug },
+            },
+            fetchRealmLevel,
+            currentRegion,
+            fetchRealms,
+            currentRealm,
+            onRealmChange,
+            realms,
+        } = this.props;
+
+        if (currentRegion === null) {
+            return;
         }
 
         switch (fetchRealmLevel) {
@@ -201,6 +236,26 @@ export class PriceLists extends React.Component<Props> {
 
             onRealmChange(realms[realm_slug]);
 
+            return;
+        }
+
+        this.handleWithRealm(prevProps);
+    }
+
+    private handleWithRealm(prevProps: Props) {
+        const {
+            match: {
+                params: { profession_name },
+            },
+            currentRegion,
+            currentRealm,
+            selectedProfession,
+            changeSelectedProfession,
+            professions,
+            resetProfessionsSelections,
+        } = this.props;
+
+        if (currentRegion === null || currentRealm === null) {
             return;
         }
 
@@ -238,6 +293,27 @@ export class PriceLists extends React.Component<Props> {
             return;
         }
 
+        this.handleWithProfession(prevProps);
+    }
+
+    private handleWithProfession(prevProps: Props) {
+        const {
+            match: {
+                params: { expansion_name },
+            },
+            currentRegion,
+            currentRealm,
+            selectedProfession,
+            selectedExpansion,
+            expansions,
+            changeSelectedExpansion,
+            getProfessionPricelistsLevel,
+        } = this.props;
+
+        if (currentRegion === null || currentRealm === null || selectedProfession === null) {
+            return;
+        }
+
         switch (getProfessionPricelistsLevel) {
             case FetchLevel.success:
                 break;
@@ -270,6 +346,33 @@ export class PriceLists extends React.Component<Props> {
 
             changeSelectedExpansion(foundExpansion);
 
+            return;
+        }
+
+        this.handleWithExpansion(prevProps);
+    }
+
+    private handleWithExpansion(prevProps: Props) {
+        const {
+            match: {
+                params: { pricelist_slug },
+            },
+            history,
+            currentRegion,
+            currentRealm,
+            selectedProfession,
+            selectedExpansion,
+            selectedList,
+            professionPricelists,
+            changeSelectedList,
+        } = this.props;
+
+        if (
+            currentRegion === null ||
+            currentRealm === null ||
+            selectedProfession === null ||
+            selectedExpansion === null
+        ) {
             return;
         }
 
@@ -336,61 +439,11 @@ export class PriceLists extends React.Component<Props> {
             return;
         }
 
-        this.setTitle();
+        this.handleWithPricelist(prevProps);
     }
 
-    public render() {
-        const {
-            authLevel,
-            match: {
-                params: { profession_name },
-            },
-            professions,
-        } = this.props;
-
-        if (typeof profession_name !== "undefined") {
-            const hasProfession: boolean = professions.reduce((previousValue, currentValue) => {
-                if (previousValue !== false) {
-                    return previousValue;
-                }
-
-                if (currentValue.name === profession_name) {
-                    return true;
-                }
-
-                return false;
-            }, false);
-
-            if (!hasProfession) {
-                return (
-                    <NonIdealState
-                        title="Profession not found"
-                        description={`Profession ${profession_name} could not be found`}
-                        icon={<Spinner className={Classes.LARGE} intent={Intent.DANGER} value={1} />}
-                    />
-                );
-            }
-        }
-
-        if (authLevel === AuthLevel.unauthenticated) {
-            return (
-                <>
-                    <ActionBarRouteContainer />
-                    <PricelistTreeRouteContainer />
-                </>
-            );
-        }
-
-        return (
-            <>
-                <CreateListDialogContainer />
-                <CreateEntryDialogContainer />
-                <EditListDialogContainer />
-                <DeleteListDialogContainer />
-                <ActionBarRouteContainer />
-                <PricelistTreeRouteContainer />
-            </>
-        );
+    private handleWithPricelist(prevProps: Props) {
+        this.setTitle();
     }
 
     private setTitle() {
