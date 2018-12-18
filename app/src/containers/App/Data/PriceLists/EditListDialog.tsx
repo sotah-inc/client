@@ -8,14 +8,26 @@ import { IStoreState } from "@app/types";
 import { IUpdatePricelistRequestOptions } from "@app/types/price-lists";
 
 const mapStateToProps = (state: IStoreState): IStateProps => {
-    const { profile } = state.Main;
-    const { isEditListDialogOpen, items, updatePricelistLevel, updatePricelistErrors, selectedList } = state.PriceLists;
+    const { profile, currentRegion, currentRealm } = state.Main;
+    const {
+        isEditListDialogOpen,
+        items,
+        updatePricelistLevel,
+        updatePricelistErrors,
+        selectedList,
+        selectedExpansion,
+        selectedProfession,
+    } = state.PriceLists;
 
     return {
+        currentRealm,
+        currentRegion,
         isEditListDialogOpen,
         items,
         profile,
+        selectedExpansion,
         selectedList,
+        selectedProfession,
         updatePricelistErrors,
         updatePricelistLevel,
     };

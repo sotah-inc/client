@@ -1,9 +1,13 @@
 import * as React from "react";
 
 import { Intent } from "@blueprintjs/core";
+import { RouteComponentProps } from "react-router";
 
 import { IPricelistJson } from "@app/api-types/entities";
+import { IExpansion } from "@app/api-types/expansion";
 import { IItemsMap } from "@app/api-types/item";
+import { IProfession } from "@app/api-types/profession";
+import { IRealm, IRegion } from "@app/api-types/region";
 import { ListDialogContainer } from "@app/containers/App/Data/PriceLists/util/ListDialog";
 import { IErrors, IProfile } from "@app/types/global";
 import { FetchLevel } from "@app/types/main";
@@ -17,6 +21,10 @@ export interface IStateProps {
     profile: IProfile | null;
     selectedList: IPricelistJson | null;
     items: IItemsMap;
+    currentRegion: IRegion | null;
+    currentRealm: IRealm | null;
+    selectedProfession: IProfession | null;
+    selectedExpansion: IExpansion | null;
 }
 
 export interface IDispatchProps {
@@ -25,7 +33,9 @@ export interface IDispatchProps {
     updatePricelist: (opts: IUpdatePricelistRequestOptions) => void;
 }
 
-export type Props = Readonly<IStateProps & IDispatchProps>;
+export interface IOwnProps extends RouteComponentProps<{}> {}
+
+export type Props = Readonly<IStateProps & IDispatchProps & IOwnProps>;
 
 type State = Readonly<{
     listDialogResetTrigger: number;
@@ -37,8 +47,26 @@ export class EditListDialog extends React.Component<Props, State> {
     };
 
     public componentDidUpdate(prevProps: Props) {
-        const { updatePricelistLevel, selectedList } = this.props;
+        const {
+            updatePricelistLevel,
+            selectedList,
+            currentRegion,
+            currentRealm,
+            selectedProfession,
+            selectedExpansion,
+            history,
+        } = this.props;
         const { listDialogResetTrigger } = this.state;
+
+        if (
+            currentRegion === null ||
+            currentRealm === null ||
+            selectedProfession === null ||
+            selectedExpansion === null ||
+            selectedList === null
+        ) {
+            return;
+        }
 
         if (prevProps.updatePricelistLevel !== updatePricelistLevel) {
             switch (updatePricelistLevel) {
@@ -46,9 +74,20 @@ export class EditListDialog extends React.Component<Props, State> {
                     AppToaster.show({
                         icon: "info-sign",
                         intent: Intent.SUCCESS,
-                        message: `"${selectedList!.name}" has been saved.`,
+                        message: `"${selectedList.name}" has been saved.`,
                     });
                     this.setState({ listDialogResetTrigger: listDialogResetTrigger + 1 });
+
+                    const url = [
+                        "data",
+                        currentRegion.name,
+                        currentRealm.slug,
+                        "professions",
+                        selectedProfession.name,
+                        selectedExpansion.name,
+                        selectedList.slug,
+                    ].join("/");
+                    history.replace(`/${url}`);
 
                     break;
                 default:
