@@ -1,12 +1,16 @@
 import * as React from "react";
 
 import { Button, Callout, Dialog, Intent } from "@blueprintjs/core";
+import { RouteComponentProps } from "react-router";
 
 import { IPricelistJson } from "@app/api-types/entities";
+import { IExpansion } from "@app/api-types/expansion";
 import { IProfession } from "@app/api-types/profession";
+import { IRealm, IRegion } from "@app/api-types/region";
 import { DialogActions, DialogBody } from "@app/components/util";
 import { IProfile } from "@app/types/global";
 import { FetchLevel } from "@app/types/main";
+import { AppToaster } from "@app/util/toasters";
 
 export interface IStateProps {
     selectedList: IPricelistJson | null;
@@ -14,6 +18,9 @@ export interface IStateProps {
     isDeleteListDialogOpen: boolean;
     deletePricelistLevel: FetchLevel;
     selectedProfession: IProfession | null;
+    selectedExpansion: IExpansion | null;
+    currentRealm: IRealm | null;
+    currentRegion: IRegion | null;
 }
 
 export interface IDispatchProps {
@@ -22,9 +29,59 @@ export interface IDispatchProps {
     deleteProfessionPricelist: (token: string, id: number) => void;
 }
 
-export type Props = Readonly<IStateProps & IDispatchProps>;
+export interface IOwnProps extends RouteComponentProps<{}> {}
+
+export type Props = Readonly<IStateProps & IDispatchProps & IOwnProps>;
 
 export class DeleteListDialog extends React.Component<Props> {
+    public componentDidUpdate(prevProps: Props) {
+        const {
+            deletePricelistLevel,
+            currentRegion,
+            currentRealm,
+            selectedProfession,
+            selectedExpansion,
+            history,
+            selectedList,
+        } = this.props;
+
+        if (
+            currentRegion === null ||
+            currentRealm === null ||
+            selectedProfession === null ||
+            selectedExpansion === null ||
+            selectedList === null
+        ) {
+            return;
+        }
+
+        if (prevProps.deletePricelistLevel !== deletePricelistLevel) {
+            switch (deletePricelistLevel) {
+                case FetchLevel.success:
+                    AppToaster.show({
+                        icon: "info-sign",
+                        intent: Intent.SUCCESS,
+                        message: "Your pricelist has been created.",
+                    });
+
+                    const url = [
+                        "data",
+                        currentRegion.name,
+                        currentRealm.slug,
+                        "professions",
+                        selectedProfession.name,
+                        selectedExpansion.name,
+                        selectedList.slug,
+                    ].join("/");
+                    history.replace(`/${url}`);
+
+                    return;
+                default:
+                    return;
+            }
+        }
+    }
+
     public render() {
         const { isDeleteListDialogOpen, selectedList, changeIsDeleteListDialogOpen, deletePricelistLevel } = this.props;
 
@@ -61,6 +118,7 @@ export class DeleteListDialog extends React.Component<Props> {
 
     private onDialogCancel() {
         const { changeIsDeleteListDialogOpen } = this.props;
+
         changeIsDeleteListDialogOpen(false);
     }
 

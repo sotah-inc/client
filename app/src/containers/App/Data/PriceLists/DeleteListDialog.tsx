@@ -10,12 +10,22 @@ import { DeleteListDialog, IDispatchProps, IStateProps } from "@app/components/A
 import { IStoreState } from "@app/types";
 
 const mapStateToProps = (state: IStoreState): IStateProps => {
-    const { profile } = state.Main;
-    const { selectedList, isDeleteListDialogOpen, deletePricelistLevel, selectedProfession } = state.PriceLists;
+    const { profile, currentRegion, currentRealm } = state.Main;
+    const {
+        selectedList,
+        isDeleteListDialogOpen,
+        deletePricelistLevel,
+        selectedProfession,
+        selectedExpansion,
+    } = state.PriceLists;
+
     return {
+        currentRealm,
+        currentRegion,
         deletePricelistLevel,
         isDeleteListDialogOpen,
         profile,
+        selectedExpansion,
         selectedList,
         selectedProfession,
     };
