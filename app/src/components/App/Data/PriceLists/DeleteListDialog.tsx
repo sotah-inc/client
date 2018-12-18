@@ -67,10 +67,16 @@ export class DeleteListDialog extends React.Component<Props> {
     private onDialogConfirm() {
         const { selectedList, deletePricelist, profile, selectedProfession, deleteProfessionPricelist } = this.props;
 
-        if (selectedProfession === null) {
-            deletePricelist(profile!.token, selectedList!.id);
+        if (profile === null || selectedList === null) {
+            return;
         }
 
-        deleteProfessionPricelist(profile!.token, selectedList!.id);
+        if (selectedProfession === null) {
+            deletePricelist(profile.token, selectedList.id);
+
+            return;
+        }
+
+        deleteProfessionPricelist(profile.token, selectedList.id);
     }
 }
