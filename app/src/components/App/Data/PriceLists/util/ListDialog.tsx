@@ -94,6 +94,7 @@ export class ListDialog extends React.Component<Props, State> {
                 entriesItems: {},
                 listDialogStep: ListDialogStep.list,
                 listName: defaultName || "",
+                listSlug: defaultName || "",
             });
 
             return;
