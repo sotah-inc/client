@@ -49,8 +49,7 @@ export class DeleteListDialog extends React.Component<Props> {
             currentRegion === null ||
             currentRealm === null ||
             selectedProfession === null ||
-            selectedExpansion === null ||
-            selectedList === null
+            selectedExpansion === null
         ) {
             return;
         }
@@ -61,19 +60,21 @@ export class DeleteListDialog extends React.Component<Props> {
                     AppToaster.show({
                         icon: "info-sign",
                         intent: Intent.SUCCESS,
-                        message: "Your pricelist has been created.",
+                        message: "Your pricelist has been deleted.",
                     });
 
-                    const url = [
+                    const urlParts = [
                         "data",
                         currentRegion.name,
                         currentRealm.slug,
                         "professions",
                         selectedProfession.name,
                         selectedExpansion.name,
-                        selectedList.slug,
-                    ].join("/");
-                    history.replace(`/${url}`);
+                    ];
+                    if (selectedList !== null && selectedList.slug !== null) {
+                        urlParts.push(selectedList.slug);
+                    }
+                    history.replace(`/${urlParts.join("/")}`);
 
                     return;
                 default:
