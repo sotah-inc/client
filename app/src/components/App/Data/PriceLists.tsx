@@ -274,7 +274,36 @@ export class PriceLists extends React.Component<Props> {
         }
 
         if (typeof pricelist_slug === "undefined") {
-            this.setTitle();
+            if (!(selectedExpansion.name in professionPricelists)) {
+                return;
+            }
+
+            const preselectedList: IPricelistJson | null = (() => {
+                const sorted = professionPricelists[selectedExpansion.name].sort((a, b) => {
+                    if (a.pricelist.name === b.pricelist.name) {
+                        return 0;
+                    }
+
+                    return a.pricelist.name > b.pricelist.name ? 1 : -1;
+                });
+
+                return sorted[0].pricelist;
+            })();
+
+            if (preselectedList === null) {
+                return;
+            }
+
+            const url = [
+                "data",
+                currentRegion.name,
+                currentRealm.slug,
+                "professions",
+                selectedProfession.name,
+                selectedExpansion.name,
+                preselectedList.slug,
+            ].join("/");
+            history.replace(`/${url}`);
 
             return;
         }

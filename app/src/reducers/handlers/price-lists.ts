@@ -25,26 +25,10 @@ const handlers: IKindHandlers<IPriceListsState, PriceListsActions> = {
     expansion: {
         selected: {
             change: (state: IPriceListsState, action: ReturnType<typeof ChangeSelectedExpansion>) => {
-                const selectedList: IPricelistJson | null = (() => {
-                    if (!(action.payload.name in state.professionPricelists)) {
-                        return null;
-                    }
-
-                    const sorted = state.professionPricelists[action.payload.name].sort((a, b) => {
-                        if (a.pricelist.name === b.pricelist.name) {
-                            return 0;
-                        }
-
-                        return a.pricelist.name > b.pricelist.name ? 1 : -1;
-                    });
-
-                    return sorted[0].pricelist;
-                })();
-
                 return {
                     ...state,
                     selectedExpansion: action.payload,
-                    selectedList,
+                    selectedList: null,
                 };
             },
         },
