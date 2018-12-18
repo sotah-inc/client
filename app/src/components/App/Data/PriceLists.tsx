@@ -415,7 +415,10 @@ export class PriceLists extends React.Component<Props> {
         }
 
         if (selectedList === null || selectedList.slug !== pricelist_slug) {
-            if (!(selectedExpansion.name in professionPricelists)) {
+            if (
+                !(selectedExpansion.name in professionPricelists) ||
+                professionPricelists[selectedExpansion.name].length === 0
+            ) {
                 return;
             }
 
