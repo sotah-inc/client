@@ -1,8 +1,7 @@
 import { connect, Dispatch } from "react-redux";
 
 import { Actions } from "@app/actions";
-import { ChangeSelectedList, FetchGetPricelists, FetchGetProfessionPricelists } from "@app/actions/price-lists";
-import { IPricelistJson } from "@app/api-types/entities";
+import { FetchGetPricelists, FetchGetProfessionPricelists } from "@app/actions/price-lists";
 import { ProfessionName } from "@app/api-types/profession";
 import { IDispatchProps, IStateProps, PricelistTree } from "@app/components/App/Data/PriceLists/PricelistTree";
 import { IStoreState } from "@app/types";
@@ -38,7 +37,6 @@ const mapStateToProps = (state: IStoreState): IStateProps => {
 
 const mapDispatchToProps = (dispatch: Dispatch<Actions>): IDispatchProps => {
     return {
-        changeSelectedList: (selectedList: IPricelistJson) => dispatch(ChangeSelectedList(selectedList)),
         refreshPricelists: (token: string) => dispatch(FetchGetPricelists(token)),
         refreshProfessionPricelists: (profession: ProfessionName) => dispatch(FetchGetProfessionPricelists(profession)),
     };

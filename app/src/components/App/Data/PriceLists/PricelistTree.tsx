@@ -31,7 +31,6 @@ export interface IStateProps {
 }
 
 export interface IDispatchProps {
-    changeSelectedList: (list: IPricelistJson) => void;
     refreshProfessionPricelists: (profession: ProfessionName) => void;
     refreshPricelists: (token: string) => void;
 }
@@ -313,14 +312,19 @@ export class PricelistTree extends React.Component<Props, IState> {
         const {
             pricelists,
             professionPricelists,
-            changeSelectedList,
             selectedExpansion,
             history,
             currentRegion,
             currentRealm,
+            selectedProfession,
         } = this.props;
 
-        if (currentRegion === null || currentRealm === null) {
+        if (
+            currentRegion === null ||
+            currentRealm === null ||
+            selectedProfession === null ||
+            selectedExpansion === null
+        ) {
             return;
         }
 
@@ -337,13 +341,20 @@ export class PricelistTree extends React.Component<Props, IState> {
             return null;
         }, null);
         if (list !== null) {
-            history.push(`/data/${currentRegion.name}/${currentRealm.slug}/professions`);
-            changeSelectedList(list);
+            if (list.slug === null) {
+                return;
+            }
 
-            return;
-        }
+            const userPricelistUrl = [
+                "data",
+                currentRegion.name,
+                currentRealm.slug,
+                "professions",
+                "user",
+                list.slug,
+            ].join("/");
+            history.push(`/${userPricelistUrl}`);
 
-        if (selectedExpansion === null) {
             return;
         }
 
@@ -370,7 +381,20 @@ export class PricelistTree extends React.Component<Props, IState> {
             return;
         }
 
-        changeSelectedList(foundProfessionPricelist);
+        if (foundProfessionPricelist.slug === null) {
+            return;
+        }
+
+        const professionPricelistUrl = [
+            "data",
+            currentRegion.name,
+            currentRealm.slug,
+            "professions",
+            selectedProfession.name,
+            selectedExpansion.name,
+            foundProfessionPricelist.slug,
+        ].join("/");
+        history.push(`/${professionPricelistUrl}`);
     }
 
     private onProfessionNodeClick(id: string) {

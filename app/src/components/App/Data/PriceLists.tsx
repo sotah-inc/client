@@ -3,6 +3,7 @@ import * as React from "react";
 import { Classes, Intent, NonIdealState, Spinner } from "@blueprintjs/core";
 import { RouteComponentProps } from "react-router";
 
+import { IPricelistJson } from "@app/api-types/entities";
 import { IExpansion } from "@app/api-types/expansion";
 import { IProfession } from "@app/api-types/profession";
 import { IRealm, IRegion } from "@app/api-types/region";
@@ -14,6 +15,7 @@ import { ActionBarRouteContainer } from "@app/route-containers/App/Data/PriceLis
 import { PricelistTreeRouteContainer } from "@app/route-containers/App/Data/PriceLists/PricelistTree";
 import { IRealms, IRegions } from "@app/types/global";
 import { AuthLevel, FetchLevel } from "@app/types/main";
+import { IExpansionProfessionPricelistMap } from "@app/types/price-lists";
 import { setTitle } from "@app/util";
 
 import "./PriceLists.scss";
@@ -31,11 +33,14 @@ export interface IStateProps {
     professions: IProfession[];
     expansions: IExpansion[];
     getProfessionPricelistsLevel: FetchLevel;
+    selectedList: IPricelistJson | null;
+    professionPricelists: IExpansionProfessionPricelistMap;
 }
 
 export interface IDispatchProps {
     changeIsLoginDialogOpen: (isLoginDialogOpen: boolean) => void;
     changeSelectedExpansion: (expansion: IExpansion) => void;
+    changeSelectedList: (list: IPricelistJson) => void;
     changeSelectedProfession: (profession: IProfession) => void;
     fetchRealms: (region: IRegion) => void;
     onRegionChange: (region: IRegion) => void;
@@ -48,6 +53,7 @@ interface IRouteParams {
     realm_slug: string;
     profession_name?: string;
     expansion_name?: string;
+    pricelist_slug?: string;
 }
 
 export interface IOwnProps extends RouteComponentProps<IRouteParams> {}
@@ -116,7 +122,7 @@ export class PriceLists extends React.Component<Props> {
     public componentDidUpdate(prevProps: Props) {
         const {
             match: {
-                params: { region_name, realm_slug, profession_name, expansion_name },
+                params: { region_name, realm_slug, profession_name, expansion_name, pricelist_slug },
             },
             history,
             fetchRealmLevel,
@@ -135,6 +141,9 @@ export class PriceLists extends React.Component<Props> {
             expansions,
             changeSelectedExpansion,
             getProfessionPricelistsLevel,
+            selectedList,
+            professionPricelists,
+            changeSelectedList,
         } = this.props;
 
         if (currentRegion === null) {
@@ -264,6 +273,40 @@ export class PriceLists extends React.Component<Props> {
             return;
         }
 
+        if (typeof pricelist_slug === "undefined") {
+            this.setTitle();
+
+            return;
+        }
+
+        if (selectedList === null || selectedList.slug !== pricelist_slug) {
+            if (!(selectedExpansion.name in professionPricelists)) {
+                return;
+            }
+
+            const foundList: IPricelistJson | null = professionPricelists[selectedExpansion.name].reduce(
+                (prevValue, curValue) => {
+                    if (prevValue !== null) {
+                        return prevValue;
+                    }
+
+                    if (curValue.pricelist.slug === pricelist_slug) {
+                        return curValue.pricelist;
+                    }
+
+                    return null;
+                },
+                null,
+            );
+            if (foundList === null) {
+                return;
+            }
+
+            changeSelectedList(foundList);
+
+            return;
+        }
+
         this.setTitle();
     }
 
@@ -322,7 +365,7 @@ export class PriceLists extends React.Component<Props> {
     }
 
     private setTitle() {
-        const { currentRegion, currentRealm, selectedProfession, selectedExpansion } = this.props;
+        const { currentRegion, currentRealm, selectedProfession, selectedExpansion, selectedList } = this.props;
 
         if (currentRegion === null || currentRealm === null) {
             return;
@@ -341,9 +384,23 @@ export class PriceLists extends React.Component<Props> {
             return;
         }
 
-        setTitle(`
-            ${selectedExpansion.label} - ${
-            selectedProfession.label
-        } - Professions - ${currentRegion.name.toUpperCase()} ${currentRealm.name}`);
+        if (selectedList === null) {
+            setTitle(`
+                ${selectedExpansion.label} - ${
+                selectedProfession.label
+            } - Professions - ${currentRegion.name.toUpperCase()} ${currentRealm.name}`);
+
+            return;
+        }
+
+        const title = [
+            selectedList.name,
+            selectedExpansion.label,
+            selectedProfession.label,
+            "Professions",
+            currentRegion.name.toUpperCase(),
+            currentRealm.name,
+        ].join(" - ");
+        setTitle(title);
     }
 }
