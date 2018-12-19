@@ -61,6 +61,7 @@ export class ListForm extends React.Component<Props, State> {
                             intent={errors.name && !!touched.name ? Intent.DANGER : Intent.NONE}
                             type="text"
                             value={values.name}
+                            autoFocus={true}
                             onChange={e => {
                                 setFieldValue("name", e.target.value);
 
