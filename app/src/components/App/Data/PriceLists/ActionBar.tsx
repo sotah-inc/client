@@ -15,6 +15,7 @@ import {
 import { RouteComponentProps } from "react-router";
 
 import { IPricelistJson, UserLevel } from "@app/api-types/entities";
+import { IExpansion } from "@app/api-types/expansion";
 import { IProfession } from "@app/api-types/profession";
 import { IRealm, IRegion } from "@app/api-types/region";
 import { RealmToggleContainer } from "@app/containers/util/RealmToggle";
@@ -31,6 +32,7 @@ export interface IStateProps {
     selectedProfession: IProfession | null;
     authLevel: AuthLevel;
     profile: IProfile | null;
+    selectedExpansion: IExpansion | null;
 }
 
 export interface IDispatchProps {
@@ -60,13 +62,28 @@ export class ActionBar extends React.Component<Props> {
     }
 
     private onRealmChange(realm: IRealm) {
-        const { history, currentRegion } = this.props;
+        const { history, currentRegion, selectedProfession, selectedList, selectedExpansion } = this.props;
 
         if (currentRegion === null) {
             return;
         }
 
-        history.push(`/data/${currentRegion.name}/${realm.slug}/professions`);
+        const urlParts = ["data", currentRegion.name, realm.slug, "professions"];
+        if (selectedProfession === null) {
+            if (selectedList !== null && selectedList.slug !== null) {
+                urlParts.push(...["user", selectedList.slug]);
+            }
+        } else {
+            urlParts.push(selectedProfession.name);
+
+            if (selectedExpansion !== null) {
+                urlParts.push(selectedExpansion.name);
+            }
+            if (selectedList !== null && selectedList.slug !== null) {
+                urlParts.push(selectedList.slug);
+            }
+        }
+        history.push(`/${urlParts.join("/")}`);
     }
 
     private renderListButtons() {

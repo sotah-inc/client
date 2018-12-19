@@ -12,7 +12,14 @@ import { IStoreState } from "@app/types";
 
 const mapStateToProps = (state: IStoreState): IStateProps => {
     const { currentRegion, currentRealm, authLevel, profile } = state.Main;
-    const { isAddListDialogOpen, isAddEntryDialogOpen, selectedList, selectedProfession } = state.PriceLists;
+    const {
+        isAddListDialogOpen,
+        isAddEntryDialogOpen,
+        selectedList,
+        selectedProfession,
+        selectedExpansion,
+    } = state.PriceLists;
+
     return {
         authLevel,
         currentRealm,
@@ -20,6 +27,7 @@ const mapStateToProps = (state: IStoreState): IStateProps => {
         isAddEntryDialogOpen,
         isAddListDialogOpen,
         profile,
+        selectedExpansion,
         selectedList,
         selectedProfession,
     };
