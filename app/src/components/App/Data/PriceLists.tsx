@@ -290,7 +290,13 @@ export class PriceLists extends React.Component<Props> {
                 return;
             }
 
-            changeSelectedList(foundList);
+            if (selectedList === null || foundList.id !== selectedList.id) {
+                changeSelectedList(foundList);
+
+                return;
+            }
+
+            this.setTitle();
 
             return;
         }
@@ -400,14 +406,14 @@ export class PriceLists extends React.Component<Props> {
             return;
         }
 
-        if (typeof pricelist_slug === "undefined") {
-            if (
-                !(selectedExpansion.name in professionPricelists) ||
-                professionPricelists[selectedExpansion.name].length === 0
-            ) {
-                return;
-            }
+        if (
+            !(selectedExpansion.name in professionPricelists) ||
+            professionPricelists[selectedExpansion.name].length === 0
+        ) {
+            return;
+        }
 
+        if (typeof pricelist_slug === "undefined") {
             const preselectedList: IPricelistJson | null = (() => {
                 const sorted = professionPricelists[selectedExpansion.name].sort((a, b) => {
                     if (a.pricelist.name === b.pricelist.name) {
@@ -438,32 +444,25 @@ export class PriceLists extends React.Component<Props> {
             return;
         }
 
-        if (selectedList === null || selectedList.slug !== pricelist_slug) {
-            if (
-                !(selectedExpansion.name in professionPricelists) ||
-                professionPricelists[selectedExpansion.name].length === 0
-            ) {
-                return;
-            }
+        const foundList: IPricelistJson | null = professionPricelists[selectedExpansion.name].reduce(
+            (prevValue, curValue) => {
+                if (prevValue !== null) {
+                    return prevValue;
+                }
 
-            const foundList: IPricelistJson | null = professionPricelists[selectedExpansion.name].reduce(
-                (prevValue, curValue) => {
-                    if (prevValue !== null) {
-                        return prevValue;
-                    }
+                if (curValue.pricelist.slug === pricelist_slug) {
+                    return curValue.pricelist;
+                }
 
-                    if (curValue.pricelist.slug === pricelist_slug) {
-                        return curValue.pricelist;
-                    }
+                return null;
+            },
+            null,
+        );
+        if (foundList === null) {
+            return;
+        }
 
-                    return null;
-                },
-                null,
-            );
-            if (foundList === null) {
-                return;
-            }
-
+        if (selectedList === null || foundList.id !== selectedList.id) {
             changeSelectedList(foundList);
 
             return;
@@ -484,7 +483,19 @@ export class PriceLists extends React.Component<Props> {
         }
 
         if (selectedProfession === null) {
-            setTitle(`Professions - ${currentRegion.name.toUpperCase()} ${currentRealm.name}`);
+            if (selectedList === null) {
+                setTitle(`Professions - ${currentRegion.name.toUpperCase()} ${currentRealm.name}`);
+
+                return;
+            }
+
+            const userPricelistTitle = [
+                selectedList.name,
+                "Professions",
+                currentRegion.name.toUpperCase(),
+                currentRealm.name,
+            ].join(" - ");
+            setTitle(userPricelistTitle);
 
             return;
         }
