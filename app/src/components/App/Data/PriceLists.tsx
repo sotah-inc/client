@@ -35,6 +35,7 @@ export interface IStateProps {
     getProfessionPricelistsLevel: FetchLevel;
     selectedList: IPricelistJson | null;
     professionPricelists: IExpansionProfessionPricelistMap;
+    pricelists: IPricelistJson[];
 }
 
 export interface IDispatchProps {
@@ -245,14 +246,18 @@ export class PriceLists extends React.Component<Props> {
     private handleWithRealm(prevProps: Props) {
         const {
             match: {
-                params: { profession_name },
+                params: { profession_name, pricelist_slug },
             },
             currentRegion,
             currentRealm,
             selectedProfession,
+            selectedExpansion,
+            selectedList,
             changeSelectedProfession,
             professions,
             resetProfessionsSelections,
+            pricelists,
+            changeSelectedList,
         } = this.props;
 
         if (currentRegion === null || currentRealm === null) {
@@ -260,13 +265,32 @@ export class PriceLists extends React.Component<Props> {
         }
 
         if (typeof profession_name === "undefined") {
-            if (selectedProfession !== null) {
-                resetProfessionsSelections();
+            if (typeof pricelist_slug === "undefined") {
+                if (selectedProfession !== null || selectedExpansion !== null || selectedList !== null) {
+                    resetProfessionsSelections();
+
+                    return;
+                }
 
                 return;
             }
 
-            this.setTitle();
+            const foundList: IPricelistJson | null = pricelists.reduce((prevValue, curValue) => {
+                if (prevValue !== null) {
+                    return prevValue;
+                }
+
+                if (curValue.slug === pricelist_slug) {
+                    return curValue;
+                }
+
+                return null;
+            }, null);
+            if (foundList === null) {
+                return;
+            }
+
+            changeSelectedList(foundList);
 
             return;
         }

@@ -32,6 +32,7 @@ const mapStateToProps = (state: IStoreState): IStateProps => {
         getProfessionPricelistsLevel,
         selectedList,
         professionPricelists,
+        pricelists,
     } = state.PriceLists;
 
     return {
@@ -41,6 +42,7 @@ const mapStateToProps = (state: IStoreState): IStateProps => {
         expansions,
         fetchRealmLevel,
         getProfessionPricelistsLevel,
+        pricelists,
         professionPricelists,
         professions,
         realms,
