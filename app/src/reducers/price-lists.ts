@@ -33,19 +33,21 @@ export const priceLists = (state: State, action: PriceListsActions): State => {
         case CHANGE_ENTRY_CREATELEVEL:
             return { ...state, entryCreateLevel: action.payload };
         case CHANGE_SELECTED_LIST:
-            let isProfessionPricelist = false;
-            for (const expansionName of Object.keys(state.professionPricelists)) {
-                for (const v of state.professionPricelists[expansionName]) {
-                    if (v.pricelist.id === action.payload.id) {
-                        isProfessionPricelist = true;
-
-                        break;
+            const isProfessionPricelist: boolean = (() => {
+                for (const expansionName of Object.keys(state.professionPricelists)) {
+                    for (const v of state.professionPricelists[expansionName]) {
+                        if (v.pricelist.id === action.payload.id) {
+                            return true;
+                        }
                     }
                 }
-            }
+
+                return false;
+            })();
 
             return {
                 ...state,
+                selectedExpansion: isProfessionPricelist ? state.selectedExpansion : null,
                 selectedList: action.payload,
                 selectedProfession: isProfessionPricelist ? state.selectedProfession : null,
             };
