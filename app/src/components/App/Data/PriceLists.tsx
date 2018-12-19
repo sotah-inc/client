@@ -128,6 +128,13 @@ export class PriceLists extends React.Component<Props> {
             currentRegion,
             onRegionChange,
             regions,
+            fetchRealmLevel,
+            fetchRealms,
+            currentRealm,
+            history,
+            selectedProfession,
+            selectedExpansion,
+            selectedList,
         } = this.props;
 
         if (currentRegion === null) {
@@ -135,9 +142,45 @@ export class PriceLists extends React.Component<Props> {
         }
 
         if (currentRegion.name !== region_name) {
-            onRegionChange(regions[region_name]);
+            switch (fetchRealmLevel) {
+                case FetchLevel.initial:
+                    if (region_name in regions) {
+                        onRegionChange(regions[region_name]);
 
-            return;
+                        return;
+                    }
+
+                    return;
+                case FetchLevel.prompted:
+                    fetchRealms(currentRegion);
+
+                    return;
+                case FetchLevel.success:
+                    if (currentRealm === null) {
+                        return;
+                    }
+
+                    const urlParts = ["data", currentRegion.name, currentRealm.slug, "professions"];
+                    if (selectedProfession === null) {
+                        if (selectedList !== null && selectedList.slug !== null) {
+                            urlParts.push(...["user", selectedList.slug]);
+                        }
+                    } else {
+                        urlParts.push(selectedProfession.name);
+
+                        if (selectedExpansion !== null) {
+                            urlParts.push(selectedExpansion.name);
+                        }
+                        if (selectedList !== null && selectedList.slug !== null) {
+                            urlParts.push(selectedList.slug);
+                        }
+                    }
+                    history.push(`/${urlParts.join("/")}`);
+
+                    return;
+                default:
+                    return;
+            }
         }
 
         this.handleWithRegion(prevProps);
