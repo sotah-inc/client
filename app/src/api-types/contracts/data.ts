@@ -45,6 +45,7 @@ export interface IGetAuctionsResponse {
     total: number;
     total_count: number;
     items: IItemsMap;
+    professionPricelists: IProfessionPricelistJson[];
 }
 
 export interface IGetOwnersRequest {
