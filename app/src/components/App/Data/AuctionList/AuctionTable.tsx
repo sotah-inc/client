@@ -39,7 +39,7 @@ export interface IDispatchProps {
 
 export interface IOwnProps extends RouteComponentProps<{}> {}
 
-type Props = Readonly<IStateProps & IDispatchProps & RouteComponentProps>;
+type Props = Readonly<IStateProps & IDispatchProps & IOwnProps>;
 
 export class AuctionTable extends React.Component<Props> {
     public isResultSelected(result: IQueryAuctionsItem) {
