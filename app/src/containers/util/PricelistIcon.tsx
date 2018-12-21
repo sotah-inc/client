@@ -4,8 +4,10 @@ import { IOwnProps, IStateProps, PricelistIcon } from "@app/components/util/Pric
 import { IStoreState } from "@app/types";
 
 const mapStateToProps = (state: IStoreState): IStateProps => {
-    const { items } = state.PriceLists;
-    return { items };
+    const { items: auctionItems } = state.Auction;
+    const { items: pricelistItems } = state.PriceLists;
+
+    return { items: { ...auctionItems, ...pricelistItems } };
 };
 
 export const PricelistIconContainer = connect<IStateProps, IOwnProps>(mapStateToProps)(PricelistIcon);
