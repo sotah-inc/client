@@ -45,6 +45,7 @@ export const auction = (state: State, action: AuctionActions): State => {
                 auctions,
                 fetchAuctionsLevel: FetchLevel.success,
                 items: { ...action.payload.items },
+                relatedProfessionPricelists: action.payload.professionPricelists,
                 totalResults: action.payload.total,
             };
         case PAGE_CHANGE:
