@@ -96,10 +96,10 @@ export class AuctionTable extends React.Component<Props> {
                     <td className={qualityToColorClass(item.quality)}>{this.renderItemPopover(item)}</td>
                     <td className="quantity-container">{auction.quantity}</td>
                     <td className="currency-container">
-                        <Currency amount={auction.buyout} />
+                        <Currency amount={auction.buyout} hideCopper={true} />
                     </td>
                     <td className="buyout-container">
-                        <Currency amount={auction.buyoutPer} />
+                        <Currency amount={auction.buyoutPer} hideCopper={true} />
                     </td>
                     <td className="auclist-container">{auction.aucList.length}</td>
                     <td className="owner-container">{auction.owner}</td>
