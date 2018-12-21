@@ -8,3 +8,4 @@ export { ErrorList } from "./ErrorList";
 export { LastModified } from "./LastModified";
 export { PanelHeader } from "./PanelHeader";
 export { CardCallout } from "./CardCallout";
+export { ProfessionIcon } from "./ProfessionIcon";
