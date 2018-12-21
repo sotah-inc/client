@@ -10,6 +10,7 @@ import { IProfessionPricelistJson } from "@app/api-types/entities";
 import { IExpansion } from "@app/api-types/expansion";
 import { IItem, IItemsMap, ItemId } from "@app/api-types/item";
 import { IProfession } from "@app/api-types/profession";
+import { IRealm, IRegion } from "@app/api-types/region";
 import { Currency, ProfessionIcon } from "@app/components/util";
 import { SortToggleContainer } from "@app/containers/App/Data/AuctionList/SortToggle";
 import { ItemPopoverContainer } from "@app/containers/util/ItemPopover";
@@ -27,6 +28,8 @@ export interface IStateProps {
     relatedProfessionPricelists: IProfessionPricelistJson[];
     expansions: IExpansion[];
     professions: IProfession[];
+    currentRealm: IRealm | null;
+    currentRegion: IRegion | null;
 }
 
 export interface IDispatchProps {
@@ -154,7 +157,11 @@ export class AuctionTable extends React.Component<Props> {
     }
 
     private renderProfessionPricelist(index: number, professionPricelist: IProfessionPricelistJson) {
-        const { expansions, professions } = this.props;
+        const { expansions, professions, currentRegion, currentRealm, history } = this.props;
+
+        if (currentRegion === null || currentRealm === null) {
+            return null;
+        }
 
         const expansion: IExpansion | null = expansions.reduce((prev, v) => {
             if (prev !== null) {
@@ -188,20 +195,41 @@ export class AuctionTable extends React.Component<Props> {
 
         const boxShadow: string = index === 0 ? "none" : "inset 0 1px 0 0 rgba(255, 255, 255, 0.15)";
 
+        const url = [
+            "data",
+            currentRegion.name,
+            currentRealm.slug,
+            "professions",
+            profession.name,
+            expansion.name,
+            professionPricelist.pricelist.slug,
+        ].join("/");
+
         return (
             <tr className="related-profession-pricelists" key={index}>
                 <td colSpan={2} style={{ boxShadow }}>
                     <ButtonGroup>
-                        <Button rightIcon="chevron-right" minimal={true} small={true}>
+                        <Button
+                            rightIcon="chevron-right"
+                            minimal={true}
+                            small={true}
+                            onClick={() => history.push(`/${url}`)}
+                        >
                             <ProfessionIcon profession={profession} /> {profession.label}
                         </Button>
-                        <Button rightIcon="chevron-right" minimal={true} small={true}>
+                        <Button
+                            rightIcon="chevron-right"
+                            minimal={true}
+                            small={true}
+                            onClick={() => history.push(`/${url}`)}
+                        >
                             <span style={{ color: expansion.label_color }}>{expansion.label}</span>
                         </Button>
                         <Button
+                            icon={<PricelistIconContainer pricelist={professionPricelist.pricelist} />}
                             minimal={true}
                             small={true}
-                            icon={<PricelistIconContainer pricelist={professionPricelist.pricelist} />}
+                            onClick={() => history.push(`/${url}`)}
                         >
                             {professionPricelist.pricelist.name}
                         </Button>

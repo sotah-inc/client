@@ -7,11 +7,13 @@ import { AuctionTable, IDispatchProps, IStateProps } from "@app/components/App/D
 import { IStoreState } from "@app/types";
 
 const mapStateToProps = (state: IStoreState): IStateProps => {
-    const { professions, expansions } = state.Main;
+    const { professions, expansions, currentRealm, currentRegion } = state.Main;
     const { auctions, selectedQueryAuctionResults, items, relatedProfessionPricelists } = state.Auction;
 
     return {
         auctions,
+        currentRealm,
+        currentRegion,
         expansions,
         items,
         professions,
