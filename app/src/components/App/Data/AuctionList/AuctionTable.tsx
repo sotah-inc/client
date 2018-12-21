@@ -1,6 +1,7 @@
 import * as React from "react";
 
 import { Button, ButtonGroup, Classes, HTMLTable } from "@blueprintjs/core";
+import { RouteComponentProps } from "react-router";
 
 import { SortKind } from "@app/api-types";
 import { IAuction } from "@app/api-types/auction";
@@ -33,7 +34,9 @@ export interface IDispatchProps {
     onAuctionsQueryDeselect: (index: number) => void;
 }
 
-type Props = Readonly<IStateProps & IDispatchProps>;
+export interface IOwnProps extends RouteComponentProps<{}> {}
+
+type Props = Readonly<IStateProps & IDispatchProps & RouteComponentProps>;
 
 export class AuctionTable extends React.Component<Props> {
     public isResultSelected(result: IQueryAuctionsItem) {

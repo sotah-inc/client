@@ -21,11 +21,11 @@ import { ItemId } from "@app/api-types/item";
 import { IRealm, IRegion } from "@app/api-types/region";
 import { IGetAuctionsOptions, IQueryAuctionsOptions } from "@app/api/data";
 import { LastModified, Pagination } from "@app/components/util";
-import { AuctionTableContainer } from "@app/containers/App/Data/AuctionList/AuctionTable";
 import { CountToggleContainer } from "@app/containers/App/Data/AuctionList/CountToggle";
 import { QueryAuctionsFilterContainer } from "@app/containers/App/Data/AuctionList/QueryAuctionsFilter";
 import { RealmToggleContainer } from "@app/containers/util/RealmToggle";
 import { RegionToggleContainer } from "@app/containers/util/RegionToggle";
+import { AuctionTableRouteContainer } from "@app/route-containers/App/Data/AuctionList/AuctionTable";
 import { IRealms, IRegions } from "@app/types/global";
 import { AuthLevel, FetchLevel } from "@app/types/main";
 import { didRealmChange, setTitle } from "@app/util";
@@ -610,7 +610,7 @@ export class AuctionList extends React.Component<Props> {
                         </ButtonGroup>
                     </NavbarGroup>
                 </Navbar>
-                <AuctionTableContainer />
+                <AuctionTableRouteContainer />
                 <p style={{ textAlign: "center", margin: "10px auto" }}>
                     Page {currentPage + 1} of {pageCount + 1}
                 </p>
