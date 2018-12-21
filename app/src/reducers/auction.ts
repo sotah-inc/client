@@ -32,10 +32,13 @@ export const auction = (state: State, action: AuctionActions): State => {
                 return { ...state, fetchAuctionsLevel: FetchLevel.failure };
             }
 
-            let auctions: IAuction[] = [];
-            if (action.payload.auctions !== null) {
-                auctions = action.payload.auctions;
-            }
+            const auctions: IAuction[] = (() => {
+                if (action.payload.auctions === null) {
+                    return [];
+                }
+
+                return action.payload.auctions;
+            })();
 
             return {
                 ...state,
