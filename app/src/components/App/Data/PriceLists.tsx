@@ -66,15 +66,10 @@ export class PriceLists extends React.Component<Props> {
         const {
             currentRegion,
             match: {
-                params: { region_name, realm_slug, profession_name },
+                params: { region_name },
             },
             onRegionChange,
             regions,
-            fetchRealmLevel,
-            fetchRealms,
-            currentRealm,
-            selectedProfession,
-            resetProfessionsSelections,
         } = this.props;
 
         if (currentRegion === null) {
@@ -91,36 +86,10 @@ export class PriceLists extends React.Component<Props> {
             return;
         }
 
-        switch (fetchRealmLevel) {
-            case FetchLevel.initial:
-            case FetchLevel.prompted:
-                fetchRealms(currentRegion);
-
-                return;
-            case FetchLevel.success:
-                break;
-            default:
-                return;
-        }
-
-        if (currentRealm === null) {
-            return;
-        }
-
-        if (currentRealm.slug !== realm_slug) {
-            return;
-        }
-
-        if (selectedProfession !== null && typeof profession_name === "undefined") {
-            resetProfessionsSelections();
-
-            return;
-        }
-
-        this.setTitle();
+        this.handleWithRegion();
     }
 
-    public componentDidUpdate(prevProps: Props) {
+    public componentDidUpdate() {
         const {
             match: {
                 params: { region_name },
@@ -183,7 +152,7 @@ export class PriceLists extends React.Component<Props> {
             }
         }
 
-        this.handleWithRegion(prevProps);
+        this.handleWithRegion();
     }
 
     public render() {
@@ -240,7 +209,7 @@ export class PriceLists extends React.Component<Props> {
         );
     }
 
-    private handleWithRegion(prevProps: Props) {
+    private handleWithRegion() {
         const {
             match: {
                 params: { realm_slug },
@@ -283,10 +252,10 @@ export class PriceLists extends React.Component<Props> {
             return;
         }
 
-        this.handleWithRealm(prevProps);
+        this.handleWithRealm();
     }
 
-    private handleWithRealm(prevProps: Props) {
+    private handleWithRealm() {
         const {
             match: {
                 params: { profession_name, pricelist_slug },
@@ -366,10 +335,10 @@ export class PriceLists extends React.Component<Props> {
             return;
         }
 
-        this.handleWithProfession(prevProps);
+        this.handleWithProfession();
     }
 
-    private handleWithProfession(prevProps: Props) {
+    private handleWithProfession() {
         const {
             match: {
                 params: { expansion_name },
@@ -422,10 +391,10 @@ export class PriceLists extends React.Component<Props> {
             return;
         }
 
-        this.handleWithExpansion(prevProps);
+        this.handleWithExpansion();
     }
 
-    private handleWithExpansion(prevProps: Props) {
+    private handleWithExpansion() {
         const {
             match: {
                 params: { pricelist_slug },
@@ -511,10 +480,10 @@ export class PriceLists extends React.Component<Props> {
             return;
         }
 
-        this.handleWithPricelist(prevProps);
+        this.handleWithPricelist();
     }
 
-    private handleWithPricelist(prevProps: Props) {
+    private handleWithPricelist() {
         this.setTitle();
     }
 
