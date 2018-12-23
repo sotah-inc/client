@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { Button, ButtonGroup, Menu, MenuItem, Popover } from "@blueprintjs/core";
+import { ButtonGroup } from "@blueprintjs/core";
 import { RouteComponentProps } from "react-router-dom";
 
 import { IUserJson, UserLevel } from "@app/api-types/entities";
@@ -19,30 +19,28 @@ export class NewsButton extends React.Component<Props> {
         const { user } = this.props;
 
         if (user === null || user.level < UserLevel.Admin) {
-            return (
-                <LinkButtonRouteContainer
-                    destination="/content/news"
-                    buttonProps={{ icon: "globe-network", text: "News", minimal: true }}
-                />
-            );
+            return this.renderHomeButton();
         }
 
         return (
             <ButtonGroup>
+                {this.renderHomeButton()}
                 <LinkButtonRouteContainer
-                    destination="/content/news"
-                    buttonProps={{ icon: "globe-network", text: "News", minimal: true }}
+                    destination="/content/news/creator"
+                    buttonProps={{ icon: "plus", minimal: true }}
+                    prefix={true}
                 />
-                <Popover content={this.renderMenu()} target={<Button icon="chevron-down" minimal={true} />} />
             </ButtonGroup>
         );
     }
 
-    private renderMenu() {
+    private renderHomeButton() {
         return (
-            <Menu>
-                <MenuItem icon="plus" text="Add" />
-            </Menu>
+            <LinkButtonRouteContainer
+                destination="/content/news"
+                buttonProps={{ icon: "globe-network", text: "News", minimal: true }}
+                prefix={true}
+            />
         );
     }
 }
