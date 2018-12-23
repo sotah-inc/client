@@ -42,4 +42,6 @@ export interface IUserJson {
 export interface IPostJson {
     id: number;
     title: string;
+    body: string;
+    createdAt: number;
 }
