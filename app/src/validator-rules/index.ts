@@ -24,5 +24,9 @@ export const PriceListRules = {
 
 export const PostRules = {
     body: Yup.string().required("Post body is required"),
+    slug: Yup.string()
+        .min(4)
+        .matches(/^[a-z|0-9|_|\-]+$/, "Slug must be a-z, 0-9, or underscore")
+        .required("Slug is required"),
     title: Yup.string().required("Post title is requred"),
 };

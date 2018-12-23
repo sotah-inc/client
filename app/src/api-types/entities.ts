@@ -42,6 +42,7 @@ export interface IUserJson {
 export interface IPostJson {
     id: number;
     title: string;
+    slug: string;
     body: string;
     createdAt: number;
 }
