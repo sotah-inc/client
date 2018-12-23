@@ -1,6 +1,6 @@
 import * as React from "react";
 
-export class NewsCreator extends React.Component {
+export class PostForm extends React.Component {
     public render() {
         return <p>Hello, world!</p>;
     }
