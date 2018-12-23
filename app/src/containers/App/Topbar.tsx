@@ -5,8 +5,8 @@ import { IStoreState } from "@app/types";
 
 const mapStateToProps = (state: IStoreState): IStateProps => {
     const { profile, currentRealm, currentRegion } = state.Main;
-
     const user = profile === null ? null : profile.user;
+
     return { user, currentRealm, currentRegion };
 };
 
