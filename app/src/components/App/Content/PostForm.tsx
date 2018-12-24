@@ -1,9 +1,25 @@
 import * as React from "react";
 
-import { Button, Callout, ControlGroup, FormGroup, H2, H4, InputGroup, Intent, TextArea } from "@blueprintjs/core";
+import {
+    Alignment,
+    Button,
+    Callout,
+    ControlGroup,
+    FormGroup,
+    H2,
+    H4,
+    InputGroup,
+    Intent,
+    Navbar,
+    NavbarDivider,
+    NavbarGroup,
+    TextArea,
+} from "@blueprintjs/core";
 import { FormikProps } from "formik";
 import * as ReactMarkdown from "react-markdown";
 import * as getSlug from "speakingurl";
+
+import { setTitle } from "@app/util";
 
 export interface IOwnProps {
     onComplete: (values: IFormValues) => void;
@@ -26,14 +42,40 @@ export class PostForm extends React.Component<Props, State> {
         manualSlug: false,
     };
 
+    public componentDidMount() {
+        setTitle("News Creator");
+    }
+
     public render() {
+        const { handleSubmit, handleReset, dirty, isSubmitting } = this.props;
+
         return (
             <>
                 <H2>News Creator</H2>
-                <div className="pure-g">
-                    <div className="pure-u-2-5">{this.renderForm()}</div>
-                    <div className="pure-u-3-5">{this.renderPreview()}</div>
-                </div>
+                <form onSubmit={handleSubmit}>
+                    <Navbar>
+                        <NavbarGroup align={Alignment.LEFT}>
+                            <Button
+                                type="submit"
+                                icon="edit"
+                                text="Publish"
+                                intent={Intent.PRIMARY}
+                                disabled={isSubmitting}
+                            />
+                            <NavbarDivider />
+                            <Button
+                                text="Reset"
+                                intent={Intent.NONE}
+                                onClick={handleReset}
+                                disabled={!dirty || isSubmitting}
+                            />
+                        </NavbarGroup>
+                    </Navbar>
+                    <div className="pure-g" style={{ marginTop: "10px" }}>
+                        <div className="pure-u-2-5">{this.renderForm()}</div>
+                        <div className="pure-u-3-5">{this.renderPreview()}</div>
+                    </div>
+                </form>
             </>
         );
     }
@@ -78,18 +120,21 @@ export class PostForm extends React.Component<Props, State> {
                     This is a preview of the news posting.
                 </Callout>
                 <H4>{title}</H4>
-                <p>Slug: {`/content/news/${slug}`}</p>
+                <p>
+                    Slug: <span style={{ textDecoration: "underline" }}>{`/content/news/${slug}`}</span>
+                </p>
+                <hr />
                 <ReactMarkdown source={body} />
             </>
         );
     }
 
     private renderForm() {
-        const { values, setFieldValue, handleSubmit, errors, touched } = this.props;
+        const { values, setFieldValue, errors, touched } = this.props;
         const { manualSlug } = this.state;
 
         return (
-            <form onSubmit={handleSubmit}>
+            <>
                 <Callout title="Input" icon="edit" style={{ marginBottom: "10px" }}>
                     Please enter your news post here.
                 </Callout>
@@ -148,10 +193,14 @@ export class PostForm extends React.Component<Props, State> {
                     intent={errors.body && !!touched.body ? Intent.DANGER : Intent.NONE}
                 >
                     <ControlGroup fill={true}>
-                        <TextArea value={values.body} onChange={e => setFieldValue("body", e.target.value)} />
+                        <TextArea
+                            value={values.body}
+                            onChange={e => setFieldValue("body", e.target.value)}
+                            style={{ minHeight: "200px" }}
+                        />
                     </ControlGroup>
                 </FormGroup>
-            </form>
+            </>
         );
     }
 }
