@@ -4,7 +4,7 @@ import { PostFormFormContainer } from "@app/form-containers/App/Content/PostForm
 
 export class NewsCreator extends React.Component {
     public render() {
-        return <div id="content">{this.renderContent()}</div>;
+        return this.renderContent();
     }
 
     private renderContent() {
