@@ -207,7 +207,7 @@ export class AuctionTable extends React.Component<Props> {
 
         return (
             <tr className="related-profession-pricelists" key={index}>
-                <td colSpan={2} style={{ boxShadow }}>
+                <td colSpan={3} style={{ boxShadow }}>
                     <ButtonGroup>
                         <Button
                             rightIcon="chevron-right"
@@ -235,7 +235,6 @@ export class AuctionTable extends React.Component<Props> {
                         </Button>
                     </ButtonGroup>
                 </td>
-                <td style={{ boxShadow: "inset 1px 0 0 0 rgba(255, 255, 255, 0.15)" }}>&nbsp;</td>
                 <td style={{ boxShadow: "inset 1px 0 0 0 rgba(255, 255, 255, 0.15)" }}>&nbsp;</td>
                 <td style={{ boxShadow: "inset 1px 0 0 0 rgba(255, 255, 255, 0.15)" }}>&nbsp;</td>
                 <td style={{ boxShadow: "inset 1px 0 0 0 rgba(255, 255, 255, 0.15)" }}>&nbsp;</td>
