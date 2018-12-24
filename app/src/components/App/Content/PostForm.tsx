@@ -1,7 +1,8 @@
 import * as React from "react";
 
-import { Button, Callout, ControlGroup, FormGroup, H2, H4, InputGroup, Intent } from "@blueprintjs/core";
+import { Button, Callout, ControlGroup, FormGroup, H2, H4, InputGroup, Intent, TextArea } from "@blueprintjs/core";
 import { FormikProps } from "formik";
+import * as ReactMarkdown from "react-markdown";
 import * as getSlug from "speakingurl";
 
 export interface IOwnProps {
@@ -45,7 +46,7 @@ export class PostForm extends React.Component<Props, State> {
 
     private renderPreviewContent() {
         const {
-            values: { title, slug },
+            values: { title, slug, body },
         } = this.props;
 
         if (typeof title === "undefined" || title.length === 0) {
@@ -78,6 +79,7 @@ export class PostForm extends React.Component<Props, State> {
                 </Callout>
                 <H4>{title}</H4>
                 <p>Slug: {`/content/news/${slug}`}</p>
+                <ReactMarkdown source={body} />
             </>
         );
     }
@@ -136,6 +138,17 @@ export class PostForm extends React.Component<Props, State> {
                         >
                             Edit
                         </Button>
+                    </ControlGroup>
+                </FormGroup>
+                <FormGroup
+                    helperText={errors.body}
+                    label="Body"
+                    labelFor="body"
+                    labelInfo={true}
+                    intent={errors.body && !!touched.body ? Intent.DANGER : Intent.NONE}
+                >
+                    <ControlGroup fill={true}>
+                        <TextArea value={values.body} onChange={e => setFieldValue("body", e.target.value)} />
                     </ControlGroup>
                 </FormGroup>
             </form>
