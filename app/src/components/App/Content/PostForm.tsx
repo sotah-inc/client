@@ -75,6 +75,9 @@ export class PostForm extends React.Component<Props, State> {
                         <div className="pure-u-2-5">{this.renderForm()}</div>
                         <div className="pure-u-3-5">{this.renderPreview()}</div>
                     </div>
+                    <Callout intent={Intent.WARNING} icon="dollar">
+                        <em>Make gold!</em>
+                    </Callout>
                 </form>
             </>
         );
