@@ -9,11 +9,18 @@ import { USER_LOGIN, USER_REGISTER } from "@app/actions/main";
 import { rootReducer } from "@app/reducers";
 import registerServiceWorker from "@app/registerServiceWorker";
 import { AppRouteContainer } from "@app/route-containers/App";
-import { defaultAuctionState, defaultMainState, defaultPriceListsState, IStoreState } from "@app/types";
+import {
+    defaultAuctionState,
+    defaultMainState,
+    defaultPostsState,
+    defaultPriceListsState,
+    IStoreState,
+} from "@app/types";
 
 const defaultState: IStoreState = {
     Auction: defaultAuctionState,
     Main: defaultMainState,
+    Posts: defaultPostsState,
     PriceLists: defaultPriceListsState,
 };
 
