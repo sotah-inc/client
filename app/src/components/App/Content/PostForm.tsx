@@ -33,6 +33,7 @@ export interface IStateProps {
     };
     createPostLevel: FetchLevel;
     profile: IProfile | null;
+    currentPost: IPostJson | null;
 }
 
 export interface IDispatchProps {
@@ -65,7 +66,7 @@ export class PostForm extends React.Component<Props, State> {
     }
 
     public componentDidUpdate(prevProps: Props) {
-        const { createPostLevel, setSubmitting, handleReset, createPostErrors } = this.props;
+        const { createPostLevel, setSubmitting, handleReset, createPostErrors, history, currentPost } = this.props;
 
         switch (createPostLevel) {
             case FetchLevel.success:
@@ -97,6 +98,11 @@ export class PostForm extends React.Component<Props, State> {
                 intent: "success",
                 message: "Your post has successfully been created!",
             });
+            if (currentPost === null) {
+                return;
+            }
+
+            history.push(`/content/news/${currentPost.slug}`);
 
             return;
         }

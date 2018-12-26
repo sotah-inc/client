@@ -17,6 +17,7 @@ interface IFormProps extends RouteComponentProps<{}> {
         [key: string]: string;
     };
     createPostLevel: FetchLevel;
+    currentPost: IPostJson | null;
     profile: IProfile | null;
 }
 
