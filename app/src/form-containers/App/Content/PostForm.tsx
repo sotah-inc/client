@@ -1,4 +1,5 @@
 import { withFormik, WithFormikConfig } from "formik";
+import { RouteComponentProps } from "react-router-dom";
 import * as Yup from "yup";
 
 import { ICreatePostRequest } from "@app/api-types/contracts/user/post-crud";
@@ -8,7 +9,7 @@ import { IProfile } from "@app/types/global";
 import { FetchLevel } from "@app/types/main";
 import { PostRules } from "@app/validator-rules";
 
-interface IFormProps {
+interface IFormProps extends RouteComponentProps<{}> {
     onComplete: (v: IPostJson) => void;
     createPost: (token: string, v: ICreatePostRequest) => void;
 

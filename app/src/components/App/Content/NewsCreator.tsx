@@ -3,7 +3,7 @@ import * as React from "react";
 import { RouteComponentProps } from "react-router-dom";
 
 import { IUserJson, UserLevel } from "@app/api-types/entities";
-import { PostFormContainer } from "@app/containers/App/Content/PostForm";
+import { PostFormRouteContainer } from "@app/route-containers/App/Content/PostForm";
 import { Classes, Intent, NonIdealState, Spinner } from "@blueprintjs/core";
 
 export interface IStateProps {
@@ -27,6 +27,6 @@ export class NewsCreator extends React.Component<Props> {
             );
         }
 
-        return <PostFormContainer onComplete={v => console.log(v)} />;
+        return <PostFormRouteContainer onComplete={v => console.log(v)} />;
     }
 }

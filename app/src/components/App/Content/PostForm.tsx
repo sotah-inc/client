@@ -17,6 +17,7 @@ import {
 } from "@blueprintjs/core";
 import { FormikProps } from "formik";
 import * as ReactMarkdown from "react-markdown";
+import { RouteComponentProps } from "react-router-dom";
 import * as getSlug from "speakingurl";
 
 import { ICreatePostRequest } from "@app/api-types/contracts/user/post-crud";
@@ -38,7 +39,7 @@ export interface IDispatchProps {
     createPost: (token: string, v: ICreatePostRequest) => void;
 }
 
-export interface IOwnProps {
+export interface IOwnProps extends RouteComponentProps<{}> {
     onComplete: (v: IPostJson) => void;
 }
 
