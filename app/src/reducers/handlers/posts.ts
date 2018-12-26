@@ -1,7 +1,7 @@
 import { PostsActions, ReceiveCreatePost } from "@app/actions/posts";
-import { IPostsState } from "@app/types/posts";
-
+import { IValidationErrorResponse } from "@app/api-types/contracts";
 import { FetchLevel } from "@app/types/main";
+import { IPostsState } from "@app/types/posts";
 
 import { IKindHandlers, Runner } from "./index";
 
@@ -9,12 +9,21 @@ const handlers: IKindHandlers<IPostsState, PostsActions> = {
     post: {
         create: {
             receive: (state: IPostsState, action: ReturnType<typeof ReceiveCreatePost>) => {
-                if (action.payload === null) {
-                    return { ...state, createPostLevel: FetchLevel.failure };
+                if (action.payload.post === null) {
+                    const createPostErrors: IValidationErrorResponse = (() => {
+                        if (typeof action.payload.error !== "undefined") {
+                            return { error: action.payload.error };
+                        }
+
+                        return action.payload.errors!;
+                    })();
+
+                    return { ...state, createPostLevel: FetchLevel.failure, createPostErrors };
                 }
 
                 return {
                     ...state,
+                    createPostErrors: {},
                     createPostLevel: FetchLevel.success,
                     currentPost: action.payload.post!,
                     posts: [...state.posts, action.payload.post!],

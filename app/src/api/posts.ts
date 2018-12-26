@@ -7,7 +7,10 @@ import { apiEndpoint, gather } from "./index";
 
 export interface ICreatePostResult {
     post: IPostJson | null;
-    error: string | null;
+    error?: string;
+    errors?: {
+        [key: string]: string;
+    };
 }
 
 export const createPost = async (token: string, request: ICreatePostRequest): Promise<ICreatePostResult> => {
@@ -26,6 +29,16 @@ export const createPost = async (token: string, request: ICreatePostRequest): Pr
     if (status === HTTPStatus.UNAUTHORIZED) {
         return { error: "Unauthorized", post: null };
     }
+    switch (status) {
+        case HTTPStatus.CREATED:
+            break;
+        case HTTPStatus.UNAUTHORIZED:
+            return { error: "Unauthorized", post: null };
+        case HTTPStatus.BAD_REQUEST:
+            return { errors: body as IValidationErrorResponse, post: null };
+        default:
+            return { error: "Failure", post: null };
+    }
 
-    return { post: (body as ICreatePostResponse).post, error: null };
+    return { post: (body as ICreatePostResponse).post };
 };

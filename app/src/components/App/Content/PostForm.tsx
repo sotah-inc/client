@@ -24,8 +24,12 @@ import { IPostJson } from "@app/api-types/entities";
 import { IProfile } from "@app/types/global";
 import { FetchLevel } from "@app/types/main";
 import { setTitle } from "@app/util";
+import { AppToaster } from "@app/util/toasters";
 
 export interface IStateProps {
+    createPostErrors: {
+        [key: string]: string;
+    };
     createPostLevel: FetchLevel;
     profile: IProfile | null;
 }
@@ -59,8 +63,46 @@ export class PostForm extends React.Component<Props, State> {
         setTitle("News Creator");
     }
 
+    public componentDidUpdate(prevProps: Props) {
+        const { createPostLevel, setSubmitting, handleReset, createPostErrors } = this.props;
+
+        switch (createPostLevel) {
+            case FetchLevel.success:
+                break;
+            case FetchLevel.failure:
+                if (prevProps.createPostLevel !== createPostLevel) {
+                    setSubmitting(false);
+                    if ("error" in createPostErrors) {
+                        AppToaster.show({
+                            icon: "warning-sign",
+                            intent: "danger",
+                            message: `Could not create post: ${createPostErrors.error}`,
+                        });
+                    }
+
+                    return;
+                }
+
+                return;
+            default:
+                return;
+        }
+
+        if (prevProps.createPostLevel !== createPostLevel) {
+            setSubmitting(false);
+            handleReset();
+            AppToaster.show({
+                icon: "info-sign",
+                intent: "success",
+                message: "Your post has successfully been created!",
+            });
+
+            return;
+        }
+    }
+
     public render() {
-        const { handleSubmit, handleReset, dirty, isSubmitting } = this.props;
+        const { handleSubmit, handleReset, dirty, isSubmitting, createPostLevel } = this.props;
 
         return (
             <>
@@ -80,7 +122,7 @@ export class PostForm extends React.Component<Props, State> {
                                 text="Reset"
                                 intent={Intent.NONE}
                                 onClick={handleReset}
-                                disabled={!dirty || isSubmitting}
+                                disabled={!dirty || isSubmitting || createPostLevel === FetchLevel.fetching}
                             />
                         </NavbarGroup>
                     </Navbar>
@@ -146,8 +188,13 @@ export class PostForm extends React.Component<Props, State> {
     }
 
     private renderForm() {
-        const { values, setFieldValue, errors, touched } = this.props;
+        const { values, setFieldValue, errors, touched, createPostErrors } = this.props;
         const { manualSlug } = this.state;
+
+        const coalescedErrors = {
+            ...errors,
+            ...createPostErrors,
+        };
 
         return (
             <>
@@ -155,14 +202,14 @@ export class PostForm extends React.Component<Props, State> {
                     Please enter your news post here.
                 </Callout>
                 <FormGroup
-                    helperText={errors.title}
+                    helperText={coalescedErrors.title}
                     label="Title"
                     labelFor="title"
                     labelInfo={true}
-                    intent={errors.title && !!touched.title ? Intent.DANGER : Intent.NONE}
+                    intent={coalescedErrors.title && !!touched.title ? Intent.DANGER : Intent.NONE}
                 >
                     <InputGroup
-                        intent={errors.title && !!touched.title ? Intent.DANGER : Intent.NONE}
+                        intent={coalescedErrors.title && !!touched.title ? Intent.DANGER : Intent.NONE}
                         type="text"
                         value={values.title}
                         autoFocus={true}
@@ -178,15 +225,15 @@ export class PostForm extends React.Component<Props, State> {
                     />
                 </FormGroup>
                 <FormGroup
-                    helperText={errors.slug ? errors.slug : "For URLs"}
+                    helperText={coalescedErrors.slug ? coalescedErrors.slug : "For URLs"}
                     label="Slug"
                     labelFor="slug"
                     labelInfo={true}
-                    intent={errors.slug && !!touched.slug ? Intent.DANGER : Intent.NONE}
+                    intent={coalescedErrors.slug && !!touched.slug ? Intent.DANGER : Intent.NONE}
                 >
                     <ControlGroup fill={true}>
                         <InputGroup
-                            intent={errors.slug && !!touched.slug ? Intent.DANGER : Intent.NONE}
+                            intent={coalescedErrors.slug && !!touched.slug ? Intent.DANGER : Intent.NONE}
                             type="text"
                             value={values.slug}
                             onChange={e => setFieldValue("slug", e.target.value)}
@@ -202,11 +249,11 @@ export class PostForm extends React.Component<Props, State> {
                     </ControlGroup>
                 </FormGroup>
                 <FormGroup
-                    helperText={errors.body}
+                    helperText={coalescedErrors.body}
                     label="Body"
                     labelFor="body"
                     labelInfo={true}
-                    intent={errors.body && !!touched.body ? Intent.DANGER : Intent.NONE}
+                    intent={coalescedErrors.body && !!touched.body ? Intent.DANGER : Intent.NONE}
                 >
                     <ControlGroup fill={true}>
                         <TextArea

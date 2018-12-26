@@ -9,9 +9,9 @@ import { IStoreState } from "@app/types";
 
 const mapStateToProps = (state: IStoreState): IStateProps => {
     const { profile } = state.Main;
-    const { createPostLevel } = state.Posts;
+    const { createPostLevel, createPostErrors } = state.Posts;
 
-    return { createPostLevel, profile };
+    return { createPostErrors, createPostLevel, profile };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<Actions>): IDispatchProps => {

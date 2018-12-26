@@ -12,19 +12,21 @@ interface IFormProps {
     onComplete: (v: IPostJson) => void;
     createPost: (token: string, v: ICreatePostRequest) => void;
 
+    createPostErrors: {
+        [key: string]: string;
+    };
     createPostLevel: FetchLevel;
     profile: IProfile | null;
 }
 
 const config: WithFormikConfig<IFormProps, IFormValues> = {
-    handleSubmit: async (values, { setSubmitting, props }) => {
+    handleSubmit: async (values, { props }) => {
         const { createPost, profile } = props;
 
         if (profile === null) {
             return;
         }
 
-        setSubmitting(false);
         createPost(profile.token, values);
     },
     mapPropsToValues: (_: IFormProps) => {
