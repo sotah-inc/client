@@ -98,6 +98,7 @@ export class PostForm extends React.Component<Props, State> {
                 intent: "success",
                 message: "Your post has successfully been created!",
             });
+
             if (currentPost === null) {
                 return;
             }
