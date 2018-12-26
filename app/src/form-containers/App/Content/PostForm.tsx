@@ -1,17 +1,31 @@
 import { withFormik, WithFormikConfig } from "formik";
 import * as Yup from "yup";
 
+import { ICreatePostRequest } from "@app/api-types/contracts/user/post-crud";
+import { IPostJson } from "@app/api-types/entities";
 import { IFormValues, PostForm } from "@app/components/App/Content/PostForm";
+import { IProfile } from "@app/types/global";
+import { FetchLevel } from "@app/types/main";
 import { PostRules } from "@app/validator-rules";
 
 interface IFormProps {
-    onComplete: (values: IFormValues) => void;
+    onComplete: (v: IPostJson) => void;
+    createPost: (token: string, v: ICreatePostRequest) => void;
+
+    createPostLevel: FetchLevel;
+    profile: IProfile | null;
 }
 
 const config: WithFormikConfig<IFormProps, IFormValues> = {
     handleSubmit: async (values, { setSubmitting, props }) => {
+        const { createPost, profile } = props;
+
+        if (profile === null) {
+            return;
+        }
+
         setSubmitting(false);
-        props.onComplete(values);
+        createPost(profile.token, values);
     },
     mapPropsToValues: (_: IFormProps) => {
         return {

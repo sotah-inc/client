@@ -19,10 +19,23 @@ import { FormikProps } from "formik";
 import * as ReactMarkdown from "react-markdown";
 import * as getSlug from "speakingurl";
 
+import { ICreatePostRequest } from "@app/api-types/contracts/user/post-crud";
+import { IPostJson } from "@app/api-types/entities";
+import { IProfile } from "@app/types/global";
+import { FetchLevel } from "@app/types/main";
 import { setTitle } from "@app/util";
 
+export interface IStateProps {
+    createPostLevel: FetchLevel;
+    profile: IProfile | null;
+}
+
+export interface IDispatchProps {
+    createPost: (token: string, v: ICreatePostRequest) => void;
+}
+
 export interface IOwnProps {
-    onComplete: (values: IFormValues) => void;
+    onComplete: (v: IPostJson) => void;
 }
 
 export interface IFormValues {
@@ -35,7 +48,7 @@ type State = Readonly<{
     manualSlug: boolean;
 }>;
 
-export type Props = Readonly<IOwnProps & FormikProps<IFormValues>>;
+export type Props = Readonly<IDispatchProps & IStateProps & IOwnProps & FormikProps<IFormValues>>;
 
 export class PostForm extends React.Component<Props, State> {
     public state: State = {
