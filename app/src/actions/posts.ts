@@ -6,8 +6,8 @@ import { ActionsUnion, createAction } from "./helpers";
 
 export const REQUEST_CREATE_POST = "REQUEST_CREATE_POST";
 export const RECEIVE_CREATE_POST = "RECEIVE_CREATE_POST";
-const RequestCreatePost = () => createAction(REQUEST_CREATE_POST);
-const ReceiveCreatePost = (payload: ICreatePostResult | null) => createAction(RECEIVE_CREATE_POST, payload);
+export const RequestCreatePost = () => createAction(REQUEST_CREATE_POST);
+export const ReceiveCreatePost = (payload: ICreatePostResult | null) => createAction(RECEIVE_CREATE_POST, payload);
 type FetchCreatePostType = ReturnType<typeof RequestCreatePost | typeof ReceiveCreatePost>;
 export const FetchCreatePost = (token: string, request: ICreatePostRequest) => {
     return async (dispatch: Dispatch<FetchCreatePostType>) => {
