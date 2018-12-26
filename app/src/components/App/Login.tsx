@@ -1,6 +1,7 @@
+import * as React from "react";
+
 import { Button, Dialog, Intent } from "@blueprintjs/core";
 import { FormikProps } from "formik";
-import * as React from "react";
 
 import { IProfile } from "@app/types/global";
 import { DialogActions, DialogBody } from "../util";
