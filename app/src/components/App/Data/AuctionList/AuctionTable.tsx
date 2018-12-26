@@ -54,7 +54,7 @@ export class AuctionTable extends React.Component<Props> {
     public onItemClick(item: IItem) {
         const result: IQueryAuctionsItem = {
             item,
-            owner: { name: "", normalized_name: "" },
+            owner: null,
             rank: 0,
             target: "",
         };
