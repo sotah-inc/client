@@ -20,9 +20,24 @@ export class PostList extends React.Component<Props> {
                     <H2 style={{ margin: 0 }}>Latest News</H2>
                     {this.renderLoadingSpinner()}
                 </div>
-                {this.renderSkeleton()}
+                {this.renderContent()}
             </>
         );
+    }
+
+    private renderContent() {
+        const { getPostsLevel } = this.props;
+
+        switch (getPostsLevel) {
+            case FetchLevel.success:
+                return this.renderPosts();
+            default:
+                return this.renderSkeleton();
+        }
+    }
+
+    private renderPosts() {
+        return <p>Hello, world!</p>;
     }
 
     private renderLoadingSpinner() {
@@ -54,7 +69,7 @@ export class PostList extends React.Component<Props> {
     }
 
     private renderSkeleton() {
-        const numbers: number[] = Array.apply(null, Array(3)).map((_, i: number) => i);
+        const numbers: number[] = Array.apply(null, Array(2)).map((_, i: number) => i);
 
         return numbers.map(() => this.renderSkeletonItem());
     }
