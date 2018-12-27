@@ -43,12 +43,24 @@ export const createPost = async (token: string, request: ICreatePostRequest): Pr
     return { post: (body as ICreatePostResponse).post };
 };
 
-export const getPosts = async (): Promise<IPostJson[]> => {
-    const { body } = await gather<null, IGetPostsResponse>({
+export interface IGetPostsResult {
+    posts: IPostJson[];
+    error?: string;
+}
+
+export const getPosts = async (): Promise<IGetPostsResult> => {
+    const { body, status } = await gather<null, IGetPostsResponse>({
         headers: new Headers({ "content-type": "application/json" }),
         method: "GET",
         url: `${apiEndpoint}/user/posts`,
     });
 
-    return body!.posts;
+    switch (status) {
+        case HTTPStatus.OK:
+            break;
+        default:
+            return { posts: [], error: "Failure" };
+    }
+
+    return { posts: body!.posts };
 };

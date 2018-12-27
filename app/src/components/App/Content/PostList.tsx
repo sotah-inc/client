@@ -17,6 +17,32 @@ export interface IStateProps {
 export type Props = Readonly<IDispatchProps & IStateProps>;
 
 export class PostList extends React.Component<Props> {
+    public componentDidMount() {
+        const { getPostsLevel, refreshPosts } = this.props;
+
+        switch (getPostsLevel) {
+            case FetchLevel.initial:
+                refreshPosts();
+
+                return;
+            default:
+                return;
+        }
+    }
+
+    public componentDidUpdate() {
+        const { getPostsLevel, refreshPosts } = this.props;
+
+        switch (getPostsLevel) {
+            case FetchLevel.initial:
+                refreshPosts();
+
+                return;
+            default:
+                return;
+        }
+    }
+
     public render() {
         return (
             <>
@@ -75,12 +101,12 @@ export class PostList extends React.Component<Props> {
     private renderSkeleton() {
         const numbers: number[] = Array.apply(null, Array(2)).map((_, i: number) => i);
 
-        return numbers.map(() => this.renderSkeletonItem());
+        return numbers.map((_, i) => this.renderSkeletonItem(i));
     }
 
-    private renderSkeletonItem() {
+    private renderSkeletonItem(index: number) {
         return (
-            <Card style={{ marginTop: "10px" }}>
+            <Card style={{ marginTop: "10px" }} key={index}>
                 <H5 className={Classes.SKELETON}>
                     <a href="#">Lorem ipsum</a>
                 </H5>
