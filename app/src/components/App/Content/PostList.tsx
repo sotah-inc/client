@@ -2,6 +2,7 @@ import * as React from "react";
 
 import { Button, Card, Classes, H2, H5, Intent, Spinner } from "@blueprintjs/core";
 import * as ReactMarkdown from "react-markdown";
+import { RouteComponentProps } from "react-router-dom";
 
 import { IPostJson } from "@app/api-types/entities";
 import { FetchLevel } from "@app/types/main";
@@ -15,7 +16,9 @@ export interface IStateProps {
     getPostsLevel: FetchLevel;
 }
 
-export type Props = Readonly<IDispatchProps & IStateProps>;
+export interface IOwnProps extends RouteComponentProps<{}> {}
+
+export type Props = Readonly<IDispatchProps & IStateProps & IOwnProps>;
 
 export class PostList extends React.Component<Props> {
     public componentDidMount() {
@@ -74,17 +77,21 @@ export class PostList extends React.Component<Props> {
     }
 
     private renderPost(index: number, post: IPostJson) {
-        const dest = `/content/news/${post.slug}`;
-
         return (
-            <Card style={{ marginTop: "10px" }} key={index}>
+            <Card key={index} style={{ marginTop: "10px" }} interactive={true} onClick={() => this.browseToPost(post)}>
                 <H5>
-                    <a href={dest}>{post.title}</a>
+                    <a onClick={() => this.browseToPost(post)}>{post.title}</a>
                 </H5>
                 <ReactMarkdown source={post.body} />
-                <Button text="Read More" />
+                <Button onClick={() => this.browseToPost(post)} text="Read More" />
             </Card>
         );
+    }
+
+    private browseToPost(post: IPostJson) {
+        const { history } = this.props;
+
+        history.push(`/content/news/${post.slug}`);
     }
 
     private renderLoadingSpinner() {
