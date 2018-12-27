@@ -41,7 +41,7 @@ const handlers: IKindHandlers<IPostsState, PostsActions> = {
                     return { ...state, getPostsLevel: FetchLevel.failure };
                 }
 
-                return { ...state, getPostsLevel: FetchLevel.success };
+                return { ...state, getPostsLevel: FetchLevel.success, posts: action.payload.posts };
             },
             request: (state: IPostsState) => {
                 return { ...state, getPostsLevel: FetchLevel.fetching };

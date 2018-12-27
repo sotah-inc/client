@@ -1,6 +1,7 @@
 import * as React from "react";
 
 import { Button, Card, Classes, H2, H5, Intent, Spinner } from "@blueprintjs/core";
+import * as ReactMarkdown from "react-markdown";
 
 import { IPostJson } from "@app/api-types/entities";
 import { FetchLevel } from "@app/types/main";
@@ -67,7 +68,23 @@ export class PostList extends React.Component<Props> {
     }
 
     private renderPosts() {
-        return <p>Hello, world!</p>;
+        const { posts } = this.props;
+
+        return posts.map((v, i) => this.renderPost(i, v));
+    }
+
+    private renderPost(index: number, post: IPostJson) {
+        const dest = `/content/news/${post.slug}`;
+
+        return (
+            <Card style={{ marginTop: "10px" }} key={index}>
+                <H5>
+                    <a href={dest}>{post.title}</a>
+                </H5>
+                <ReactMarkdown source={post.body} />
+                <Button text="Read More" />
+            </Card>
+        );
     }
 
     private renderLoadingSpinner() {
