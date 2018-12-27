@@ -58,10 +58,14 @@ export class News extends React.Component<Props> {
                                 {this.renderCard("/content/getting-started", "star", "Getting Started")}
                             </div>
                             <div className="pure-u-1-4 homepage-card-container">
-                                {this.renderCard(`/data/auctions/${currentRegion.name}`, "dollar", "Auctions")}
+                                {this.renderCard(`/data/auctions/${currentRegion.name}`, "dollar", "Browse Auctions")}
                             </div>
                             <div className="pure-u-1-4 homepage-card-container">
-                                {this.renderCard(`/data/professions/${currentRegion.name}`, "chart", "Professions")}
+                                {this.renderCard(
+                                    `/data/professions/${currentRegion.name}`,
+                                    "chart",
+                                    "Discover Professions",
+                                )}
                             </div>
                             {this.renderRegisterCallout()}
                         </div>
