@@ -43,26 +43,32 @@ export class News extends React.Component<Props> {
 
         return (
             <>
-                <H1>
-                    <Icon icon="globe" iconSize={35} /> Secrets of the Auction House
-                </H1>
-                <H4>
-                    Sotah is a full-featured technical analysis application for the World of Warcraft Auction House.
-                </H4>
-                <p>It is optimized for users comparing markets and discovering competitors.</p>
-                <div className="welcome pure-g">
-                    <div className="pure-u-1-4 homepage-card-container">
-                        {this.renderCard("/content/getting-started", "star", "Getting Started")}
+                <div className="pure-g">
+                    <div className="pure-u-3-4">
+                        <H1>
+                            <Icon icon="globe" iconSize={35} /> Secrets of the Auction House
+                        </H1>
+                        <H4>
+                            Sotah is a full-featured technical analysis application for the World of Warcraft Auction
+                            House.
+                        </H4>
+                        <p>It is optimized for users comparing markets and discovering competitors.</p>
+                        <div className="welcome pure-g">
+                            <div className="pure-u-1-4 homepage-card-container">
+                                {this.renderCard("/content/getting-started", "star", "Getting Started")}
+                            </div>
+                            <div className="pure-u-1-4 homepage-card-container">
+                                {this.renderCard(`/data/auctions/${currentRegion.name}`, "dollar", "Auctions")}
+                            </div>
+                            <div className="pure-u-1-4 homepage-card-container">
+                                {this.renderCard(`/data/professions/${currentRegion.name}`, "chart", "Professions")}
+                            </div>
+                            {this.renderRegisterCallout()}
+                        </div>
+                        <PostListContainer />
                     </div>
-                    <div className="pure-u-1-4 homepage-card-container">
-                        {this.renderCard(`/data/auctions/${currentRegion.name}`, "dollar", "Auctions")}
-                    </div>
-                    <div className="pure-u-1-4 homepage-card-container">
-                        {this.renderCard(`/data/professions/${currentRegion.name}`, "chart", "Professions")}
-                    </div>
-                    {this.renderRegisterCallout()}
+                    <div className="pure-u-1-4">&nbsp;</div>
                 </div>
-                <PostListContainer />
             </>
         );
     }
