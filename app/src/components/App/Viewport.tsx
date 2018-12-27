@@ -4,6 +4,7 @@ import { Route, RouteComponentProps, Switch } from "react-router-dom";
 
 import { NotFound } from "@app/components/util/NotFound";
 import { NewsCreatorContainer } from "@app/containers/App/Content/NewsCreator";
+import { PostContainer } from "@app/containers/App/Content/Post";
 import { DataContainer } from "@app/containers/App/Data";
 import { AuctionsLandingRouteContainer } from "@app/route-containers/App/AuctionsLanding";
 import { ContentRouteContainer } from "@app/route-containers/App/Content";
@@ -33,6 +34,7 @@ export class Viewport extends React.Component<Props> {
                 <Route exact={true} path="/content" component={ContentRouteContainer} />
                 <Route exact={true} path="/content/news" component={NewsRouteContainer} />
                 <Route exact={true} path="/content/news/creator" component={NewsCreatorContainer} />
+                <Route exact={true} path="/content/news/:post_slug" component={PostContainer} />
                 <Route exact={true} path="/data" component={DataContainer} />
                 <Route exact={true} path="/data/auctions/:region_name" component={AuctionsLandingRouteContainer} />
                 <Route
