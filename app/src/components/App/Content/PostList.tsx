@@ -5,12 +5,16 @@ import { Button, Card, Classes, H2, H5, Intent, Spinner } from "@blueprintjs/cor
 import { IPostJson } from "@app/api-types/entities";
 import { FetchLevel } from "@app/types/main";
 
+export interface IDispatchProps {
+    refreshPosts: () => void;
+}
+
 export interface IStateProps {
     posts: IPostJson[];
     getPostsLevel: FetchLevel;
 }
 
-export type Props = Readonly<IStateProps>;
+export type Props = Readonly<IDispatchProps & IStateProps>;
 
 export class PostList extends React.Component<Props> {
     public render() {

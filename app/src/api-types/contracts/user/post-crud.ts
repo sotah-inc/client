@@ -13,3 +13,7 @@ export interface ICreatePostResponse {
 export type IUpdatePostRequest = ICreatePostRequest;
 
 export type IUpdatePostResponse = ICreatePostResponse;
+
+export interface IGetPostsResponse {
+    posts: IPostJson[];
+}

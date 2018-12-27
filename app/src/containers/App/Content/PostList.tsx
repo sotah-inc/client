@@ -1,6 +1,8 @@
-import { connect } from "react-redux";
+import { connect, Dispatch } from "react-redux";
 
-import { IStateProps, PostList } from "@app/components/App/Content/PostList";
+import { Actions } from "@app/actions";
+import { FetchGetPosts } from "@app/actions/posts";
+import { IDispatchProps, IStateProps, PostList } from "@app/components/App/Content/PostList";
 import { IStoreState } from "@app/types";
 
 const mapStateToProps = (state: IStoreState): IStateProps => {
@@ -9,4 +11,13 @@ const mapStateToProps = (state: IStoreState): IStateProps => {
     return { getPostsLevel, posts };
 };
 
-export const PostListContainer = connect<IStateProps>(mapStateToProps)(PostList);
+const mapDispatchToProps = (dispatch: Dispatch<Actions>): IDispatchProps => {
+    return {
+        refreshPosts: () => dispatch(FetchGetPosts()),
+    };
+};
+
+export const PostListContainer = connect<IStateProps, IDispatchProps>(
+    mapStateToProps,
+    mapDispatchToProps,
+)(PostList);
