@@ -3,9 +3,11 @@ import * as React from "react";
 import { Button, Card, Classes, H2, H5, Intent, Spinner } from "@blueprintjs/core";
 
 import { IPostJson } from "@app/api-types/entities";
+import { FetchLevel } from "@app/types/main";
 
 export interface IStateProps {
     posts: IPostJson[];
+    getPostsLevel: FetchLevel;
 }
 
 export type Props = Readonly<IStateProps>;
@@ -24,11 +26,31 @@ export class PostList extends React.Component<Props> {
     }
 
     private renderLoadingSpinner() {
-        return (
-            <div style={{ marginLeft: "10px", paddingTop: "7px" }}>
-                <Spinner size={20} intent={Intent.PRIMARY} />
-            </div>
-        );
+        const { getPostsLevel } = this.props;
+
+        switch (getPostsLevel) {
+            case FetchLevel.success:
+                return null;
+            case FetchLevel.failure:
+                return (
+                    <div style={{ marginLeft: "10px", paddingTop: "7px" }}>
+                        <Spinner size={20} intent={Intent.DANGER} value={1} />
+                    </div>
+                );
+            case FetchLevel.fetching:
+                return (
+                    <div style={{ marginLeft: "10px", paddingTop: "7px" }}>
+                        <Spinner size={20} intent={Intent.PRIMARY} />
+                    </div>
+                );
+            case FetchLevel.initial:
+            default:
+                return (
+                    <div style={{ marginLeft: "10px", paddingTop: "7px" }}>
+                        <Spinner size={20} intent={Intent.NONE} value={0} />
+                    </div>
+                );
+        }
     }
 
     private renderSkeleton() {
