@@ -84,9 +84,7 @@ export class PostList extends React.Component<Props> {
             <Card key={index} style={{ marginTop: "10px" }} interactive={true} onClick={() => this.browseToPost(post)}>
                 <H5>
                     <a onClick={() => this.browseToPost(post)}>{post.title}</a>
-                    <small style={{ marginLeft: "5px" }}>
-                        <em>submitted {moment(createdAt).format("MMM Do YYYY")}</em>
-                    </small>
+                    <small style={{ marginLeft: "5px" }}>submitted {moment(createdAt).format("MMM Do YYYY")}</small>
                 </H5>
                 <ReactMarkdown source={post.body} />
                 <Button onClick={() => this.browseToPost(post)} text="Read More" />
