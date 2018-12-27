@@ -1,5 +1,5 @@
 import { IAuction, IOwner, OwnerName } from "../auction";
-import { IProfessionPricelistJson } from "../entities";
+import { IPostJson, IProfessionPricelistJson } from "../entities";
 import { ExpansionName, IExpansion } from "../expansion";
 import { SortDirection, SortKind } from "../index";
 import { IItem, IItemsMap, ItemId } from "../item";
@@ -16,9 +16,7 @@ export interface IGetItemsClassesResponse {
 
 export interface IGetBootResponse {
     regions: IRegion[];
-    item_classes: {
-        classes: IItemClass[];
-    };
+    item_classes: IItemClass[];
     expansions: IExpansion[];
     professions: IProfession[];
 }
@@ -139,4 +137,8 @@ export interface IGetUnmetDemandResponse {
 export interface IGetProfessionPricelistsResponse {
     profession_pricelists: IProfessionPricelistJson[];
     items: IItemsMap;
+}
+
+export interface IGetPostsResponse {
+    posts: IPostJson[];
 }
