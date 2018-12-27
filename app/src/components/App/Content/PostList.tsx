@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { Button, Card, Classes, H2, H5 } from "@blueprintjs/core";
+import { Button, Card, Classes, H2, H5, Intent, Spinner } from "@blueprintjs/core";
 
 import { IPostJson } from "@app/api-types/entities";
 
@@ -14,9 +14,20 @@ export class PostList extends React.Component<Props> {
     public render() {
         return (
             <>
-                <H2>Latest News</H2>
+                <div style={{ display: "flex" }}>
+                    <H2 style={{ margin: 0 }}>Latest News</H2>
+                    {this.renderLoadingSpinner()}
+                </div>
                 {this.renderSkeleton()}
             </>
+        );
+    }
+
+    private renderLoadingSpinner() {
+        return (
+            <div style={{ marginLeft: "10px", paddingTop: "7px" }}>
+                <Spinner size={20} intent={Intent.PRIMARY} />
+            </div>
         );
     }
 
