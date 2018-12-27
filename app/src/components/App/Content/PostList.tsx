@@ -1,6 +1,7 @@
 import * as React from "react";
 
 import { Button, Card, Classes, H2, H5, Intent, Spinner } from "@blueprintjs/core";
+import * as moment from "moment";
 import * as ReactMarkdown from "react-markdown";
 import { RouteComponentProps } from "react-router-dom";
 
@@ -77,10 +78,15 @@ export class PostList extends React.Component<Props> {
     }
 
     private renderPost(index: number, post: IPostJson) {
+        const createdAt = new Date(post.createdAt * 1000);
+
         return (
             <Card key={index} style={{ marginTop: "10px" }} interactive={true} onClick={() => this.browseToPost(post)}>
                 <H5>
                     <a onClick={() => this.browseToPost(post)}>{post.title}</a>
+                    <small style={{ marginLeft: "5px" }}>
+                        <em>submitted {moment(createdAt).format("MMM Do YYYY")}</em>
+                    </small>
                 </H5>
                 <ReactMarkdown source={post.body} />
                 <Button onClick={() => this.browseToPost(post)} text="Read More" />
