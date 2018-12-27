@@ -1,7 +1,8 @@
 import { Dispatch } from "redux";
 
 import { ICreatePostRequest } from "@app/api-types/contracts/user/post-crud";
-import { createPost, getPosts, ICreatePostResult, IGetPostsResult } from "@app/api/posts";
+import { getPosts, IGetPostsResult } from "@app/api/data";
+import { createPost, ICreatePostResult } from "@app/api/posts";
 import { ActionsUnion, createAction } from "./helpers";
 
 export const REQUEST_CREATE_POST = "REQUEST_CREATE_POST";

@@ -1,7 +1,7 @@
 import * as HTTPStatus from "http-status";
 
 import { IErrorResponse, IValidationErrorResponse } from "@app/api-types/contracts";
-import { ICreatePostRequest, ICreatePostResponse, IGetPostsResponse } from "@app/api-types/contracts/user/post-crud";
+import { ICreatePostRequest, ICreatePostResponse } from "@app/api-types/contracts/user/post-crud";
 import { IPostJson } from "@app/api-types/entities";
 import { apiEndpoint, gather } from "./index";
 
@@ -41,26 +41,4 @@ export const createPost = async (token: string, request: ICreatePostRequest): Pr
     }
 
     return { post: (body as ICreatePostResponse).post };
-};
-
-export interface IGetPostsResult {
-    posts: IPostJson[];
-    error?: string;
-}
-
-export const getPosts = async (): Promise<IGetPostsResult> => {
-    const { body, status } = await gather<null, IGetPostsResponse>({
-        headers: new Headers({ "content-type": "application/json" }),
-        method: "GET",
-        url: `${apiEndpoint}/user/posts`,
-    });
-
-    switch (status) {
-        case HTTPStatus.OK:
-            break;
-        default:
-            return { posts: [], error: "Failure" };
-    }
-
-    return { posts: body!.posts };
 };

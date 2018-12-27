@@ -6,6 +6,7 @@ import {
     IGetBootResponse,
     IGetOwnersRequest,
     IGetOwnersResponse,
+    IGetPostsResponse,
     IGetPricelistHistoriesRequest,
     IGetPricelistHistoriesResponse,
     IGetPricelistRequest,
@@ -20,6 +21,7 @@ import {
     IQueryOwnerItemsResponse,
     IStatusRealm,
 } from "@app/api-types/contracts/data";
+import { IPostJson } from "@app/api-types/entities";
 import { ItemId } from "@app/api-types/item";
 import { RealmSlug, RegionName } from "@app/api-types/region";
 import { apiEndpoint, gather } from "./index";
@@ -199,4 +201,26 @@ export const queryOwnersByItems = async (
     }
 
     return body;
+};
+
+export interface IGetPostsResult {
+    posts: IPostJson[];
+    error?: string;
+}
+
+export const getPosts = async (): Promise<IGetPostsResult> => {
+    const { body, status } = await gather<null, IGetPostsResponse>({
+        headers: new Headers({ "content-type": "application/json" }),
+        method: "GET",
+        url: `${apiEndpoint}/posts`,
+    });
+
+    switch (status) {
+        case HTTPStatus.OK:
+            break;
+        default:
+            return { posts: [], error: "Failure" };
+    }
+
+    return { posts: body!.posts };
 };
