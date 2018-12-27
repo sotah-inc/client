@@ -1,10 +1,11 @@
 import * as React from "react";
 
-import { Classes, H1, H2, H4, Icon, IconName, Intent, NonIdealState, Spinner } from "@blueprintjs/core";
+import { Classes, H1, H4, Icon, IconName, Intent, NonIdealState, Spinner } from "@blueprintjs/core";
 import { RouteComponentProps } from "react-router-dom";
 
 import { IRegion } from "@app/api-types/region";
 import { CardCallout } from "@app/components/util";
+import { PostListContainer } from "@app/containers/App/Content/PostList";
 import { AuthLevel } from "@app/types/main";
 import { setTitle } from "@app/util";
 
@@ -61,10 +62,7 @@ export class News extends React.Component<Props> {
                     </div>
                     {this.renderRegisterCallout()}
                 </div>
-                <H2>Latest News</H2>
-                <p>
-                    <em>Insert news here.</em>
-                </p>
+                <PostListContainer />
             </>
         );
     }
