@@ -35,12 +35,14 @@ const config: WithFormikConfig<IFormProps, IFormValues> = {
         return {
             body: "",
             slug: "",
+            summary: "",
             title: "",
         };
     },
     validationSchema: Yup.object().shape({
         body: PostRules.body,
         slug: PostRules.slug,
+        summary: PostRules.summary,
         title: PostRules.title,
     }),
 };

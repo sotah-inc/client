@@ -4,6 +4,7 @@ export interface ICreatePostRequest {
     title: string;
     slug: string;
     body: string;
+    summary: string;
 }
 
 export interface ICreatePostResponse {

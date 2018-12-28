@@ -4,6 +4,7 @@ import {
     Alignment,
     Button,
     Callout,
+    Card,
     ControlGroup,
     FormGroup,
     H2,
@@ -48,6 +49,7 @@ export interface IFormValues {
     title: string;
     body: string;
     slug: string;
+    summary: string;
 }
 
 type State = Readonly<{
@@ -149,12 +151,12 @@ export class PostForm extends React.Component<Props, State> {
     // Gnoll Report 1: WoW Recession Edition
 
     private renderPreview() {
-        return <div style={{ marginLeft: "5px" }}>{this.renderPreviewContent()}</div>;
+        return <div style={{ marginLeft: "10px" }}>{this.renderPreviewContent()}</div>;
     }
 
     private renderPreviewContent() {
         const {
-            values: { title, slug, body },
+            values: { title, slug, body, summary },
         } = this.props;
 
         if (typeof title === "undefined" || title.length === 0) {
@@ -190,6 +192,9 @@ export class PostForm extends React.Component<Props, State> {
                     Slug: <span style={{ textDecoration: "underline" }}>{`/content/news/${slug}`}</span>
                 </p>
                 <hr />
+                <Card elevation={2}>
+                    <ReactMarkdown source={summary} />
+                </Card>
                 <ReactMarkdown source={body} />
             </>
         );
@@ -254,6 +259,21 @@ export class PostForm extends React.Component<Props, State> {
                         >
                             Edit
                         </Button>
+                    </ControlGroup>
+                </FormGroup>
+                <FormGroup
+                    helperText={coalescedErrors.summary}
+                    label="Summary"
+                    labelFor="summary"
+                    labelInfo={true}
+                    intent={coalescedErrors.summary && !!touched.summary ? Intent.DANGER : Intent.NONE}
+                >
+                    <ControlGroup fill={true}>
+                        <TextArea
+                            value={values.summary}
+                            onChange={e => setFieldValue("summary", e.target.value)}
+                            style={{ minHeight: "200px" }}
+                        />
                     </ControlGroup>
                 </FormGroup>
                 <FormGroup

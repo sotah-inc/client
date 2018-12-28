@@ -28,5 +28,6 @@ export const PostRules = {
         .min(4)
         .matches(/^[a-z|0-9|_|\-]+$/, "Slug must be a-z, 0-9, or underscore")
         .required("Slug is required"),
+    summary: Yup.string().required("Post summary is required"),
     title: Yup.string().required("Post title is requred"),
 };

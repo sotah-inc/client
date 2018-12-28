@@ -74,6 +74,14 @@ export class PostList extends React.Component<Props> {
     private renderPosts() {
         const { posts } = this.props;
 
+        if (posts.length === 0) {
+            return (
+                <p>
+                    <em>Insert news here.</em>
+                </p>
+            );
+        }
+
         return posts.map((v, i) => this.renderPost(i, v));
     }
 
@@ -86,7 +94,7 @@ export class PostList extends React.Component<Props> {
                         submitted {moment(new Date(post.createdAt * 1000)).format("MMM Do YYYY")}
                     </small>
                 </H5>
-                <ReactMarkdown source={post.body} />
+                <ReactMarkdown source={post.summary} />
                 <hr />
                 <Button onClick={() => this.browseToPost(post)} text="Read More" />
             </Card>
