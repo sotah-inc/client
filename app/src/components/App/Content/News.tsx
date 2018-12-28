@@ -49,7 +49,7 @@ export class News extends React.Component<Props> {
                             <Icon icon="globe" iconSize={35} /> Secrets of the Auction House
                         </H1>
                         <H4>
-                            Sotah is a full-featured technical analysis application for the World of Warcraft Auction
+                            SotAH is a full-featured technical analysis application for the World of Warcraft Auction
                             House.
                         </H4>
                         <p>It is optimized for users comparing markets and discovering competitors.</p>
