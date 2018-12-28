@@ -4,14 +4,17 @@ import { Classes, H1, Icon, Intent, NonIdealState, Spinner } from "@blueprintjs/
 import { RouteComponentProps } from "react-router-dom";
 
 import { IPostJson } from "@app/api-types/entities";
+import { FetchLevel } from "@app/types/main";
 
 export interface IStateProps {
     posts: IPostJson[];
     currentPost: IPostJson | null;
+    getPostsLevel: FetchLevel;
 }
 
 export interface IDispatchProps {
     changePost: (v: IPostJson) => void;
+    refreshPosts: () => void;
 }
 
 interface IRouteParams {
@@ -31,10 +34,23 @@ export class Post extends React.Component<Props> {
             posts,
             currentPost,
             changePost,
+            getPostsLevel,
+            refreshPosts,
         } = this.props;
 
         if (typeof post_slug === "undefined") {
             return;
+        }
+
+        switch (getPostsLevel) {
+            case FetchLevel.initial:
+                refreshPosts();
+
+                return;
+            case FetchLevel.success:
+                break;
+            default:
+                return;
         }
 
         const foundPost: IPostJson | null = posts.reduce((pv, v) => {
@@ -64,13 +80,26 @@ export class Post extends React.Component<Props> {
             match: {
                 params: { post_slug },
             },
+            getPostsLevel,
             posts,
             currentPost,
             changePost,
+            refreshPosts,
         } = this.props;
 
         if (typeof post_slug === "undefined") {
             return;
+        }
+
+        switch (getPostsLevel) {
+            case FetchLevel.initial:
+                refreshPosts();
+
+                return;
+            case FetchLevel.success:
+                break;
+            default:
+                return;
         }
 
         const foundPost: IPostJson | null = posts.reduce((pv, v) => {
@@ -111,6 +140,7 @@ export class Post extends React.Component<Props> {
             match: {
                 params: { post_slug },
             },
+            getPostsLevel,
             currentPost,
         } = this.props;
 
@@ -121,6 +151,33 @@ export class Post extends React.Component<Props> {
                     icon={<Spinner className={Classes.LARGE} intent={Intent.NONE} value={1} />}
                 />
             );
+        }
+
+        switch (getPostsLevel) {
+            case FetchLevel.success:
+                break;
+            case FetchLevel.failure:
+                return (
+                    <NonIdealState
+                        title="Failed to fetch news posts"
+                        icon={<Spinner className={Classes.LARGE} intent={Intent.DANGER} value={1} />}
+                    />
+                );
+            case FetchLevel.fetching:
+                return (
+                    <NonIdealState
+                        title="Loading news posts"
+                        icon={<Spinner className={Classes.LARGE} intent={Intent.PRIMARY} />}
+                    />
+                );
+            case FetchLevel.initial:
+            default:
+                return (
+                    <NonIdealState
+                        title="Loading news posts"
+                        icon={<Spinner className={Classes.LARGE} intent={Intent.NONE} value={0} />}
+                    />
+                );
         }
 
         if (currentPost === null) {
