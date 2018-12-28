@@ -78,15 +78,16 @@ export class PostList extends React.Component<Props> {
     }
 
     private renderPost(index: number, post: IPostJson) {
-        const createdAt = new Date(post.createdAt * 1000);
-
         return (
             <Card key={index} style={{ marginTop: "10px" }} interactive={true} onClick={() => this.browseToPost(post)}>
                 <H5>
                     <a onClick={() => this.browseToPost(post)}>{post.title}</a>
-                    <small style={{ marginLeft: "5px" }}>submitted {moment(createdAt).format("MMM Do YYYY")}</small>
+                    <small style={{ marginLeft: "5px" }}>
+                        submitted {moment(new Date(post.createdAt * 1000)).format("MMM Do YYYY")}
+                    </small>
                 </H5>
                 <ReactMarkdown source={post.body} />
+                <hr />
                 <Button onClick={() => this.browseToPost(post)} text="Read More" />
             </Card>
         );
