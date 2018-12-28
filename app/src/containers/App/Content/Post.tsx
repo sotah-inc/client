@@ -1,12 +1,24 @@
-import { connect } from "react-redux";
+import { connect, Dispatch } from "react-redux";
 
-import { IOwnProps, IStateProps, Post } from "@app/components/App/Content/Post";
+import { Actions } from "@app/actions";
+import { ChangePost } from "@app/actions/posts";
+import { IPostJson } from "@app/api-types/entities";
+import { IDispatchProps, IOwnProps, IStateProps, Post } from "@app/components/App/Content/Post";
 import { IStoreState } from "@app/types";
 
 const mapStateToProps = (state: IStoreState): IStateProps => {
-    const { currentPost } = state.Posts;
+    const { posts, currentPost } = state.Posts;
 
-    return { currentPost };
+    return { currentPost, posts };
 };
 
-export const PostContainer = connect<IStateProps, IOwnProps>(mapStateToProps)(Post);
+const mapDispatchToProps = (dispatch: Dispatch<Actions>): IDispatchProps => {
+    return {
+        changePost: (v: IPostJson) => dispatch(ChangePost(v)),
+    };
+};
+
+export const PostContainer = connect<IStateProps, IDispatchProps, IOwnProps>(
+    mapStateToProps,
+    mapDispatchToProps,
+)(Post);

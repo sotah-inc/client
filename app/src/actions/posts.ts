@@ -1,6 +1,7 @@
 import { Dispatch } from "redux";
 
 import { ICreatePostRequest } from "@app/api-types/contracts/user/post-crud";
+import { IPostJson } from "@app/api-types/entities";
 import { getPosts, IGetPostsResult } from "@app/api/data";
 import { createPost, ICreatePostResult } from "@app/api/posts";
 import { ActionsUnion, createAction } from "./helpers";
@@ -29,7 +30,11 @@ export const FetchGetPosts = () => {
     };
 };
 
+export const CHANGE_POST = "CHANGE_POST";
+export const ChangePost = (payload: IPostJson) => createAction(CHANGE_POST, payload);
+
 export const PostsActions = {
+    ChangePost,
     ReceiveCreatePost,
     ReceiveGetPosts,
     RequestCreatePost,
