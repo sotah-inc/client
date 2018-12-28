@@ -67,7 +67,7 @@ export class News extends React.Component<Props> {
                                     "Discover Professions",
                                 )}
                             </div>
-                            {this.renderRegisterCallout()}
+                            {this.renderUserCallout()}
                         </div>
                         <PostListRouteContainer />
                     </div>
@@ -83,11 +83,15 @@ export class News extends React.Component<Props> {
         return <CardCallout onClick={() => history.push(dest)} icon={icon} label={label} />;
     }
 
-    private renderRegisterCallout() {
+    private renderUserCallout() {
         const { changeIsRegisterDialogOpen, authLevel } = this.props;
 
         if (authLevel === AuthLevel.authenticated) {
-            return null;
+            return (
+                <div className="pure-u-1-4 homepage-card-container">
+                    {this.renderCard(`/content/feed`, "feed", "Check Your Feed")}
+                </div>
+            );
         }
 
         return (
