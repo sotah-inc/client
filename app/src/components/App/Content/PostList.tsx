@@ -96,7 +96,7 @@ export class PostList extends React.Component<Props> {
                 </H5>
                 <ReactMarkdown source={post.summary} />
                 <hr />
-                <Button onClick={() => this.browseToPost(post)} text="Read More" />
+                <Button intent={Intent.PRIMARY} onClick={() => this.browseToPost(post)} text="Read More" />
             </Card>
         );
     }
