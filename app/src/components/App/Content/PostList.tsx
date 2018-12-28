@@ -94,9 +94,15 @@ export class PostList extends React.Component<Props> {
                         submitted {moment(new Date(post.createdAt * 1000)).format("MMM Do YYYY")}
                     </small>
                 </H5>
+                <hr />
                 <ReactMarkdown source={post.summary} />
                 <hr />
-                <Button intent={Intent.PRIMARY} onClick={() => this.browseToPost(post)} text="Read More" />
+                <Button
+                    icon="calendar"
+                    intent={Intent.PRIMARY}
+                    onClick={() => this.browseToPost(post)}
+                    text="Read More"
+                />
             </Card>
         );
     }

@@ -206,6 +206,7 @@ export class Post extends React.Component<Props> {
                 <H5>
                     <small>Submitted {moment(new Date(currentPost.createdAt * 1000)).format("MMM Do YYYY")}</small>
                 </H5>
+                <hr />
                 <ReactMarkdown source={currentPost.body} />
             </Card>
         );
