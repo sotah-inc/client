@@ -1,6 +1,8 @@
 import * as React from "react";
 
-import { Classes, H1, Icon, Intent, NonIdealState, Spinner } from "@blueprintjs/core";
+import { Card, Classes, H1, H2, H5, Icon, Intent, NonIdealState, Spinner } from "@blueprintjs/core";
+import * as moment from "moment";
+import * as ReactMarkdown from "react-markdown";
 import { RouteComponentProps } from "react-router-dom";
 
 import { IPostJson } from "@app/api-types/entities";
@@ -198,6 +200,14 @@ export class Post extends React.Component<Props> {
             );
         }
 
-        return <p>Hello, world!</p>;
+        return (
+            <Card elevation={3}>
+                <H2>{currentPost.title}</H2>
+                <H5>
+                    <small>Submitted {moment(new Date(currentPost.createdAt * 1000)).format("MMM Do YYYY")}</small>
+                </H5>
+                <ReactMarkdown source={currentPost.body} />
+            </Card>
+        );
     }
 }
