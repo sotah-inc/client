@@ -1,4 +1,4 @@
-import { PostsActions } from "@app/actions/posts";
+import { CHANGE_POST, PostsActions } from "@app/actions/posts";
 import { defaultPostsState, IPostsState } from "@app/types/posts";
 import { runners } from "./handlers";
 
@@ -10,6 +10,8 @@ export const posts = (state: State, action: PostsActions): State => {
     }
 
     switch (action.type) {
+        case CHANGE_POST:
+            return { ...state, currentPost: action.payload };
         default:
             return runners.post(state, action);
     }
