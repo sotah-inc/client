@@ -14,6 +14,7 @@ interface IFormProps {
         [key: string]: string;
     };
     mutatePostLevel: FetchLevel;
+    defaultFormValues?: IFormValues;
 }
 
 const config: WithFormikConfig<IFormProps, IFormValues> = {
@@ -22,7 +23,11 @@ const config: WithFormikConfig<IFormProps, IFormValues> = {
 
         onSubmit(values);
     },
-    mapPropsToValues: (_: IFormProps) => {
+    mapPropsToValues: ({ defaultFormValues }: IFormProps) => {
+        if (typeof defaultFormValues !== "undefined") {
+            return defaultFormValues;
+        }
+
         return {
             body: "",
             slug: "",

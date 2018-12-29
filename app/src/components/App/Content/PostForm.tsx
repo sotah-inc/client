@@ -31,6 +31,7 @@ export interface IOwnProps {
     mutatePostErrors: {
         [key: string]: string;
     };
+    defaultFormValues?: IFormValues;
 }
 
 export interface IFormValues {
