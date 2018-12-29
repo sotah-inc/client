@@ -7,6 +7,7 @@ import { RouteComponentProps } from "react-router-dom";
 
 import { IPostJson } from "@app/api-types/entities";
 import { FetchLevel } from "@app/types/main";
+import { setTitle } from "@app/util";
 
 export interface IStateProps {
     posts: IPostJson[];
@@ -67,6 +68,8 @@ export class Post extends React.Component<Props> {
             return null;
         }, null);
         if (foundPost === null) {
+            setTitle("Post Not Found - News");
+
             return;
         }
 
@@ -116,6 +119,8 @@ export class Post extends React.Component<Props> {
             return null;
         }, null);
         if (foundPost === null) {
+            setTitle("Post Not Found - News");
+
             return;
         }
 
@@ -144,6 +149,7 @@ export class Post extends React.Component<Props> {
             },
             getPostsLevel,
             currentPost,
+            posts,
         } = this.props;
 
         if (typeof post_slug === "undefined") {
@@ -182,19 +188,51 @@ export class Post extends React.Component<Props> {
                 );
         }
 
+        const foundPost: IPostJson | null = posts.reduce((pv, v) => {
+            if (pv !== null) {
+                return pv;
+            }
+
+            if (v.slug === post_slug) {
+                return v;
+            }
+
+            return null;
+        }, null);
+
         if (currentPost === null) {
+            if (foundPost === null) {
+                return (
+                    <NonIdealState
+                        title="Post not found"
+                        icon={<Spinner className={Classes.LARGE} intent={Intent.DANGER} value={1} />}
+                    />
+                );
+            }
+
             return (
                 <NonIdealState
-                    title="Loading news post"
-                    icon={<Spinner className={Classes.LARGE} intent={Intent.NONE} value={0} />}
+                    title="Changing news post"
+                    description={`Browsing to ${foundPost.title}`}
+                    icon={<Spinner className={Classes.LARGE} intent={Intent.PRIMARY} />}
                 />
             );
         }
 
         if (currentPost.slug !== post_slug) {
+            if (foundPost === null) {
+                return (
+                    <NonIdealState
+                        title="Post not found"
+                        icon={<Spinner className={Classes.LARGE} intent={Intent.DANGER} value={1} />}
+                    />
+                );
+            }
+
             return (
                 <NonIdealState
                     title="Changing news post"
+                    description={`Browsing to ${foundPost.title}`}
                     icon={<Spinner className={Classes.LARGE} intent={Intent.PRIMARY} />}
                 />
             );
