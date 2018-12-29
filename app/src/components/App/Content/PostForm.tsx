@@ -18,19 +18,15 @@ import {
 } from "@blueprintjs/core";
 import { FormikProps } from "formik";
 import * as ReactMarkdown from "react-markdown";
-import { RouteComponentProps } from "react-router-dom";
 import * as getSlug from "speakingurl";
 
-import { IPostJson } from "@app/api-types/entities";
 import { FetchLevel } from "@app/types/main";
 import { AppToaster } from "@app/util/toasters";
 
-export interface IStateProps {
-    currentPost: IPostJson | null;
-}
-
-export interface IOwnProps extends RouteComponentProps<{}> {
+export interface IOwnProps {
     onSubmit: (v: IFormValues) => void;
+    onComplete: () => void;
+
     mutatePostLevel: FetchLevel;
     mutatePostErrors: {
         [key: string]: string;
@@ -48,7 +44,7 @@ type State = Readonly<{
     manualSlug: boolean;
 }>;
 
-export type Props = Readonly<IStateProps & IOwnProps & FormikProps<IFormValues>>;
+export type Props = Readonly<IOwnProps & FormikProps<IFormValues>>;
 
 export class PostForm extends React.Component<Props, State> {
     public state: State = {
@@ -56,7 +52,7 @@ export class PostForm extends React.Component<Props, State> {
     };
 
     public componentDidUpdate(prevProps: Props) {
-        const { mutatePostLevel, setSubmitting, handleReset, mutatePostErrors, history, currentPost } = this.props;
+        const { mutatePostLevel, setSubmitting, handleReset, mutatePostErrors, onComplete } = this.props;
 
         switch (mutatePostLevel) {
             case FetchLevel.success:
@@ -83,17 +79,18 @@ export class PostForm extends React.Component<Props, State> {
         if (prevProps.mutatePostLevel !== mutatePostLevel) {
             setSubmitting(false);
             handleReset();
-            AppToaster.show({
-                icon: "info-sign",
-                intent: "success",
-                message: "Your post has successfully been created!",
-            });
+            onComplete();
+            // AppToaster.show({
+            //     icon: "info-sign",
+            //     intent: "success",
+            //     message: "Your post has successfully been created!",
+            // });
 
-            if (currentPost === null) {
-                return;
-            }
+            // if (currentPost === null) {
+            //     return;
+            // }
 
-            history.push(`/content/news/${currentPost.slug}`);
+            // history.push(`/content/news/${currentPost.slug}`);
 
             return;
         }

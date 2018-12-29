@@ -1,20 +1,18 @@
 import { withFormik, WithFormikConfig } from "formik";
-import { RouteComponentProps } from "react-router-dom";
 import * as Yup from "yup";
 
-import { IPostJson } from "@app/api-types/entities";
 import { IFormValues, PostForm } from "@app/components/App/Content/PostForm";
 import { FetchLevel } from "@app/types/main";
 import { PostRules } from "@app/validator-rules";
 
-interface IFormProps extends RouteComponentProps<{}> {
+interface IFormProps {
     onSubmit: (v: IFormValues) => void;
+    onComplete: () => void;
 
     mutatePostErrors: {
         [key: string]: string;
     };
     mutatePostLevel: FetchLevel;
-    currentPost: IPostJson | null;
 }
 
 const config: WithFormikConfig<IFormProps, IFormValues> = {
