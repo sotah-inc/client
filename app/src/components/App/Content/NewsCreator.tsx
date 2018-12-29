@@ -10,6 +10,7 @@ import { PostFormFormContainer } from "@app/form-containers/App/Content/PostForm
 import { IProfile } from "@app/types/global";
 import { FetchLevel } from "@app/types/main";
 import { setTitle } from "@app/util";
+import { AppToaster } from "@app/util/toasters";
 
 export interface IStateProps {
     profile: IProfile | null;
@@ -55,7 +56,20 @@ export class NewsCreator extends React.Component<Props> {
                         return;
                     }
 
+                    AppToaster.show({
+                        icon: "info-sign",
+                        intent: "success",
+                        message: "Your post has successfully been created!",
+                    });
+
                     history.push(`/content/news/${currentPost.slug}`);
+                }}
+                onFatalError={err => {
+                    AppToaster.show({
+                        icon: "warning-sign",
+                        intent: "danger",
+                        message: `Could not create post: ${err}`,
+                    });
                 }}
             />
         );

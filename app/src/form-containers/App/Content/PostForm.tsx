@@ -8,6 +8,7 @@ import { PostRules } from "@app/validator-rules";
 interface IFormProps {
     onSubmit: (v: IFormValues) => void;
     onComplete: () => void;
+    onFatalError: (err: string) => void;
 
     mutatePostErrors: {
         [key: string]: string;

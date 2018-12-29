@@ -21,11 +21,11 @@ import * as ReactMarkdown from "react-markdown";
 import * as getSlug from "speakingurl";
 
 import { FetchLevel } from "@app/types/main";
-import { AppToaster } from "@app/util/toasters";
 
 export interface IOwnProps {
     onSubmit: (v: IFormValues) => void;
     onComplete: () => void;
+    onFatalError: (err: string) => void;
 
     mutatePostLevel: FetchLevel;
     mutatePostErrors: {
@@ -52,7 +52,7 @@ export class PostForm extends React.Component<Props, State> {
     };
 
     public componentDidUpdate(prevProps: Props) {
-        const { mutatePostLevel, setSubmitting, handleReset, mutatePostErrors, onComplete } = this.props;
+        const { mutatePostLevel, setSubmitting, handleReset, onComplete, onFatalError, mutatePostErrors } = this.props;
 
         switch (mutatePostLevel) {
             case FetchLevel.success:
@@ -61,11 +61,7 @@ export class PostForm extends React.Component<Props, State> {
                 if (prevProps.mutatePostLevel !== mutatePostLevel) {
                     setSubmitting(false);
                     if ("error" in mutatePostErrors) {
-                        AppToaster.show({
-                            icon: "warning-sign",
-                            intent: "danger",
-                            message: `Could not create post: ${mutatePostErrors.error}`,
-                        });
+                        onFatalError(mutatePostErrors.error);
                     }
 
                     return;
@@ -80,17 +76,6 @@ export class PostForm extends React.Component<Props, State> {
             setSubmitting(false);
             handleReset();
             onComplete();
-            // AppToaster.show({
-            //     icon: "info-sign",
-            //     intent: "success",
-            //     message: "Your post has successfully been created!",
-            // });
-
-            // if (currentPost === null) {
-            //     return;
-            // }
-
-            // history.push(`/content/news/${currentPost.slug}`);
 
             return;
         }
