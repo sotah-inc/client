@@ -35,6 +35,7 @@ export class Viewport extends React.Component<Props> {
                 <Route exact={true} path="/content/news" component={NewsRouteContainer} />
                 <Route exact={true} path="/content/news/creator" component={NewsCreatorContainer} />
                 <Route exact={true} path="/content/news/:post_slug" component={PostContainer} />
+                <Route exact={true} path="/content/news/:post_slug/edit" component={PostContainer} />
                 <Route exact={true} path="/data" component={DataContainer} />
                 <Route exact={true} path="/data/auctions/:region_name" component={AuctionsLandingRouteContainer} />
                 <Route
