@@ -6,9 +6,11 @@ import { IDispatchProps, IStateProps, PostList } from "@app/components/App/Conte
 import { IStoreState } from "@app/types";
 
 const mapStateToProps = (state: IStoreState): IStateProps => {
+    const { profile } = state.Main;
     const { posts, getPostsLevel } = state.Posts;
+    const user = profile === null ? null : profile.user;
 
-    return { getPostsLevel, posts };
+    return { getPostsLevel, posts, user };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<Actions>): IDispatchProps => {

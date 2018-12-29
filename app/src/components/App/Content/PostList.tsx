@@ -1,11 +1,11 @@
 import * as React from "react";
 
-import { Button, Card, Classes, H2, H5, Intent, Spinner } from "@blueprintjs/core";
+import { Button, ButtonGroup, Card, Classes, H2, H5, Intent, Spinner } from "@blueprintjs/core";
 import * as moment from "moment";
 import * as ReactMarkdown from "react-markdown";
 import { RouteComponentProps } from "react-router-dom";
 
-import { IPostJson } from "@app/api-types/entities";
+import { IPostJson, IUserJson, UserLevel } from "@app/api-types/entities";
 import { FetchLevel } from "@app/types/main";
 
 export interface IDispatchProps {
@@ -15,6 +15,7 @@ export interface IDispatchProps {
 export interface IStateProps {
     posts: IPostJson[];
     getPostsLevel: FetchLevel;
+    user: IUserJson | null;
 }
 
 export interface IOwnProps extends RouteComponentProps<{}> {}
@@ -97,13 +98,43 @@ export class PostList extends React.Component<Props> {
                 <hr />
                 <ReactMarkdown source={post.summary} />
                 <hr />
+                {this.renderActionButtons(post)}
+            </Card>
+        );
+    }
+
+    private renderActionButtons(post: IPostJson) {
+        const { user, history } = this.props;
+
+        if (user === null || user.level < UserLevel.Admin) {
+            return (
                 <Button
                     icon="calendar"
                     intent={Intent.PRIMARY}
                     onClick={() => this.browseToPost(post)}
                     text="Read More"
                 />
-            </Card>
+            );
+        }
+
+        return (
+            <ButtonGroup>
+                <Button
+                    icon="calendar"
+                    intent={Intent.PRIMARY}
+                    onClick={() => this.browseToPost(post)}
+                    text="Read More"
+                />
+                <Button
+                    icon="edit"
+                    onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                        e.stopPropagation();
+
+                        history.push(`/content/news/${post.slug}/edit`);
+                    }}
+                />
+                <Button icon="delete" onClick={() => console.log("wew lad")} />
+            </ButtonGroup>
         );
     }
 
