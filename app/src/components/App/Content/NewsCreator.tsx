@@ -8,10 +8,15 @@ import { UserLevel } from "@app/api-types/entities";
 import { IFormValues } from "@app/components/App/Content/PostForm";
 import { PostFormRouteContainer } from "@app/route-containers/App/Content/PostForm";
 import { IProfile } from "@app/types/global";
+import { FetchLevel } from "@app/types/main";
 import { setTitle } from "@app/util";
 
 export interface IStateProps {
     profile: IProfile | null;
+    createPostLevel: FetchLevel;
+    createPostErrors: {
+        [key: string]: string;
+    };
 }
 
 export interface IDispatchProps {
@@ -28,7 +33,7 @@ export class NewsCreator extends React.Component<Props> {
     }
 
     public render() {
-        const { profile, createPost } = this.props;
+        const { profile, createPost, createPostLevel, createPostErrors } = this.props;
 
         if (profile === null || profile.user.level < UserLevel.Admin) {
             return (
@@ -39,6 +44,12 @@ export class NewsCreator extends React.Component<Props> {
             );
         }
 
-        return <PostFormRouteContainer onSubmit={(v: IFormValues) => createPost(profile.token, v)} />;
+        return (
+            <PostFormRouteContainer
+                mutatePostLevel={createPostLevel}
+                mutatePostErrors={createPostErrors}
+                onSubmit={(v: IFormValues) => createPost(profile.token, v)}
+            />
+        );
     }
 }

@@ -10,10 +10,10 @@ import { PostRules } from "@app/validator-rules";
 interface IFormProps extends RouteComponentProps<{}> {
     onSubmit: (v: IFormValues) => void;
 
-    createPostErrors: {
+    mutatePostErrors: {
         [key: string]: string;
     };
-    createPostLevel: FetchLevel;
+    mutatePostLevel: FetchLevel;
     currentPost: IPostJson | null;
 }
 

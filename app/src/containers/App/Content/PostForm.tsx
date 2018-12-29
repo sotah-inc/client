@@ -5,9 +5,9 @@ import { PostFormFormContainer } from "@app/form-containers/App/Content/PostForm
 import { IStoreState } from "@app/types";
 
 const mapStateToProps = (state: IStoreState): IStateProps => {
-    const { createPostLevel, createPostErrors, currentPost } = state.Posts;
+    const { currentPost } = state.Posts;
 
-    return { createPostErrors, createPostLevel, currentPost };
+    return { currentPost };
 };
 
 export const PostFormContainer = connect<IStateProps, IOwnProps>(mapStateToProps)(PostFormFormContainer);

@@ -26,15 +26,15 @@ import { FetchLevel } from "@app/types/main";
 import { AppToaster } from "@app/util/toasters";
 
 export interface IStateProps {
-    createPostErrors: {
-        [key: string]: string;
-    };
-    createPostLevel: FetchLevel;
     currentPost: IPostJson | null;
 }
 
 export interface IOwnProps extends RouteComponentProps<{}> {
     onSubmit: (v: IFormValues) => void;
+    mutatePostLevel: FetchLevel;
+    mutatePostErrors: {
+        [key: string]: string;
+    };
 }
 
 export interface IFormValues {
@@ -56,19 +56,19 @@ export class PostForm extends React.Component<Props, State> {
     };
 
     public componentDidUpdate(prevProps: Props) {
-        const { createPostLevel, setSubmitting, handleReset, createPostErrors, history, currentPost } = this.props;
+        const { mutatePostLevel, setSubmitting, handleReset, mutatePostErrors, history, currentPost } = this.props;
 
-        switch (createPostLevel) {
+        switch (mutatePostLevel) {
             case FetchLevel.success:
                 break;
             case FetchLevel.failure:
-                if (prevProps.createPostLevel !== createPostLevel) {
+                if (prevProps.mutatePostLevel !== mutatePostLevel) {
                     setSubmitting(false);
-                    if ("error" in createPostErrors) {
+                    if ("error" in mutatePostErrors) {
                         AppToaster.show({
                             icon: "warning-sign",
                             intent: "danger",
-                            message: `Could not create post: ${createPostErrors.error}`,
+                            message: `Could not create post: ${mutatePostErrors.error}`,
                         });
                     }
 
@@ -80,7 +80,7 @@ export class PostForm extends React.Component<Props, State> {
                 return;
         }
 
-        if (prevProps.createPostLevel !== createPostLevel) {
+        if (prevProps.mutatePostLevel !== mutatePostLevel) {
             setSubmitting(false);
             handleReset();
             AppToaster.show({
@@ -100,7 +100,7 @@ export class PostForm extends React.Component<Props, State> {
     }
 
     public render() {
-        const { handleSubmit, handleReset, dirty, isSubmitting, createPostLevel } = this.props;
+        const { handleSubmit, handleReset, dirty, isSubmitting, mutatePostLevel } = this.props;
 
         return (
             <>
@@ -120,7 +120,7 @@ export class PostForm extends React.Component<Props, State> {
                                 text="Reset"
                                 intent={Intent.NONE}
                                 onClick={handleReset}
-                                disabled={!dirty || isSubmitting || createPostLevel === FetchLevel.fetching}
+                                disabled={!dirty || isSubmitting || mutatePostLevel === FetchLevel.fetching}
                             />
                         </NavbarGroup>
                     </Navbar>
@@ -189,12 +189,12 @@ export class PostForm extends React.Component<Props, State> {
     }
 
     private renderForm() {
-        const { values, setFieldValue, errors, touched, createPostErrors } = this.props;
+        const { values, setFieldValue, errors, touched, mutatePostErrors } = this.props;
         const { manualSlug } = this.state;
 
         const coalescedErrors = {
             ...errors,
-            ...createPostErrors,
+            ...mutatePostErrors,
         };
 
         return (
