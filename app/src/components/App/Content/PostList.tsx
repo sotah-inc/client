@@ -2,10 +2,10 @@ import * as React from "react";
 
 import { Button, ButtonGroup, Card, Classes, H2, H5, Intent, Spinner } from "@blueprintjs/core";
 import * as moment from "moment";
-import * as ReactMarkdown from "react-markdown";
 import { RouteComponentProps } from "react-router-dom";
 
 import { IPostJson, IUserJson, UserLevel } from "@app/api-types/entities";
+import { MarkdownRenderer } from "@app/components/util";
 import { FetchLevel } from "@app/types/main";
 
 export interface IDispatchProps {
@@ -96,7 +96,7 @@ export class PostList extends React.Component<Props> {
                     </small>
                 </H5>
                 <hr />
-                <ReactMarkdown source={post.summary} />
+                <MarkdownRenderer body={post.summary} />
                 <hr />
                 {this.renderActionButtons(post)}
             </Card>
