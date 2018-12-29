@@ -2,10 +2,10 @@ import * as React from "react";
 
 import { Card, Classes, H1, H2, H5, Icon, Intent, NonIdealState, Spinner } from "@blueprintjs/core";
 import * as moment from "moment";
-import * as ReactMarkdown from "react-markdown";
 import { RouteComponentProps } from "react-router-dom";
 
 import { IPostJson } from "@app/api-types/entities";
+import { PostRenderer } from "@app/components/util";
 import { FetchLevel } from "@app/types/main";
 import { setTitle } from "@app/util";
 
@@ -247,7 +247,7 @@ export class Post extends React.Component<Props> {
                     <small>Submitted {moment(new Date(currentPost.createdAt * 1000)).format("MMM Do YYYY")}</small>
                 </H5>
                 <hr />
-                <ReactMarkdown source={currentPost.body} />
+                <PostRenderer post={currentPost} />
             </Card>
         );
     }
