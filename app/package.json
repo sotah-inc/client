@@ -41,6 +41,7 @@
     "recharts": "^1.1.0",
     "redux": "^3.7.2",
     "redux-thunk": "2.2.0",
+    "remark-shortcodes": "^0.2.1",
     "sass-loader": "^6.0.7",
     "serve": "^9.4.0",
     "source-map-loader": "^0.2.1",
