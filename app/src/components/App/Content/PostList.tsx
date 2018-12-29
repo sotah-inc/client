@@ -90,7 +90,15 @@ export class PostList extends React.Component<Props> {
         return (
             <Card key={index} style={{ marginTop: "10px" }} interactive={true} onClick={() => this.browseToPost(post)}>
                 <H5>
-                    <a onClick={() => this.browseToPost(post)}>{post.title}</a>
+                    <a
+                        onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
+                            e.stopPropagation();
+
+                            this.browseToPost(post);
+                        }}
+                    >
+                        {post.title}
+                    </a>
                     <small style={{ marginLeft: "5px" }}>
                         submitted {moment(new Date(post.createdAt * 1000)).format("MMM Do YYYY")}
                     </small>
@@ -111,7 +119,11 @@ export class PostList extends React.Component<Props> {
                 <Button
                     icon="calendar"
                     intent={Intent.PRIMARY}
-                    onClick={() => this.browseToPost(post)}
+                    onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                        e.stopPropagation();
+
+                        this.browseToPost(post);
+                    }}
                     text="Read More"
                 />
             );
@@ -122,7 +134,11 @@ export class PostList extends React.Component<Props> {
                 <Button
                     icon="calendar"
                     intent={Intent.PRIMARY}
-                    onClick={() => this.browseToPost(post)}
+                    onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                        e.stopPropagation();
+
+                        this.browseToPost(post);
+                    }}
                     text="Read More"
                 />
                 <Button
