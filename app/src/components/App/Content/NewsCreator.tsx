@@ -1,24 +1,36 @@
 import * as React from "react";
 
+import { Classes, Intent, NonIdealState, Spinner } from "@blueprintjs/core";
 import { RouteComponentProps } from "react-router-dom";
 
-import { IUserJson, UserLevel } from "@app/api-types/entities";
+import { ICreatePostRequest } from "@app/api-types/contracts/user/post-crud";
+import { UserLevel } from "@app/api-types/entities";
+import { IFormValues } from "@app/components/App/Content/PostForm";
 import { PostFormRouteContainer } from "@app/route-containers/App/Content/PostForm";
-import { Classes, Intent, NonIdealState, Spinner } from "@blueprintjs/core";
+import { IProfile } from "@app/types/global";
+import { setTitle } from "@app/util";
 
 export interface IStateProps {
-    user: IUserJson | null;
+    profile: IProfile | null;
+}
+
+export interface IDispatchProps {
+    createPost: (token: string, v: ICreatePostRequest) => void;
 }
 
 export interface IOwnProps extends RouteComponentProps<{}> {}
 
-type Props = Readonly<IStateProps & IOwnProps>;
+type Props = Readonly<IDispatchProps & IStateProps & IOwnProps>;
 
 export class NewsCreator extends React.Component<Props> {
-    public render() {
-        const { user } = this.props;
+    public componentDidMount() {
+        setTitle("News Creator");
+    }
 
-        if (user === null || user.level < UserLevel.Admin) {
+    public render() {
+        const { profile, createPost } = this.props;
+
+        if (profile === null || profile.user.level < UserLevel.Admin) {
             return (
                 <NonIdealState
                     title="Unauthorized."
@@ -27,6 +39,6 @@ export class NewsCreator extends React.Component<Props> {
             );
         }
 
-        return <PostFormRouteContainer onComplete={v => console.log(v)} />;
+        return <PostFormRouteContainer onSubmit={(v: IFormValues) => createPost(profile.token, v)} />;
     }
 }

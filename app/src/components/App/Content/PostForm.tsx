@@ -21,11 +21,8 @@ import * as ReactMarkdown from "react-markdown";
 import { RouteComponentProps } from "react-router-dom";
 import * as getSlug from "speakingurl";
 
-import { ICreatePostRequest } from "@app/api-types/contracts/user/post-crud";
 import { IPostJson } from "@app/api-types/entities";
-import { IProfile } from "@app/types/global";
 import { FetchLevel } from "@app/types/main";
-import { setTitle } from "@app/util";
 import { AppToaster } from "@app/util/toasters";
 
 export interface IStateProps {
@@ -33,16 +30,11 @@ export interface IStateProps {
         [key: string]: string;
     };
     createPostLevel: FetchLevel;
-    profile: IProfile | null;
     currentPost: IPostJson | null;
 }
 
-export interface IDispatchProps {
-    createPost: (token: string, v: ICreatePostRequest) => void;
-}
-
 export interface IOwnProps extends RouteComponentProps<{}> {
-    onComplete: (v: IPostJson) => void;
+    onSubmit: (v: IFormValues) => void;
 }
 
 export interface IFormValues {
@@ -56,16 +48,12 @@ type State = Readonly<{
     manualSlug: boolean;
 }>;
 
-export type Props = Readonly<IDispatchProps & IStateProps & IOwnProps & FormikProps<IFormValues>>;
+export type Props = Readonly<IStateProps & IOwnProps & FormikProps<IFormValues>>;
 
 export class PostForm extends React.Component<Props, State> {
     public state: State = {
         manualSlug: false,
     };
-
-    public componentDidMount() {
-        setTitle("News Creator");
-    }
 
     public componentDidUpdate(prevProps: Props) {
         const { createPostLevel, setSubmitting, handleReset, createPostErrors, history, currentPost } = this.props;
