@@ -133,7 +133,14 @@ export class PostList extends React.Component<Props> {
                         history.push(`/content/news/${post.slug}/edit`);
                     }}
                 />
-                <Button icon="delete" onClick={() => console.log("wew lad")} />
+                <Button
+                    icon="delete"
+                    onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                        e.stopPropagation();
+
+                        console.log("wew lad");
+                    }}
+                />
             </ButtonGroup>
         );
     }
