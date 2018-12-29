@@ -129,6 +129,8 @@ export class Post extends React.Component<Props> {
 
             return;
         }
+
+        setTitle(`${currentPost.title} - News`);
     }
 
     public render() {
