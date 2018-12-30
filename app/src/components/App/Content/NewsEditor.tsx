@@ -52,7 +52,6 @@ export class NewsEditor extends React.Component<Props> {
             profile,
             updatePost,
             updatePostLevel,
-            history,
             currentPost,
             updatePostErrors,
             getPostLevel,
@@ -112,17 +111,7 @@ export class NewsEditor extends React.Component<Props> {
                     defaultFormValues={currentPost}
                     onSubmit={(v: IFormValues) => updatePost(profile.token, currentPost.id, v)}
                     onComplete={() => {
-                        if (currentPost === null) {
-                            return;
-                        }
-
-                        AppToaster.show({
-                            icon: "info-sign",
-                            intent: "success",
-                            message: "Your post has successfully been updated!",
-                        });
-
-                        history.push(`/content/news/${currentPost.slug}`);
+                        return;
                     }}
                     onFatalError={err => {
                         AppToaster.show({
@@ -145,10 +134,46 @@ export class NewsEditor extends React.Component<Props> {
             currentPost,
             getPost,
             getPostLevel,
+            profile,
+            updatePostLevel,
+            history,
         } = this.props;
+
+        if (profile === null || profile.user.level < UserLevel.Admin) {
+            return;
+        }
 
         if (typeof post_slug === "undefined") {
             return;
+        }
+
+        if (typeof prevProps !== "undefined" && prevProps.updatePostLevel !== updatePostLevel) {
+            switch (updatePostLevel) {
+                case FetchLevel.success:
+                    if (prevProps.updatePostLevel !== FetchLevel.fetching) {
+                        return;
+                    }
+
+                    if (currentPost === null) {
+                        return;
+                    }
+
+                    if (currentPost.slug === post_slug) {
+                        return;
+                    }
+
+                    AppToaster.show({
+                        icon: "info-sign",
+                        intent: "success",
+                        message: "Your post has successfully been updated!",
+                    });
+
+                    history.push(`/content/news/${currentPost.slug}`);
+
+                    return;
+                default:
+                    return;
+            }
         }
 
         switch (getPostLevel) {
