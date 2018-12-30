@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { Classes, Intent, NonIdealState, Spinner } from "@blueprintjs/core";
+import { Classes, H2, Intent, NonIdealState, Spinner } from "@blueprintjs/core";
 import { RouteComponentProps } from "react-router-dom";
 
 import { ICreatePostRequest } from "@app/api-types/contracts/user/post-crud";
@@ -47,31 +47,34 @@ export class NewsCreator extends React.Component<Props> {
         }
 
         return (
-            <PostFormFormContainer
-                mutatePostLevel={createPostLevel}
-                mutatePostErrors={createPostErrors}
-                onSubmit={(v: IFormValues) => createPost(profile.token, v)}
-                onComplete={() => {
-                    if (currentPost === null) {
-                        return;
-                    }
+            <>
+                <H2>News Creator</H2>
+                <PostFormFormContainer
+                    mutatePostLevel={createPostLevel}
+                    mutatePostErrors={createPostErrors}
+                    onSubmit={(v: IFormValues) => createPost(profile.token, v)}
+                    onComplete={() => {
+                        if (currentPost === null) {
+                            return;
+                        }
 
-                    AppToaster.show({
-                        icon: "info-sign",
-                        intent: "success",
-                        message: "Your post has successfully been created!",
-                    });
+                        AppToaster.show({
+                            icon: "info-sign",
+                            intent: "success",
+                            message: "Your post has successfully been created!",
+                        });
 
-                    history.push(`/content/news/${currentPost.slug}`);
-                }}
-                onFatalError={err => {
-                    AppToaster.show({
-                        icon: "warning-sign",
-                        intent: "danger",
-                        message: `Could not create post: ${err}`,
-                    });
-                }}
-            />
+                        history.push(`/content/news/${currentPost.slug}`);
+                    }}
+                    onFatalError={err => {
+                        AppToaster.show({
+                            icon: "warning-sign",
+                            intent: "danger",
+                            message: `Could not create post: ${err}`,
+                        });
+                    }}
+                />
+            </>
         );
     }
 }

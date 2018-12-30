@@ -7,7 +7,6 @@ import {
     Card,
     ControlGroup,
     FormGroup,
-    H2,
     H4,
     InputGroup,
     Intent,
@@ -87,7 +86,6 @@ export class PostForm extends React.Component<Props, State> {
 
         return (
             <>
-                <H2>News Creator</H2>
                 <form onSubmit={handleSubmit}>
                     <Navbar>
                         <NavbarGroup align={Alignment.LEFT}>
