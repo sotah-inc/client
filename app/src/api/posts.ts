@@ -1,6 +1,7 @@
 import * as HTTPStatus from "http-status";
 
 import { IErrorResponse, IValidationErrorResponse } from "@app/api-types/contracts";
+import { IGetPostResponse } from "@app/api-types/contracts/data";
 import {
     ICreatePostRequest,
     ICreatePostResponse,
@@ -87,5 +88,22 @@ export const updatePost = async (
             return { error: "Failure", post: null };
     }
 
-    return { post: (body as ICreatePostResponse).post };
+    return { post: (body as IUpdatePostResponse).post };
+};
+
+export const getPost = async (id: number): Promise<IGetPostResponse | null> => {
+    const { body, status } = await gather<null, IGetPostResponse | IErrorResponse>({
+        headers: new Headers({
+            "content-type": "application/json",
+        }),
+        url: `${apiEndpoint}/user/posts/${id}`,
+    });
+    switch (status) {
+        case HTTPStatus.OK:
+            break;
+        default:
+            return null;
+    }
+
+    return { post: (body as IGetPostResponse).post };
 };
