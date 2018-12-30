@@ -45,7 +45,18 @@ export class NewsEditor extends React.Component<Props> {
     }
 
     public render() {
-        const { profile, updatePost, updatePostLevel, history, currentPost, updatePostErrors } = this.props;
+        const {
+            match: {
+                params: { post_slug },
+            },
+            profile,
+            updatePost,
+            updatePostLevel,
+            history,
+            currentPost,
+            updatePostErrors,
+            getPostLevel,
+        } = this.props;
 
         if (profile === null || profile.user.level < UserLevel.Admin) {
             return (
@@ -56,8 +67,40 @@ export class NewsEditor extends React.Component<Props> {
             );
         }
 
-        if (currentPost === null) {
-            return null;
+        switch (getPostLevel) {
+            case FetchLevel.success:
+                if (currentPost !== null && typeof post_slug !== "undefined" && currentPost.slug === post_slug) {
+                    break;
+                }
+
+                return (
+                    <NonIdealState
+                        title="Switching to new post."
+                        icon={<Spinner className={Classes.LARGE} intent={Intent.PRIMARY} />}
+                    />
+                );
+            case FetchLevel.fetching:
+                return (
+                    <NonIdealState
+                        title="Loading post."
+                        icon={<Spinner className={Classes.LARGE} intent={Intent.PRIMARY} />}
+                    />
+                );
+            case FetchLevel.failure:
+                return (
+                    <NonIdealState
+                        title="Failed to load post."
+                        icon={<Spinner className={Classes.LARGE} intent={Intent.DANGER} value={1} />}
+                    />
+                );
+            default:
+            case FetchLevel.initial:
+                return (
+                    <NonIdealState
+                        title="Loading post."
+                        icon={<Spinner className={Classes.LARGE} intent={Intent.NONE} value={0} />}
+                    />
+                );
         }
 
         return (
