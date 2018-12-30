@@ -13,12 +13,14 @@ export interface IPostsState {
         [key: string]: string;
     };
     currentPost: IPostJson | null;
+    getPostLevel: FetchLevel;
 }
 
 export const defaultPostsState: IPostsState = {
     createPostErrors: {},
     createPostLevel: FetchLevel.initial,
     currentPost: null,
+    getPostLevel: FetchLevel.initial,
     getPostsLevel: FetchLevel.initial,
     posts: [],
     updatePostErrors: {},
