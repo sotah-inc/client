@@ -47,6 +47,7 @@ export class Post extends React.Component<Props> {
 
         switch (getPostsLevel) {
             case FetchLevel.initial:
+            case FetchLevel.prompted:
                 refreshPosts();
 
                 return;
@@ -98,6 +99,7 @@ export class Post extends React.Component<Props> {
 
         switch (getPostsLevel) {
             case FetchLevel.initial:
+            case FetchLevel.prompted:
                 refreshPosts();
 
                 return;
