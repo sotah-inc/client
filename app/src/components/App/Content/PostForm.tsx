@@ -164,6 +164,7 @@ export class PostForm extends React.Component<Props, State> {
                 <Card elevation={2}>
                     <ReactMarkdown source={summary} />
                 </Card>
+                <hr />
                 <ReactMarkdown source={body} />
             </>
         );
