@@ -78,7 +78,7 @@ export const updatePost = async (
         return { error: "Unauthorized", post: null };
     }
     switch (status) {
-        case HTTPStatus.CREATED:
+        case HTTPStatus.OK:
             break;
         case HTTPStatus.UNAUTHORIZED:
             return { error: "Unauthorized", post: null };
