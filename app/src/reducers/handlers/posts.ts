@@ -1,4 +1,10 @@
-import { PostsActions, ReceiveCreatePost, ReceiveGetPost, ReceiveGetPosts } from "@app/actions/posts";
+import {
+    PostsActions,
+    ReceiveCreatePost,
+    ReceiveGetPost,
+    ReceiveGetPosts,
+    ReceiveUpdatePost,
+} from "@app/actions/posts";
 import { IValidationErrorResponse } from "@app/api-types/contracts";
 import { FetchLevel } from "@app/types/main";
 import { IPostsState } from "@app/types/posts";
@@ -43,6 +49,40 @@ const handlers: IKindHandlers<IPostsState, PostsActions> = {
             },
             request: (state: IPostsState) => {
                 return { ...state, getPostLevel: FetchLevel.fetching };
+            },
+        },
+        update: {
+            receive: (state: IPostsState, action: ReturnType<typeof ReceiveUpdatePost>) => {
+                if (action.payload.post === null) {
+                    const updatePostErrors: IValidationErrorResponse = (() => {
+                        if (typeof action.payload.error !== "undefined") {
+                            return { error: action.payload.error };
+                        }
+
+                        return action.payload.errors!;
+                    })();
+
+                    return { ...state, updatePostLevel: FetchLevel.failure, updatePostErrors };
+                }
+
+                const posts = state.posts.map(v => {
+                    if (v.id === action.payload.post!.id) {
+                        return action.payload.post!;
+                    }
+
+                    return v;
+                });
+
+                return {
+                    ...state,
+                    currentPost: action.payload.post!,
+                    posts,
+                    updatePostErrors: {},
+                    updatePostLevel: FetchLevel.success,
+                };
+            },
+            request: (state: IPostsState) => {
+                return { ...state, updatePostLevel: FetchLevel.fetching };
             },
         },
     },

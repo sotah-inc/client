@@ -63,9 +63,11 @@ export const PostsActions = {
     ReceiveCreatePost,
     ReceiveGetPost,
     ReceiveGetPosts,
+    ReceiveUpdatePost,
     RequestCreatePost,
     RequestGetPost,
     RequestGetPosts,
+    RequestUpdatePost,
 };
 
 export type PostsActions = ActionsUnion<typeof PostsActions>;
