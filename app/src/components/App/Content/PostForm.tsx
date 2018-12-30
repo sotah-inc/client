@@ -8,6 +8,7 @@ import {
     ControlGroup,
     FormGroup,
     H4,
+    H5,
     InputGroup,
     Intent,
     Navbar,
@@ -161,10 +162,12 @@ export class PostForm extends React.Component<Props, State> {
                     Slug: <span style={{ textDecoration: "underline" }}>{`/content/news/${slug}`}</span>
                 </p>
                 <hr />
+                <H5>Summary</H5>
                 <Card elevation={2}>
                     <ReactMarkdown source={summary} />
                 </Card>
                 <hr />
+                <H5>Body</H5>
                 <ReactMarkdown source={body} />
             </>
         );
