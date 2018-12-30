@@ -32,7 +32,7 @@ const handlers: IKindHandlers<IPostsState, PostsActions> = {
                     createPostErrors: {},
                     createPostLevel: FetchLevel.success,
                     currentPost: action.payload.post!,
-                    posts: [...state.posts, action.payload.post!],
+                    posts: [action.payload.post!, ...state.posts],
                 };
             },
             request: (state: IPostsState) => {
