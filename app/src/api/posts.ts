@@ -91,12 +91,12 @@ export const updatePost = async (
     return { post: (body as IUpdatePostResponse).post };
 };
 
-export const getPost = async (id: number): Promise<IGetPostResponse | null> => {
+export const getPost = async (slug: string): Promise<IGetPostResponse | null> => {
     const { body, status } = await gather<null, IGetPostResponse | IErrorResponse>({
         headers: new Headers({
             "content-type": "application/json",
         }),
-        url: `${apiEndpoint}/user/posts/${id}`,
+        url: `${apiEndpoint}/posts/${slug}`,
     });
     switch (status) {
         case HTTPStatus.OK:
