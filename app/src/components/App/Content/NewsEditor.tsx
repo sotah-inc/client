@@ -167,6 +167,12 @@ export class NewsEditor extends React.Component<Props> {
                     return;
                 }
 
+                if (currentPost === null || currentPost.slug !== post_slug) {
+                    getPost(post_slug);
+
+                    return;
+                }
+
                 return;
             case FetchLevel.success:
                 if (currentPost !== null) {
