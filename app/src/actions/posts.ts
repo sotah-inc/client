@@ -48,10 +48,10 @@ export const RECEIVE_GET_POST = "RECEIVE_GET_POST";
 export const RequestGetPost = () => createAction(REQUEST_GET_POST);
 export const ReceiveGetPost = (payload: IGetPostResponse | null) => createAction(RECEIVE_GET_POST, payload);
 type FetchGetPostType = ReturnType<typeof RequestGetPost | typeof ReceiveGetPost>;
-export const FetchGetPost = (id: number) => {
+export const FetchGetPost = (slug: string) => {
     return async (dispatch: Dispatch<FetchGetPostType>) => {
         dispatch(RequestGetPost());
-        dispatch(ReceiveGetPost(await getPost(id)));
+        dispatch(ReceiveGetPost(await getPost(slug)));
     };
 };
 
@@ -61,8 +61,10 @@ export const ChangePost = (payload: IPostJson) => createAction(CHANGE_POST, payl
 export const PostsActions = {
     ChangePost,
     ReceiveCreatePost,
+    ReceiveGetPost,
     ReceiveGetPosts,
     RequestCreatePost,
+    RequestGetPost,
     RequestGetPosts,
 };
 
