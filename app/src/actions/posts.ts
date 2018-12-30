@@ -1,9 +1,9 @@
 import { Dispatch } from "redux";
 
-import { ICreatePostRequest } from "@app/api-types/contracts/user/post-crud";
+import { ICreatePostRequest, IUpdatePostRequest } from "@app/api-types/contracts/user/post-crud";
 import { IPostJson } from "@app/api-types/entities";
 import { getPosts, IGetPostsResult } from "@app/api/data";
-import { createPost, ICreatePostResult } from "@app/api/posts";
+import { createPost, ICreatePostResult, IUpdatePostResult, updatePost } from "@app/api/posts";
 import { ActionsUnion, createAction } from "./helpers";
 
 export const REQUEST_CREATE_POST = "REQUEST_CREATE_POST";
@@ -15,6 +15,18 @@ export const FetchCreatePost = (token: string, request: ICreatePostRequest) => {
     return async (dispatch: Dispatch<FetchCreatePostType>) => {
         dispatch(RequestCreatePost());
         dispatch(ReceiveCreatePost(await createPost(token, request)));
+    };
+};
+
+export const REQUEST_UPDATE_POST = "REQUEST_UPDATE_POST";
+export const RECEIVE_UPDATE_POST = "RECEIVE_UPDATE_POST";
+export const RequestUpdatePost = () => createAction(REQUEST_UPDATE_POST);
+export const ReceiveUpdatePost = (payload: IUpdatePostResult) => createAction(RECEIVE_UPDATE_POST, payload);
+type FetchUpdatePostType = ReturnType<typeof RequestUpdatePost | typeof ReceiveUpdatePost>;
+export const FetchUpdatePost = (token: string, id: number, request: IUpdatePostRequest) => {
+    return async (dispatch: Dispatch<FetchUpdatePostType>) => {
+        dispatch(RequestUpdatePost());
+        dispatch(ReceiveUpdatePost(await updatePost(token, id, request)));
     };
 };
 

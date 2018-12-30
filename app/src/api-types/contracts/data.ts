@@ -144,3 +144,7 @@ export interface IGetProfessionPricelistsResponse {
 export interface IGetPostsResponse {
     posts: IPostJson[];
 }
+
+export interface IGetPostResponse {
+    post: IPostJson;
+}

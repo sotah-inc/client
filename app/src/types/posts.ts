@@ -8,6 +8,10 @@ export interface IPostsState {
     createPostErrors: {
         [key: string]: string;
     };
+    updatePostLevel: FetchLevel;
+    updatePostErrors: {
+        [key: string]: string;
+    };
     currentPost: IPostJson | null;
 }
 
@@ -17,4 +21,6 @@ export const defaultPostsState: IPostsState = {
     currentPost: null,
     getPostsLevel: FetchLevel.initial,
     posts: [],
+    updatePostErrors: {},
+    updatePostLevel: FetchLevel.initial,
 };
