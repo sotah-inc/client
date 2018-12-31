@@ -7,9 +7,11 @@ import { IDispatchProps, IOwnProps, IStateProps, Post } from "@app/components/Ap
 import { IStoreState } from "@app/types";
 
 const mapStateToProps = (state: IStoreState): IStateProps => {
+    const { profile } = state.Main;
     const { currentPost, getPostLevel } = state.Posts;
+    const user = profile === null ? null : profile.user;
 
-    return { currentPost, getPostLevel };
+    return { currentPost, getPostLevel, user };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<Actions>): IDispatchProps => {

@@ -4,7 +4,7 @@ import { Card, Classes, H1, H2, H5, Icon, Intent, NonIdealState, Spinner } from 
 import * as moment from "moment";
 import { RouteComponentProps } from "react-router-dom";
 
-import { IPostJson } from "@app/api-types/entities";
+import { IPostJson, IUserJson } from "@app/api-types/entities";
 import { MarkdownRenderer } from "@app/components/util";
 import { FetchLevel } from "@app/types/main";
 import { setTitle } from "@app/util";
@@ -12,6 +12,7 @@ import { setTitle } from "@app/util";
 export interface IStateProps {
     currentPost: IPostJson | null;
     getPostLevel: FetchLevel;
+    user: IUserJson | null;
 }
 
 export interface IDispatchProps {
@@ -167,9 +168,18 @@ export class Post extends React.Component<Props> {
                 <H5>
                     <small>Submitted {moment(new Date(currentPost.createdAt * 1000)).format("MMM Do YYYY")}</small>
                 </H5>
+                {this.renderActionBar()}
                 <hr />
                 <MarkdownRenderer body={currentPost.body} />
             </Card>
         );
+    }
+
+    private renderActionBar() {
+        const { user } = this.props;
+
+        console.log(user);
+
+        return null;
     }
 }
