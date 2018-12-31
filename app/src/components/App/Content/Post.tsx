@@ -52,10 +52,15 @@ export class Post extends React.Component<Props> {
     public render() {
         return (
             <>
-                <H1>
-                    <Icon icon="globe" iconSize={35} /> Secrets of the Auction House
-                </H1>
-                {this.renderContent()}
+                <div className="pure-g">
+                    <div className="pure-u-3-4">
+                        <H1>
+                            <Icon icon="globe" iconSize={35} /> Secrets of the Auction House
+                        </H1>
+                        {this.renderContent()}
+                    </div>
+                </div>
+                <div className="pure-u-1-4">&nbsp;</div>
             </>
         );
     }
