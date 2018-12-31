@@ -3,6 +3,7 @@ import * as React from "react";
 import { Button, Callout, Dialog, Intent } from "@blueprintjs/core";
 import { RouteComponentProps } from "react-router";
 
+import { IDeletePostOptions } from "@app/actions/posts";
 import { IPostJson } from "@app/api-types/entities";
 import { DialogActions, DialogBody } from "@app/components/util";
 import { IProfile } from "@app/types/global";
@@ -17,7 +18,7 @@ export interface IStateProps {
 }
 
 export interface IDispatchProps {
-    changeIsDeletePostDialogOpen: (v: boolean) => void;
+    changeIsDeletePostDialogOpen: (v: IDeletePostOptions) => void;
     deletePost: (token: string, id: number) => void;
 }
 
@@ -57,7 +58,7 @@ export class DeletePostDialog extends React.Component<Props> {
         return (
             <Dialog
                 isOpen={isDeletePostDialogOpen}
-                onClose={() => changeIsDeletePostDialogOpen(isDeletePostDialogOpen)}
+                onClose={() => changeIsDeletePostDialogOpen({ post: currentPost, opened: isDeletePostDialogOpen })}
                 title="Delete List"
                 icon="delete"
             >
@@ -82,9 +83,13 @@ export class DeletePostDialog extends React.Component<Props> {
     }
 
     private onDialogCancel() {
-        const { changeIsDeletePostDialogOpen } = this.props;
+        const { changeIsDeletePostDialogOpen, currentPost } = this.props;
 
-        changeIsDeletePostDialogOpen(false);
+        if (currentPost === null) {
+            return;
+        }
+
+        changeIsDeletePostDialogOpen({ post: currentPost, opened: false });
     }
 
     private onDialogConfirm() {

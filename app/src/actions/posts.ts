@@ -70,7 +70,7 @@ export const FetchDeletePost = (token: string, id: number) => {
 export const CHANGE_POST = "CHANGE_POST";
 export const ChangePost = (payload: IPostJson) => createAction(CHANGE_POST, payload);
 
-interface IDeletePostOptions {
+export interface IDeletePostOptions {
     opened: boolean;
     post: IPostJson;
 }
