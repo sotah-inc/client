@@ -7,6 +7,7 @@ import { RouteComponentProps } from "react-router-dom";
 import { IPostJson } from "@app/api-types/entities";
 import { MarkdownRenderer } from "@app/components/util";
 import { FetchLevel } from "@app/types/main";
+import { setTitle } from "@app/util";
 
 export interface IStateProps {
     currentPost: IPostJson | null;
@@ -68,6 +69,10 @@ export class Post extends React.Component<Props> {
                     return;
                 }
 
+                if (currentPost === null) {
+                    return;
+                }
+
                 break;
             case FetchLevel.failure:
                 if (typeof prevProps !== "undefined" && prevProps.getPostLevel === FetchLevel.fetching) {
@@ -88,6 +93,8 @@ export class Post extends React.Component<Props> {
             default:
                 return;
         }
+
+        setTitle(`${currentPost.title} - News`);
     }
 
     private renderContent() {
