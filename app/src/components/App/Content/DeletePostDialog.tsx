@@ -13,6 +13,7 @@ export interface IStateProps {
     profile: IProfile | null;
     isDeletePostDialogOpen: boolean;
     deletePostLevel: FetchLevel;
+    currentPost: IPostJson | null;
 }
 
 export interface IDispatchProps {
@@ -20,9 +21,7 @@ export interface IDispatchProps {
     deletePost: (token: string, id: number) => void;
 }
 
-export interface IOwnProps extends RouteComponentProps<{}> {
-    selectedPost: IPostJson;
-}
+export interface IOwnProps extends RouteComponentProps<{}> {}
 
 export type Props = Readonly<IStateProps & IDispatchProps & IOwnProps>;
 
@@ -49,7 +48,11 @@ export class DeletePostDialog extends React.Component<Props> {
     }
 
     public render() {
-        const { isDeletePostDialogOpen, changeIsDeletePostDialogOpen, selectedPost, deletePostLevel } = this.props;
+        const { isDeletePostDialogOpen, changeIsDeletePostDialogOpen, currentPost, deletePostLevel } = this.props;
+
+        if (currentPost === null) {
+            return null;
+        }
 
         return (
             <Dialog
@@ -60,7 +63,7 @@ export class DeletePostDialog extends React.Component<Props> {
             >
                 <DialogBody>
                     <Callout intent={Intent.DANGER} icon="info-sign">
-                        Are you sure you want to delete "{selectedPost.title}"
+                        Are you sure you want to delete "{currentPost.title}"
                     </Callout>
                 </DialogBody>
                 <DialogActions>
@@ -69,7 +72,7 @@ export class DeletePostDialog extends React.Component<Props> {
                         type="submit"
                         intent={Intent.DANGER}
                         icon="delete"
-                        text={`Delete "${selectedPost.title}"`}
+                        text={`Delete "${currentPost.title}"`}
                         onClick={() => this.onDialogConfirm()}
                         disabled={deletePostLevel === FetchLevel.fetching}
                     />
@@ -85,12 +88,12 @@ export class DeletePostDialog extends React.Component<Props> {
     }
 
     private onDialogConfirm() {
-        const { profile, deletePost, selectedPost } = this.props;
+        const { profile, deletePost, currentPost } = this.props;
 
-        if (profile === null) {
+        if (profile === null || currentPost === null) {
             return;
         }
 
-        deletePost(profile.token, selectedPost.id);
+        deletePost(profile.token, currentPost.id);
     }
 }

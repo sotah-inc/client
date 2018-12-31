@@ -7,9 +7,10 @@ import { IStoreState } from "@app/types";
 
 const mapStateToProps = (state: IStoreState): IStateProps => {
     const { profile } = state.Main;
-    const { deletePostLevel, isDeletePostDialogOpen } = state.Posts;
+    const { deletePostLevel, isDeletePostDialogOpen, currentPost } = state.Posts;
 
     return {
+        currentPost,
         deletePostLevel,
         isDeletePostDialogOpen,
         profile,
