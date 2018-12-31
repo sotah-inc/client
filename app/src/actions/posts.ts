@@ -70,7 +70,12 @@ export const FetchDeletePost = (token: string, id: number) => {
 export const CHANGE_POST = "CHANGE_POST";
 export const ChangePost = (payload: IPostJson) => createAction(CHANGE_POST, payload);
 
+export const CHANGE_IS_DELETE_POST_DIALOG_OPEN = "CHANGE_IS_DELETE_POST_DIALOG_OPEN";
+export const ChangeIsDeletePostDialogOpen = (payload: boolean) =>
+    createAction(CHANGE_IS_DELETE_POST_DIALOG_OPEN, payload);
+
 export const PostsActions = {
+    ChangeIsDeletePostDialogOpen,
     ChangePost,
     ReceiveCreatePost,
     ReceiveDeletePost,
