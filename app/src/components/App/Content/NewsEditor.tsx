@@ -9,6 +9,7 @@ import { IFormValues } from "@app/components/App/Content/PostForm";
 import { PostFormFormContainer } from "@app/form-containers/App/Content/PostForm";
 import { IProfile } from "@app/types/global";
 import { FetchLevel } from "@app/types/main";
+import { setTitle } from "@app/util";
 import { AppToaster } from "@app/util/toasters";
 
 export interface IStateProps {
@@ -23,7 +24,6 @@ export interface IStateProps {
 
 export interface IDispatchProps {
     getPost: (slug: string) => void;
-    changePost: (v: IPostJson) => void;
     updatePost: (token: string, postId: number, v: IUpdatePostRequest) => void;
 }
 
@@ -130,7 +130,6 @@ export class NewsEditor extends React.Component<Props> {
             match: {
                 params: { post_slug },
             },
-            changePost,
             currentPost,
             getPost,
             getPostLevel,
@@ -207,14 +206,14 @@ export class NewsEditor extends React.Component<Props> {
                         return;
                     }
 
-                    changePost(currentPost);
-
-                    return;
+                    break;
                 }
 
                 return;
             default:
                 return;
         }
+
+        setTitle(`Editing ${currentPost.title} - News`);
     }
 }
