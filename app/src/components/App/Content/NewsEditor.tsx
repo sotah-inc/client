@@ -157,10 +157,6 @@ export class NewsEditor extends React.Component<Props> {
                         return;
                     }
 
-                    if (currentPost.slug === post_slug) {
-                        return;
-                    }
-
                     AppToaster.show({
                         icon: "info-sign",
                         intent: "success",
