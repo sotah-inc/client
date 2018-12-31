@@ -107,3 +107,20 @@ export const getPost = async (slug: string): Promise<IGetPostResponse | null> =>
 
     return { post: (body as IGetPostResponse).post };
 };
+
+export const deletePost = async (token: string, id: number): Promise<number | null> => {
+    const { status } = await gather<null, null>({
+        headers: new Headers({
+            Authorization: `Bearer ${token}`,
+            "content-type": "application/json",
+        }),
+        method: "DELETE",
+        url: `${apiEndpoint}/user/posts/${id}`,
+    });
+    switch (status) {
+        case HTTPStatus.OK:
+            return id;
+        default:
+            return null;
+    }
+};

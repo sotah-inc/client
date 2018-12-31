@@ -4,7 +4,7 @@ import { IGetPostResponse } from "@app/api-types/contracts/data";
 import { ICreatePostRequest, IUpdatePostRequest } from "@app/api-types/contracts/user/post-crud";
 import { IPostJson } from "@app/api-types/entities";
 import { getPosts, IGetPostsResult } from "@app/api/data";
-import { createPost, getPost, ICreatePostResult, IUpdatePostResult, updatePost } from "@app/api/posts";
+import { createPost, deletePost, getPost, ICreatePostResult, IUpdatePostResult, updatePost } from "@app/api/posts";
 import { ActionsUnion, createAction } from "./helpers";
 
 export const REQUEST_CREATE_POST = "REQUEST_CREATE_POST";
@@ -55,16 +55,30 @@ export const FetchGetPost = (slug: string) => {
     };
 };
 
+export const REQUEST_DELETE_POST = "REQUEST_DELETE_POST";
+export const RECEIVE_DELETE_POST = "RECEIVE_DELETE_POST";
+export const RequestDeletePost = () => createAction(REQUEST_DELETE_POST);
+export const ReceiveDeletePost = (payload: number | null) => createAction(RECEIVE_DELETE_POST, payload);
+type FetchDeletePostType = ReturnType<typeof RequestDeletePost | typeof ReceiveDeletePost>;
+export const FetchDeletePost = (token: string, id: number) => {
+    return async (dispatch: Dispatch<FetchDeletePostType>) => {
+        dispatch(RequestDeletePost());
+        dispatch(ReceiveDeletePost(await deletePost(token, id)));
+    };
+};
+
 export const CHANGE_POST = "CHANGE_POST";
 export const ChangePost = (payload: IPostJson) => createAction(CHANGE_POST, payload);
 
 export const PostsActions = {
     ChangePost,
     ReceiveCreatePost,
+    ReceiveDeletePost,
     ReceiveGetPost,
     ReceiveGetPosts,
     ReceiveUpdatePost,
     RequestCreatePost,
+    RequestDeletePost,
     RequestGetPost,
     RequestGetPosts,
     RequestUpdatePost,

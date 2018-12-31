@@ -1,6 +1,7 @@
 import {
     PostsActions,
     ReceiveCreatePost,
+    ReceiveDeletePost,
     ReceiveGetPost,
     ReceiveGetPosts,
     ReceiveUpdatePost,
@@ -37,6 +38,18 @@ const handlers: IKindHandlers<IPostsState, PostsActions> = {
             },
             request: (state: IPostsState) => {
                 return { ...state, createPostLevel: FetchLevel.fetching };
+            },
+        },
+        delete: {
+            receive: (state: IPostsState, action: ReturnType<typeof ReceiveDeletePost>) => {
+                if (action.payload === null) {
+                    return { ...state, deletePostLevel: FetchLevel.failure };
+                }
+
+                return { ...state, getPostsLevel: FetchLevel.prompted, deletePostLevel: FetchLevel.success };
+            },
+            request: (state: IPostsState) => {
+                return { ...state, deletePostLevel: FetchLevel.fetching };
             },
         },
         get: {
