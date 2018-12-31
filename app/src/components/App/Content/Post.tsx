@@ -1,10 +1,22 @@
 import * as React from "react";
 
-import { Card, Classes, H1, H2, H5, Icon, Intent, NonIdealState, Spinner } from "@blueprintjs/core";
+import {
+    Button,
+    ButtonGroup,
+    Card,
+    Classes,
+    H1,
+    H2,
+    H5,
+    Icon,
+    Intent,
+    NonIdealState,
+    Spinner,
+} from "@blueprintjs/core";
 import * as moment from "moment";
 import { RouteComponentProps } from "react-router-dom";
 
-import { IPostJson, IUserJson } from "@app/api-types/entities";
+import { IPostJson, IUserJson, UserLevel } from "@app/api-types/entities";
 import { MarkdownRenderer } from "@app/components/util";
 import { FetchLevel } from "@app/types/main";
 import { setTitle } from "@app/util";
@@ -176,10 +188,28 @@ export class Post extends React.Component<Props> {
     }
 
     private renderActionBar() {
-        const { user } = this.props;
+        const { user, currentPost, history } = this.props;
 
-        console.log(user);
+        if (user === null || user.level < UserLevel.Admin) {
+            return null;
+        }
 
-        return null;
+        if (currentPost === null) {
+            return null;
+        }
+
+        return (
+            <>
+                <hr />
+                <ButtonGroup>
+                    <Button
+                        icon="edit"
+                        text="Edit"
+                        onClick={() => history.push(`/content/news/${currentPost.slug}/edit`)}
+                    />
+                    <Button icon="delete" onClick={() => console.log("wew lad")} />
+                </ButtonGroup>
+            </>
+        );
     }
 }
