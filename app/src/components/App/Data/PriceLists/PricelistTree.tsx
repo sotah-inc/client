@@ -273,17 +273,16 @@ export class PricelistTree extends React.Component<Props, IState> {
             return [{ id: "none-none", label: <em>None found.</em> }];
         }
 
-        const nodes = result
-            .map(v => this.getPricelistNode(v.pricelist!))
-            .sort((a, b) => {
-                if (a.label === b.label) {
-                    return 0;
-                }
+        const pricelistNodes = result.map(v => this.getPricelistNode(v.pricelist!));
+        const sortedPricelistNodes = pricelistNodes.sort((a, b) => {
+            if (a.label === b.label) {
+                return 0;
+            }
 
-                return a.label > b.label ? 1 : -1;
-            });
+            return a.label > b.label ? 1 : -1;
+        });
 
-        return nodes;
+        return sortedPricelistNodes;
     }
 
     private getPricelistNode(v: IPricelistJson) {
