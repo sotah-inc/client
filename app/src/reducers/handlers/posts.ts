@@ -46,7 +46,13 @@ const handlers: IKindHandlers<IPostsState, PostsActions> = {
                     return { ...state, deletePostLevel: FetchLevel.failure };
                 }
 
-                return { ...state, getPostsLevel: FetchLevel.prompted, deletePostLevel: FetchLevel.success };
+                return {
+                    ...state,
+                    currentPost: null,
+                    deletePostLevel: FetchLevel.success,
+                    getPostsLevel: FetchLevel.prompted,
+                    isDeletePostDialogOpen: false,
+                };
             },
             request: (state: IPostsState) => {
                 return { ...state, deletePostLevel: FetchLevel.fetching };
