@@ -71,7 +71,7 @@ export const CHANGE_POST = "CHANGE_POST";
 export const ChangePost = (payload: IPostJson) => createAction(CHANGE_POST, payload);
 
 export interface IDeletePostOptions {
-    opened: boolean;
+    isOpen: boolean;
     post: IPostJson;
 }
 

@@ -58,7 +58,7 @@ export class DeletePostDialog extends React.Component<Props> {
         return (
             <Dialog
                 isOpen={isDeletePostDialogOpen}
-                onClose={() => changeIsDeletePostDialogOpen({ post: currentPost, opened: isDeletePostDialogOpen })}
+                onClose={() => changeIsDeletePostDialogOpen({ post: currentPost, isOpen: isDeletePostDialogOpen })}
                 title="Delete List"
                 icon="delete"
             >
@@ -89,7 +89,7 @@ export class DeletePostDialog extends React.Component<Props> {
             return;
         }
 
-        changeIsDeletePostDialogOpen({ post: currentPost, opened: false });
+        changeIsDeletePostDialogOpen({ post: currentPost, isOpen: false });
     }
 
     private onDialogConfirm() {

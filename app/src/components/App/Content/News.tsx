@@ -5,6 +5,7 @@ import { RouteComponentProps } from "react-router-dom";
 
 import { IRegion } from "@app/api-types/region";
 import { CardCallout } from "@app/components/util";
+import { DeletePostDialogRouteContainer } from "@app/route-containers/App/Content/DeletePostDialog";
 import { PostListRouteContainer } from "@app/route-containers/App/Content/PostList";
 import { AuthLevel } from "@app/types/main";
 import { setTitle } from "@app/util";
@@ -43,6 +44,7 @@ export class News extends React.Component<Props> {
 
         return (
             <>
+                <DeletePostDialogRouteContainer />
                 <div className="pure-g">
                     <div className="pure-u-3-4">
                         <H1>

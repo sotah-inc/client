@@ -4,12 +4,14 @@ import { Button, ButtonGroup, Card, Classes, H2, H5, Intent, Spinner } from "@bl
 import * as moment from "moment";
 import { RouteComponentProps } from "react-router-dom";
 
+import { IDeletePostOptions } from "@app/actions/posts";
 import { IPostJson, IUserJson, UserLevel } from "@app/api-types/entities";
 import { MarkdownRenderer } from "@app/components/util";
 import { FetchLevel } from "@app/types/main";
 
 export interface IDispatchProps {
     refreshPosts: () => void;
+    changeIsDeletePostDialogOpen: (v: IDeletePostOptions) => void;
 }
 
 export interface IStateProps {
@@ -114,7 +116,7 @@ export class PostList extends React.Component<Props> {
     }
 
     private renderActionButtons(post: IPostJson) {
-        const { user, history } = this.props;
+        const { user, history, changeIsDeletePostDialogOpen } = this.props;
 
         if (user === null || user.level < UserLevel.Admin) {
             return (
@@ -156,7 +158,7 @@ export class PostList extends React.Component<Props> {
                     onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
                         e.stopPropagation();
 
-                        console.log("wew lad");
+                        changeIsDeletePostDialogOpen({ isOpen: true, post });
                     }}
                 />
             </ButtonGroup>
