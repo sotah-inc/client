@@ -208,7 +208,7 @@ export class CurrentPricesTable extends React.Component<Props> {
                 <td>
                     <Currency amount={buyout * quantity_modifier} />
                 </td>
-                <td>{volume}</td>
+                <td>{volume.toLocaleString()}</td>
             </tr>
         );
     }

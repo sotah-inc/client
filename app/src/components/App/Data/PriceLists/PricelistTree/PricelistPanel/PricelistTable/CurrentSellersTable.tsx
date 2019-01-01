@@ -206,7 +206,7 @@ export class CurrentSellersTable extends React.Component<Props & State> {
                 <td>
                     <Currency amount={ownership.owned_value} />
                 </td>
-                <td>{ownership.owned_volume}</td>
+                <td>{ownership.owned_volume.toLocaleString()}</td>
             </tr>
         );
     }
