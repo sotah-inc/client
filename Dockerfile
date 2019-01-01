@@ -7,6 +7,7 @@ WORKDIR /srv/app
 
 # installing deps and building
 RUN npm install -s \
+  && cp app/vendor/react-markdown/index.d.ts ./node_modules/react-markdown/index.d.ts \
   && npm run -s build \
   && rm -rf ./node_modules \
   && npm install -s --only=production \
