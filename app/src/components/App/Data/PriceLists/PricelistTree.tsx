@@ -273,8 +273,7 @@ export class PricelistTree extends React.Component<Props, IState> {
             return [{ id: "none-none", label: <em>None found.</em> }];
         }
 
-        const nodes = result
-            .map(v => this.getPricelistNode(v.pricelist!))
+        const nodes = result.map(v => this.getPricelistNode(v.pricelist!))
             .sort((a, b) => {
                 if (a.label === b.label) {
                     return 0;
