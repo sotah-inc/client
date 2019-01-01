@@ -1,6 +1,7 @@
 import * as React from "react";
 
 import {
+    Breadcrumbs,
     Button,
     ButtonGroup,
     Card,
@@ -8,6 +9,7 @@ import {
     H1,
     H2,
     H5,
+    IBreadcrumbProps,
     Icon,
     Intent,
     NonIdealState,
@@ -61,11 +63,50 @@ export class Post extends React.Component<Props> {
                         <H1>
                             <Icon icon="globe" iconSize={35} /> Secrets of the Auction House
                         </H1>
+                        {this.renderBreadcrumbs()}
                         {this.renderContent()}
                     </div>
                 </div>
                 <div className="pure-u-1-4">&nbsp;</div>
             </>
+        );
+    }
+
+    private renderBreadcrumbs() {
+        const { history, currentPost } = this.props;
+
+        if (currentPost === null) {
+            return;
+        }
+
+        const breadcrumbs: IBreadcrumbProps[] = [
+            {
+                href: "/",
+                onClick: (e: React.MouseEvent<HTMLElement>) => {
+                    e.preventDefault();
+
+                    history.push("/");
+                },
+                text: "Home",
+            },
+            {
+                href: "/content/news",
+                onClick: (e: React.MouseEvent<HTMLElement>) => {
+                    e.preventDefault();
+
+                    history.push("/content/news");
+                },
+                text: "News",
+            },
+            {
+                text: currentPost.title,
+            },
+        ];
+
+        return (
+            <div style={{ marginBottom: "10px" }}>
+                <Breadcrumbs items={breadcrumbs} />
+            </div>
         );
     }
 

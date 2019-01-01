@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { Classes, H2, Intent, NonIdealState, Spinner } from "@blueprintjs/core";
+import { Breadcrumbs, Classes, H2, IBreadcrumbProps, Intent, NonIdealState, Spinner } from "@blueprintjs/core";
 import { RouteComponentProps } from "react-router-dom";
 
 import { ICreatePostRequest } from "@app/api-types/contracts/user/post-crud";
@@ -49,6 +49,7 @@ export class NewsCreator extends React.Component<Props> {
         return (
             <>
                 <H2>News Creator</H2>
+                {this.renderBreadcrumbs()}
                 <PostFormFormContainer
                     mutatePostLevel={createPostLevel}
                     mutatePostErrors={createPostErrors}
@@ -75,6 +76,40 @@ export class NewsCreator extends React.Component<Props> {
                     }}
                 />
             </>
+        );
+    }
+
+    private renderBreadcrumbs() {
+        const { history } = this.props;
+
+        const breadcrumbs: IBreadcrumbProps[] = [
+            {
+                href: "/",
+                onClick: (e: React.MouseEvent<HTMLElement>) => {
+                    e.preventDefault();
+
+                    history.push("/");
+                },
+                text: "Home",
+            },
+            {
+                href: "/content/news",
+                onClick: (e: React.MouseEvent<HTMLElement>) => {
+                    e.preventDefault();
+
+                    history.push("/content/news");
+                },
+                text: "News",
+            },
+            {
+                text: "News Creator",
+            },
+        ];
+
+        return (
+            <div style={{ marginBottom: "10px" }}>
+                <Breadcrumbs items={breadcrumbs} />
+            </div>
         );
     }
 }
