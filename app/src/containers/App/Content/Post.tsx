@@ -1,7 +1,7 @@
 import { connect, Dispatch } from "react-redux";
 
 import { Actions } from "@app/actions";
-import { ChangePost, FetchGetPost } from "@app/actions/posts";
+import { ChangeIsDeletePostDialogOpen, ChangePost, FetchGetPost, IDeletePostOptions } from "@app/actions/posts";
 import { IPostJson } from "@app/api-types/entities";
 import { IDispatchProps, IOwnProps, IStateProps, Post } from "@app/components/App/Content/Post";
 import { IStoreState } from "@app/types";
@@ -16,6 +16,7 @@ const mapStateToProps = (state: IStoreState): IStateProps => {
 
 const mapDispatchToProps = (dispatch: Dispatch<Actions>): IDispatchProps => {
     return {
+        changeIsDeletePostDialogOpen: (v: IDeletePostOptions) => dispatch(ChangeIsDeletePostDialogOpen(v)),
         changePost: (v: IPostJson) => dispatch(ChangePost(v)),
         getPost: (slug: string) => dispatch(FetchGetPost(slug)),
     };

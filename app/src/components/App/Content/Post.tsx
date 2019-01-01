@@ -16,8 +16,10 @@ import {
 import * as moment from "moment";
 import { RouteComponentProps } from "react-router-dom";
 
+import { IDeletePostOptions } from "@app/actions/posts";
 import { IPostJson, IUserJson, UserLevel } from "@app/api-types/entities";
 import { MarkdownRenderer } from "@app/components/util";
+import { DeletePostDialogRouteContainer } from "@app/route-containers/App/Content/DeletePostDialog";
 import { FetchLevel } from "@app/types/main";
 import { setTitle } from "@app/util";
 
@@ -30,6 +32,7 @@ export interface IStateProps {
 export interface IDispatchProps {
     changePost: (v: IPostJson) => void;
     getPost: (slug: string) => void;
+    changeIsDeletePostDialogOpen: (v: IDeletePostOptions) => void;
 }
 
 interface IRouteParams {
@@ -52,6 +55,7 @@ export class Post extends React.Component<Props> {
     public render() {
         return (
             <>
+                <DeletePostDialogRouteContainer />
                 <div className="pure-g">
                     <div className="pure-u-3-4">
                         <H1>
@@ -193,7 +197,7 @@ export class Post extends React.Component<Props> {
     }
 
     private renderActionBar() {
-        const { user, currentPost, history } = this.props;
+        const { user, currentPost, history, changeIsDeletePostDialogOpen } = this.props;
 
         if (user === null || user.level < UserLevel.Admin) {
             return null;
@@ -212,7 +216,10 @@ export class Post extends React.Component<Props> {
                         text="Edit"
                         onClick={() => history.push(`/content/news/${currentPost.slug}/edit`)}
                     />
-                    <Button icon="delete" onClick={() => console.log("wew lad")} />
+                    <Button
+                        icon="delete"
+                        onClick={() => changeIsDeletePostDialogOpen({ isOpen: true, post: currentPost })}
+                    />
                 </ButtonGroup>
             </>
         );
