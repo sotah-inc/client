@@ -10,10 +10,6 @@ import { IRealm, IRegion } from "../region";
 
 export type IGetRegionsResponse = IRegion[];
 
-export interface IGetItemsClassesResponse {
-    classes: IItemClass[];
-}
-
 export interface IGetBootResponse {
     regions: IRegion[];
     item_classes: {
