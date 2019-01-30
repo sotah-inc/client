@@ -12,7 +12,6 @@ import {
     IGetPricelistRequest,
     IGetPricelistResponse,
     IGetRealmsResponse,
-    IGetRegionsResponse,
     IQueryAuctionsRequest,
     IQueryAuctionsResponse,
     IQueryItemsRequest,
@@ -33,15 +32,6 @@ export const getPing = async (): Promise<boolean> => {
     } catch (err) {
         return false;
     }
-};
-
-export const getRegions = async (): Promise<IGetRegionsResponse | null> => {
-    const { body, status } = await gather<null, IGetRegionsResponse>({ url: `${apiEndpoint}/regions` });
-    if (status !== HTTPStatus.OK) {
-        return null;
-    }
-
-    return body;
 };
 
 export const getBoot = async (): Promise<IGetBootResponse | null> => {

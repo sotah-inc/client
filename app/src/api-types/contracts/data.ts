@@ -8,8 +8,6 @@ import { IItemPriceLimits, IItemPricelistHistoryMap, IPriceLimits, IPriceListMap
 import { IProfession } from "../profession";
 import { IRealm, IRegion } from "../region";
 
-export type IGetRegionsResponse = IRegion[];
-
 export interface IGetBootResponse {
     regions: IRegion[];
     item_classes: {
