@@ -17,3 +17,4 @@
 - [ ] Use [emojione](https://www.npmjs.com/package/emojione) and [markdown-it-emoji](https://www.npmjs.com/package/markdown-it-emoji) for emojis.
 - [ ] Use [Mathjs](https://www.npmjs.com/package/mathjs) for evaluating expressions.
 - [ ] Use [css-blocks](https://github.com/linkedin/css-blocks).
+- [ ] Use [xstate](https://github.com/davidkpiano/xstate) for managing state.
