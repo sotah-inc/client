@@ -13,6 +13,7 @@ import {
 } from "@app/api-types/pricelist";
 import { IRealm, IRegion } from "@app/api-types/region";
 import { IGetPriceListHistoryOptions } from "@app/api/data";
+import { IProfile } from "@app/types/global";
 import { FetchLevel } from "@app/types/main";
 import { currencyToText, didRealmChange, didRegionChange, getColor, unixTimestampToText } from "@app/util";
 
@@ -23,6 +24,7 @@ export interface IStateProps {
     itemsPriceLimits: IItemPriceLimits;
     overallPriceLimits: IPriceLimits;
     fetchRealmLevel: FetchLevel;
+    profile: IProfile | null;
 }
 
 export interface IDispatchProps {
@@ -59,12 +61,17 @@ export class PricelistHistoryGraph extends React.Component<Props, State> {
     };
 
     public componentDidMount() {
-        const { region, realm, reloadPricelistHistory, itemIds } = this.props;
+        const { region, realm, reloadPricelistHistory, itemIds, profile } = this.props;
+
+        if (profile === null) {
+            return;
+        }
 
         reloadPricelistHistory({
             itemIds,
             realmSlug: realm.slug,
             regionName: region.name,
+            token: profile.token,
         });
     }
 
@@ -76,7 +83,12 @@ export class PricelistHistoryGraph extends React.Component<Props, State> {
             getPricelistHistoryLevel,
             itemIds,
             fetchRealmLevel,
+            profile,
         } = this.props;
+
+        if (profile === null) {
+            return;
+        }
 
         switch (fetchRealmLevel) {
             case FetchLevel.success:
@@ -107,6 +119,7 @@ export class PricelistHistoryGraph extends React.Component<Props, State> {
             itemIds,
             realmSlug: realm.slug,
             regionName: region.name,
+            token: profile.token,
         });
     }
 

@@ -12,7 +12,7 @@ import {
 import { IStoreState } from "@app/types";
 
 const mapStateToProps = (state: IStoreState): IStateProps => {
-    const { fetchRealmLevel } = state.Main;
+    const { fetchRealmLevel, profile } = state.Main;
 
     const {
         items: pricelistsItems,
@@ -31,6 +31,7 @@ const mapStateToProps = (state: IStoreState): IStateProps => {
         itemsPriceLimits,
         overallPriceLimits,
         pricelistHistoryMap,
+        profile,
     };
 };
 

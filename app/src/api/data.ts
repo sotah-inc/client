@@ -153,14 +153,19 @@ export interface IGetPriceListHistoryOptions extends IGetPriceListOptions {
     regionName: string;
     realmSlug: string;
     itemIds: ItemId[];
+    token: string;
 }
 
 export const getPriceListHistory = async (
     opts: IGetPriceListHistoryOptions,
 ): Promise<IGetPricelistHistoriesResponse | null> => {
-    const { regionName, realmSlug, itemIds } = opts;
+    const { regionName, realmSlug, itemIds, token } = opts;
     const { body, status } = await gather<IGetPricelistHistoriesRequest, IGetPricelistHistoriesResponse>({
         body: { item_ids: itemIds },
+        headers: new Headers({
+            Authorization: `Bearer ${token}`,
+            "content-type": "application/json",
+        }),
         method: "POST",
         url: `${apiEndpoint}/region/${regionName}/realm/${realmSlug}/price-list-history`,
     });
