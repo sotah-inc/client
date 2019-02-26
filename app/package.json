@@ -66,7 +66,8 @@
     "test": "node scripts/test.js --env=jsdom",
     "serve": "serve -s build",
     "lint": "tslint ./src/**/*.ts{,x} && echo linted",
-    "lint:fix": "tslint --fix ./src/**/*.ts{,x} && echo linted"
+    "lint:fix": "tslint --fix ./src/**/*.ts{,x} && echo linted",
+    "gcp-build": "npm run -s build"
   },
   "devDependencies": {
     "@blueprintjs/tslint-config": "^1.5.0",
