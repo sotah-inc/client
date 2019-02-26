@@ -64,7 +64,7 @@
     "debug": "node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom",
-    "start": "serve -s build -l 80",
+    "start": "serve -s build -l $PORT",
     "lint": "tslint ./src/**/*.ts{,x} && echo linted",
     "lint:fix": "tslint --fix ./src/**/*.ts{,x} && echo linted",
     "gcp-build": "node scripts/build.js"
