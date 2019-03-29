@@ -162,6 +162,7 @@ export interface IItem {
     bonusStats: IItemBonusStat[];
     description: string;
     icon_url: string;
+    icon_object_name: string;
 }
 
 export interface IItemsMap {
