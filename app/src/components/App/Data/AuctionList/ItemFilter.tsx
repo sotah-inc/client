@@ -135,7 +135,10 @@ export class ItemFilter extends React.Component<Props, State> {
                             itemPredicate={this.itemPredicate}
                             onItemSelect={this.onFilterSet}
                             inputValueRenderer={v => v.name}
-                            inputProps={{ onChange: e => this.onFilterChange(e), value: itemFilterValue }}
+                            inputProps={{
+                                onChange: (e: React.ChangeEvent<HTMLInputElement>) => this.onFilterChange(e),
+                                value: itemFilterValue,
+                            }}
                         />
                         <Button
                             icon="filter-remove"

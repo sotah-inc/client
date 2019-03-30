@@ -605,7 +605,7 @@ export class AuctionList extends React.Component<Props> {
                     </NavbarGroup>
                     <NavbarGroup align={Alignment.RIGHT}>
                         <ButtonGroup>
-                            <RealmToggleContainer onRealmChange={v => this.onRealmChange(v)} />
+                            <RealmToggleContainer onRealmChange={(v: IRealm) => this.onRealmChange(v)} />
                             <RegionToggleContainer />
                         </ButtonGroup>
                     </NavbarGroup>
