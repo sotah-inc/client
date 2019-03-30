@@ -8,6 +8,7 @@ import { IExpansion } from "@app/api-types/expansion";
 import { IItemsMap } from "@app/api-types/item";
 import { IProfession } from "@app/api-types/profession";
 import { IRealm, IRegion } from "@app/api-types/region";
+import { IOnCompleteOptions } from "@app/components/App/Data/PriceLists/util/ListDialog";
 import { ListDialogContainer } from "@app/containers/App/Data/PriceLists/util/ListDialog";
 import { IErrors, IProfile } from "@app/types/global";
 import { FetchLevel } from "@app/types/main";
@@ -115,7 +116,7 @@ export class EditListDialog extends React.Component<Props, State> {
                 defaultName={selectedList!.name}
                 defaultSlug={selectedList!.slug === null ? "" : selectedList.slug!}
                 defaultEntries={selectedList.pricelist_entries}
-                onComplete={v => this.onListDialogComplete(v)}
+                onComplete={(v: IOnCompleteOptions) => this.onListDialogComplete(v)}
             />
         );
     }
@@ -128,7 +129,7 @@ export class EditListDialog extends React.Component<Props, State> {
         this.setState({ listDialogResetTrigger: listDialogResetTrigger + 1 });
     }
 
-    private onListDialogComplete({ name, entries, items, slug }) {
+    private onListDialogComplete({ name, entries, items, slug }: IOnCompleteOptions) {
         const { updatePricelist, profile, selectedList, appendItems } = this.props;
 
         updatePricelist({

@@ -483,10 +483,10 @@ export class PricelistTree extends React.Component<Props, IState> {
             node.id.toString().substr(separatorIndex + 1),
         ];
         const nodeClickMap = {
-            expansion: v => this.onExpansionClick(v),
-            pricelist: v => this.onPricelistNodeClick(v),
-            profession: v => this.onProfessionNodeClick(v),
-            top: v => this.onTopNodeClick(v),
+            expansion: (v: string) => this.onExpansionClick(v),
+            pricelist: (v: string) => this.onPricelistNodeClick(v),
+            profession: (v: string) => this.onProfessionNodeClick(v),
+            top: (v: TopOpenKey) => this.onTopNodeClick(v),
         };
 
         if (!(kind in nodeClickMap)) {

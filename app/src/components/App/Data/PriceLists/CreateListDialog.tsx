@@ -121,7 +121,7 @@ export class CreateListDialog extends React.Component<Props, State> {
                 mutationErrors={createPricelistErrors}
                 mutatePricelistLevel={createPricelistLevel}
                 resetTrigger={listDialogResetTrigger}
-                onComplete={v => this.onListDialogComplete(v)}
+                onComplete={(v: IOnCompleteOptions) => this.onListDialogComplete(v)}
             />
         );
     }
