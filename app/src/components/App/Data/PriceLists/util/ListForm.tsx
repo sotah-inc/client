@@ -62,7 +62,7 @@ export class ListForm extends React.Component<Props, State> {
                             type="text"
                             value={values.name}
                             autoFocus={true}
-                            onChange={e => {
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                 setFieldValue("name", e.target.value);
 
                                 if (manualSlug) {
@@ -85,7 +85,9 @@ export class ListForm extends React.Component<Props, State> {
                                 intent={errors.slug && !!touched.slug ? Intent.DANGER : Intent.NONE}
                                 type="text"
                                 value={values.slug}
-                                onChange={e => setFieldValue("slug", e.target.value)}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                                    setFieldValue("slug", e.target.value)
+                                }
                                 disabled={!manualSlug}
                             />
                             <Button

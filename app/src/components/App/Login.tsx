@@ -43,7 +43,7 @@ export class Login extends React.Component<Props> {
                     {createFormField({
                         autofocus: true,
                         fieldName: "email",
-                        getError: () => errors.email,
+                        getError: () => (errors.email ? errors.email : ""),
                         getTouched: () => !!touched.email,
                         getValue: () => values.email,
                         placeholder: "test@example.com",
@@ -51,7 +51,7 @@ export class Login extends React.Component<Props> {
                     })}
                     {createFormField({
                         fieldName: "password",
-                        getError: () => errors.password,
+                        getError: () => (errors.password ? errors.password : ""),
                         getTouched: () => !!touched.password,
                         getValue: () => values.password,
                         type: "password",

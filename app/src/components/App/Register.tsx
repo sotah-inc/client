@@ -42,7 +42,7 @@ export class Register extends React.Component<Props> {
                 <DialogBody>
                     {createFormField({
                         fieldName: "email",
-                        getError: () => errors.email,
+                        getError: () => (errors.email ? errors.email : ""),
                         getTouched: () => !!touched.email,
                         getValue: () => values.email,
                         helperText: "For communication",
@@ -51,7 +51,7 @@ export class Register extends React.Component<Props> {
                     })}
                     {createFormField({
                         fieldName: "password",
-                        getError: () => errors.password,
+                        getError: () => (errors.password ? errors.password : ""),
                         getTouched: () => !!touched.password,
                         getValue: () => values.password,
                         helperText: "For login",

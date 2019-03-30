@@ -80,7 +80,7 @@ export class CreateEntryForm extends React.Component<Props> {
                     </div>
                     {createFormField({
                         fieldName: "quantity",
-                        getError: () => errors.quantity,
+                        getError: () => (errors.quantity ? errors.quantity : ""),
                         getTouched: () => !!touched.quantity,
                         getValue: () => values.quantity.toString(),
                         placeholder: "1",

@@ -3,9 +3,13 @@ import * as React from "react";
 import { Button, IButtonProps } from "@blueprintjs/core";
 import { RouteComponentProps } from "react-router-dom";
 
+interface ILinkButtonButtonProps extends IButtonProps {
+    type?: "button" | "reset" | "submit";
+}
+
 export interface IProps extends RouteComponentProps<{}> {
     destination: string;
-    buttonProps: IButtonProps;
+    buttonProps: ILinkButtonButtonProps;
     prefix?: boolean;
 }
 

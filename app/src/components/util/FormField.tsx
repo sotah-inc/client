@@ -54,7 +54,7 @@ export const FormField: FormFieldType = (props: Props) => {
                 type={type}
                 placeholder={placeholder}
                 value={getValue()}
-                onChange={e => setFieldValue(fieldName, e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFieldValue(fieldName, e.target.value)}
                 autoFocus={autofocus}
             />
         </FormGroup>
