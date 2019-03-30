@@ -17,8 +17,8 @@ import {
     TextArea,
 } from "@blueprintjs/core";
 import { FormikProps } from "formik";
-import * as ReactMarkdown from "react-markdown";
-import * as getSlug from "speakingurl";
+import ReactMarkdown from "react-markdown";
+import speakingurl from "speakingurl";
 
 import { FetchLevel } from "@app/types/main";
 
@@ -206,7 +206,7 @@ export class PostForm extends React.Component<Props, State> {
                                 return;
                             }
 
-                            setFieldValue("slug", getSlug(e.target.value));
+                            setFieldValue("slug", speakingurl(e.target.value));
                         }}
                     />
                 </FormGroup>

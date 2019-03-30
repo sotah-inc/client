@@ -1,4 +1,4 @@
-import * as moment from "moment";
+import moment from "moment";
 
 import { apiEndpoint } from "@app/api";
 import { IQueryAuctionsItem } from "@app/api-types/contracts/data";

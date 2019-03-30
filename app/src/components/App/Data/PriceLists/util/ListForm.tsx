@@ -3,7 +3,7 @@ import * as React from "react";
 import { Button, ControlGroup, FormGroup, InputGroup, Intent } from "@blueprintjs/core";
 import { IconName } from "@blueprintjs/icons";
 import { FormikProps } from "formik";
-import * as getSlug from "speakingurl";
+import speakingurl from "speakingurl";
 
 import { DialogActions, DialogBody } from "@app/components/util";
 
@@ -69,7 +69,7 @@ export class ListForm extends React.Component<Props, State> {
                                     return;
                                 }
 
-                                setFieldValue("slug", getSlug(e.target.value));
+                                setFieldValue("slug", speakingurl(e.target.value));
                             }}
                         />
                     </FormGroup>

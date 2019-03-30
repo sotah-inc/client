@@ -15,7 +15,7 @@ import {
     NonIdealState,
     Spinner,
 } from "@blueprintjs/core";
-import * as moment from "moment";
+import moment from "moment";
 import { RouteComponentProps } from "react-router-dom";
 
 import { IDeletePostOptions } from "@app/actions/posts";

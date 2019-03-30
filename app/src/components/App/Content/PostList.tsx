@@ -1,7 +1,7 @@
 import * as React from "react";
 
 import { Button, ButtonGroup, Card, Classes, H2, H5, Intent, Spinner } from "@blueprintjs/core";
-import * as moment from "moment";
+import moment from "moment";
 import { RouteComponentProps } from "react-router-dom";
 
 import { IDeletePostOptions } from "@app/actions/posts";
