@@ -1,8 +1,6 @@
-import { connect, Dispatch } from "react-redux";
+import { connect } from "react-redux";
 
-import { Actions } from "@app/actions";
 import { FetchGetRealms, RegionChange } from "@app/actions/main";
-import { IRegion } from "@app/api-types/region";
 import { IDispatchProps, IOwnProps, IStateProps, Region } from "@app/components/App/Data/Region";
 import { IStoreState } from "@app/types";
 
@@ -11,11 +9,9 @@ const mapStateToProps = (state: IStoreState): IStateProps => {
     return { currentRegion, currentRealm, authLevel, regions, fetchRealmLevel };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<Actions>): IDispatchProps => {
-    return {
-        fetchRealms: (region: IRegion) => dispatch(FetchGetRealms(region)),
-        onRegionChange: (region: IRegion) => dispatch(RegionChange(region)),
-    };
+const mapDispatchToProps: IDispatchProps = {
+    fetchRealms: FetchGetRealms,
+    onRegionChange: RegionChange,
 };
 
 export const RegionContainer = connect<IStateProps, IDispatchProps, IOwnProps>(

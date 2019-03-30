@@ -1,8 +1,6 @@
-import { connect, Dispatch } from "react-redux";
+import { connect } from "react-redux";
 
-import { Actions } from "@app/actions";
-import { FetchGetUnmetDemand, IProfessionNode, NavigateProfessionNode } from "@app/actions/price-lists";
-import { IGetUnmetDemandOptions } from "@app/api/price-lists";
+import { FetchGetUnmetDemand, NavigateProfessionNode } from "@app/actions/price-lists";
 import {
     IDispatchProps,
     IOwnProps,
@@ -17,11 +15,9 @@ const mapStateToProps = (state: IStoreState): IStateProps => {
     return { expansions, getUnmetDemandLevel, items, professions, unmetDemandItemIds, unmetDemandProfessionPricelists };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<Actions>): IDispatchProps => {
-    return {
-        navigateProfessionNode: (node: IProfessionNode) => dispatch(NavigateProfessionNode(node)),
-        refreshUnmetDemand: (opts: IGetUnmetDemandOptions) => dispatch(FetchGetUnmetDemand(opts)),
-    };
+const mapDispatchToProps: IDispatchProps = {
+    navigateProfessionNode: NavigateProfessionNode,
+    refreshUnmetDemand: FetchGetUnmetDemand,
 };
 
 export const RealmSummaryPanelContainer = connect<IStateProps, IDispatchProps, IOwnProps>(

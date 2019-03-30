@@ -1,7 +1,6 @@
-import { connect, Dispatch } from "react-redux";
+import { connect } from "react-redux";
 
-import { Actions } from "@app/actions";
-import { ChangeIsDeletePostDialogOpen, FetchDeletePost, IDeletePostOptions } from "@app/actions/posts";
+import { ChangeIsDeletePostDialogOpen, FetchDeletePost } from "@app/actions/posts";
 import { DeletePostDialog, IDispatchProps, IStateProps } from "@app/components/App/Content/DeletePostDialog";
 import { IStoreState } from "@app/types";
 
@@ -17,11 +16,9 @@ const mapStateToProps = (state: IStoreState): IStateProps => {
     };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<Actions>): IDispatchProps => {
-    return {
-        changeIsDeletePostDialogOpen: (v: IDeletePostOptions) => dispatch(ChangeIsDeletePostDialogOpen(v)),
-        deletePost: (token: string, id: number) => dispatch(FetchDeletePost(token, id)),
-    };
+const mapDispatchToProps: IDispatchProps = {
+    changeIsDeletePostDialogOpen: ChangeIsDeletePostDialogOpen,
+    deletePost: FetchDeletePost,
 };
 
 export const DeletePostDialogContainer = connect<IStateProps, IDispatchProps>(

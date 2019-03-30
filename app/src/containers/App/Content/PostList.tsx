@@ -1,7 +1,6 @@
-import { connect, Dispatch } from "react-redux";
+import { connect } from "react-redux";
 
-import { Actions } from "@app/actions";
-import { ChangeIsDeletePostDialogOpen, FetchGetPosts, IDeletePostOptions } from "@app/actions/posts";
+import { ChangeIsDeletePostDialogOpen, FetchGetPosts } from "@app/actions/posts";
 import { IDispatchProps, IStateProps, PostList } from "@app/components/App/Content/PostList";
 import { IStoreState } from "@app/types";
 
@@ -13,11 +12,9 @@ const mapStateToProps = (state: IStoreState): IStateProps => {
     return { getPostsLevel, posts, user };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<Actions>): IDispatchProps => {
-    return {
-        changeIsDeletePostDialogOpen: (v: IDeletePostOptions) => dispatch(ChangeIsDeletePostDialogOpen(v)),
-        refreshPosts: () => dispatch(FetchGetPosts()),
-    };
+const mapDispatchToProps: IDispatchProps = {
+    changeIsDeletePostDialogOpen: ChangeIsDeletePostDialogOpen,
+    refreshPosts: FetchGetPosts,
 };
 
 export const PostListContainer = connect<IStateProps, IDispatchProps>(

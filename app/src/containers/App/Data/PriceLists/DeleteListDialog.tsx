@@ -1,6 +1,5 @@
-import { connect, Dispatch } from "react-redux";
+import { connect } from "react-redux";
 
-import { Actions } from "@app/actions";
 import {
     ChangeIsDeleteListDialogOpen,
     FetchDeletePricelist,
@@ -31,12 +30,10 @@ const mapStateToProps = (state: IStoreState): IStateProps => {
     };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<Actions>): IDispatchProps => {
-    return {
-        changeIsDeleteListDialogOpen: (isDialogOpen: boolean) => dispatch(ChangeIsDeleteListDialogOpen(isDialogOpen)),
-        deletePricelist: (token: string, id: number) => dispatch(FetchDeletePricelist(token, id)),
-        deleteProfessionPricelist: (token: string, id: number) => dispatch(FetchDeleteProfessionPricelist(token, id)),
-    };
+const mapDispatchToProps: IDispatchProps = {
+    changeIsDeleteListDialogOpen: ChangeIsDeleteListDialogOpen,
+    deletePricelist: FetchDeletePricelist,
+    deleteProfessionPricelist: FetchDeleteProfessionPricelist,
 };
 
 export const DeleteListDialogContainer = connect<IStateProps, IDispatchProps>(

@@ -1,6 +1,5 @@
-import { connect, Dispatch } from "react-redux";
+import { connect } from "react-redux";
 
-import { Actions } from "@app/actions";
 import {
     ChangeIsAddEntryDialogOpen,
     ChangeIsAddListDialogOpen,
@@ -33,13 +32,11 @@ const mapStateToProps = (state: IStoreState): IStateProps => {
     };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<Actions>): IDispatchProps => {
-    return {
-        changeIsAddEntryDialogOpen: (isDialogOpen: boolean) => dispatch(ChangeIsAddEntryDialogOpen(isDialogOpen)),
-        changeIsAddListDialogOpen: (isDialogOpen: boolean) => dispatch(ChangeIsAddListDialogOpen(isDialogOpen)),
-        changeIsDeleteListDialogOpen: (isDialogOpen: boolean) => dispatch(ChangeIsDeleteListDialogOpen(isDialogOpen)),
-        changeIsEditListDialogOpen: (isDialogOpen: boolean) => dispatch(ChangeIsEditListDialogOpen(isDialogOpen)),
-    };
+const mapDispatchToProps: IDispatchProps = {
+    changeIsAddEntryDialogOpen: ChangeIsAddEntryDialogOpen,
+    changeIsAddListDialogOpen: ChangeIsAddListDialogOpen,
+    changeIsDeleteListDialogOpen: ChangeIsDeleteListDialogOpen,
+    changeIsEditListDialogOpen: ChangeIsEditListDialogOpen,
 };
 
 export const ActionBarContainer = connect<IStateProps, IDispatchProps, IOwnProps>(

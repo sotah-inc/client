@@ -202,7 +202,7 @@ export class CurrentPricesTable extends React.Component<Props> {
                 <td className={qualityToColorClass(item.quality)}>
                     <ItemPopoverContainer
                         item={item}
-                        itemTextFormatter={itemText => `${itemText} \u00D7${quantity_modifier}`}
+                        itemTextFormatter={(itemText: string) => `${itemText} \u00D7${quantity_modifier}`}
                     />
                 </td>
                 <td>

@@ -1,8 +1,6 @@
-import { connect, Dispatch } from "react-redux";
+import { connect } from "react-redux";
 
-import { Actions } from "@app/actions";
 import { FetchGetItemsOwnership } from "@app/actions/price-lists";
-import { IQueryOwnersByItemsOptions } from "@app/api/data";
 import {
     CurrentSellersTable,
     IDispatchProps,
@@ -17,10 +15,8 @@ const mapStateToProps = (state: IStoreState): IStateProps => {
     return { fetchRealmLevel, getItemsOwnershipLevel, itemsOwnershipMap };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<Actions>): IDispatchProps => {
-    return {
-        queryOwnersByItems: (opts: IQueryOwnersByItemsOptions) => dispatch(FetchGetItemsOwnership(opts)),
-    };
+const mapDispatchToProps: IDispatchProps = {
+    queryOwnersByItems: FetchGetItemsOwnership,
 };
 
 export const CurrentSellersTableContainer = connect<IStateProps, IDispatchProps, IOwnProps>(

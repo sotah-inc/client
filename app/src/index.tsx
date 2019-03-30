@@ -43,7 +43,7 @@ const localStorageMiddleware: Middleware = () => next => action => {
     return next(action);
 };
 
-const store = createStore<IStoreState>(rootReducer, defaultState, applyMiddleware(localStorageMiddleware, thunk));
+const store = createStore(rootReducer, defaultState, applyMiddleware(localStorageMiddleware, thunk));
 
 ReactDOM.render(
     <Provider store={store}>

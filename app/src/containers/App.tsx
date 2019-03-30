@@ -1,6 +1,5 @@
-import { connect, Dispatch } from "react-redux";
+import { connect } from "react-redux";
 
-import { Actions } from "@app/actions";
 import {
     ChangeAuthLevel,
     ChangeIsLoginDialogOpen,
@@ -11,7 +10,6 @@ import {
 } from "@app/actions/main";
 import { App, IDispatchProps, IOwnProps, IStateProps } from "@app/components/App";
 import { IStoreState } from "@app/types";
-import { AuthLevel } from "@app/types/main";
 
 const mapStateToProps = (state: IStoreState): IStateProps => {
     const {
@@ -42,15 +40,13 @@ const mapStateToProps = (state: IStoreState): IStateProps => {
     };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<Actions>): IDispatchProps => {
-    return {
-        boot: () => dispatch(FetchGetBoot()),
-        changeAuthLevel: (authLevel: AuthLevel) => dispatch(ChangeAuthLevel(authLevel)),
-        changeIsLoginDialogOpen: (isLoginDialogOpen: boolean) => dispatch(ChangeIsLoginDialogOpen(isLoginDialogOpen)),
-        loadUserPreferences: (token: string) => dispatch(FetchGetUserPreferences(token)),
-        onLoad: () => dispatch(FetchGetPing()),
-        reloadUser: (token: string) => dispatch(FetchUserReload(token)),
-    };
+const mapDispatchToProps: IDispatchProps = {
+    boot: FetchGetBoot,
+    changeAuthLevel: ChangeAuthLevel,
+    changeIsLoginDialogOpen: ChangeIsLoginDialogOpen,
+    loadUserPreferences: FetchGetUserPreferences,
+    onLoad: FetchGetPing,
+    reloadUser: FetchUserReload,
 };
 
 export const AppContainer = connect<IStateProps, IDispatchProps, IOwnProps>(

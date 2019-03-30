@@ -148,7 +148,10 @@ export class OwnerFilter extends React.Component<Props, State> {
                             itemPredicate={this.itemPredicate}
                             onItemSelect={v => this.onFilterSet(v)}
                             inputValueRenderer={v => v.name}
-                            inputProps={{ onChange: e => this.onFilterChange(e), value: ownerFilterValue }}
+                            inputProps={{
+                                onChange: (e: React.ChangeEvent<HTMLInputElement>) => this.onFilterChange(e),
+                                value: ownerFilterValue,
+                            }}
                         />
                         <Button
                             icon="filter-remove"

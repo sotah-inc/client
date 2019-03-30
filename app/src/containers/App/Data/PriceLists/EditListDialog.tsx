@@ -1,11 +1,8 @@
-import { connect, Dispatch } from "react-redux";
+import { connect } from "react-redux";
 
-import { Actions } from "@app/actions";
 import { AppendItems, ChangeIsEditListDialogOpen, FetchUpdatePricelist } from "@app/actions/price-lists";
-import { IItemsMap } from "@app/api-types/item";
 import { EditListDialog, IDispatchProps, IStateProps } from "@app/components/App/Data/PriceLists/EditListDialog";
 import { IStoreState } from "@app/types";
-import { IUpdatePricelistRequestOptions } from "@app/types/price-lists";
 
 const mapStateToProps = (state: IStoreState): IStateProps => {
     const { profile, currentRegion, currentRealm } = state.Main;
@@ -33,12 +30,10 @@ const mapStateToProps = (state: IStoreState): IStateProps => {
     };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<Actions>): IDispatchProps => {
-    return {
-        appendItems: (items: IItemsMap) => dispatch(AppendItems(items)),
-        changeIsEditListDialogOpen: (isDialogOpen: boolean) => dispatch(ChangeIsEditListDialogOpen(isDialogOpen)),
-        updatePricelist: (opts: IUpdatePricelistRequestOptions) => dispatch(FetchUpdatePricelist(opts)),
-    };
+const mapDispatchToProps: IDispatchProps = {
+    appendItems: AppendItems,
+    changeIsEditListDialogOpen: ChangeIsEditListDialogOpen,
+    updatePricelist: FetchUpdatePricelist,
 };
 
 export const EditListDialogContainer = connect<IStateProps, IDispatchProps>(

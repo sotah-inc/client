@@ -1,8 +1,6 @@
-import { connect, Dispatch } from "react-redux";
+import { connect } from "react-redux";
 
-import { Actions } from "@app/actions";
 import { FetchGetPricelist } from "@app/actions/price-lists";
-import { IGetPriceListOptions } from "@app/api/data";
 import {
     CurrentPricesTable,
     IDispatchProps,
@@ -17,10 +15,8 @@ const mapStateToProps = (state: IStoreState): IStateProps => {
     return { fetchRealmLevel, getPricelistLevel, items, pricelistMap };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<Actions>): IDispatchProps => {
-    return {
-        reloadPrices: (opts: IGetPriceListOptions) => dispatch(FetchGetPricelist(opts)),
-    };
+const mapDispatchToProps: IDispatchProps = {
+    reloadPrices: FetchGetPricelist,
 };
 
 export const CurrentPricesTableContainer = connect<IStateProps, IDispatchProps, IOwnProps>(

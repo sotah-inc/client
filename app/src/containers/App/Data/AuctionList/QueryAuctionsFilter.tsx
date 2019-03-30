@@ -1,9 +1,6 @@
-import { connect, Dispatch } from "react-redux";
+import { connect } from "react-redux";
 
-import { Actions } from "@app/actions";
 import { ActiveSelectChange, AddAuctionsQuery, FetchAuctionsQuery, RemoveAuctionsQuery } from "@app/actions/auction";
-import { IQueryAuctionsItem } from "@app/api-types/contracts/data";
-import { IQueryAuctionsOptions } from "@app/api/data";
 import {
     IDispatchProps,
     IStateProps,
@@ -24,13 +21,11 @@ const mapStateToProps = (state: IStoreState): IStateProps => {
     };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<Actions>): IDispatchProps => {
-    return {
-        activeSelectChange: (v: boolean) => dispatch(ActiveSelectChange(v)),
-        onAuctionsQueryDeselect: (index: number) => dispatch(RemoveAuctionsQuery(index)),
-        onAuctionsQuerySelect: (aqItem: IQueryAuctionsItem) => dispatch(AddAuctionsQuery(aqItem)),
-        refreshAuctionsQuery: (opts: IQueryAuctionsOptions) => dispatch(FetchAuctionsQuery(opts)),
-    };
+const mapDispatchToProps: IDispatchProps = {
+    activeSelectChange: ActiveSelectChange,
+    onAuctionsQueryDeselect: RemoveAuctionsQuery,
+    onAuctionsQuerySelect: AddAuctionsQuery,
+    refreshAuctionsQuery: FetchAuctionsQuery,
 };
 
 export const QueryAuctionsFilterContainer = connect<IStateProps, IDispatchProps>(

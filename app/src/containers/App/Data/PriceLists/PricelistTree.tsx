@@ -1,8 +1,6 @@
-import { connect, Dispatch } from "react-redux";
+import { connect } from "react-redux";
 
-import { Actions } from "@app/actions";
 import { FetchGetPricelists, FetchGetProfessionPricelists } from "@app/actions/price-lists";
-import { ProfessionName } from "@app/api-types/profession";
 import { IDispatchProps, IStateProps, PricelistTree } from "@app/components/App/Data/PriceLists/PricelistTree";
 import { IStoreState } from "@app/types";
 
@@ -35,11 +33,9 @@ const mapStateToProps = (state: IStoreState): IStateProps => {
     };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<Actions>): IDispatchProps => {
-    return {
-        refreshPricelists: (token: string) => dispatch(FetchGetPricelists(token)),
-        refreshProfessionPricelists: (profession: ProfessionName) => dispatch(FetchGetProfessionPricelists(profession)),
-    };
+const mapDispatchToProps: IDispatchProps = {
+    refreshPricelists: FetchGetPricelists,
+    refreshProfessionPricelists: FetchGetProfessionPricelists,
 };
 
 export const PricelistTreeContainer = connect<IStateProps, IDispatchProps>(

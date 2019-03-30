@@ -1,10 +1,7 @@
-import { connect, Dispatch } from "react-redux";
+import { connect } from "react-redux";
 
-import { Actions } from "@app/actions";
 import { FetchAuctions, FetchAuctionsQuery, PageChange } from "@app/actions/auction";
 import { FetchGetRealms, RealmChange, RegionChange } from "@app/actions/main";
-import { IRealm, IRegion } from "@app/api-types/region";
-import { IGetAuctionsOptions, IQueryAuctionsOptions } from "@app/api/data";
 import { AuctionList, IDispatchProps, IStateProps } from "@app/components/App/Data/AuctionList";
 import { IStoreState } from "@app/types";
 
@@ -53,15 +50,13 @@ const mapStateToProps = (state: IStoreState): IStateProps => {
     };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<Actions>): IDispatchProps => {
-    return {
-        fetchRealms: (region: IRegion) => dispatch(FetchGetRealms(region)),
-        onRealmChange: (realm: IRealm) => dispatch(RealmChange(realm)),
-        onRegionChange: (region: IRegion) => dispatch(RegionChange(region)),
-        refreshAuctions: (opts: IGetAuctionsOptions) => dispatch(FetchAuctions(opts)),
-        refreshAuctionsQuery: (opts: IQueryAuctionsOptions) => dispatch(FetchAuctionsQuery(opts)),
-        setCurrentPage: (page: number) => dispatch(PageChange(page)),
-    };
+const mapDispatchToProps: IDispatchProps = {
+    fetchRealms: FetchGetRealms,
+    onRealmChange: RealmChange,
+    onRegionChange: RegionChange,
+    refreshAuctions: FetchAuctions,
+    refreshAuctionsQuery: FetchAuctionsQuery,
+    setCurrentPage: PageChange,
 };
 
 export const AuctionsListContainer = connect<IStateProps, IDispatchProps>(

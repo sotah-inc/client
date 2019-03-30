@@ -1,10 +1,8 @@
-import { connect, Dispatch } from "react-redux";
+import { connect } from "react-redux";
 
-import { Actions } from "@app/actions";
 import { ChangeIsAddEntryDialogOpen, FetchUpdatePricelist } from "@app/actions/price-lists";
 import { CreateEntryDialog, IDispatchProps, IStateProps } from "@app/components/App/Data/PriceLists/CreateEntryDialog";
 import { IStoreState } from "@app/types";
-import { IUpdatePricelistRequestOptions } from "@app/types/price-lists";
 
 const mapStateToProps = (state: IStoreState): IStateProps => {
     const { profile } = state.Main;
@@ -17,11 +15,9 @@ const mapStateToProps = (state: IStoreState): IStateProps => {
     };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<Actions>): IDispatchProps => {
-    return {
-        changeIsAddEntryDialogOpen: (isDialogOpen: boolean) => dispatch(ChangeIsAddEntryDialogOpen(isDialogOpen)),
-        updatePricelist: (opts: IUpdatePricelistRequestOptions) => dispatch(FetchUpdatePricelist(opts)),
-    };
+const mapDispatchToProps: IDispatchProps = {
+    changeIsAddEntryDialogOpen: ChangeIsAddEntryDialogOpen,
+    updatePricelist: FetchUpdatePricelist,
 };
 
 export const CreateEntryDialogContainer = connect<IStateProps, IDispatchProps>(

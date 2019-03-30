@@ -1,8 +1,6 @@
-import { connect, Dispatch } from "react-redux";
+import { connect } from "react-redux";
 
-import { Actions } from "@app/actions";
 import { FetchCreatePost } from "@app/actions/posts";
-import { ICreatePostRequest } from "@app/api-types/contracts/user/post-crud";
 import { IDispatchProps, IOwnProps, IStateProps, NewsCreator } from "@app/components/App/Content/NewsCreator";
 import { IStoreState } from "@app/types";
 
@@ -13,10 +11,8 @@ const mapStateToProps = (state: IStoreState): IStateProps => {
     return { createPostErrors, createPostLevel, currentPost, profile };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<Actions>): IDispatchProps => {
-    return {
-        createPost: (token: string, v: ICreatePostRequest) => dispatch(FetchCreatePost(token, v)),
-    };
+const mapDispatchToProps: IDispatchProps = {
+    createPost: FetchCreatePost,
 };
 
 export const NewsCreatorContainer = connect<IStateProps, IDispatchProps, IOwnProps>(

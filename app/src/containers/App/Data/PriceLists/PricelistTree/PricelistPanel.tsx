@@ -1,6 +1,5 @@
-import { connect, Dispatch } from "react-redux";
+import { connect } from "react-redux";
 
-import { Actions } from "@app/actions";
 import { ChangeIsAddEntryDialogOpen } from "@app/actions/price-lists";
 import {
     IDispatchProps,
@@ -16,10 +15,8 @@ const mapStateToProps = (state: IStoreState): IStateProps => {
     return { currentRegion, currentRealm, isAddEntryDialogOpen };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<Actions>): IDispatchProps => {
-    return {
-        changeIsAddEntryDialogOpen: (isDialogOpen: boolean) => dispatch(ChangeIsAddEntryDialogOpen(isDialogOpen)),
-    };
+const mapDispatchToProps: IDispatchProps = {
+    changeIsAddEntryDialogOpen: ChangeIsAddEntryDialogOpen,
 };
 
 export const PricelistPanelContainer = connect<IStateProps, IDispatchProps, IOwnProps>(

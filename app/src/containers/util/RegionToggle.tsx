@@ -1,8 +1,6 @@
-import { connect, Dispatch } from "react-redux";
+import { connect } from "react-redux";
 
-import { Actions } from "@app/actions";
 import { RegionChange } from "@app/actions/main";
-import { IRegion } from "@app/api-types/region";
 import { IDispatchProps, IStateProps, RegionToggle } from "@app/components/util/RegionToggle";
 import { IStoreState } from "@app/types";
 
@@ -14,10 +12,8 @@ const mapStateToProps = (state: IStoreState): IStateProps => {
     };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<Actions>): IDispatchProps => {
-    return {
-        onRegionChange: (region: IRegion) => dispatch(RegionChange(region)),
-    };
+const mapDispatchToProps: IDispatchProps = {
+    onRegionChange: RegionChange,
 };
 
 export const RegionToggleContainer = connect<IStateProps, IDispatchProps>(
