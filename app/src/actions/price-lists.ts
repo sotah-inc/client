@@ -128,7 +128,7 @@ export const RECEIVE_CREATE_PROFESSIONPRICELIST = "RECEIVE_CREATE_PROFESSIONPRIC
 export const ReceiveCreateProfessionPricelist = (payload: ICreateProfessionPricelistResult) =>
     createAction(RECEIVE_CREATE_PROFESSIONPRICELIST, payload);
 type FetchCreateProfessionPricelistType = ReturnType<
-    typeof RequestCreateProfessionPricelist | typeof ReceiveCreatePricelist
+    typeof RequestCreateProfessionPricelist | typeof ReceiveCreateProfessionPricelist
 >;
 export const FetchCreateProfessionPricelist = (token: string, request: ICreateProfessionPricelistRequest) => {
     return async (dispatch: Dispatch<FetchCreateProfessionPricelistType>) => {
@@ -158,7 +158,7 @@ export const RECEIVE_GET_PROFESSIONPRICELISTS = "RECEIVE_GET_PROFESSIONPRICELIST
 export const ReceiveGetProfessionPricelists = (payload: IGetProfessionPricelistsResult) =>
     createAction(RECEIVE_GET_PROFESSIONPRICELISTS, payload);
 type FetchProfessionPricelistsType = ReturnType<
-    typeof RequestGetProfessionPricelists | typeof ReceiveDeleteProfessionPricelist
+    typeof RequestGetProfessionPricelists | typeof ReceiveGetProfessionPricelists
 >;
 export const FetchGetProfessionPricelists = (profession: ProfessionName) => {
     return async (dispatch: Dispatch<FetchProfessionPricelistsType>) => {
