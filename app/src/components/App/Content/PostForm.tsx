@@ -199,7 +199,7 @@ export class PostForm extends React.Component<Props, State> {
                         type="text"
                         value={values.title}
                         autoFocus={true}
-                        onChange={e => {
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                             setFieldValue("title", e.target.value);
 
                             if (manualSlug) {
@@ -222,7 +222,7 @@ export class PostForm extends React.Component<Props, State> {
                             intent={coalescedErrors.slug && !!touched.slug ? Intent.DANGER : Intent.NONE}
                             type="text"
                             value={values.slug}
-                            onChange={e => setFieldValue("slug", e.target.value)}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFieldValue("slug", e.target.value)}
                             disabled={!manualSlug}
                         />
                         <Button
