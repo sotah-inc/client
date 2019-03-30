@@ -16,6 +16,9 @@ RUN npm install -s \
 # running
 FROM node:10-alpine
 
+# env vars
+ENV PORT 8080
+
 # copying in source
 COPY ./app /srv/app
 WORKDIR /srv/app

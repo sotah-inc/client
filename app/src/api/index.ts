@@ -1,7 +1,7 @@
 const hostname = window.location.hostname;
-export let apiEndpoint = `//${window.location.hostname}:9999`;
-if (hostname !== "localhost") {
-    apiEndpoint = `//api.${hostname}`;
+export let apiEndpoint = `https://api.sotah.info`;
+if (hostname === "localhost") {
+    apiEndpoint = `http://localhost:9999`;
 }
 
 export interface IGatherOptions<T> {

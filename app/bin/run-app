@@ -1,3 +1,3 @@
 #! /bin/sh
 
-npm run -s serve
+PORT=8080 npm run -s serve

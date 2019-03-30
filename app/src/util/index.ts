@@ -71,6 +71,10 @@ export const qualityToColorClass = (quality: ItemQuality): string => {
 };
 
 export const getItemIconUrl = (item: IItem): string | null => {
+    if (item.icon_object_name !== "") {
+        return `https://item-icons.sotah.info/${item.icon_object_name}`;
+    }
+
     if (item.icon_url !== "") {
         return item.icon_url;
     }
