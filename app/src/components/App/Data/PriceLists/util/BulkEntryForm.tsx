@@ -60,7 +60,7 @@ export class BulkEntryForm extends React.Component<Props> {
                                 >
                                     <ItemInput
                                         itemIdBlacklist={itemIdBlacklist}
-                                        onSelect={v => this.onItemSelect(v)}
+                                        onSelect={(v: IItem) => this.onItemSelect(v)}
                                         autoFocus={true}
                                         closeOnSelect={false}
                                     />
