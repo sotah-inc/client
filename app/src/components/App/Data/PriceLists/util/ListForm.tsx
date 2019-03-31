@@ -22,7 +22,7 @@ export interface IFormValues {
 
 export type Props = Readonly<IOwnProps & FormikProps<IFormValues>>;
 
-export const ListForm: React.FunctionComponent = (props: Props) => {
+export function ListForm(props: Props) {
     const {
         values,
         setFieldValue,
@@ -99,4 +99,4 @@ export const ListForm: React.FunctionComponent = (props: Props) => {
             </DialogActions>
         </form>
     );
-};
+}
