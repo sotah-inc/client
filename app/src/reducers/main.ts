@@ -12,9 +12,9 @@ import {
 import { AuthLevel, defaultMainState, FetchLevel, IMainState } from "@app/types/main";
 import { runners } from "./handlers";
 
-type State = Readonly<IMainState> | undefined;
+type State = Readonly<IMainState>;
 
-export const main = (state: State, action: MainActions): State => {
+export const main = (state: State | undefined, action: MainActions): State => {
     if (state === undefined) {
         return defaultMainState;
     }

@@ -15,9 +15,9 @@ import { IItem } from "@app/api-types/item";
 import { defaultPriceListsState, IPriceListsState } from "@app/types/price-lists";
 import { runners } from "./handlers";
 
-type State = Readonly<IPriceListsState> | undefined;
+type State = Readonly<IPriceListsState>;
 
-export const priceLists = (state: State, action: PriceListsActions): State => {
+export const priceLists = (state: State | undefined, action: PriceListsActions): State => {
     if (state === undefined) {
         return defaultPriceListsState;
     }

@@ -15,9 +15,9 @@ import { IAuction } from "@app/api-types/auction";
 import { defaultAuctionState, IAuctionState } from "@app/types/auction";
 import { FetchLevel } from "@app/types/main";
 
-type State = Readonly<IAuctionState> | undefined;
+type State = Readonly<IAuctionState>;
 
-export const auction = (state: State, action: AuctionActions): State => {
+export const auction = (state: State | undefined, action: AuctionActions): State => {
     if (state === undefined) {
         return defaultAuctionState;
     }
