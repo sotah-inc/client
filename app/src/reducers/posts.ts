@@ -2,9 +2,9 @@ import { CHANGE_IS_DELETE_POST_DIALOG_OPEN, CHANGE_POST, PostsActions } from "@a
 import { defaultPostsState, IPostsState } from "@app/types/posts";
 import { runners } from "./handlers";
 
-type State = Readonly<IPostsState> | undefined;
+type State = Readonly<IPostsState>;
 
-export const posts = (state: State, action: PostsActions): State => {
+export const posts = (state: State | undefined, action: PostsActions): State => {
     if (state === undefined) {
         return defaultPostsState;
     }
