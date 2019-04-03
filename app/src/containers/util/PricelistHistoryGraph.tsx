@@ -1,14 +1,12 @@
-import { connect, Dispatch } from "react-redux";
+import { connect } from "react-redux";
 
-import { Actions } from "@app/actions";
 import { FetchGetPricelistHistory } from "@app/actions/price-lists";
-import { IGetPriceListHistoryOptions } from "@app/api/data";
 import {
     IDispatchProps,
     IOwnProps,
     IStateProps,
     PricelistHistoryGraph,
-} from "@app/components/util/PricelistHistoryGraph._tsx";
+} from "@app/components/util/PricelistHistoryGraph";
 import { IStoreState } from "@app/types";
 
 const mapStateToProps = (state: IStoreState): IStateProps => {
@@ -34,10 +32,8 @@ const mapStateToProps = (state: IStoreState): IStateProps => {
     };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<Actions>): IDispatchProps => {
-    return {
-        reloadPricelistHistory: (opts: IGetPriceListHistoryOptions) => dispatch(FetchGetPricelistHistory(opts)),
-    };
+const mapDispatchToProps = {
+    reloadPricelistHistory: FetchGetPricelistHistory,
 };
 
 export const PricelistHistoryGraphContainer = connect<IStateProps, IDispatchProps, IOwnProps>(

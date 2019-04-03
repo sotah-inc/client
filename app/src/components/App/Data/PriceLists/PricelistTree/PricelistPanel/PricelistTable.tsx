@@ -7,7 +7,7 @@ import { IItemsMap } from "@app/api-types/item";
 import { IRealm, IRegion } from "@app/api-types/region";
 import { CurrentPricesTableContainer } from "@app/containers/App/Data/PriceLists/PricelistTree/PricelistPanel/PricelistTable/CurrentPricesTable";
 import { CurrentSellersTableContainer } from "@app/containers/App/Data/PriceLists/PricelistTree/PricelistPanel/PricelistTable/CurrentSellersTable";
-// import { PricelistHistoryGraphContainer } from "@app/containers/util/PricelistHistoryGraph";
+import { PricelistHistoryGraphContainer } from "@app/containers/util/PricelistHistoryGraph";
 import { PricelistIconContainer } from "@app/containers/util/PricelistIcon";
 
 export interface IStateProps {
@@ -26,7 +26,7 @@ export class PricelistTable extends React.Component<Props> {
     public render() {
         const { list, region, realm } = this.props;
 
-        // const itemIds = list.pricelist_entries.map(v => v.item_id);
+        const itemIds = list.pricelist_entries.map(v => v.item_id);
 
         return (
             <>
@@ -35,7 +35,7 @@ export class PricelistTable extends React.Component<Props> {
                     {list.name}
                 </H2>
                 <H4>History</H4>
-                {/*{<PricelistHistoryGraphContainer itemIds={itemIds} region={region} realm={realm} />}*/}
+                {<PricelistHistoryGraphContainer itemIds={itemIds} region={region} realm={realm} />}
                 {<CurrentPricesTableContainer list={list} region={region} realm={realm} />}
                 {<CurrentSellersTableContainer list={list} region={region} realm={realm} />}
             </>
