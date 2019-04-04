@@ -23,9 +23,9 @@ const mapStateToProps = (state: IStoreState): IStateProps => {
 
 const mapDispatchToProps: IDispatchProps = {
     activeSelectChange: ActiveSelectChange,
+    fetchAuctionsQuery: FetchAuctionsQuery,
     onAuctionsQueryDeselect: RemoveAuctionsQuery,
     onAuctionsQuerySelect: AddAuctionsQuery,
-    refreshAuctionsQuery: FetchAuctionsQuery,
 };
 
 export const QueryAuctionsFilterContainer = connect<IStateProps, IDispatchProps>(

@@ -46,7 +46,7 @@ export interface IStateProps {
 export interface IDispatchProps {
     onAuctionsQuerySelect: (aqResult: IQueryAuctionsItem) => void;
     onAuctionsQueryDeselect: (index: number) => void;
-    refreshAuctionsQuery: (opts: IQueryAuctionsOptions) => void;
+    fetchAuctionsQuery: (opts: IQueryAuctionsOptions) => void;
     activeSelectChange: (v: boolean) => void;
 }
 
@@ -225,9 +225,9 @@ export class QueryAuctionsFilter extends React.Component<Props> {
     }
 
     private triggerQuery(filterValue: string) {
-        const { refreshAuctionsQuery, currentRealm, currentRegion } = this.props;
+        const { fetchAuctionsQuery, currentRealm, currentRegion } = this.props;
 
-        refreshAuctionsQuery({
+        fetchAuctionsQuery({
             query: filterValue,
             realmSlug: currentRealm!.slug,
             regionName: currentRegion!.name,
