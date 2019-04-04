@@ -71,7 +71,7 @@ export const FetchAuctionsQuery = (opts: IQueryAuctionsOptions) => {
 };
 
 export const REFRESH_AUCTIONS_QUERY = "REFRESH_AUCTIONS_QUERY";
-const RefreshAuctionsQuery = (payload: IQueryAuctionsItem[]) => createAction(REFRESH_AUCTIONS_QUERY, payload);
+export const RefreshAuctionsQuery = (payload: IQueryAuctionsItem[]) => createAction(REFRESH_AUCTIONS_QUERY, payload);
 
 export const ADD_AUCTIONS_QUERY = "ADD_AUCTIONS_QUERY";
 export const AddAuctionsQuery = (payload: IQueryAuctionsItem) => createAction(ADD_AUCTIONS_QUERY, payload);

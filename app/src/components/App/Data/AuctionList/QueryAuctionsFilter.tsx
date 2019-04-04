@@ -48,6 +48,7 @@ export interface IDispatchProps {
     onAuctionsQueryDeselect: (index: number) => void;
     fetchAuctionsQuery: (opts: IQueryAuctionsOptions) => void;
     activeSelectChange: (v: boolean) => void;
+    refreshAuctionsQuery: (v: IQueryAuctionsItem[]) => void;
 }
 
 type Props = Readonly<IStateProps & IDispatchProps>;
