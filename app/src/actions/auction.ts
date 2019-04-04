@@ -70,6 +70,9 @@ export const FetchAuctionsQuery = (opts: IQueryAuctionsOptions) => {
     };
 };
 
+export const REFRESH_AUCTIONS_QUERY = "REFRESH_AUCTIONS_QUERY";
+const RefreshAuctionsQuery = (payload: IQueryAuctionsItem[]) => createAction(REFRESH_AUCTIONS_QUERY, payload);
+
 export const ADD_AUCTIONS_QUERY = "ADD_AUCTIONS_QUERY";
 export const AddAuctionsQuery = (payload: IQueryAuctionsItem) => createAction(ADD_AUCTIONS_QUERY, payload);
 export const REMOVE_AUCTIONS_QUERY = "REMOVE_AUCTIONS_QUERY";
@@ -88,6 +91,7 @@ export const AuctionActions = {
     ReceiveAuctions,
     ReceiveAuctionsQuery,
     ReceiveOwners,
+    RefreshAuctionsQuery,
     RemoveAuctionsQuery,
     RequestAuctions,
     RequestAuctionsQuery,

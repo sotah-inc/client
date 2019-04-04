@@ -6,6 +6,7 @@ import {
     PAGE_CHANGE,
     RECEIVE_AUCTIONS,
     RECEIVE_AUCTIONS_QUERY,
+    REFRESH_AUCTIONS_QUERY,
     REMOVE_AUCTIONS_QUERY,
     REQUEST_AUCTIONS,
     REQUEST_AUCTIONS_QUERY,
@@ -68,6 +69,11 @@ export const auction = (state: State | undefined, action: AuctionActions): State
                 ...state,
                 queryAuctionResults: action.payload.items,
                 queryAuctionsLevel: FetchLevel.success,
+            };
+        case REFRESH_AUCTIONS_QUERY:
+            return {
+                ...state,
+                queryAuctionResults: action.payload,
             };
         case ADD_AUCTIONS_QUERY:
             return {
