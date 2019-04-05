@@ -1,2 +1,7 @@
 runtime: nodejs10
 instance_class: F1
+
+handlers:
+- url: /.*
+  secure: always
+  script: auto
