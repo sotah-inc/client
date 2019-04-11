@@ -12,7 +12,7 @@ steps:
     'run',
     'deploy',
     '--image', 'gcr.io/$PROJECT_ID/client',
-    '--region', 'us-central1'
+    '--region', 'us-central1',
     'sotah-client',
   ]
 
