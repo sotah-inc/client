@@ -13,6 +13,7 @@ steps:
     'deploy',
     '--image', 'gcr.io/$PROJECT_ID/client',
     '--region', 'us-central1',
+    '--allow-unauthenticated',
     'sotah-client',
   ]
 
