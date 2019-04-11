@@ -1,0 +1,21 @@
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  args: [
+    'build',
+    '-f', './Dockerfile',
+    '-t', 'gcr.io/$PROJECT_ID/client',
+    '.'
+  ]
+- name: 'gcr.io/cloud-builders/gcloud'
+  args: [
+    'beta',
+    'run',
+    'deploy',
+    '--image', 'gcr.io/$PROJECT_ID/client',
+    '--region', 'us-central1'
+    'sotah-client',
+  ]
+
+images: [
+    'gcr.io/$PROJECT_ID/client:latest',
+]
