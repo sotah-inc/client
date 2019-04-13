@@ -57,7 +57,7 @@ export class QueryAuctionsFilter extends React.Component<Props> {
     private debouncedTriggerQuery = debounce((filterValue: string) => this.triggerQuery(filterValue), 0.25 * 1000);
 
     public render() {
-        const { queryAuctionsLevel, items, activeSelect } = this.props;
+        const { queryAuctionsLevel, items, activeSelect, selectedItems } = this.props;
 
         switch (queryAuctionsLevel) {
             case FetchLevel.success:
@@ -91,7 +91,7 @@ export class QueryAuctionsFilter extends React.Component<Props> {
                                 />
                             </NavbarGroup>
                         </Navbar>
-                        {this.renderSelectedItems()}
+                        {this.renderSelectedItems(selectedItems)}
                     </>
                 );
             case FetchLevel.failure:
@@ -266,9 +266,7 @@ export class QueryAuctionsFilter extends React.Component<Props> {
         );
     }
 
-    private renderSelectedItems() {
-        const { selectedItems } = this.props;
-
+    private renderSelectedItems(selectedItems: IQueryAuctionsItem[]) {
         if (selectedItems.length === 0) {
             return;
         }

@@ -48,6 +48,6 @@ export class TreeContent extends React.Component<Props> {
             return;
         }
 
-        return <LastModified targetDate={new Date(currentRealm.last_modified * 1000)} />;
+        return <LastModified targetDate={new Date(currentRealm.realm_modification_dates.downloaded * 1000)} />;
     }
 }
