@@ -129,13 +129,18 @@ const renderInventoryType = (item: IItem, itemClasses: IItemClasses) => {
 
             return;
         default:
-            let iSubClassText = "";
-            if (item.itemClass in itemClasses) {
-                const iClass = itemClasses[item.itemClass];
-                if (item.itemSubClass in iClass.subclasses) {
-                    iSubClassText = iClass.subclasses[item.itemSubClass].name;
+            const iSubClassText: string = (() => {
+                if (!(item.itemClass in itemClasses)) {
+                    return "";
                 }
-            }
+
+                const iClass = itemClasses[item.itemClass];
+                if (!(item.itemSubClass in iClass.subclasses)) {
+                    return "";
+                }
+
+                return iClass.subclasses[item.itemSubClass].name;
+            })();
 
             return (
                 <li>
