@@ -1,5 +1,5 @@
 const hostname = window.location.hostname;
-export let apiEndpoint = `https://api.sotah.info`;
+export let apiEndpoint = "https://api.sotah.info";
 if (hostname === "localhost") {
     apiEndpoint = "http://localhost:9999";
 }
