@@ -89,7 +89,7 @@ export interface IQueryItemsRequest {
 }
 
 export interface IQueryItemsItem {
-    item: IItem;
+    item: IItem | null;
     target: string;
     rank: number;
 }

@@ -27,7 +27,7 @@ export interface IOwnProps {
 type Props = Readonly<IOwnProps>;
 
 const inputValueRenderer = (result: IQueryItemsItem): string => {
-    if (result.item.id === 0) {
+    if (result.item === null || result.item.id === 0) {
         return "n/a";
     }
 
@@ -49,15 +49,15 @@ const renderItemAsItemRendererText = (item: IItem) => {
     );
 };
 
-const renderItemRendererTextContent = (item: IItem) => {
-    if (item.id === 0) {
+const renderItemRendererTextContent = (item: IItem | null) => {
+    if (item === null || item.id === 0) {
         return "n/a";
     }
 
     return renderItemAsItemRendererText(item);
 };
 
-const renderItemRendererText = (item: IItem) => {
+const renderItemRendererText = (item: IItem | null) => {
     return <span className="item-input-menu-item">{renderItemRendererTextContent(item)}</span>;
 };
 
@@ -107,6 +107,10 @@ export function ItemInput(props: Props) {
                         return false;
                     }
 
+                    if (result.item === null) {
+                        return true;
+                    }
+
                     return itemIdBlacklist.indexOf(result.item.id) > -1;
                 })();
 
@@ -118,7 +122,7 @@ export function ItemInput(props: Props) {
                 const { item } = result;
 
                 let label = "n/a";
-                if (item.name !== "") {
+                if (item !== null && item.name !== "") {
                     label = `#${item.id}`;
                     className = `${className} ${qualityToColorClass(item.quality)}`;
                 }
@@ -135,7 +139,13 @@ export function ItemInput(props: Props) {
                 );
             }}
             items={results}
-            onItemSelect={v => onSelect(v.item)}
+            onItemSelect={v => {
+                if (v.item === null) {
+                    return;
+                }
+
+                onSelect(v.item);
+            }}
             closeOnSelect={typeof closeOnSelect === "undefined" ? true : closeOnSelect}
             onQueryChange={debounce(async (filterValue: string) => {
                 const res = await getItems(filterValue);
