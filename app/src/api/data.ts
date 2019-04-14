@@ -23,7 +23,7 @@ import {
 import { IPostJson } from "@app/api-types/entities";
 import { ItemId } from "@app/api-types/item";
 import { RealmSlug, RegionName } from "@app/api-types/region";
-import { apiEndpoint, gather } from "./index";
+import { apiEndpoint, gather, gatherWithQuery } from "./index";
 
 export const getPing = async (): Promise<boolean> => {
     try {
@@ -64,9 +64,9 @@ export interface IGetAuctionsOptions {
 
 export const getAuctions = async (opts: IGetAuctionsOptions): Promise<IGetAuctionsResponse | null> => {
     const { regionName, realmSlug, request } = opts;
-    const { body, status } = await gather<IGetAuctionsRequest, IGetAuctionsResponse>({
-        body: request,
-        method: "POST",
+    const { body, status } = await gatherWithQuery<IGetAuctionsRequest, IGetAuctionsResponse>({
+        method: "GET",
+        query: request,
         url: `${apiEndpoint}/region/${regionName}/realm/${realmSlug}/auctions`,
     });
     if (status !== HTTPStatus.OK) {
