@@ -47,7 +47,8 @@ export const gather = async <T, A>(opts: IGatherOptions<T>): Promise<IGatherResu
 };
 
 export const gatherWithQuery = async <Q, A>(opts: IGatherQueryOptions<Q>): Promise<IGatherResult<A>> => {
-    const query = typeof opts.query === "undefined" ? null : queryString.stringify(opts.query);
+    const query =
+        typeof opts.query === "undefined" ? null : queryString.stringify(opts.query, { arrayFormat: "index" });
     const method = typeof opts.method === "undefined" ? "GET" : opts.method;
     const headers: Headers = (() => {
         if (typeof opts.headers === "undefined") {
