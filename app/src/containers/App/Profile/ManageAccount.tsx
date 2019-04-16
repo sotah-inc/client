@@ -1,6 +1,6 @@
 import { connect } from "react-redux";
 
-import { IOwnProps, IStateProps, Profile } from "@app/components/App/Profile";
+import { IOwnProps, IStateProps, ManageAccount } from "@app/components/App/Profile/ManageAccount";
 import { IStoreState } from "@app/types";
 
 const mapStateToProps = (state: IStoreState): IStateProps => {
@@ -8,4 +8,4 @@ const mapStateToProps = (state: IStoreState): IStateProps => {
     return { user: profile === null ? null : profile.user };
 };
 
-export const ProfileContainer = connect<IStateProps, IOwnProps>(mapStateToProps)(Profile);
+export const ManageAccountContainer = connect<IStateProps, IOwnProps>(mapStateToProps)(ManageAccount);

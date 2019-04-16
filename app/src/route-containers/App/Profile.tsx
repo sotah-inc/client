@@ -1,6 +1,5 @@
 import { withRouter } from "react-router-dom";
 
-import { IOwnProps } from "@app/components/App/Profile";
-import { ProfileContainer } from "@app/containers/App/Profile";
+import { IOwnProps, Profile } from "@app/components/App/Profile";
 
-export const ProfileRouteContainer = withRouter<IOwnProps>(ProfileContainer);
+export const ProfileRouteContainer = withRouter<IOwnProps>(Profile);

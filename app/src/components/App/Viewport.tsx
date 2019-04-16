@@ -16,6 +16,7 @@ import { RealmRouteContainer } from "@app/route-containers/App/Data/Realm";
 import { RegionRouteContainer } from "@app/route-containers/App/Data/Region";
 import { ProfessionsLandingRouteContainer } from "@app/route-containers/App/ProfessionsLanding";
 import { ProfileRouteContainer } from "@app/route-containers/App/Profile";
+import { ManageAccountRouteContainer } from "@app/route-containers/App/Profile/ManageAccount";
 import { RootRouteContainer } from "@app/route-containers/App/Root";
 
 export interface IOwnProps extends RouteComponentProps<{}> {}
@@ -32,6 +33,7 @@ export class Viewport extends React.Component<Props> {
             <Switch>
                 <Route exact={true} path="/" component={RootRouteContainer} />
                 <Route exact={true} path="/profile" component={ProfileRouteContainer} />>
+                <Route exact={true} path="/profile/manage-account" component={ManageAccountRouteContainer} />>
                 <Route exact={true} path="/auctions" component={AuctionsLandingRouteContainer} />
                 <Route exact={true} path="/price-lists" component={ProfessionsLandingRouteContainer} />
                 <Route exact={true} path="/content" component={ContentRouteContainer} />
