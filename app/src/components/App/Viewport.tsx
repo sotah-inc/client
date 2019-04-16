@@ -15,6 +15,7 @@ import { PriceListsRouteContainer } from "@app/route-containers/App/Data/PriceLi
 import { RealmRouteContainer } from "@app/route-containers/App/Data/Realm";
 import { RegionRouteContainer } from "@app/route-containers/App/Data/Region";
 import { ProfessionsLandingRouteContainer } from "@app/route-containers/App/ProfessionsLanding";
+import { ProfileRouteContainer } from "@app/route-containers/App/Profile";
 import { RootRouteContainer } from "@app/route-containers/App/Root";
 
 export interface IOwnProps extends RouteComponentProps<{}> {}
@@ -30,6 +31,7 @@ export class Viewport extends React.Component<Props> {
         return (
             <Switch>
                 <Route exact={true} path="/" component={RootRouteContainer} />
+                <Route exact={true} path="/profile" component={ProfileRouteContainer} />>
                 <Route exact={true} path="/auctions" component={AuctionsLandingRouteContainer} />
                 <Route exact={true} path="/price-lists" component={ProfessionsLandingRouteContainer} />
                 <Route exact={true} path="/content" component={ContentRouteContainer} />

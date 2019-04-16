@@ -35,6 +35,7 @@ enum SubBarKind {
     Unknown,
     Content,
     Data,
+    Profile,
 }
 
 export class Topbar extends React.Component<Props> {
@@ -124,6 +125,10 @@ export class Topbar extends React.Component<Props> {
             return SubBarKind.Data;
         }
 
+        if (location.pathname.startsWith("/profile")) {
+            return SubBarKind.Profile;
+        }
+
         return SubBarKind.Unknown;
     }
 
@@ -147,9 +152,35 @@ export class Topbar extends React.Component<Props> {
                 );
             case SubBarKind.Data:
                 return this.renderDataSubBar();
+            case SubBarKind.Profile:
+                return this.renderProfileSubBar();
             default:
                 return null;
         }
+    }
+
+    private renderProfileSubBar() {
+        return this.renderManageAccountButton();
+    }
+
+    private renderManageAccountButton() {
+        const { user } = this.props;
+
+        if (user === null) {
+            return (
+                <LinkButtonRouteContainer
+                    destination={""}
+                    buttonProps={{ icon: "edit", text: "Manage Account", minimal: true, disabled: true }}
+                />
+            );
+        }
+
+        return (
+            <LinkButtonRouteContainer
+                destination="/profile/manage-account"
+                buttonProps={{ icon: "edit", text: "Manage Account", minimal: true }}
+            />
+        );
     }
 
     private renderDataSubBar() {
@@ -195,6 +226,12 @@ export class Topbar extends React.Component<Props> {
             );
         }
 
-        return <LinkButtonRouteContainer destination="/profile" buttonProps={{ icon: "user", text: "Profile" }} />;
+        return (
+            <LinkButtonRouteContainer
+                destination="/profile"
+                buttonProps={{ icon: "user", text: "Profile" }}
+                prefix={true}
+            />
+        );
     }
 }

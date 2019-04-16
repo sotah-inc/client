@@ -1,10 +1,10 @@
 import queryString from "query-string";
 
-const hostname = window.location.hostname;
+// const hostname = window.location.hostname;
 export let apiEndpoint = "https://api.sotah.info";
-if (hostname === "localhost") {
-    apiEndpoint = "http://localhost:9999";
-}
+// if (hostname === "localhost") {
+//     apiEndpoint = "http://localhost:9999";
+// }
 
 export interface IGatherOptions<T> {
     headers?: Headers;
