@@ -1,8 +1,7 @@
 import { connect } from "react-redux";
 
 import { FetchUpdateProfile } from "@app/actions/profile";
-import { IDispatchProps } from "@app/components/App/Profile/ManageAccount";
-import { IOwnProps, IStateProps, ManageAccount } from "@app/components/App/Profile/ManageAccount";
+import { IDispatchProps, IOwnProps, IStateProps, ManageAccount } from "@app/components/App/Profile/ManageAccount";
 import { IStoreState } from "@app/types";
 
 const mapStateToProps = (state: IStoreState): IStateProps => {
