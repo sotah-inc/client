@@ -12,11 +12,7 @@ export interface IUpdateProfileResult {
     };
 }
 
-export const updatePost = async (
-    token: string,
-    id: number,
-    request: IUpdateProfileRequest,
-): Promise<IUpdateProfileResult> => {
+export const updatePost = async (token: string, request: IUpdateProfileRequest): Promise<IUpdateProfileResult> => {
     const { body, status } = await gather<IUpdateProfileRequest, IUpdateProfileResponse | IValidationErrorResponse>({
         body: request,
         headers: new Headers({
