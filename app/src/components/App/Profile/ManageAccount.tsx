@@ -62,7 +62,7 @@ export class ManageAccount extends React.Component<Props> {
                         AppToaster.show({
                             icon: "warning-sign",
                             intent: "danger",
-                            message: "Could not save profile",
+                            message: `Could not save profile: ${err}`,
                         });
                     }}
                     onSubmit={(v: IFormValues) => updateProfile(token!, { email: v.email })}

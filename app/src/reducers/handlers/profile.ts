@@ -19,7 +19,7 @@ const handlers: IKindHandlers<IProfileState, ProfileActions> = {
                 if (typeof action.payload.error !== "undefined") {
                     return {
                         ...state,
-                        updateProfileErrors: {},
+                        updateProfileErrors: { error: action.payload.error },
                         updateProfileLevel: FetchLevel.failure,
                     };
                 }
