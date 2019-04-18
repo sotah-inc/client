@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { Classes, H1, H2, Icon, Intent, NonIdealState, Spinner } from "@blueprintjs/core";
+import { Breadcrumbs, Classes, H2, IBreadcrumbProps, Intent, NonIdealState, Spinner } from "@blueprintjs/core";
 import { RouteComponentProps } from "react-router-dom";
 
 import { IUserJson } from "@app/api-types/entities";
@@ -36,15 +36,47 @@ export class ManageAccount extends React.Component<Props> {
             <>
                 <div className="pure-g">
                     <div className="pure-u-3-4">
-                        <H1>
-                            <Icon icon="globe" iconSize={35} /> Secrets of the Auction House
-                        </H1>
-                        <H2 style={{ margin: 0 }}>Hello {user.email}</H2>
+                        <H2>Manage Account</H2>
+                        {this.renderBreadcrumbs()}
                         <p>Hello, world!</p>
                     </div>
                     <div className="pure-u-1-4">&nbsp;</div>
                 </div>
             </>
+        );
+    }
+
+    private renderBreadcrumbs() {
+        const { history } = this.props;
+
+        const breadcrumbs: IBreadcrumbProps[] = [
+            {
+                href: "/",
+                onClick: (e: React.MouseEvent<HTMLElement>) => {
+                    e.preventDefault();
+
+                    history.push("/");
+                },
+                text: "Home",
+            },
+            {
+                href: "/profile",
+                onClick: (e: React.MouseEvent<HTMLElement>) => {
+                    e.preventDefault();
+
+                    history.push("/profile");
+                },
+                text: "Profile",
+            },
+            {
+                text: "Manage Account",
+            },
+        ];
+
+        return (
+            <div style={{ marginBottom: "10px" }}>
+                <Breadcrumbs items={breadcrumbs} />
+            </div>
         );
     }
 }
