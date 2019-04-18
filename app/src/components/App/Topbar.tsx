@@ -170,7 +170,7 @@ export class Topbar extends React.Component<Props> {
             return (
                 <LinkButtonRouteContainer
                     destination={""}
-                    buttonProps={{ icon: "edit", text: "Manage Account", minimal: true, disabled: true }}
+                    buttonProps={{ icon: "cog", text: "Manage Account", minimal: true, disabled: true }}
                 />
             );
         }
@@ -178,7 +178,7 @@ export class Topbar extends React.Component<Props> {
         return (
             <LinkButtonRouteContainer
                 destination="/profile/manage-account"
-                buttonProps={{ icon: "edit", text: "Manage Account", minimal: true }}
+                buttonProps={{ icon: "cog", text: "Manage Account", minimal: true }}
             />
         );
     }
