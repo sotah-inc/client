@@ -3,6 +3,7 @@ import * as React from "react";
 import { Breadcrumbs, Classes, H2, IBreadcrumbProps, Intent, NonIdealState, Spinner } from "@blueprintjs/core";
 import { RouteComponentProps } from "react-router-dom";
 
+import { IUpdateProfileRequest } from "@app/api-types/contracts/user/profile";
 import { IUserJson } from "@app/api-types/entities";
 import { IFormValues } from "@app/components/App/Profile/ManageAccountForm";
 import { ManageAccountFormFormContainer } from "@app/form-containers/App/Profile/ManageAccountForm";
@@ -17,9 +18,13 @@ export interface IStateProps {
     updateProfileErrors: IErrors;
 }
 
+export interface IDispatchProps {
+    updateProfile: (token: string, req: IUpdateProfileRequest) => void;
+}
+
 export interface IOwnProps extends RouteComponentProps<{}> {}
 
-type Props = Readonly<IOwnProps & IStateProps>;
+type Props = Readonly<IOwnProps & IStateProps & IDispatchProps>;
 
 export class ManageAccount extends React.Component<Props> {
     public componentDidMount() {
