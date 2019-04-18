@@ -2,14 +2,14 @@ import * as HTTPStatus from "http-status";
 
 import { IValidationErrorResponse } from "@app/api-types/contracts";
 import { IUpdateProfileRequest, IUpdateProfileResponse } from "@app/api-types/contracts/user/profile";
+import { IErrors } from "@app/types/global";
+
 import { apiEndpoint, gather } from "./index";
 
 export interface IUpdateProfileResult {
     email: string | null;
     error?: string;
-    errors?: {
-        [key: string]: string;
-    };
+    errors?: IErrors;
 }
 
 export const updateProfile = async (token: string, request: IUpdateProfileRequest): Promise<IUpdateProfileResult> => {

@@ -1,10 +1,10 @@
+import { IErrors } from "@app/types/global";
+
 import { FetchLevel } from "./main";
 
 export interface IProfileState {
     updateProfileLevel: FetchLevel;
-    updateProfileErrors: {
-        [key: string]: string;
-    };
+    updateProfileErrors: IErrors;
 }
 
 export const defaultProfileState: IProfileState = {

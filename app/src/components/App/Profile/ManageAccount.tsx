@@ -1,17 +1,20 @@
 import * as React from "react";
+
+import { Breadcrumbs, Classes, H2, IBreadcrumbProps, Intent, NonIdealState, Spinner } from "@blueprintjs/core";
 import { RouteComponentProps } from "react-router-dom";
 
 import { IUserJson } from "@app/api-types/entities";
 import { IFormValues } from "@app/components/App/Profile/ManageAccountForm";
 import { ManageAccountFormFormContainer } from "@app/form-containers/App/Profile/ManageAccountForm";
+import { IErrors } from "@app/types/global";
 import { FetchLevel } from "@app/types/main";
 import { setTitle } from "@app/util";
 import { AppToaster } from "@app/util/toasters";
 
-import { Breadcrumbs, Classes, H2, IBreadcrumbProps, Intent, NonIdealState, Spinner } from "@blueprintjs/core";
-
 export interface IStateProps {
     user: IUserJson | null;
+    updateProfileLevel: FetchLevel;
+    updateProfileErrors: IErrors;
 }
 
 export interface IOwnProps extends RouteComponentProps<{}> {}
