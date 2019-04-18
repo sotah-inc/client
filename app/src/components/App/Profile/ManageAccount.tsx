@@ -1,10 +1,14 @@
 import * as React from "react";
-
-import { Breadcrumbs, Classes, H2, IBreadcrumbProps, Intent, NonIdealState, Spinner } from "@blueprintjs/core";
 import { RouteComponentProps } from "react-router-dom";
 
 import { IUserJson } from "@app/api-types/entities";
+import { IFormValues } from "@app/components/App/Profile/ManageAccountForm";
+import { ManageAccountFormFormContainer } from "@app/form-containers/App/Profile/ManageAccountForm";
+import { FetchLevel } from "@app/types/main";
 import { setTitle } from "@app/util";
+import { AppToaster } from "@app/util/toasters";
+
+import { Breadcrumbs, Classes, H2, IBreadcrumbProps, Intent, NonIdealState, Spinner } from "@blueprintjs/core";
 
 export interface IStateProps {
     user: IUserJson | null;
@@ -34,14 +38,26 @@ export class ManageAccount extends React.Component<Props> {
 
         return (
             <>
-                <div className="pure-g">
-                    <div className="pure-u-3-4">
-                        <H2>Manage Account</H2>
-                        {this.renderBreadcrumbs()}
-                        <p>Hello, world!</p>
-                    </div>
-                    <div className="pure-u-1-4">&nbsp;</div>
-                </div>
+                <H2>Manage Account</H2>
+                {this.renderBreadcrumbs()}
+                <ManageAccountFormFormContainer
+                    defaultFormValues={{ email: user.email }}
+                    onComplete={() => {
+                        console.log("wew lad");
+                    }}
+                    onFatalError={err => {
+                        AppToaster.show({
+                            icon: "warning-sign",
+                            intent: "danger",
+                            message: `Could not create post: ${err}`,
+                        });
+                    }}
+                    onSubmit={(v: IFormValues) => {
+                        console.log("wew lad", v);
+                    }}
+                    updateProfileErrors={{}}
+                    updateProfileLevel={FetchLevel.initial}
+                />
             </>
         );
     }
