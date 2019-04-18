@@ -4,13 +4,10 @@ import { runners } from "./handlers";
 
 type State = Readonly<IProfileState>;
 
-export const posts = (state: State | undefined, action: ProfileActions): State => {
+export const profile = (state: State | undefined, action: ProfileActions): State => {
     if (state === undefined) {
         return defaultProfileState;
     }
 
-    switch (action.type) {
-        default:
-            return runners.profile(state, action);
-    }
+    return runners.profile(state, action);
 };

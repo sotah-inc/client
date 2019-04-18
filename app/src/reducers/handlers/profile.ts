@@ -1,9 +1,20 @@
-import { ProfileActions } from "@app/actions/profile";
+import { ProfileActions, ReceiveUpdateProfile, RequestUpdateProfile } from "@app/actions/profile";
 import { IProfileState } from "@app/types/profile";
 
 import { IKindHandlers, Runner } from "./index";
 
-const handlers: IKindHandlers<IProfileState, ProfileActions> = {};
+const handlers: IKindHandlers<IProfileState, ProfileActions> = {
+    profile: {
+        update: {
+            receive: (state: IProfileState, action: ReturnType<typeof ReceiveUpdateProfile>) => {
+                return state;
+            },
+            request: (state: IProfileState, action: ReturnType<typeof RequestUpdateProfile>) => {
+                return state;
+            },
+        },
+    },
+};
 
 export const run: Runner<IProfileState, ProfileActions> = (
     state: IProfileState,
