@@ -16,6 +16,7 @@ export interface IStateProps {
     user: IUserJson | null;
     updateProfileLevel: FetchLevel;
     updateProfileErrors: IErrors;
+    token: string | null;
 }
 
 export interface IDispatchProps {
@@ -32,7 +33,7 @@ export class ManageAccount extends React.Component<Props> {
     }
 
     public render() {
-        const { user } = this.props;
+        const { user, updateProfile, token, updateProfileErrors, updateProfileLevel } = this.props;
 
         if (user === null) {
             return (
@@ -60,11 +61,9 @@ export class ManageAccount extends React.Component<Props> {
                             message: `Could not create post: ${err}`,
                         });
                     }}
-                    onSubmit={(v: IFormValues) => {
-                        console.log("wew lad", v);
-                    }}
-                    updateProfileErrors={{}}
-                    updateProfileLevel={FetchLevel.initial}
+                    onSubmit={(v: IFormValues) => updateProfile(token!, { email: v.email })}
+                    updateProfileErrors={updateProfileErrors}
+                    updateProfileLevel={updateProfileLevel}
                 />
             </>
         );

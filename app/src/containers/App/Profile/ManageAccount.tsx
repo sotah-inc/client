@@ -9,6 +9,7 @@ const mapStateToProps = (state: IStoreState): IStateProps => {
     const { updateProfileLevel, updateProfileErrors } = state.Profile;
 
     return {
+        token: profile === null ? null : profile.token,
         updateProfileErrors,
         updateProfileLevel,
         user: profile === null ? null : profile.user,
