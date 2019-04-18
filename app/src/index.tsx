@@ -14,6 +14,7 @@ import {
     defaultMainState,
     defaultPostsState,
     defaultPriceListsState,
+    defaultProfileState,
     IStoreState,
 } from "@app/types";
 
@@ -22,6 +23,7 @@ const defaultState: IStoreState = {
     Main: defaultMainState,
     Posts: defaultPostsState,
     PriceLists: defaultPriceListsState,
+    Profile: defaultProfileState,
 };
 
 const token = localStorage.getItem("token");
