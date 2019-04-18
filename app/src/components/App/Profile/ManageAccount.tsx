@@ -52,13 +52,17 @@ export class ManageAccount extends React.Component<Props> {
                 <ManageAccountFormFormContainer
                     defaultFormValues={{ email: user.email }}
                     onComplete={() => {
-                        console.log("wew lad");
+                        AppToaster.show({
+                            icon: "info-sign",
+                            intent: "success",
+                            message: "Your profile has been updated!",
+                        });
                     }}
                     onFatalError={err => {
                         AppToaster.show({
                             icon: "warning-sign",
                             intent: "danger",
-                            message: `Could not create post: ${err}`,
+                            message: "Could not save profile",
                         });
                     }}
                     onSubmit={(v: IFormValues) => updateProfile(token!, { email: v.email })}
