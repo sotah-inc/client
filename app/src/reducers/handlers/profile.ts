@@ -5,7 +5,10 @@ import { IKindHandlers, Runner } from "./index";
 
 const handlers: IKindHandlers<IProfileState, ProfileActions> = {};
 
-export const run: Runner<IProfileState, ProfileActions> = (state: IProfileState, action: ProfileActions): IProfileState => {
+export const run: Runner<IProfileState, ProfileActions> = (
+    state: IProfileState,
+    action: ProfileActions,
+): IProfileState => {
     const [kind, verb, task] = action.type
         .split("_")
         .reverse()
