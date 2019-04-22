@@ -1,0 +1,5 @@
+dispatch:
+  - url: "sotah.info/*"
+    service: default
+  - url: "api.sotah.info/*"
+    service: api
