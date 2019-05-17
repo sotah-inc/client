@@ -142,6 +142,8 @@ const handlers: IKindHandlers<IMainState, MainActions> = {
                     {},
                 );
 
+                debugger;
+
                 return { ...state, fetchRealmLevel: FetchLevel.success, realms, currentRealm };
             },
             request: (state: IMainState) => {
